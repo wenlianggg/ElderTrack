@@ -94,7 +94,7 @@ public class MainFrame extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean loginResult = LoginProcessor.loginCheck(loginField.getText(), passwordField.getPassword());
-				if (loginResult = true) {
+				if (loginResult) {
 					loginMessage = "Login successful!";
 				} else {
 					loginMessage = "Login failed!";

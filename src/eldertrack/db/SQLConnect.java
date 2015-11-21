@@ -2,7 +2,7 @@ package eldertrack.db;
 
 import java.sql.*;
 
-public class SQLiteConnection {
+public class SQLConnect {
 	public static ResultSet getResultSet(String query) {
 		Connection c = null;
 		Statement stmt = null;

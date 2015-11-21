@@ -1,5 +1,9 @@
 package eldertrack.login;
 
+import java.sql.*;
+
+import eldertrack.db.SQLConnect;
+
 public class LoginUser{
 	String username;
 	char[] password;
@@ -9,11 +13,18 @@ public class LoginUser{
 	
 	LoginUser(String username, char[] password) throws WrongPasswordException, NoSuchUserException {
 		// If username does not exist, throw NoSuchUserException
-		if (username.contains("wrong")) {
-			throw new NoSuchUserException();
-		// If password is wrong, throw WrongPasswordException
-		} else if (password.equals("wrong")) {
-			throw new WrongPasswordException();
+		ResultSet rs = null;
+		// Get user as resultset
+		try {
+			rs = SQLConnect.getResultSet("SELECT * FROM et_staff WHERE username='" + username + "'");
+			if (rs.next() == false) {
+				throw new NoSuchUserException();
+			// If password is wrong, throw WrongPasswordException
+			} else if (password.equals("wrong")) {
+				throw new WrongPasswordException();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }
