@@ -20,8 +20,8 @@ public class SQLiteJDBC {
          System.out.println( "ID = " + staffid );
          System.out.println( "USERNAME = " + username );
          System.out.println( "PASSWORD = " + password );
-         System.out.println( "NAME = " + firstname + " " + lastname);
-         System.out.println();
+         System.out.println( "PERSON NAME = " + firstname + " " + lastname);
+         System.out.println("");
       }
       rs.close();
       stmt.close();
