@@ -2,7 +2,26 @@ package eldertrack.db;
 
 import java.sql.*;
 
-public class SQLiteJDBC {	
+public class SQLConnect {
+	public static ResultSet getResultSet(String query) throws SQLException {
+		Connection c = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+		      c = DriverManager.getConnection("jdbc:sqlite:db\\MySQLiteDB");
+		      c.setAutoCommit(false);
+		      stmt = c.createStatement();
+		      rs = stmt.executeQuery(query);
+		} catch (Exception e) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		}
+		if (rs.isClosed()) {
+			return null;
+		}
+		return rs;
+	}
+	
 	public static void main(String args[]) {
     Connection c = null;
     Statement stmt = null;

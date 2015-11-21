@@ -1,1 +1,1 @@
-SELECT * FROM et_staff
+SELECT * FROM et_staff WHERE username = 'wlgoh'
