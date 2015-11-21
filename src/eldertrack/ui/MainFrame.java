@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.JPasswordField;
 import java.awt.Color;
@@ -58,41 +58,48 @@ public class MainFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		// Label for Login:
-		JLabel lblEldertrack = new JLabel("ElderTrack Login");
+		JLabel lblEldertrack = new JLabel("ElderTrack Authentication");
 		lblEldertrack.setForeground(SystemColor.textHighlight);
 		lblEldertrack.setBounds(10, 0, 754, 54);
 		lblEldertrack.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		contentPane.add(lblEldertrack);
 		
+		JPanel panel = new JPanel();
+		panel.setBounds(200, 136, 400, 290);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
 		// Label for Password:
 		JLabel lblLogin = new JLabel("Login:");
+		lblLogin.setBounds(10, 54, 38, 19);
+		panel.add(lblLogin);
 		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblLogin.setBounds(200, 144, 46, 22);
-		contentPane.add(lblLogin);
 		
 		// Login field
-		JTextArea loginField = new JTextArea();
+		JTextField loginField = new JTextField();
+		loginField.setBounds(10, 84, 380, 32);
+		panel.add(loginField);
 		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
 		loginField.setBackground(Color.LIGHT_GRAY);
-		loginField.setBounds(200, 167, 400, 33);
-		contentPane.add(loginField);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setBounds(10, 145, 66, 19);
+		panel.add(lblPassword);
+		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		// Password field
 		passwordField = new JPasswordField();
+		passwordField.setBounds(10, 175, 380, 30);
+		panel.add(passwordField);
 		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
 		passwordField.setBackground(Color.LIGHT_GRAY);
-		passwordField.setBounds(200, 232, 400, 33);
-		contentPane.add(passwordField);
 		
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblPassword.setBounds(200, 211, 66, 22);
-		contentPane.add(lblPassword);
-		
-		JButton btnNewButton = new JButton("Login");
+		JButton loginButton = new JButton("Login");
+		loginButton.setBounds(296, 237, 94, 42);
+		panel.add(loginButton);
 		// On login button pressed, 
 		// Check login details by calling method from eldertrack.login.LoginProcessor class file
-		btnNewButton.addActionListener(new ActionListener() {
+		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Check if login fields are null, if not, process login.
 				if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
@@ -108,7 +115,5 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
-		btnNewButton.setBounds(495, 287, 105, 33);
-		contentPane.add(btnNewButton);
 	}
 }

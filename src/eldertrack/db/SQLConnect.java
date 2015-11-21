@@ -17,10 +17,8 @@ public class SQLConnect {
 		      System.exit(0);
 		}
 		if (rs.isClosed()) {
-			System.out.println("Resultset is NULL!");
 			return null;
 		}
-		System.out.println("Returned resultset!");
 		return rs;
 	}
 	

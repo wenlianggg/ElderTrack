@@ -6,16 +6,15 @@ import eldertrack.db.SQLConnect;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class StaffSession{
+	private int staffid;
 	private String username;
-	private String hpassword;
 	private String firstname;
 	private String lastname;
 	private boolean exists;
-	private boolean accesslevel;
+	private boolean accesslevel = false;
 	private boolean passwordcorrect = false;
 	
 	StaffSession(String username, char[] password) throws WrongPasswordException, NoSuchUserException {
-		hpassword = DigestUtils.sha512Hex(new String(password));
 		// If username does not exist, throw NoSuchUserException
 		ResultSet rs = null;
 		try {
@@ -28,8 +27,9 @@ public class StaffSession{
 			}
 			this.exists = true;
 			// Compare and verify strings
-			System.out.println("User Input: " + new String(password) + " vs " + rs.getString("password"));
-			if (rs.getString("password").equals(new String(password))) {
+			System.out.println("User Input: " + DigestUtils.sha512Hex(new String(password)) + " vs " + rs.getString("password"));
+			if (rs.getString("password").equals(DigestUtils.sha512Hex(new String(password)))) {
+				this.staffid = rs.getInt("staffid");
 				this.accesslevel = rs.getBoolean("accesslevel");
 				passwordcorrect = true;
 			} else {
@@ -49,6 +49,10 @@ public class StaffSession{
 	
 	public boolean isUserFound() {
 		return this.exists;
+	}
+	
+	public int getStaffid() {
+		return this.staffid;
 	}
 	
 	public String getUsername() {
