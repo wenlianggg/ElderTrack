@@ -3,7 +3,7 @@ package eldertrack.db;
 import java.sql.*;
 
 public class SQLConnect {
-	public static ResultSet getResultSet(String query) {
+	public static ResultSet getResultSet(String query) throws SQLException {
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -16,7 +16,11 @@ public class SQLConnect {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
 		}
-		System.out.println("Generated and returned ResultSet successfully");
+		if (rs.isClosed()) {
+			System.out.println("Resultset is NULL!");
+			return null;
+		}
+		System.out.println("Returned resultset!");
 		return rs;
 	}
 	

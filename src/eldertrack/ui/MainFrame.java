@@ -18,7 +18,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 
-import eldertrack.login.LoginProcessor;
+import eldertrack.login.SessionTools;
+import eldertrack.login.StaffSession;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1;
@@ -93,13 +94,18 @@ public class MainFrame extends JFrame {
 		// Check login details by calling method from eldertrack.login.LoginProcessor class file
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				boolean loginResult = LoginProcessor.loginCheck(loginField.getText(), passwordField.getPassword());
-				if (loginResult) {
-					loginMessage = "Login successful!";
+				// Check if login fields are null, if not, process login.
+				if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
+					StaffSession session = SessionTools.createSession(loginField.getText(), passwordField.getPassword());
+					if (session == null) {
+						loginMessage = "Login failed!";
+					} else if (session.isAuthenticated()) {
+						loginMessage = "Login successful!";
+					}
+					JOptionPane.showMessageDialog(null, loginMessage);
 				} else {
-					loginMessage = "Login failed!";
+					JOptionPane.showMessageDialog(null, "Fields cannot be empty!");
 				}
-				JOptionPane.showMessageDialog(null, loginMessage);
 			}
 		});
 		btnNewButton.setBounds(495, 287, 105, 33);
