@@ -44,7 +44,7 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the frame...
 	 */
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
