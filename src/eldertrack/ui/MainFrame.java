@@ -1,6 +1,5 @@
 package eldertrack.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,8 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
 import javax.swing.JPasswordField;
 import java.awt.Color;
 import javax.swing.JButton;
@@ -17,8 +16,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 
-public class MainFrame extends JFrame {
+import eldertrack.login.LoginProcessor;
 
+public class MainFrame extends JFrame {
+	private static final long serialVersionUID = 1;
 	private JPanel contentPane;
 	private JPasswordField passwordField;
 
@@ -29,6 +30,7 @@ public class MainFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -44,6 +46,8 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 780, 540);
+		setResizable(false);
+		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -78,8 +82,12 @@ public class MainFrame extends JFrame {
 		contentPane.add(lblPassword);
 		
 		JButton btnNewButton = new JButton("Login");
+		// On login button pressed, 
+		// Check login details by calling method from eldertrack.login.LoginProcessor class file
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				boolean loginResult = LoginProcessor.loginCheck(loginField.getText(), passwordField.getPassword());
+				System.out.println(loginResult);
 			}
 		});
 		btnNewButton.setBounds(429, 311, 105, 33);
