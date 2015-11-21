@@ -30,9 +30,9 @@ public class MainFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Make program look like windows software
 					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
+					frame.setVisible(true); // Set the main frame as 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
