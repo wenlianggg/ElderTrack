@@ -2,10 +2,14 @@ package eldertrack.login;
 
 public class LoginProcessor {
 	public static boolean loginCheck(String username, char[] passarray) {
-		String password = new String(passarray);
-		if (username.equals(password))
-			return true;
-		else
+		LoginUser lu = null;
+		try {
+			lu = new LoginUser(username, passarray);
+		} catch (WrongPasswordException e) {
 			return false;
+		} catch (NoSuchUserException e) {
+			return false;
+		}
+		return true;
 	}
 }
