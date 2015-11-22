@@ -10,7 +10,7 @@ public class StaffSession{
 	private String username;
 	private String firstname;
 	private String lastname;
-	private boolean exists;
+	private boolean exists = false;
 	private boolean accesslevel = false;
 	private boolean passwordcorrect = false;
 	
@@ -22,7 +22,6 @@ public class StaffSession{
 			rs = SQLConnect.getResultSet("SELECT * FROM et_staff WHERE username='" + username + "'");
 			// If resultset is null, it means that no such user is found
 			if (rs == null) {
-				this.exists = false;
 				throw new NoSuchUserException();
 			}
 			this.exists = true;
