@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 public class Weather {
-	private long time;
+	private long epochtime;
 	private String summary;
 	private double precip;
 	private double temperature;
@@ -14,7 +14,7 @@ public class Weather {
 	private double airpressure;
 	
 	Weather(Object time, Object summary, Object precip, Object temperature, Object windspeed, Object airpressure) {
-		this.time = (long)time;
+		this.epochtime = (long)time;
 		this.summary = summary.toString();
 		this.precip = (double)precip;
 		this.temperature = (double)temperature;
@@ -23,31 +23,31 @@ public class Weather {
 		System.out.println(this.airpressure + " " + this.summary);
 	}
 	
-	String getTimeString() {
-        Date date = new Date(this.time * 1000);
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	public String getTimeString() {
+        Date date = new Date(this.epochtime * 1000);
+        DateFormat format = new SimpleDateFormat("dd MMM HH:mm");
         format.setTimeZone(TimeZone.getTimeZone("Asia/Singapore"));
         String formatted = format.format(date);
         return formatted;
 	}
 	
-	String getSummary() {
+	public String getSummary() {
 		return this.summary;
 	}
 	
-	double getPrecip() {
+	public double getPrecip() {
 		return this.precip;
 	}
 	
-	double getTemperature() {
+	public double getTemperature() {
 		return this.temperature;
 	}
 	
-	double getWindSpeed() {
+	public double getWindSpeed() {
 		return this.windspeed;
 	}
 	
-	double getAirPressure() {
+	public double getAirPressure() {
 		return this.airpressure;
 	}
 }
