@@ -26,6 +26,7 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private String loginMessage;
 	private JPasswordField passwordField;
+	private StaffSession session;
 
 	/**
 	 * Launch the application.
@@ -77,6 +78,7 @@ public class MainFrame extends JFrame {
 		
 		// Login field
 		JTextField loginField = new JTextField();
+		loginField.setToolTipText("Enter your login username that you were assigned");
 		loginField.setBounds(10, 84, 380, 32);
 		panel.add(loginField);
 		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
@@ -89,6 +91,7 @@ public class MainFrame extends JFrame {
 		
 		// Password field
 		passwordField = new JPasswordField();
+		passwordField.setToolTipText("Enter your login password that you were assigned");
 		passwordField.setBounds(10, 175, 380, 30);
 		panel.add(passwordField);
 		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
@@ -103,7 +106,7 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// Check if login fields are null, if not, process login.
 				if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
-					StaffSession session = SessionTools.createSession(loginField.getText(), passwordField.getPassword());
+					session = SessionTools.createSession(loginField.getText(), passwordField.getPassword());
 					if (session == null) {
 						loginMessage = "Login failed!";
 					} else if (session.isAuthenticated()) {
