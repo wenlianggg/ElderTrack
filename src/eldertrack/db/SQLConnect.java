@@ -8,7 +8,7 @@ public class SQLConnect {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-		      c = DriverManager.getConnection("jdbc:sqlite:db\\MySQLiteDB");
+		      c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
 		      c.setAutoCommit(false);
 		      stmt = c.createStatement();
 		      rs = stmt.executeQuery(query);
@@ -26,7 +26,7 @@ public class SQLConnect {
     Connection c = null;
     Statement stmt = null;
     try {
-      c = DriverManager.getConnection("jdbc:sqlite:db\\MySQLiteDB");
+      c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
       c.setAutoCommit(false);
       stmt = c.createStatement();
       ResultSet rs = stmt.executeQuery( "SELECT * FROM et_staff;" );
