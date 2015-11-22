@@ -20,6 +20,8 @@ import java.awt.SystemColor;
 
 import eldertrack.login.SessionTools;
 import eldertrack.login.StaffSession;
+import eldertrack.weather.Weather;
+import eldertrack.weather.WeatherTools;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1;
@@ -65,41 +67,79 @@ public class MainFrame extends JFrame {
 		lblEldertrack.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		contentPane.add(lblEldertrack);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(200, 136, 400, 290);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		JPanel LoginPanel = new JPanel();
+		LoginPanel.setBounds(200, 136, 400, 290);
+		contentPane.add(LoginPanel);
+		LoginPanel.setLayout(null);
 		
 		// Label for Password:
 		JLabel lblLogin = new JLabel("Login:");
 		lblLogin.setBounds(10, 54, 38, 19);
-		panel.add(lblLogin);
+		LoginPanel.add(lblLogin);
 		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		// Login field
 		JTextField loginField = new JTextField();
 		loginField.setToolTipText("Enter your login username that you were assigned");
 		loginField.setBounds(10, 84, 380, 32);
-		panel.add(loginField);
+		LoginPanel.add(loginField);
 		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
 		loginField.setBackground(Color.LIGHT_GRAY);
 		
 		JLabel lblPassword = new JLabel("Password:");
 		lblPassword.setBounds(10, 145, 66, 19);
-		panel.add(lblPassword);
+		LoginPanel.add(lblPassword);
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		// Password field
 		passwordField = new JPasswordField();
 		passwordField.setToolTipText("Enter your login password that you were assigned");
 		passwordField.setBounds(10, 175, 380, 30);
-		panel.add(passwordField);
+		LoginPanel.add(passwordField);
 		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
 		passwordField.setBackground(Color.LIGHT_GRAY);
 		
 		JButton loginButton = new JButton("Login");
 		loginButton.setBounds(296, 237, 94, 42);
-		panel.add(loginButton);
+		LoginPanel.add(loginButton);
+		
+		JPanel WeatherPanel = new JPanel();
+		WeatherPanel.setBackground(new Color(173, 255, 47));
+		WeatherPanel.setBounds(597, 483, 197, 88);
+		contentPane.add(WeatherPanel);
+		WeatherPanel.setLayout(null);
+		
+		JLabel lblWeatherText = new JLabel("Weather");
+		lblWeatherText.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		lblWeatherText.setBounds(5, 0, 194, 25);
+		WeatherPanel.add(lblWeatherText);
+		
+		JLabel lblWeatherLine1 = new JLabel("No Information Obtained");
+		lblWeatherLine1.setBounds(10, 25, 177, 14);
+		WeatherPanel.add(lblWeatherLine1);
+		
+		JLabel lblWeatherLine2 = new JLabel("No Information Obtained");
+		lblWeatherLine2.setBounds(10, 40, 177, 14);
+		WeatherPanel.add(lblWeatherLine2);
+		
+		JLabel lblWeatherLine3 = new JLabel("No Information Obtained");
+		lblWeatherLine3.setBounds(10, 55, 177, 14);
+		WeatherPanel.add(lblWeatherLine3);
+		
+		JLabel lblWeatherLine4 = new JLabel("No Information Obtained");
+		lblWeatherLine4.setBounds(10, 70, 177, 14);
+		WeatherPanel.add(lblWeatherLine4);
+		
+		Weather weather = WeatherTools.getWeather();
+		if (weather!=null) {
+			lblWeatherLine1.setText(weather.getTemperature() + "°C on " + weather.getTimeString() );
+			lblWeatherLine2.setText(weather.getSummary());
+			lblWeatherLine3.setText("Precip " + weather.getPrecip()*100 + "% Wind Speed: " + weather.getWindSpeed() + "m/s");
+			lblWeatherLine4.setText("Air Pressure: " + weather.getAirPressure() + "hPa");
+		}
+		
+		
+		
 		// On login button pressed, 
 		// Check login details by calling method from eldertrack.login.LoginProcessor class file
 		loginButton.addActionListener(new ActionListener() {
