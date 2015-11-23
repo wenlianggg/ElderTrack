@@ -21,7 +21,7 @@ public class StaffSession{
 			// Get resultset
 			rs = SQLConnect.getResultSet("SELECT * FROM et_staff WHERE username = ?", username.toLowerCase());
 			// If resultset is null, it means that no such user is found
-			if (rs == null) {
+			if (rs == null || rs.next() == false) {
 				throw new NoSuchUserException();
 			}
 			this.exists = true;
