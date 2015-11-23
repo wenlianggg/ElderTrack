@@ -1,35 +1,47 @@
 package eldertrack.db;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class SQLConnect {
-	public static ResultSet getResultSet(String query) throws SQLException {
-		Connection c = null;
-		Statement stmt = null;
+	static Connection c = null;
+	// Takes in a statement and a query
+	public static ResultSet getResultSet(String statement, String query) throws SQLException {
+		ArrayList<String> qarray = new ArrayList<String>();
+		qarray.add(query);
+		return getResultSet(statement, qarray);
+	}
+	
+	// Takes in a statement and many queries
+	public static ResultSet getResultSet(String statement, ArrayList<String> queries) throws SQLException{
 		ResultSet rs = null;
-		try {
-		      c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
-		      c.setAutoCommit(false);
-		      stmt = c.createStatement();
-		      rs = stmt.executeQuery(query);
-		} catch (Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
+		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
+		c.setAutoCommit(false);
+		PreparedStatement prpstmt = c.prepareStatement(statement);
+		for(int i = 1; i <= queries.size(); i++) {
+			System.out.println(queries.get(i-1));
+			prpstmt.setString(i, queries.get(i-1));
 		}
-		if (rs.isClosed()) {
-			return null;
-		}
+		rs = prpstmt.executeQuery();
+		return rs;
+	}
+	
+	// Takes in a statement
+	public static ResultSet getResultSet(String statement) throws SQLException {
+		ResultSet rs = null;
+		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
+		c.setAutoCommit(false);
+		PreparedStatement prpstmt = c.prepareStatement(statement);
+		rs = prpstmt.executeQuery();
 		return rs;
 	}
 	
 	public static void main(String args[]) {
     Connection c = null;
-    Statement stmt = null;
     try {
       c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
       c.setAutoCommit(false);
-      stmt = c.createStatement();
-      ResultSet rs = stmt.executeQuery( "SELECT * FROM et_staff;" );
+      ResultSet rs = getResultSet("SELECT * FROM et_staff;");
       while (rs.next()) {
          int staffid = rs.getInt("staffid");
          String username = rs.getString("username");
@@ -43,7 +55,6 @@ public class SQLConnect {
          System.out.println("");
       }
       rs.close();
-      stmt.close();
       c.close();
     } catch ( Exception e ) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
