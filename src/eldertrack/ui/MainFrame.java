@@ -74,9 +74,9 @@ public class MainFrame extends JFrame {
 		
 		// Label for Password:
 		JLabel lblLogin = new JLabel("Login:");
-		lblLogin.setBounds(10, 54, 38, 19);
+		lblLogin.setBounds(10, 41, 66, 32);
 		LoginPanel.add(lblLogin);
-		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		// Login field
 		JTextField loginField = new JTextField();
@@ -87,9 +87,9 @@ public class MainFrame extends JFrame {
 		loginField.setBackground(Color.LIGHT_GRAY);
 		
 		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(10, 145, 66, 19);
+		lblPassword.setBounds(10, 145, 101, 19);
 		LoginPanel.add(lblPassword);
-		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		// Password field
 		passwordField = new JPasswordField();
@@ -100,6 +100,7 @@ public class MainFrame extends JFrame {
 		passwordField.setBackground(Color.LIGHT_GRAY);
 		
 		JButton loginButton = new JButton("Login");
+		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		loginButton.setBounds(296, 237, 94, 42);
 		LoginPanel.add(loginButton);
 		
@@ -118,23 +119,23 @@ public class MainFrame extends JFrame {
 		lblWeatherLine1.setBounds(10, 25, 177, 14);
 		WeatherPanel.add(lblWeatherLine1);
 		
-		JLabel lblWeatherLine2 = new JLabel("No Information Obtained");
+		JLabel lblWeatherLine2 = new JLabel("API Did Not Respond Timely");
 		lblWeatherLine2.setBounds(10, 40, 177, 14);
 		WeatherPanel.add(lblWeatherLine2);
 		
-		JLabel lblWeatherLine3 = new JLabel("No Information Obtained");
+		JLabel lblWeatherLine3 = new JLabel("");
 		lblWeatherLine3.setBounds(10, 55, 177, 14);
 		WeatherPanel.add(lblWeatherLine3);
 		
-		JLabel lblWeatherLine4 = new JLabel("No Information Obtained");
+		JLabel lblWeatherLine4 = new JLabel("");
 		lblWeatherLine4.setBounds(10, 70, 177, 14);
 		WeatherPanel.add(lblWeatherLine4);
 		
 		Weather weather = WeatherTools.getWeather();
 		if (weather!=null) {
 			lblWeatherLine1.setText(weather.getTemperature() + "°C on " + weather.getTimeString() );
-			lblWeatherLine2.setText(weather.getSummary());
-			lblWeatherLine3.setText("Precip " + weather.getPrecip()*100 + "% Wind Speed: " + weather.getWindSpeed() + "m/s");
+			lblWeatherLine2.setText("Condition: " + weather.getSummary());
+			lblWeatherLine3.setText("Precip: " + weather.getPrecip()*100 + "% Wind Speed: " + weather.getWindSpeed() + "m/s");
 			lblWeatherLine4.setText("Air Pressure: " + weather.getAirPressure() + "hPa");
 		}
 		
