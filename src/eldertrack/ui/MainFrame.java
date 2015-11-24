@@ -25,6 +25,10 @@ import eldertrack.weather.WeatherTools;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1;
+    final static String LOGINPANEL = "Card with Login Panel";
+    final static String MEDICATIONPANEL = "Card with Medication Panel";
+    final static String DIETPANEL = "Card with Diet Panel";
+    
 	private JPanel contentPane;
 	private String loginMessage;
 	private JPasswordField passwordField;
@@ -33,6 +37,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -50,65 +55,75 @@ public class MainFrame extends JFrame {
 	/**
 	 * Create the frame...
 	 */
+	
 	public MainFrame() {
+		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		setResizable(false);
-		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		// Label for Login:
-		JLabel lblEldertrack = new JLabel("ElderTrack Authentication");
-		lblEldertrack.setForeground(SystemColor.textHighlight);
-		lblEldertrack.setBounds(10, 0, 754, 54);
-		lblEldertrack.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-		contentPane.add(lblEldertrack);
+		/**
+		 * Instantiate all JPanels
+		 */
 		
 		JPanel LoginPanel = new JPanel();
-		LoginPanel.setBounds(200, 136, 400, 290);
+		LoginPanel.setBounds(0, 0, 794, 483);
 		contentPane.add(LoginPanel);
 		LoginPanel.setLayout(null);
 		
-		// Label for Password:
-		JLabel lblLogin = new JLabel("Login:");
-		lblLogin.setBounds(10, 41, 66, 32);
-		LoginPanel.add(lblLogin);
-		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		
-		// Login field
-		JTextField loginField = new JTextField();
-		loginField.setToolTipText("Enter your login username that you were assigned");
-		loginField.setBounds(10, 84, 380, 32);
-		LoginPanel.add(loginField);
-		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
-		loginField.setBackground(Color.LIGHT_GRAY);
-		
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(10, 145, 101, 19);
-		LoginPanel.add(lblPassword);
-		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		
-		// Password field
-		passwordField = new JPasswordField();
-		passwordField.setToolTipText("Enter your login password that you were assigned");
-		passwordField.setBounds(10, 175, 380, 30);
-		LoginPanel.add(passwordField);
-		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
-		passwordField.setBackground(Color.LIGHT_GRAY);
-		
-		JButton loginButton = new JButton("Login");
-		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		loginButton.setBounds(296, 237, 94, 42);
-		LoginPanel.add(loginButton);
 		
 		JPanel WeatherPanel = new JPanel();
 		WeatherPanel.setBackground(new Color(173, 255, 47));
 		WeatherPanel.setBounds(597, 483, 197, 88);
 		contentPane.add(WeatherPanel);
 		WeatherPanel.setLayout(null);
+		
+		/**
+		 * Login Panel
+		 */
+		
+		JLabel lblLogin = new JLabel("Login:");
+		lblLogin.setBounds(207, 126, 66, 32);
+		LoginPanel.add(lblLogin);
+		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		JTextField loginField = new JTextField();
+		loginField.setToolTipText("Enter your login username that you were assigned");
+		loginField.setBounds(207, 166, 380, 32);
+		LoginPanel.add(loginField);
+		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
+		loginField.setBackground(Color.LIGHT_GRAY);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setBounds(207, 227, 101, 19);
+		LoginPanel.add(lblPassword);
+		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		passwordField = new JPasswordField();
+		passwordField.setToolTipText("Enter your login password that you were assigned");
+		passwordField.setBounds(207, 257, 380, 30);
+		LoginPanel.add(passwordField);
+		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
+		passwordField.setBackground(Color.LIGHT_GRAY);
+		
+		JButton loginButton = new JButton("Login");
+		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		loginButton.setBounds(493, 307, 94, 42);
+		LoginPanel.add(loginButton);
+		
+		JLabel lblEldertrack = new JLabel("ElderTrack Login");
+		lblEldertrack.setBounds(10, 0, 754, 54);
+		LoginPanel.add(lblEldertrack);
+		lblEldertrack.setForeground(SystemColor.textHighlight);
+		lblEldertrack.setFont(new Font("Segoe UI", Font.PLAIN, 40));
+		
+		/**
+		 *  Weather Panel
+		 */
 		
 		JLabel lblWeatherText = new JLabel("Weather");
 		lblWeatherText.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -139,7 +154,9 @@ public class MainFrame extends JFrame {
 			lblWeatherLine4.setText("Air Pressure: " + weather.getAirPressure() + "hPa");
 		}
 		
-		
+		/**
+		 * Action Listeners
+		 */
 		
 		// On login button pressed, 
 		// Check login details by calling method from eldertrack.login.LoginProcessor class file
