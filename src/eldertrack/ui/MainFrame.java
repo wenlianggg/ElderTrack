@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -12,8 +11,12 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.JPasswordField;
+
+import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
@@ -22,18 +25,23 @@ import eldertrack.login.SessionTools;
 import eldertrack.login.StaffSession;
 import eldertrack.weather.Weather;
 import eldertrack.weather.WeatherTools;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.FlowLayout;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1;
-    final static String LOGINPANEL = "Card with Login Panel";
-    final static String MEDICATIONPANEL = "Card with Medication Panel";
-    final static String DIETPANEL = "Card with Diet Panel";
+    final static String LOGINPANEL = "Login Panel";
+    final static String MEDICATIONPANEL = "Medication Panel";
+    final static String DIETPANEL = "Diet Panel";
+    final static String MGMTPANEL = "Management Panel";
     
-	private JPanel contentPane;
+	private JPanel MasterPane;
 	private String loginMessage;
 	private JPasswordField passwordField;
 	private StaffSession session;
 
+	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
+	
 	/**
 	 * Launch the application.
 	 */
@@ -59,60 +67,46 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 1000, 800);
 		setResizable(false);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		
-		/**
-		 * Instantiate all JPanels
-		 */
-		
+		MasterPane = new JPanel();
+		MasterPane.setBorder(null);
+		setContentPane(MasterPane);
+		MasterPane.setLayout(null);
+
 		JPanel LoginPanel = new JPanel();
-		LoginPanel.setBounds(0, 0, 794, 483);
-		contentPane.add(LoginPanel);
+		LoginPanel.setBounds(0, 0, 995, 670);
+		MasterPane.add(LoginPanel);
 		LoginPanel.setLayout(null);
 		
-		
-		JPanel WeatherPanel = new JPanel();
-		WeatherPanel.setBackground(new Color(173, 255, 47));
-		WeatherPanel.setBounds(597, 483, 197, 88);
-		contentPane.add(WeatherPanel);
-		WeatherPanel.setLayout(null);
-		
-		/**
-		 * Login Panel
-		 */
-		
 		JLabel lblLogin = new JLabel("Login:");
-		lblLogin.setBounds(207, 126, 66, 32);
+		lblLogin.setBounds(298, 209, 66, 32);
 		LoginPanel.add(lblLogin);
 		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		JTextField loginField = new JTextField();
 		loginField.setToolTipText("Enter your login username that you were assigned");
-		loginField.setBounds(207, 166, 380, 32);
+		loginField.setBounds(298, 249, 400, 32);
 		LoginPanel.add(loginField);
 		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
 		loginField.setBackground(Color.LIGHT_GRAY);
 		
 		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(207, 227, 101, 19);
+		lblPassword.setBounds(300, 303, 101, 19);
 		LoginPanel.add(lblPassword);
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		passwordField = new JPasswordField();
 		passwordField.setToolTipText("Enter your login password that you were assigned");
-		passwordField.setBounds(207, 257, 380, 30);
+		passwordField.setBounds(298, 330, 400, 30);
 		LoginPanel.add(passwordField);
 		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
 		passwordField.setBackground(Color.LIGHT_GRAY);
 		
 		JButton loginButton = new JButton("Login");
 		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		loginButton.setBounds(493, 307, 94, 42);
+		loginButton.setBounds(604, 392, 94, 42);
 		LoginPanel.add(loginButton);
 		
 		JLabel lblEldertrack = new JLabel("ElderTrack Login");
@@ -121,9 +115,34 @@ public class MainFrame extends JFrame {
 		lblEldertrack.setForeground(SystemColor.textHighlight);
 		lblEldertrack.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		
-		/**
-		 *  Weather Panel
-		 */
+		JPanel DietPanel = new JPanel();
+		DietPanel.setBounds(0, 0, 995, 670);
+		MasterPane.add(DietPanel);
+		DietPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel lblDietLabel = new JLabel("ElderTrack Diet Management");
+		DietPanel.add(lblDietLabel);
+		
+		
+		JComboBox<String> comboBox = new JComboBox<>();
+		comboBox.setSize(174, 26);
+		comboBox.setLocation(10, 682);
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {DIETPANEL, LOGINPANEL,}));
+		comboBox.setSelectedIndex(0);
+		MasterPane.add(comboBox);
+		
+		JPanel MainPanel = new JPanel(new CardLayout()); // MAIN PANEL
+		MasterPane.add(MainPanel);
+		MainPanel.setLocation(0, 0);
+		MainPanel.setSize(994, 671);
+		MainPanel.setLayout(null);
+		CardLayout cl = (CardLayout) MainPanel.getLayout();
+
+		JPanel WeatherPanel = new JPanel();
+		WeatherPanel.setBounds(794, 671, 200, 100);
+		MasterPane.add(WeatherPanel);
+		WeatherPanel.setBackground(new Color(173, 255, 47));
+		WeatherPanel.setLayout(null);
 		
 		JLabel lblWeatherText = new JLabel("Weather");
 		lblWeatherText.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -134,7 +153,7 @@ public class MainFrame extends JFrame {
 		lblWeatherLine1.setBounds(10, 25, 177, 14);
 		WeatherPanel.add(lblWeatherLine1);
 		
-		JLabel lblWeatherLine2 = new JLabel("API Did Not Respond Timely");
+		JLabel lblWeatherLine2 = new JLabel("Web API Did Not Respond Timely");
 		lblWeatherLine2.setBounds(10, 40, 177, 14);
 		WeatherPanel.add(lblWeatherLine2);
 		
@@ -154,10 +173,11 @@ public class MainFrame extends JFrame {
 			lblWeatherLine4.setText("Air Pressure: " + weather.getAirPressure() + "hPa");
 		}
 		
-		/**
-		 * Action Listeners
-		 */
+		JButton btnSwitchCards = new JButton("Switch Cards");
+		btnSwitchCards.setBounds(10, 636, 120, 23);
+		MasterPane.add(btnSwitchCards);
 		
+				
 		// On login button pressed, 
 		// Check login details by calling method from eldertrack.login.LoginProcessor class file
 		loginButton.addActionListener(new ActionListener() {
@@ -176,5 +196,11 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
+
+
+		
+		/**
+		 * Action Listeners
+		 */
 	}
 }

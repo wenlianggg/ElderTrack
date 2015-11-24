@@ -49,7 +49,7 @@ public class CardLayoutDemo implements ItemListener {
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel comboBoxPane = new JPanel(); //use FlowLayout
         String comboBoxItems[] = { BUTTONPANEL, TEXTPANEL };
-        JComboBox cb = new JComboBox(comboBoxItems);
+        JComboBox<?> cb = new JComboBox<Object>(comboBoxItems);
         cb.setEditable(false);
         cb.addItemListener(this);
         comboBoxPane.add(cb);
@@ -73,8 +73,9 @@ public class CardLayoutDemo implements ItemListener {
     }
     
     public void itemStateChanged(ItemEvent evt) {
-        CardLayout cl = (CardLayout)(cards.getLayout());
-        cl.show(cards, (String)evt.getItem());
+        JComboBox<?> jcb = (JComboBox<?>) evt.getSource();
+        CardLayout cl = (CardLayout) cards.getLayout();
+        cl.show(cards, jcb.getSelectedItem().toString());
     }
     
     /**

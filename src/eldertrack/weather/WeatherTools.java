@@ -49,24 +49,29 @@ public class WeatherTools {
 		    String weatherjson = URLTools.readUrl("https://api.forecast.io/forecast/5a1a1e859c525d254a02e4944d0de102/1.379348,103.849876?exclude=minutely,hourly,daily,alerts,flags&units=si");
 		    JSONObject json = (JSONObject)new JSONParser().parse(weatherjson);
 		    JSONObject jsonc = (JSONObject)new JSONParser().parse(json.get("currently").toString());
-		    double precipProb = 0;
-		    
-		    if (jsonc.get("precipProb") instanceof Double) {
-		    	precipProb = (double)jsonc.get("precipProb");
-		    } else if (jsonc.get("precipProb") instanceof Long) {
-		    	precipProb = 0;
-		    }
 		    
 		    weather = new Weather(jsonc.get("time"),
 		    		jsonc.get("summary"),
-		    		precipProb,
-		    		(double)jsonc.get("temperature"),
-		    		(double)jsonc.get("windSpeed"),
-		    		(double)jsonc.get("pressure"));
+		    		doubleCaster(jsonc.get("precipProbability")),
+		    		doubleCaster(jsonc.get("temperature")),
+		    		doubleCaster(jsonc.get("windSpeed")),
+		    		doubleCaster(jsonc.get("pressure")));
 		    return weather;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static double doubleCaster(double toCast) {
+		return toCast;
+	}
+	
+	public static double doubleCaster(Object toCast) {
+		if (toCast instanceof Long) {
+			return Long.valueOf((long)toCast).doubleValue();
+		} else {
+			return (double)toCast;
+		}
 	}
 }
