@@ -11,6 +11,8 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import javax.swing.border.EtchedBorder;
+import java.awt.Color;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -48,7 +50,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 800);
+		setBounds(100, 100, 1000, 810);
 		setResizable(false);
 		
 		MasterPane = new JPanel();
@@ -57,7 +59,9 @@ public class MainFrame extends JFrame {
 		setContentPane(MasterPane);
 		
 		JPanel WeatherPanel = new WeatherPanel();
+		WeatherPanel.setLocation(790, 671);
 		JPanel LoginPanel = new LoginPanel();
+		LoginPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		JPanel DietPanel = new DietPanel();
 		JPanel MedPanel = new MedPanel();
 		JPanel MgmtPanel = new MgmtPanel();

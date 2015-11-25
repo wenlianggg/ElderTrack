@@ -1,5 +1,7 @@
 package eldertrack.weather;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -42,7 +44,8 @@ public class WeatherTools {
 		   future.cancel(true);
 		}
 	}
-		
+	
+	// Method to get and return the Weather object
 	public static Weather weatherGetter() {
 		Weather weather = null;
 		try {
@@ -63,12 +66,22 @@ public class WeatherTools {
 		return null;
 	}
 	
+	// Method to cast a double onto Long or Double
 	public static double doubleCaster(Object toCast) {
 		System.out.println(toCast.getClass().getName());
 		if (toCast instanceof Long) {
 			return Long.valueOf((long)toCast).doubleValue();
 		} else {
-			return (double)toCast;
+			return round((double)toCast,2);
 		}
+	}
+	
+	// Method to round numbers
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
 	}
 }
