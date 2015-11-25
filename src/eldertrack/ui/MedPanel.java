@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class MedPanel extends JPanel {
+	private static final long serialVersionUID = 5062666526948201245L;
 	JLabel lblMedPanelLbl;
 	MedPanel() {
 		setBounds(0, 0, 995, 670);

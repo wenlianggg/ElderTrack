@@ -4,29 +4,11 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.JPasswordField;
-
 import java.awt.CardLayout;
-import java.awt.Color;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.SystemColor;
-
-import eldertrack.login.SessionTools;
-import eldertrack.login.StaffSession;
-import eldertrack.weather.Weather;
-import eldertrack.weather.WeatherTools;
 import javax.swing.DefaultComboBoxModel;
-import java.awt.FlowLayout;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
