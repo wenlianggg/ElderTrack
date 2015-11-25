@@ -63,11 +63,8 @@ public class WeatherTools {
 		return null;
 	}
 	
-	public static double doubleCaster(double toCast) {
-		return toCast;
-	}
-	
 	public static double doubleCaster(Object toCast) {
+		System.out.println(toCast.getClass().getName());
 		if (toCast instanceof Long) {
 			return Long.valueOf((long)toCast).doubleValue();
 		} else {

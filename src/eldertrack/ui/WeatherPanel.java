@@ -41,7 +41,7 @@ public class WeatherPanel extends JPanel {
 		if (weather!=null) {
 			lblWeatherLine1.setText(weather.getTemperature() + "°C on " + weather.getTimeString() );
 			lblWeatherLine2.setText("Condition: " + weather.getSummary());
-			lblWeatherLine3.setText("Precip: " + weather.getPrecip()*100 + "% Wind Speed: " + weather.getWindSpeed() + "m/s");
+			lblWeatherLine3.setText("Precip: " + weather.getPrecip() + "% Wind Speed: " + weather.getWindSpeed() + "m/s");
 			lblWeatherLine4.setText("Air Pressure: " + weather.getAirPressure() + "hPa");
 		}
 		

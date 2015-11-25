@@ -16,11 +16,11 @@ public class Weather {
 	Weather(Object time, Object summary, double precip, double temperature, double windspeed, double airpressure) {
 		this.epochtime = (long)time;
 		this.summary = summary.toString();
-		this.precip = (long)precip;
-		this.temperature = (double)temperature;
-		this.windspeed = (double)windspeed;
-		this.airpressure = (double)airpressure;
-		System.out.println(this.airpressure + " " + this.summary); // Test
+		this.precip = precip;
+		this.temperature = temperature;
+		this.windspeed = windspeed;
+		this.airpressure = airpressure;
+		System.out.println(this.getSummary() + " - " + this.getAirPressure() + " " + this.getPrecip() + "% " + this.getWindSpeed() + "m/s"); // Test
 	}
 	
 	public String getTimeString() {
@@ -36,7 +36,7 @@ public class Weather {
 	}
 	
 	public double getPrecip() {
-		return this.precip;
+		return this.precip*100;
 	}
 	
 	public double getTemperature() {
