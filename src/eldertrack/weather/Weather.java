@@ -13,14 +13,14 @@ public class Weather {
 	private double windspeed;
 	private double airpressure;
 	
-	Weather(Object time, Object summary, Object precip, Object temperature, Object windspeed, Object airpressure) {
+	Weather(Object time, Object summary, double precip, double temperature, double windspeed, double airpressure) {
 		this.epochtime = (long)time;
 		this.summary = summary.toString();
-		this.precip = (double)precip;
+		this.precip = (long)precip;
 		this.temperature = (double)temperature;
 		this.windspeed = (double)windspeed;
 		this.airpressure = (double)airpressure;
-		System.out.println(this.airpressure + " " + this.summary);
+		System.out.println(this.airpressure + " " + this.summary); // Test
 	}
 	
 	public String getTimeString() {
