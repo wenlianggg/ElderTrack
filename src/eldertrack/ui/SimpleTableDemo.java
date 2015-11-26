@@ -48,6 +48,7 @@ public class SimpleTableDemo extends JPanel {
     /**
 	 * 
 	 */
+	// small change
 	private static final long serialVersionUID = 1L;
 	private boolean DEBUG = false;
 
