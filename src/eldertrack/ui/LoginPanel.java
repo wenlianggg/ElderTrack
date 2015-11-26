@@ -70,7 +70,7 @@ public class LoginPanel extends JPanel {
 				if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
 					session = SessionTools.createSession(loginField.getText(), passwordField.getPassword());
 					if (session == null) {
-						loginMessage = "Login failed!";
+						loginMessage = "Login failed, Please Try Again";
 						loginField.setText("");
 						passwordField.setText("");
 					} else if (session.isAuthenticated()) {
