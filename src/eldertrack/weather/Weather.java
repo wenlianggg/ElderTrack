@@ -2,6 +2,7 @@ package eldertrack.weather;
 
 import java.sql.Date;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
@@ -12,15 +13,16 @@ public class Weather {
 	private double temperature;
 	private double windspeed;
 	private double airpressure;
+	private static DecimalFormat df = new DecimalFormat("####.0");
 	
-	Weather(Object time, Object summary, Object precip, Object temperature, Object windspeed, Object airpressure) {
+	Weather(Object time, Object summary, double precip, double temperature, double windspeed, double airpressure) {
 		this.epochtime = (long)time;
 		this.summary = summary.toString();
-		this.precip = (double)precip;
-		this.temperature = (double)temperature;
-		this.windspeed = (double)windspeed;
-		this.airpressure = (double)airpressure;
-		System.out.println(this.airpressure + " " + this.summary);
+		this.precip = precip;
+		this.temperature = temperature;
+		this.windspeed = windspeed;
+		this.airpressure = airpressure;
+		System.out.println(this.getSummary() + " - " + this.getAirPressure() + " " + this.getPrecip() + "% " + this.getWindSpeed() + "m/s"); // Test
 	}
 	
 	public String getTimeString() {
@@ -35,19 +37,19 @@ public class Weather {
 		return this.summary;
 	}
 	
-	public double getPrecip() {
-		return this.precip;
+	public String getPrecip() {
+		return df.format(this.precip*100);
 	}
 	
-	public double getTemperature() {
-		return this.temperature;
+	public String getTemperature() {
+		return df.format(this.temperature);
 	}
 	
-	public double getWindSpeed() {
-		return this.windspeed;
+	public String getWindSpeed() {
+		return df.format(this.windspeed);
 	}
 	
-	public double getAirPressure() {
-		return this.airpressure;
+	public String getAirPressure() {
+		return df.format(this.airpressure);
 	}
 }
