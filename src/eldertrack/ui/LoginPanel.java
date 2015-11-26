@@ -71,6 +71,8 @@ public class LoginPanel extends JPanel {
 					session = SessionTools.createSession(loginField.getText(), passwordField.getPassword());
 					if (session == null) {
 						loginMessage = "Login failed!";
+						loginField.setText("");
+						passwordField.setText("");
 					} else if (session.isAuthenticated()) {
 						loginMessage = "Login successful!";
 					}

@@ -45,7 +45,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class SimpleTableDemo extends JPanel {
-    private boolean DEBUG = false;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private boolean DEBUG = false;
 
     public SimpleTableDemo() {
         super(new GridLayout(1,0));

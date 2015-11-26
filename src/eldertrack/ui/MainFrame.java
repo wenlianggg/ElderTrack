@@ -12,7 +12,6 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
-import java.awt.Color;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
