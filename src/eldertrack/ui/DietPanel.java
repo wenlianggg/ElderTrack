@@ -18,7 +18,7 @@ public class DietPanel extends JPanel {
 	DietPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
-        String[] columnNames = {"First Name", "Last Name", "Sport", "# of Years"};
+        String[] columnNames = {"ID", "Name", "Room Number"};
 
 		Object[][] data = {{"Kathy", "Smith", "Snowboarding", new Integer(5)},
 		{"John", "Doe", "Rowing", new Integer(3)},
