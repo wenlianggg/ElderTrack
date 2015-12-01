@@ -2,49 +2,81 @@ package eldertrack.ui;
 
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.sql.SQLException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+
+import eldertrack.diet.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class DietPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	JLabel lblSelectElderly;
 	private JTable table;
+	private JTextField searchField;
+	private JButton btnSearch;
 	
 	// Constructor
 	DietPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
-        String[] columnNames = {"ID", "Name", "Room Number"};
 
-		Object[][] data = {{"Kathy", "Smith", "Snowboarding", new Integer(5)},
-		{"John", "Doe", "Rowing", new Integer(3)},
-		{"Sue", "Black", "Knitting", new Integer(2)},
-		{"Jane", "White", "Speed reading", new Integer(20)},
-		{"Joe", "Brown", "Pool", new Integer(10)}};
+		JScrollPane tableScrollPane = new JScrollPane(table);
+		tableScrollPane.setViewportBorder(null);
+		tableScrollPane.setBounds(10, 130, 274, 427);
+		add(tableScrollPane);
 		
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setViewportBorder(null);
-		scrollPane.setBounds(10, 99, 336, 328);
-		add(scrollPane);
 		
-		table = new JTable(data, columnNames);
-		scrollPane.setViewportView(table);
+		try {
+			DefaultTableModel allEldersData = TableHelper.getElderlyFromQuery("");
+			table = new JTable(allEldersData);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		table.getColumnModel().getColumn(0).setPreferredWidth(36);
+		tableScrollPane.setViewportView(table);
 		
 		lblDietLabel = new JLabel("ElderTrack Diet Management");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
 		lblDietLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
 		lblDietLabel.setBounds(10, 0, 557, 54);
 		
-		lblSelectElderly = new JLabel("Select Elderly");
+		lblSelectElderly = new JLabel("Select An Elderly");
 		lblSelectElderly.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblSelectElderly.setBounds(10, 65, 119, 34);
+		lblSelectElderly.setBounds(10, 55, 134, 31);
 		
 		add(lblDietLabel);
 		add(lblSelectElderly);
+		
+		searchField = new JTextField();
+		searchField.setBounds(56, 97, 145, 25);
+		add(searchField);
+		searchField.setColumns(10);
+		
+		btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					table.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				};
+			}
+		});
+		btnSearch.setBounds(211, 98, 73, 23);
+		add(btnSearch);
+		
+		JLabel lblSearch = new JLabel("Search:");
+		lblSearch.setBounds(10, 97, 47, 22);
+		add(lblSearch);
 
 	}
 }
