@@ -16,6 +16,9 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+import javax.swing.JButton;
 
 public class MedPanel extends JPanel {
 	private static final long serialVersionUID = 5062666526948201245L;
@@ -26,6 +29,7 @@ public class MedPanel extends JPanel {
 	JPanel MedTab2=new JPanel();
 	JLabel MedTab1Lab=new JLabel();
 	JLabel MedTab2Lab=new JLabel();
+	private JTextField textField;
 	
 	
 	MedPanel() {
@@ -50,6 +54,30 @@ public class MedPanel extends JPanel {
 		MedTab2.add(MedTab2Lab);
 		
 		TabbedPanel.add("Dosage", MedTab1);
+		
+		JLabel lblRoomNumber = new JLabel("Room Number: ");
+		lblRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		lblRoomNumber.setBounds(143, 110, 212, 37);
+		MedTab1.add(lblRoomNumber);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(380, 110, 129, 36);
+		MedTab1.add(comboBox);
+		
+		JLabel lblTime = new JLabel("Time: ");
+		lblTime.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		lblTime.setBounds(143, 182, 149, 37);
+		MedTab1.add(lblTime);
+		
+		textField = new JTextField();
+		textField.setBounds(411, 182, 98, 37);
+		MedTab1.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnGetDosage = new JButton("Get Dosage");
+		btnGetDosage.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		btnGetDosage.setBounds(294, 260, 215, 49);
+		MedTab1.add(btnGetDosage);
 		TabbedPanel.add("Check-Up",MedTab2);
 		add(TabbedPanel);
 		
