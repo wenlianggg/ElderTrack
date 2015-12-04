@@ -16,6 +16,8 @@ import eldertrack.diet.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
+import java.awt.Color;
+import javax.swing.border.LineBorder;
 
 public class DietPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
@@ -32,7 +34,7 @@ public class DietPanel extends JPanel {
 
 		JScrollPane tableScrollPane = new JScrollPane(table);
 		tableScrollPane.setViewportBorder(null);
-		tableScrollPane.setBounds(10, 130, 275, 500);
+		tableScrollPane.setBounds(10, 130, 283, 500);
 		add(tableScrollPane);
 		
 		try {
@@ -50,14 +52,14 @@ public class DietPanel extends JPanel {
 		lblDietLabel.setBounds(10, 0, 557, 54);
 		
 		lblSelectElderly = new JLabel("Select An Elderly");
-		lblSelectElderly.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblSelectElderly.setBounds(10, 55, 134, 31);
+		lblSelectElderly.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblSelectElderly.setBounds(10, 57, 290, 31);
 		
 		add(lblDietLabel);
 		add(lblSelectElderly);
 		
 		searchField = new JTextField();
-		searchField.setBounds(56, 97, 145, 25);
+		searchField.setBounds(56, 97, 165, 25);
 		add(searchField);
 		searchField.setColumns(10);
 		
@@ -71,7 +73,7 @@ public class DietPanel extends JPanel {
 				};
 			}
 		});
-		btnSearch.setBounds(211, 98, 74, 23);
+		btnSearch.setBounds(228, 99, 65, 23);
 		add(btnSearch);
 		
 		JLabel lblSearch = new JLabel("Search:");
@@ -79,38 +81,82 @@ public class DietPanel extends JPanel {
 		add(lblSearch);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(309, 97, 665, 440);
+		panel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		panel.setBounds(310, 97, 665, 440);
 		add(panel);
 		panel.setLayout(null);
 		
+		JLabel lblElderid = new JLabel("ElderID:");
+		lblElderid.setBounds(10, 55, 209, 14);
+		panel.add(lblElderid);
+		
 		JLabel lblInfoName = new JLabel("Elderly Name");
+		lblInfoName.setForeground(new Color(0, 128, 128));
 		lblInfoName.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblInfoName.setBounds(10, 11, 645, 37);
 		panel.add(lblInfoName);
 		
 		JLabel lblAge = new JLabel("Age: --");
-		lblAge.setBounds(10, 84, 105, 14);
+		lblAge.setBounds(10, 95, 209, 14);
 		panel.add(lblAge);
 		
 		JLabel lblRoomNumber = new JLabel("Room Number: --");
-		lblRoomNumber.setBounds(10, 59, 105, 14);
+		lblRoomNumber.setBounds(10, 75, 209, 14);
 		panel.add(lblRoomNumber);
 		
-		JLabel lblNewLabel = new JLabel("NRIC: SXXXXXXXA");
-		lblNewLabel.setBounds(10, 109, 105, 14);
-		panel.add(lblNewLabel);
+		JLabel lblNric = new JLabel("NRIC: SXXXXXXXA");
+		lblNric.setBounds(10, 115, 209, 14);
+		panel.add(lblNric);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 166, 665, 2);
+		separator.setBounds(3, 139, 659, 3);
 		panel.add(separator);
 		
-		JLabel lblRecommendedCalorieIntake = new JLabel("RDA Calories: xxx kcal");
-		lblRecommendedCalorieIntake.setBounds(10, 179, 645, 92);
-		panel.add(lblRecommendedCalorieIntake);
+		JLabel lblStatisticsForToday = new JLabel("Statistics For Today");
+		lblStatisticsForToday.setForeground(new Color(0, 128, 128));
+		lblStatisticsForToday.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		lblStatisticsForToday.setBounds(10, 145, 209, 29);
+		panel.add(lblStatisticsForToday);
+		
+		JLabel lblCalories = new JLabel("RDA Calories (kcal):  --- (x% of RDA)");
+		lblCalories.setBounds(10, 181, 209, 14);
+		panel.add(lblCalories);
+		
+		JLabel lblCarbohydrates = new JLabel("Carbohydrates (g): --- (x% of RDA)");
+		lblCarbohydrates.setBounds(10, 201, 209, 14);
+		panel.add(lblCarbohydrates);
+		
+		JLabel lblProtein = new JLabel("Protein(g) :  --- (x% of RDA)");
+		lblProtein.setBounds(10, 221, 209, 14);
+		panel.add(lblProtein);
+		
+		JLabel lblIron = new JLabel("Iron(mg):  --- (x% of RDA)");
+		lblIron.setBounds(11, 241, 208, 14);
+		panel.add(lblIron);
+		
+		JLabel lblVitaminA = new JLabel("Vitamin A (mg):  --- (x% of RDA)");
+		lblVitaminA.setBounds(10, 261, 209, 14);
+		panel.add(lblVitaminA);
+		
+		JLabel lblVitaminC = new JLabel("Vitamin C (mg):  --- (x% of RDA)");
+		lblVitaminC.setBounds(10, 281, 209, 14);
+		panel.add(lblVitaminC);
+		
+		JLabel lblVitaminD = new JLabel("Vitamin D (mg):  --- (x% of RDA)");
+		lblVitaminD.setBounds(10, 321, 209, 14);
+		panel.add(lblVitaminD);
+		
+		JLabel lblVitaminE = new JLabel("Vitamin E (mg):  --- (x% of RDA)");
+		lblVitaminE.setBounds(10, 301, 209, 14);
+		panel.add(lblVitaminE);
+		
+		JLabel lblPreviousMeal = new JLabel("Previous Meal: ______________________");
+		lblPreviousMeal.setBounds(9, 357, 209, 14);
+		panel.add(lblPreviousMeal);
 		
 		JLabel lblReviewInfo = new JLabel("Review Information");
-		lblReviewInfo.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblReviewInfo.setBounds(309, 58, 154, 25);
+		lblReviewInfo.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblReviewInfo.setBounds(310, 59, 665, 31);
 		add(lblReviewInfo);
 		
 		JButton btnModifyMeals = new JButton("Update Existing Meals");
@@ -118,15 +164,21 @@ public class DietPanel extends JPanel {
 		add(btnModifyMeals);
 		
 		JButton btnAddMeal = new JButton("Add Meal");
+		btnAddMeal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JPanel dietAddPanel = new DietAddPanel();
+				dietAddPanel.setVisible(true);
+			}
+		});
 		btnAddMeal.setBounds(309, 548, 215, 82);
 		add(btnAddMeal);
 		
 		JButton btnNewButton = new JButton("View Elderly in Management Panel");
-		btnNewButton.setBounds(759, 588, 215, 40);
+		btnNewButton.setBounds(759, 583, 216, 45);
 		add(btnNewButton);
 		
 		JButton btnMenuManagement = new JButton("Modify Menu Available");
-		btnMenuManagement.setBounds(759, 548, 215, 29);
+		btnMenuManagement.setBounds(759, 548, 216, 29);
 		add(btnMenuManagement);
 
 	}
