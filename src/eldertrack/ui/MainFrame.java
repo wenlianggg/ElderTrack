@@ -49,7 +49,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 810);
+		setBounds(0, 0, 1000, 810);
 		setResizable(false);
 		
 		MasterPane = new JPanel();
