@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -11,6 +12,9 @@ import javax.swing.JTabbedPane;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
@@ -19,6 +23,8 @@ import java.awt.Dimension;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MedPanel extends JPanel {
 	private static final long serialVersionUID = 5062666526948201245L;
@@ -41,9 +47,7 @@ public class MedPanel extends JPanel {
 		add(lblMedPanelLbl);    
 		
 		TabbedPanel.setBounds(10, 85, 975, 502);
-		
-		
-		
+		TabbedPanel.setFont( new Font( "Segoe UI", Font.BOLD|Font.ITALIC, 20 ) );
 		
 		MedTab1.setLayout(null);
 		MedTab1Lab.setBounds(23, 5, 0, 0);
@@ -57,26 +61,47 @@ public class MedPanel extends JPanel {
 		
 		JLabel lblRoomNumber = new JLabel("Room Number: ");
 		lblRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblRoomNumber.setBounds(143, 110, 212, 37);
+		lblRoomNumber.setBounds(300, 110, 212, 37);
 		MedTab1.add(lblRoomNumber);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(380, 110, 129, 36);
+		comboBox.setBounds(537, 110, 129, 36);
+		comboBox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
+		comboBox.addItem("101");
+		comboBox.addItem("102");
+		comboBox.addItem("103");
 		MedTab1.add(comboBox);
+		
+		
 		
 		JLabel lblTime = new JLabel("Time: ");
 		lblTime.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblTime.setBounds(143, 182, 149, 37);
+		lblTime.setBounds(300, 182, 149, 37);
 		MedTab1.add(lblTime);
 		
+		
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		Calendar cal = Calendar.getInstance();
+		
 		textField = new JTextField();
-		textField.setBounds(411, 182, 98, 37);
+		textField.setHorizontalAlignment(SwingConstants.CENTER);
+		textField.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
+		textField.setText(dateFormat.format(cal.getTime()));
+		textField.setBounds(568, 182, 98, 37);
 		MedTab1.add(textField);
 		textField.setColumns(10);
 		
 		JButton btnGetDosage = new JButton("Get Dosage");
+		btnGetDosage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JPanel dos=new JPanel();
+				dos.setBounds(568, 182, 98, 37);
+				
+			}
+		});
+		
 		btnGetDosage.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		btnGetDosage.setBounds(294, 260, 215, 49);
+		btnGetDosage.setBounds(451, 260, 215, 49);
 		MedTab1.add(btnGetDosage);
 		TabbedPanel.add("Check-Up",MedTab2);
 		add(TabbedPanel);
