@@ -1,25 +1,15 @@
 package eldertrack.ui;
 
-import java.awt.FlowLayout;
-
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Dimension;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -71,7 +61,7 @@ public class MedPanel extends JPanel {
 		lblRoomNumber.setBounds(300, 110, 212, 37);
 		MedTab1.add(lblRoomNumber);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(537, 110, 129, 36);
 		comboBox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
 		comboBox.addItem("101");

@@ -2,8 +2,6 @@ package eldertrack.ui;
 
 import javax.swing.JPanel;
 import java.awt.CardLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class DietPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;

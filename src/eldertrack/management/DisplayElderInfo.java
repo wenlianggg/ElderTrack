@@ -7,7 +7,6 @@ import eldertrack.db.SQLConnect;
 
 public class DisplayElderInfo {
 	public static void main(String[] args) throws SQLException {
-<<<<<<< HEAD
 		Connection c = null;
 		
 		try{
@@ -36,10 +35,5 @@ public class DisplayElderInfo {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
 		}
-=======
-		
-		ResultSet rs = SQLConnect.getResultSet("SELECT * FROM et_elderly");
-	
->>>>>>> refs/remotes/origin/master
 	}
 }
