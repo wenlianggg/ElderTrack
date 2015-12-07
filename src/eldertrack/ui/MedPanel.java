@@ -46,18 +46,25 @@ public class MedPanel extends JPanel {
 		lblMedPanelLbl.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		add(lblMedPanelLbl);    
 		
-		TabbedPanel.setBounds(10, 85, 975, 502);
+		TabbedPanel.setBounds(10, 85, 975, 510);
 		TabbedPanel.setFont( new Font( "Segoe UI", Font.BOLD|Font.ITALIC, 20 ) );
-		
-		MedTab1.setLayout(null);
-		MedTab1Lab.setBounds(23, 5, 0, 0);
-		MedTab1.add(MedTab1Lab);
 		
 		MedTab2.setLayout(null);
 		MedTab2Lab.setBounds(23, 5, 0, 0);
 		MedTab2.add(MedTab2Lab);
 		
+		
+		
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		Calendar cal = Calendar.getInstance();
+		
+		MedTab1.setLayout(null);
+		MedTab1Lab.setBounds(23, 5, 0, 0);
+		MedTab1.add(MedTab1Lab);
+		
 		TabbedPanel.add("Dosage", MedTab1);
+		int index=TabbedPanel.indexOfTab("Dosage");
+		
 		
 		JLabel lblRoomNumber = new JLabel("Room Number: ");
 		lblRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -79,10 +86,6 @@ public class MedPanel extends JPanel {
 		lblTime.setBounds(300, 182, 149, 37);
 		MedTab1.add(lblTime);
 		
-		
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		Calendar cal = Calendar.getInstance();
-		
 		textField = new JTextField();
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
@@ -94,9 +97,7 @@ public class MedPanel extends JPanel {
 		JButton btnGetDosage = new JButton("Get Dosage");
 		btnGetDosage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JPanel dos=new JPanel();
-				dos.setBounds(568, 182, 98, 37);
-				
+				TabbedPanel.setComponentAt(index, new DosagePanel());
 			}
 		});
 		
