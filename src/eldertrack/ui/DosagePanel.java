@@ -7,6 +7,8 @@ import java.awt.Font;
 
 public class DosagePanel extends JPanel {
 
+	private static final long serialVersionUID = 1726776874636177464L;
+
 	/**
 	 * Create the panel.
 	 */
