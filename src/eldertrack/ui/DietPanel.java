@@ -1,30 +1,34 @@
 package eldertrack.ui;
 
-import java.awt.Font;
-import java.awt.SystemColor;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DietPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
-	JLabel lblDietLabel;
-	JLabel lblSelectElderly;
+    final static String DMAINPANEL = "Diet Main Panel";
+	final static String DADDPANEL = "Diet Add Panel";
+    final static String DMODPANEL = "Diet Modify Panel";
+    final static String DMENUPANEL = "Diet Menu Panel";
+	static JPanel CardsPanel;
+	
+	// Constructor
 	DietPanel() {
-		setBounds(0, 0, 995, 670);
-		setLayout(null);
-		lblDietLabel = new JLabel("ElderTrack Diet Management");
-		lblSelectElderly = new JLabel("Select Elderly");
-
-		lblDietLabel.setForeground(SystemColor.textHighlight);
-		lblDietLabel.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-		lblDietLabel.setBounds(10, 0, 557, 54);
-
-		lblSelectElderly.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblSelectElderly.setBounds(10, 65, 88, 23);
+		JPanel DietMainPanel = new DietMainPanel();
+		JPanel DietAddPanel = new DietAddPanel();
+		JPanel DietModifyPanel = new DietModifyPanel();
+		JPanel DietMenuPanel = new DietMenuPanel();
 		
-		add(lblSelectElderly);
-		add(lblDietLabel);
-
+		CardsPanel = new JPanel(new CardLayout());
+		CardsPanel.add(DietMainPanel, DMAINPANEL);
+		CardsPanel.add(DietAddPanel, DADDPANEL);
+		CardsPanel.add(DietModifyPanel, DMODPANEL);
+		CardsPanel.add(DietMenuPanel, DMENUPANEL);
+		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, DMAINPANEL);
+		
+		setLayout(null);
+		CardsPanel.setBounds(0, 0, 994, 671);
+		add(CardsPanel);
 	}
 }
