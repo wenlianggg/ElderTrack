@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
     final static String MGMTPANEL = "Management Panel";
 	private JPanel MasterPane;
 	private JPanel CardsPanel;
-
+	// a freaking small change, wl i love you :D
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
