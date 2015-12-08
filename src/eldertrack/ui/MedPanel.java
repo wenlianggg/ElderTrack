@@ -1,105 +1,35 @@
 package eldertrack.ui;
 
-import javax.swing.JLabel;
+
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import java.awt.CardLayout;
 
-import java.awt.Font;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
-import javax.swing.SwingConstants;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
-import java.awt.SystemColor;
-import javax.swing.UIManager;
 
 public class MedPanel extends JPanel {
 	private static final long serialVersionUID = 5062666526948201245L;
-	JLabel lblMedPanelLbl;
-	//Panel
-	JTabbedPane TabbedPanel=new JTabbedPane();
-	static JPanel MedTab1=new JPanel();
-	static JPanel MedTab2=new JPanel();
-	JLabel MedTab1Lab=new JLabel();
-	JLabel MedTab2Lab=new JLabel();
-	private JTextField textField;
-	
+	static final String MMAINPANEL="Main Medical Panel";
+	static final String MDOSSEARCHPANEL="Medical Dosage Panel";
+	static final String MDOSPANEL="Medical Dosage Panel";
+	static JPanel MedCardPanel;
+	CardLayout mainCards;
 	
 	MedPanel() {
-		setBounds(0, 0, 995, 670);
+		JPanel MedMainPanel = new MedMainPanel();
+		JPanel MedDosageSearchPanel = new MedDosageSearchPanel();
+		JPanel MedDosagePanel = new MedDosagePanel();
+		JPanel MedCheckPanel = new MedCheckPanel();
+		
+		MedCardPanel = new JPanel(new CardLayout());
+		MedCardPanel.add(MedMainPanel, MMAINPANEL);
+		MedCardPanel.add(MedDosageSearchPanel, MDOSSEARCHPANEL);
+		MedCardPanel.add( MedDosagePanel, MDOSPANEL);
+		MedCardPanel.add(MedCheckPanel, "Medical Check-up Panel");
+		((CardLayout)MedCardPanel.getLayout()).show(MedCardPanel, "Main Medical Panel");
+		
 		setLayout(null);
-		lblMedPanelLbl = new JLabel("ElderTrack Medication");
-		lblMedPanelLbl.setForeground(new Color(51, 153, 255));
-		lblMedPanelLbl.setBounds(5, 5, 392, 54);
-		lblMedPanelLbl.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		add(lblMedPanelLbl);    
-		
-		TabbedPanel.setBounds(10, 85, 975, 510);
-		TabbedPanel.setFont( new Font( "Segoe UI", Font.BOLD|Font.ITALIC, 20 ) );
-		
-		MedTab2.setLayout(null);
-		MedTab2Lab.setBounds(23, 5, 0, 0);
-		MedTab2.add(MedTab2Lab);
-		
-		
-		
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		Calendar cal = Calendar.getInstance();
-		
-		MedTab1.setLayout(null);
-		MedTab1Lab.setBounds(23, 5, 0, 0);
-		MedTab1.add(MedTab1Lab);
-		
-		TabbedPanel.add("Dosage", MedTab1);
-		int index=TabbedPanel.indexOfTab("Dosage");
-		
-		
-		JLabel lblRoomNumber = new JLabel("Room Number: ");
-		lblRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblRoomNumber.setBounds(300, 110, 212, 37);
-		MedTab1.add(lblRoomNumber);
-		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(537, 110, 129, 36);
-		comboBox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
-		comboBox.addItem("101");
-		comboBox.addItem("102");
-		comboBox.addItem("103");
-		MedTab1.add(comboBox);
-		
-		
-		
-		JLabel lblTime = new JLabel("Time: ");
-		lblTime.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblTime.setBounds(300, 182, 149, 37);
-		MedTab1.add(lblTime);
-		
-		textField = new JTextField();
-		textField.setHorizontalAlignment(SwingConstants.CENTER);
-		textField.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
-		textField.setText(dateFormat.format(cal.getTime()));
-		textField.setBounds(568, 182, 98, 37);
-		MedTab1.add(textField);
-		textField.setColumns(10);
-		
-		JButton btnGetDosage = new JButton("Get Dosage");
-		btnGetDosage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TabbedPanel.setComponentAt(index, new DosagePanel());
-			}
-		});
-		
-		btnGetDosage.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		btnGetDosage.setBounds(451, 260, 215, 49);
-		MedTab1.add(btnGetDosage);
-		TabbedPanel.add("Check-Up",MedTab2);
-		add(TabbedPanel);
+		MedCardPanel.setBounds(0, 0, 994, 671);
+		add(MedCardPanel);
 		
 		
 	}
