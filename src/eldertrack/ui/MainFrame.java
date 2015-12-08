@@ -1,5 +1,3 @@
-
-
 package eldertrack.ui;
 
 import java.awt.EventQueue;

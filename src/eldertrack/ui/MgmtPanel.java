@@ -5,15 +5,22 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import eldertrack.diet.TableHelper;
+
 import java.awt.Font;
+import java.sql.SQLException;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
+import eldertrack.management.*;
 
 public class MgmtPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblEManagementLbl;
-	private JTable table;
+	private JTable elderlyTable;
+	private JTable staffTable;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -31,52 +38,30 @@ public class MgmtPanel extends JPanel {
 		add(tabbedPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		tabbedPane.addTab("New tab", null, scrollPane, null);
+		tabbedPane.addTab("Elderly", null, scrollPane, null);
 		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-			},
-			new String[] {
-				"ID", "NRIC", "Name", "Age", "Room No."
-			}
-		));
-		scrollPane.setViewportView(table);
+		DefaultTableModel allEldersData;
+		try {
+			allEldersData = ElderlyTableHelper.getElderlyFromQuery("");
+			elderlyTable = new JTable(allEldersData);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		scrollPane.setViewportView(elderlyTable);
+		
+		JScrollPane scrollPane2 = new JScrollPane();
+		tabbedPane.addTab("Staff", null, scrollPane2, null);
+		
+		DefaultTableModel allStaffData;
+		try {
+			allStaffData = StaffTableHelper.getStaffFromQuery("");
+			staffTable = new JTable(allStaffData);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		scrollPane2.setViewportView(staffTable);
 		
 		JButton button = new JButton("Save Changes");
 		button.setBounds(474, 499, 132, 25);
