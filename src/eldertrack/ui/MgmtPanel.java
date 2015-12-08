@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JTabbedPane;
 
 public class MgmtPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
@@ -25,13 +26,14 @@ public class MgmtPanel extends JPanel {
 		lblEManagementLbl.setBounds(407, 5, 181, 16);
 		add(lblEManagementLbl);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(29, 79, 415, 445);
-		add(scrollPane);
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(29, 79, 415, 445);
+		add(tabbedPane);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		tabbedPane.addTab("New tab", null, scrollPane, null);
 		
 		table = new JTable();
-		table.setCellSelectionEnabled(true);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null},
