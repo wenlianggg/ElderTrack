@@ -15,14 +15,17 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
+import java.awt.SystemColor;
+import javax.swing.UIManager;
 
 public class MedPanel extends JPanel {
 	private static final long serialVersionUID = 5062666526948201245L;
 	JLabel lblMedPanelLbl;
 	//Panel
 	JTabbedPane TabbedPanel=new JTabbedPane();
-	JPanel MedTab1=new JPanel();
-	JPanel MedTab2=new JPanel();
+	static JPanel MedTab1=new JPanel();
+	static JPanel MedTab2=new JPanel();
 	JLabel MedTab1Lab=new JLabel();
 	JLabel MedTab2Lab=new JLabel();
 	private JTextField textField;
@@ -32,8 +35,9 @@ public class MedPanel extends JPanel {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		lblMedPanelLbl = new JLabel("ElderTrack Medication");
+		lblMedPanelLbl.setForeground(new Color(51, 153, 255));
 		lblMedPanelLbl.setBounds(5, 5, 392, 54);
-		lblMedPanelLbl.setFont(new Font("Segoe UI", Font.PLAIN, 40));
+		lblMedPanelLbl.setFont(new Font("Segoe UI", Font.ITALIC, 40));
 		add(lblMedPanelLbl);    
 		
 		TabbedPanel.setBounds(10, 85, 975, 510);
