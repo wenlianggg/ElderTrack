@@ -12,6 +12,9 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -19,9 +22,9 @@ public class MainFrame extends JFrame {
     final static String MEDICATIONPANEL = "Medication Panel";
     final static String DIETPANEL = "Diet Panel";
     final static String MGMTPANEL = "Management Panel";
+    final static String MENUPANEL = "Main Menu Panel";
 	private JPanel MasterPane;
-	private JPanel CardsPanel;
-	// a freaking small change, wl i love you :D
+	static JPanel CardsPanel;
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
@@ -64,6 +67,7 @@ public class MainFrame extends JFrame {
 		JPanel DietPanel = new DietPanel();
 		JPanel MedPanel = new MedPanel();
 		JPanel MgmtPanel = new MgmtPanel();
+		JPanel MainMenu = new MainMenuPanel();
 		
 		CardsPanel = new JPanel(new CardLayout());
 		MasterPane.add(CardsPanel);
@@ -71,6 +75,7 @@ public class MainFrame extends JFrame {
 		CardsPanel.add(DietPanel, DIETPANEL);
 		CardsPanel.add(MedPanel, MEDICATIONPANEL);
 		CardsPanel.add(MgmtPanel, MGMTPANEL);
+		CardsPanel.add(MainMenu, MENUPANEL);
 		CardsPanel.setLocation(0, 0);
 		CardsPanel.setSize(994, 671);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
@@ -91,9 +96,18 @@ public class MainFrame extends JFrame {
 		});
 		comboBox.setSize(174, 26);
 		comboBox.setLocation(10, 682);
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {LOGINPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL}));
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {LOGINPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, MENUPANEL}));
 		comboBox.setSelectedIndex(0);
 		MasterPane.add(comboBox);
+		
+		JButton btnBackToMain = new JButton("Back to Main Menu");
+		btnBackToMain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((CardLayout)CardsPanel.getLayout()).show(CardsPanel, MENUPANEL);
+			}
+		});
+		btnBackToMain.setBounds(10, 719, 174, 23);
+		MasterPane.add(btnBackToMain);
 		
 	}
 }
