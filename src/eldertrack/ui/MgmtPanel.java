@@ -12,6 +12,8 @@ import java.awt.Font;
 import java.sql.SQLException;
 
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 import eldertrack.management.*;
@@ -26,6 +28,9 @@ public class MgmtPanel extends JPanel {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField textField_7;
 	MgmtPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
@@ -155,8 +160,71 @@ public class MgmtPanel extends JPanel {
 			panel.add(textField_4);
 			textField_4.setColumns(10);
 			
+			JPanel panel_1 = new JPanel();
+			panel_1.setBounds(479, 79, 448, 396);
+			add(panel_1);
+			panel_1.setVisible(false);
+			panel_1.setLayout(null);
+			
+			JLabel label_9 = new JLabel("STAFF ID");
+			label_9.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_9.setBounds(19, 64, 123, 25);
+			panel_1.add(label_9);
+			
+			JLabel label_10 = new JLabel("FIRST NAME");
+			label_10.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_10.setBounds(18, 102, 124, 25);
+			panel_1.add(label_10);
+			
+			JLabel label_11 = new JLabel("LAST NAME");
+			label_11.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_11.setBounds(19, 27, 123, 25);
+			panel_1.add(label_11);
+			
+			JLabel label_12 = new JLabel(":");
+			label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_12.setBounds(152, 27, 23, 25);
+			panel_1.add(label_12);
+			
+			JLabel label_13 = new JLabel(":");
+			label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_13.setBounds(152, 66, 23, 25);
+			panel_1.add(label_13);
+			
+			JLabel label_14 = new JLabel(":");
+			label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_14.setBounds(152, 103, 23, 25);
+			panel_1.add(label_14);
+			
+			textField_5 = new JTextField();
+			textField_5.setColumns(10);
+			textField_5.setBounds(180, 29, 116, 22);
+			panel_1.add(textField_5);
+			
+			textField_6 = new JTextField();
+			textField_6.setColumns(10);
+			textField_6.setBounds(180, 67, 116, 22);
+			panel_1.add(textField_6);
+			
+			textField_7 = new JTextField();
+			textField_7.setColumns(10);
+			textField_7.setBounds(180, 105, 116, 22);
+			panel_1.add(textField_7);
+			
 			JButton btnNewButton = new JButton("Back");
 			btnNewButton.setBounds(29, 569, 97, 25);
 			add(btnNewButton);
+			
+			tabbedPane.addChangeListener(new ChangeListener() {
+			    public void stateChanged(ChangeEvent e) {
+			    if (panel.isVisible()) {
+			    	panel_1.setVisible(true);
+			    	panel.setVisible(false);
+			    } else {
+			    	panel_1.setVisible(false);
+			    	panel.setVisible(true);
+			    }
+			    }
+			});
 	}
 }
