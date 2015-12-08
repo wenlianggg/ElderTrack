@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +19,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 
 import javax.swing.UIManager;
-import java.awt.Color;
+import javax.swing.JTextPane;
+
 
 public class MedDosagePanel extends JPanel {
 
@@ -27,7 +28,6 @@ public class MedDosagePanel extends JPanel {
 	private JTextField NameField;
 	private JTextField AgeField;
 	private JTextField GenderField;
-	private JTextField SummaryField;
 	private JTable DosageTable;
 	
 	
@@ -47,6 +47,7 @@ public class MedDosagePanel extends JPanel {
 		// Name 
 		JLabel lblName = new JLabel("Name: ");
 		lblName.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblName.setForeground(new Color(0, 128, 128));
 		lblName.setBounds(120, 95, 70, 30);
 		add(lblName);
 		
@@ -58,6 +59,7 @@ public class MedDosagePanel extends JPanel {
 		// Age
 		JLabel lblAge = new JLabel("Age: ");
 		lblAge.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblAge.setForeground(new Color(0, 128, 128));
 		lblAge.setBounds(120, 133, 70, 30);
 		add(lblAge);
 		
@@ -69,6 +71,7 @@ public class MedDosagePanel extends JPanel {
 		// Gender
 		JLabel lblGender = new JLabel("Gender:");
 		lblGender.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblGender.setForeground(new Color(0, 128, 128));
 		lblGender.setBounds(120, 171, 70, 30);
 		add(lblGender);
 		
@@ -81,12 +84,8 @@ public class MedDosagePanel extends JPanel {
 		JLabel lblSummary = new JLabel("Summary:");
 		lblSummary.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		lblSummary.setBounds(391, 95, 113, 30);
+		lblSummary.setForeground(new Color(0, 128, 128));
 		add(lblSummary);
-		
-		SummaryField = new JTextField();
-		SummaryField.setBounds(391, 138, 424, 68);
-		add(SummaryField);
-		SummaryField.setColumns(10);
 		
 		// DosageTable
 		JScrollPane scrollPane =  new JScrollPane();
@@ -94,6 +93,8 @@ public class MedDosagePanel extends JPanel {
 		add(scrollPane,BorderLayout.CENTER);
 		
 		DosageTable = new JTable();
+		
+		
 		scrollPane.setViewportView(DosageTable);
 		DosageTable.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -135,6 +136,10 @@ public class MedDosagePanel extends JPanel {
 		btnNextEldery.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		btnNextEldery.setBounds(638, 436, 177, 27);
 		add(btnNextEldery);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setBounds(391, 138, 424, 68);
+		add(textPane);
 		btnNextEldery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int dialogButton = JOptionPane.YES_NO_OPTION;

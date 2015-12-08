@@ -1,6 +1,7 @@
 package eldertrack.ui;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +10,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -18,7 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import java.awt.Color;
+import javax.swing.JTextPane;
+
 
 
 
@@ -41,14 +42,15 @@ public class MedDosageSearchPanel extends JPanel {
 		
 		
 		JLabel lblRoomNumber = new JLabel("Room Number: ");
-		lblRoomNumber.setBounds(341, 136, 151, 41);
+		lblRoomNumber.setBounds(90, 117, 151, 41);
 		lblRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblRoomNumber.setForeground(new Color(0, 128, 128));
 		add(lblRoomNumber);
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 		Calendar cal = Calendar.getInstance();
 		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBackground(UIManager.getColor("TextField.highlight"));
-		comboBox.setBounds(528, 143, 92, 31);
+		comboBox.setBounds(277, 124, 92, 31);
 		comboBox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
 		comboBox.addItem("101");
 		comboBox.addItem("102");
@@ -57,11 +59,12 @@ public class MedDosageSearchPanel extends JPanel {
 		
 		
 		JLabel lblTime = new JLabel("Time: ");
-		lblTime.setBounds(341, 196, 80, 41);
+		lblTime.setBounds(90, 177, 80, 41);
 		lblTime.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblTime.setForeground(new Color(0, 128, 128));
 		add(lblTime);
 		textField = new JTextField();
-		textField.setBounds(528, 203, 92, 31);
+		textField.setBounds(277, 184, 92, 31);
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
 		textField.setText(dateFormat.format(cal.getTime()));
@@ -69,9 +72,21 @@ public class MedDosageSearchPanel extends JPanel {
 		add(textField);
 		
 		JButton btnGetDosage_1 = new JButton("Get Dosage");
-		btnGetDosage_1.setBounds(341, 275, 279, 31);
+		btnGetDosage_1.setBounds(90, 256, 279, 31);
 		btnGetDosage_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		add(btnGetDosage_1);
+		
+		JLabel lblOverview = new JLabel("Overview:");
+		lblOverview.setForeground(new Color(0, 128, 128));
+		lblOverview.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblOverview.setBounds(551, 117, 151, 41);
+		add(lblOverview);
+		
+		JTextPane txtpnRoomNumber = new JTextPane();
+		txtpnRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtpnRoomNumber.setText("Room Number: ~\r\nTotal Number of Elderly: ~\r\nTotal Number of Male: ~\r\nTotal Number of Female: ~\r\nRecommandard Helper: ~\r\n");
+		txtpnRoomNumber.setBounds(551, 155, 339, 226);
+		add(txtpnRoomNumber);
 		
 	
 		

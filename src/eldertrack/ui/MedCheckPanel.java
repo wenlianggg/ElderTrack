@@ -9,7 +9,7 @@ public class MedCheckPanel extends JPanel {
 
 
 	public MedCheckPanel() {
-
+		
 	}
 
 }

@@ -30,7 +30,7 @@ public class MedMainPanel extends JPanel {
 		TabbedPanel.setFont( new Font( "Segoe UI", Font.BOLD|Font.ITALIC, 20 ) );
 		
 		MedDosageSearchPanel medDosageSearchPanel = new MedDosageSearchPanel();
-		medDosageSearchPanel.setBackground(UIManager.getColor("TabbedPane.light"));
+		
 		TabbedPanel.add("Dosage", medDosageSearchPanel);
 		TabbedPanel.add("Check-Up",new MedCheckPanel());
 		add(TabbedPanel);
