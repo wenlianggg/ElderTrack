@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/ElderManagement
 package eldertrack.ui;
 
 import java.awt.EventQueue;
@@ -22,7 +25,7 @@ public class MainFrame extends JFrame {
     final static String MGMTPANEL = "Management Panel";
 	private JPanel MasterPane;
 	private JPanel CardsPanel;
-
+	// a freaking small change, wl i love you :D
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
@@ -50,7 +53,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 810);
+		setBounds(0, 0, 1000, 810);
 		setResizable(false);
 		
 		MasterPane = new JPanel();
@@ -98,6 +101,7 @@ public class MainFrame extends JFrame {
 		
 	}
 }
+<<<<<<< HEAD
 =======
 package eldertrack.ui;
 
@@ -199,3 +203,5 @@ public class MainFrame extends JFrame {
 	}
 }
 >>>>>>> refs/remotes/origin/master
+=======
+>>>>>>> origin/ElderManagement
