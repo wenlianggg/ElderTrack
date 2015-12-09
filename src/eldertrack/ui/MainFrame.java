@@ -10,8 +10,13 @@ import javax.swing.JComboBox;
 
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
+
+import eldertrack.login.StaffSession;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -23,8 +28,15 @@ public class MainFrame extends JFrame {
     final static String DIETPANEL = "Diet Panel";
     final static String MGMTPANEL = "Management Panel";
     final static String MENUPANEL = "Main Menu Panel";
-	private JPanel MasterPane;
-	static JPanel CardsPanel;
+    private JPanel MasterPane;
+    private static LoginPanel LoginPanel;
+    private DietPanel DietPanel;
+    private MedPanel MedPanel;
+    private MgmtPanel MgmtPanel;
+    private MainMenuPanel MainMenu;
+    private static JButton btnMainMenu;
+    static JPanel CardsPanel;
+	StaffSession session;  
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
@@ -35,9 +47,11 @@ public class MainFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Make program look like windows software
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true); // Set the main frame as visible
+					showWeatherPanel(frame.MasterPane);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,14 +74,21 @@ public class MainFrame extends JFrame {
 		MasterPane.setLayout(null);
 		setContentPane(MasterPane);
 		
-		JPanel WeatherPanel = new WeatherPanel();
-		WeatherPanel.setLocation(790, 671);
-		JPanel LoginPanel = new LoginPanel();
+		btnMainMenu = new JButton("Back to Main Menu");
+		btnMainMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				((CardLayout)CardsPanel.getLayout()).show(CardsPanel, MENUPANEL);
+			}
+		});
+		btnMainMenu.setBounds(820, 15, 139, 40);
+
+		MasterPane.add(btnMainMenu);
+		LoginPanel = new LoginPanel();
 		LoginPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		JPanel DietPanel = new DietPanel();
-		JPanel MedPanel = new MedPanel();
-		JPanel MgmtPanel = new MgmtPanel();
-		JPanel MainMenu = new MainMenuPanel();
+		DietPanel = new DietPanel();
+		MedPanel = new MedPanel();
+		MgmtPanel = new MgmtPanel();
+		MainMenu = new MainMenuPanel();
 		
 		CardsPanel = new JPanel(new CardLayout());
 		MasterPane.add(CardsPanel);
@@ -80,7 +101,6 @@ public class MainFrame extends JFrame {
 		CardsPanel.setSize(994, 671);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
 		
-		MasterPane.add(WeatherPanel);
 		
 		/**
 		 * COMBO BOX FOR TEST GUI
@@ -100,14 +120,27 @@ public class MainFrame extends JFrame {
 		comboBox.setSelectedIndex(0);
 		MasterPane.add(comboBox);
 		
-		JButton btnBackToMain = new JButton("Back to Main Menu");
-		btnBackToMain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				((CardLayout)CardsPanel.getLayout()).show(CardsPanel, MENUPANEL);
-			}
-		});
-		btnBackToMain.setBounds(10, 719, 174, 23);
-		MasterPane.add(btnBackToMain);
-		
+		btnMainMenu.setVisible(true);
+//		Timer t = new Timer();
+//		t.scheduleAtFixedRate(new TimerTask() {
+//		    public void run() {
+//		    	if (!LoginPanel.getStaffSession().isAuthenticated())
+//		    	System.out.println("Not Logged In");
+//		    		if (btnMainMenu.isVisible())
+//		    			btnMainMenu.setVisible(false);
+//		    	else if (LoginPanel.getStaffSession().isAuthenticated())
+//		    	System.out.println("Is Logged In");
+//		    		if (!btnMainMenu.isVisible())
+//		    			btnMainMenu.setVisible(true);
+//		    }
+//		}, 0, 1000);
+		// 1000ms
 	}
+	
+	private static void showWeatherPanel(JPanel MasterPane) {
+		JPanel WeatherPanel = new WeatherPanel();
+		WeatherPanel.setLocation(790, 671);
+		MasterPane.add(WeatherPanel);
+	}
+	
 }
