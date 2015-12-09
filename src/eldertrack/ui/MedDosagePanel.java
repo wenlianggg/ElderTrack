@@ -98,14 +98,14 @@ public class MedDosagePanel extends JPanel {
 		scrollPane.setViewportView(DosageTable);
 		DosageTable.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
+				{null, null, null, null,new Boolean(false)},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
 			},
 			new String[] {
-				"Description", "Prescription", "Dosage"
+				"Description", "Prescription", "Medication Type", "Dosage","Feed"
 			}
 		));
 		
