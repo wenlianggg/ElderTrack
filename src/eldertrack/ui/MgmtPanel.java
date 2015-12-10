@@ -107,10 +107,10 @@ public class MgmtPanel extends JPanel {
 		panel.add(label_1);
 		label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
 		
-			JLabel lblNewLabel = new JLabel("ID");
-			lblNewLabel.setBounds(19, 27, 109, 25);
-			panel.add(lblNewLabel);
-			lblNewLabel.setFont(new Font("Calibri", Font.PLAIN, 24));
+			JLabel label1 = new JLabel("ID");
+			label1.setBounds(19, 27, 109, 25);
+			panel.add(label1);
+			label1.setFont(new Font("Calibri", Font.PLAIN, 24));
 			
 			JLabel label_2 = new JLabel("NRIC");
 			label_2.setBounds(18, 141, 109, 25);
@@ -359,6 +359,28 @@ public class MgmtPanel extends JPanel {
 					JOptionPane pane = new JOptionPane();
 					int dialogButton = JOptionPane.YES_NO_OPTION;
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
+						if (dialogResult == JOptionPane.YES_OPTION){
+							try{
+								String id = label1.getText();
+								String name = label.getText();
+								String dob = label_1.getText();
+								String nric = label_2.getText();
+								String gender = label_7.getText();
+								String age = label_15.getText();
+								String room = label_17.getText();
+								String address = label_19.getText();
+								
+								String sql = "UPDATE et_elderly set id = '"+id+"', name = '"+name+"', dob = '"+dob+"', nric = '"+nric+"', gender = '"+gender+"', age = '"+age+"', room = '"+room+"', address = '"+address+"' ";
+								int row = staffTable.getSelectedRow();
+								String table_clicked1 = (staffTable.getModel().getValueAt(row, 0).toString());
+								ResultSet rs = SQLConnect.getResultSet(sql, table_clicked1);
+								
+								
+							}catch(Exception e1){
+								JOptionPane.showMessageDialog(null,e1);	
+							}
+						}
+							
 				}
 			});
 			
