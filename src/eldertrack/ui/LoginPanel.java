@@ -38,37 +38,37 @@ public class LoginPanel extends JPanel {
 		add(lblEldertrackLogin);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(224, 255, 255));
-		panel.setBounds(281, 175, 547, 294);
+		panel.setBackground(new Color(240, 255, 240));
+		panel.setBounds(250, 175, 450, 294);
 		add(panel);
 		panel.setLayout(null);
 		
 		loginField = new JTextField();
-		loginField.setBounds(79, 62, 400, 32);
+		loginField.setBounds(26, 63, 400, 32);
 		panel.add(loginField);
 		loginField.setToolTipText("Enter your login username that you were assigned");
 		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
 		loginField.setBackground(Color.LIGHT_GRAY);
 		
 		lblLogin = new JLabel("Login:");
-		lblLogin.setBounds(78, 25, 66, 32);
+		lblLogin.setBounds(25, 26, 66, 32);
 		panel.add(lblLogin);
 		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(79, 121, 101, 19);
+		lblPassword.setBounds(26, 122, 101, 19);
 		panel.add(lblPassword);
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(79, 149, 400, 30);
+		passwordField.setBounds(26, 150, 400, 30);
 		panel.add(passwordField);
 		passwordField.setToolTipText("Enter your login password that you were assigned");
 		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
 		passwordField.setBackground(Color.LIGHT_GRAY);
 		
 		loginButton = new JButton("Login");
-		loginButton.setBounds(79, 212, 400, 32);
+		loginButton.setBounds(26, 213, 400, 32);
 		panel.add(loginButton);
 		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
