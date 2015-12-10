@@ -1,14 +1,20 @@
 package eldertrack.ui;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
+import eldertrack.db.SQLConnect;
 import eldertrack.diet.TableHelper;
 
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JTextField;
@@ -215,6 +221,7 @@ public class MgmtPanel extends JPanel {
 			btnNewButton.setBounds(29, 569, 97, 25);
 			add(btnNewButton);
 			
+			//Event Listeners
 			tabbedPane.addChangeListener(new ChangeListener() {
 			    public void stateChanged(ChangeEvent e) {
 			    if (panel.isVisible()) {
@@ -226,5 +233,25 @@ public class MgmtPanel extends JPanel {
 			    }
 			    }
 			});
+			
+			elderlyTable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					try{
+						int row = elderlyTable.getSelectedRow();
+						String table_clicked = (elderlyTable.getModel().getValueAt(row, 0).toString());
+						String sql = "SELECT * FROM et_elderly WHERE id=?";
+						ResultSet rs = SQLConnect.getResultSet(sql, table_clicked);
+						
+						while(rs.next()){
+							System.out.println(rs.getString(1));
+						}
+						
+					}catch(Exception e){
+						JOptionPane.showMessageDialog(null, e);
+					}
+				}
+			});
+			
 	}
 }
