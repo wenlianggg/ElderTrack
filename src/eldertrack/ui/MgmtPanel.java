@@ -325,5 +325,31 @@ public class MgmtPanel extends JPanel {
 				}
 			});
 			
+			staffTable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					try{
+						int row1 = staffTable.getSelectedRow();
+						String table_clicked1 = (staffTable.getModel().getValueAt(row1, 0).toString());
+						String sql1 = "SELECT * FROM et_staff WHERE staffid=?";
+						ResultSet rs1 = SQLConnect.getResultSet(sql1, table_clicked1);
+						
+						while(rs1.next()){
+							String add1 = rs1.getString("staffid");
+							textField_5.setText(add1);
+							
+							String add2 = rs1.getString("firstname");
+							textField_6.setText(add2);
+							
+							String add3 = rs1.getString("lastname");
+							textField_7.setText(add3);
+						}
+						
+					}catch(Exception e1){
+						JOptionPane.showMessageDialog(null, e1);
+					}
+				}
+			});
+			
 	}
 }
