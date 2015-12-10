@@ -1,12 +1,16 @@
 package eldertrack.ui;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
+
 
 public class MedMainPanel extends JPanel {
 
@@ -32,8 +36,18 @@ public class MedMainPanel extends JPanel {
 		MedDosageSearchPanel medDosageSearchPanel = new MedDosageSearchPanel();
 		
 		TabbedPanel.add("Dosage", medDosageSearchPanel);
-		TabbedPanel.add("Check-Up",new MedCheckPanel());
+		TabbedPanel.add("Check-Up",new MedCheckSearchPanel());
 		add(TabbedPanel);
+		JButton btnMainMenu = new JButton("Back to Main Menu");
+		btnMainMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+				parentCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
+			}
+		});
+		btnMainMenu.setBounds(820, 15, 139, 40);
+		add(btnMainMenu);
+
 		
 	}
 

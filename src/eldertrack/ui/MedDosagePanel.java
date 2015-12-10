@@ -14,13 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-
+import javax.swing.table.TableModel;
 import javax.swing.JButton;
 
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
-
+import eldertrack.medical.*;
 
 public class MedDosagePanel extends JPanel {
 
@@ -28,7 +27,7 @@ public class MedDosagePanel extends JPanel {
 	private JTextField NameField;
 	private JTextField AgeField;
 	private JTextField GenderField;
-	private JTable DosageTable;
+	
 	
 	
 	
@@ -43,7 +42,7 @@ public class MedDosagePanel extends JPanel {
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		lblNewLabel.setBounds(25, 25, 213, 41);
 		add(lblNewLabel);
-		setLayout(null);
+		
 		// Name 
 		JLabel lblName = new JLabel("Name: ");
 		lblName.setFont(new Font("Segoe UI", Font.PLAIN, 20));
@@ -53,6 +52,8 @@ public class MedDosagePanel extends JPanel {
 		
 		NameField = new JTextField();
 		NameField.setBounds(201, 100, 145, 30);
+		NameField.setText("Roy");
+		NameField.setEditable(false);
 		add(NameField);
 		NameField.setColumns(10);
 		
@@ -65,6 +66,8 @@ public class MedDosagePanel extends JPanel {
 		
 		AgeField = new JTextField();
 		AgeField.setBounds(201, 138, 145, 30);
+		AgeField.setEditable(false);
+		AgeField.setText("69");
 		add(AgeField);
 		AgeField.setColumns(10);
 		
@@ -78,6 +81,8 @@ public class MedDosagePanel extends JPanel {
 		GenderField= new JTextField();
 		GenderField.setColumns(10);
 		GenderField.setBounds(201, 176, 145, 30);
+		GenderField.setEditable(false);
+		GenderField.setText("Male");
 		add(GenderField);
 		
 		// Summary
@@ -87,27 +92,19 @@ public class MedDosagePanel extends JPanel {
 		lblSummary.setForeground(new Color(0, 128, 128));
 		add(lblSummary);
 		
+		JTextPane textPane = new JTextPane();
+		textPane.setBounds(391, 138, 424, 68);
+		textPane.setEditable(false);
+		textPane.setText("Has a bad temper when eating tablet types of medication");
+		add(textPane);
 		// DosageTable
-		JScrollPane scrollPane =  new JScrollPane();
+		
+		
+		TableModel model = new DosageTable();
+		JTable table= new JTable(model);
+		JScrollPane scrollPane=new JScrollPane(table);
 		scrollPane.setBounds(121, 278, 694, 106);
-		add(scrollPane,BorderLayout.CENTER);
-		
-		DosageTable = new JTable();
-		
-		
-		scrollPane.setViewportView(DosageTable);
-		DosageTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null,new Boolean(false)},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-			},
-			new String[] {
-				"Description", "Prescription", "Medication Type", "Dosage","Feed"
-			}
-		));
+		add(scrollPane, BorderLayout.CENTER);
 		
 		JButton btnSaveAndQuit = new JButton("Save and Quit");
 		btnSaveAndQuit.setFont(new Font("Segoe UI", Font.PLAIN, 20));
@@ -136,24 +133,24 @@ public class MedDosagePanel extends JPanel {
 		btnNextEldery.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		btnNextEldery.setBounds(638, 436, 177, 27);
 		add(btnNextEldery);
-		
-		JTextPane textPane = new JTextPane();
-		textPane.setBounds(391, 138, 424, 68);
-		add(textPane);
 		btnNextEldery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-
-                	JPanel getDosage=new MedDosagePanel();
-    				getDosage.setVisible(true);
-
-    				CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
-    			    mainCards.show(MedPanel.MedCardPanel, MedPanel.MDOSPANEL);
+                	
+                	Object [][] rawData=DosageTable.getData(); 
+                	for(int i=0;i<5;i++){
+                		if((boolean) (rawData[4][i]=Boolean.FALSE)){
+                			JOptionPane.showMessageDialog(btnNextEldery, "Please Check Again");
+                		}
+                	}
+                	
                   }
 			}
 			
 		});
 	}
+	
 }

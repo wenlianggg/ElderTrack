@@ -26,7 +26,7 @@ import javax.swing.JTextPane;
 public class MedDosageSearchPanel extends JPanel {
 
 	private static final long serialVersionUID = -2593071831861718177L;
-	private JTextField textField;
+	
 
 	public MedDosageSearchPanel() {
 		
@@ -50,7 +50,7 @@ public class MedDosageSearchPanel extends JPanel {
 		Calendar cal = Calendar.getInstance();
 		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBackground(UIManager.getColor("TextField.highlight"));
-		comboBox.setBounds(277, 124, 92, 31);
+		comboBox.setBounds(277, 124, 125, 31);
 		comboBox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
 		comboBox.addItem("101");
 		comboBox.addItem("102");
@@ -63,18 +63,16 @@ public class MedDosageSearchPanel extends JPanel {
 		lblTime.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		lblTime.setForeground(new Color(0, 128, 128));
 		add(lblTime);
+		JTextField textField=new JTextField();
 		textField = new JTextField();
-		textField.setBounds(277, 184, 92, 31);
+		textField.setBounds(277, 184, 125, 31);
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
 		textField.setText(dateFormat.format(cal.getTime()));
 		textField.setColumns(10);
 		add(textField);
 		
-		JButton btnGetDosage_1 = new JButton("Get Dosage");
-		btnGetDosage_1.setBounds(90, 256, 279, 31);
-		btnGetDosage_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		add(btnGetDosage_1);
+		
 		
 		JLabel lblOverview = new JLabel("Overview:");
 		lblOverview.setForeground(new Color(0, 128, 128));
@@ -88,7 +86,10 @@ public class MedDosageSearchPanel extends JPanel {
 		txtpnRoomNumber.setBounds(551, 155, 339, 226);
 		add(txtpnRoomNumber);
 		
-	
+		JButton btnGetDosage_1 = new JButton("Get Dosage");
+		btnGetDosage_1.setBounds(90, 256, 312, 31);
+		btnGetDosage_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		add(btnGetDosage_1);
 		
 		btnGetDosage_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
