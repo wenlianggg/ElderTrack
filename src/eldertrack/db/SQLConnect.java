@@ -1,3 +1,6 @@
+// SQLite Connection Tools (static, non-object version)
+// By Wen Liang :D
+
 package eldertrack.db;
 
 import java.sql.*;
@@ -14,26 +17,52 @@ public class SQLConnect {
 	
 	// Takes in a statement and many queries
 	public static ResultSet getResultSet(String statement, ArrayList<String> queries) throws SQLException{
-		ResultSet rs = null;
 		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
 		c.setAutoCommit(false);
 		PreparedStatement prpstmt = c.prepareStatement(statement);
-		for(int i = 1; i <= queries.size(); i++) {
-			System.out.println(queries.get(i-1));
-			prpstmt.setString(i, queries.get(i-1));
-		}
-		rs = prpstmt.executeQuery();
-		return rs;
+		if (queries.size() != 0)
+			for(int i = 1; i <= queries.size(); i++) {
+				System.out.println(queries.get(i-1));
+				prpstmt.setString(i, queries.get(i-1));
+			}
+		return prpstmt.executeQuery();
 	}
 	
 	// Takes in a statement
 	public static ResultSet getResultSet(String statement) throws SQLException {
-		ResultSet rs = null;
 		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
 		c.setAutoCommit(false);
 		PreparedStatement prpstmt = c.prepareStatement(statement);
-		rs = prpstmt.executeQuery();
-		return rs;
+		return prpstmt.executeQuery();
+	}
+	
+	// Takes in a statement to update table
+	public static int executeUpdate(String statement) throws SQLException {
+		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
+		c.setAutoCommit(false);
+		PreparedStatement prpstmt = c.prepareStatement(statement);
+		return prpstmt.executeUpdate();
+	}
+	
+	// Takes in a statement to update table
+	public static int executeUpdate(String statement, String toUpdate) throws SQLException {
+		ArrayList<String> qarray = new ArrayList<String>();
+		qarray.add(toUpdate);
+		return executeUpdate(statement, qarray);
+	}
+	
+	// Takes in a statement and many variables to update
+	public static int executeUpdate(String statement, ArrayList<String> variables) throws SQLException{
+		int rowchanges = -1;
+		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
+		c.setAutoCommit(false);
+		PreparedStatement prpstmt = c.prepareStatement(statement);
+		for(int i = 1; i <= variables.size(); i++) {
+			System.out.println(variables.get(i-1));
+			prpstmt.setString(i, variables.get(i-1));
+		}
+		rowchanges = prpstmt.executeUpdate();
+		return rowchanges;
 	}
 	
 	public static void main(String args[]) {
