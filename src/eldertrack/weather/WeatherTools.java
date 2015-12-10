@@ -17,13 +17,8 @@ import eldertrack.misc.URLTools;
 
 public class WeatherTools {
 	static Weather weather = null;
-	
-	
-	
+
 	public static Weather getWeather() {
-		/*
-		 * Source for timeout method: http://stackoverflow.com/questions/1164301/how-do-i-call-some-blocking-method-with-a-timeout-in-java
-		 */
 		ExecutorService executor = Executors.newCachedThreadPool();
 		Callable<Object> task = new Callable<Object>() {
 		   public Object call() {

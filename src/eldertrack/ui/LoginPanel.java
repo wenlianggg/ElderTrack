@@ -39,51 +39,51 @@ public class LoginPanel extends JPanel {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(250, 139, 499, 343);
+		panel.setBounds(272, 175, 449, 281);
 		add(panel);
 		panel.setLayout(null);
 		
 		loginField = new JTextField();
-		loginField.setBounds(52, 92, 400, 32);
+		loginField.setBounds(25, 61, 400, 32);
 		panel.add(loginField);
 		loginField.setToolTipText("Enter your login username that you were assigned");
 		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
 		loginField.setBackground(Color.LIGHT_GRAY);
 		
 		lblLogin = new JLabel("Login:");
-		lblLogin.setBounds(52, 52, 66, 32);
+		lblLogin.setBounds(25, 21, 66, 32);
 		panel.add(lblLogin);
 		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(54, 152, 101, 19);
+		lblPassword.setBounds(27, 121, 101, 19);
 		panel.add(lblPassword);
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
-		JPasswordField passwordField_1 = new JPasswordField();
-		passwordField_1.setBounds(52, 179, 400, 30);
-		panel.add(passwordField_1);
-		passwordField_1.setToolTipText("Enter your login password that you were assigned");
-		passwordField_1.setFont(new Font("Segoe UI", Font.PLAIN, 17));
-		passwordField_1.setBackground(Color.LIGHT_GRAY);
+		passwordField = new JPasswordField();
+		passwordField.setBounds(25, 148, 400, 30);
+		panel.add(passwordField);
+		passwordField.setToolTipText("Enter your login password that you were assigned");
+		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
+		passwordField.setBackground(Color.LIGHT_GRAY);
 		
-		JButton loginButton_1 = new JButton("Login");
-		loginButton_1.setBounds(358, 250, 94, 42);
-		panel.add(loginButton_1);
-		loginButton_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		loginButton = new JButton("Login");
+		loginButton.setBounds(25, 211, 400, 32);
+		panel.add(loginButton);
+		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 
 		// On login button pressed, 
 		// Check login details by calling method from eldertrack.login.LoginProcessor class file
-		loginButton_1.addActionListener(new ActionListener() {
+		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Check if login fields are null, if not, process login.
-				if (!loginField.getText().equals("") && !(passwordField_1.getPassword().length == 0)) {
-					session = SessionTools.createSession(loginField.getText(), passwordField_1.getPassword());
+				if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
+					session = SessionTools.createSession(loginField.getText(), passwordField.getPassword());
 					if (session == null) {
 						loginMessage = "Login failed, Please Try Again";
 						loginField.setText("");
-						passwordField_1.setText("");
+						passwordField.setText("");
 					} else if (session.isAuthenticated()) {
 						loginMessage = "Login successful!";
 					}
@@ -93,5 +93,10 @@ public class LoginPanel extends JPanel {
 				}
 			}
 		});
+	}
+	
+	StaffSession getStaffSession() {
+		StaffSession gettableSession = this.session;
+		return gettableSession;
 	}
 }

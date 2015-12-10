@@ -1,7 +1,6 @@
 package eldertrack.ui;
 
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -9,14 +8,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
-import eldertrack.login.SessionTools;
 import eldertrack.login.StaffSession;
-import javax.swing.JTextPane;
+import java.awt.Color;
+import javax.swing.border.LineBorder;
+import javax.swing.JTextArea;
 
 public class MainMenuPanel extends JPanel {
 	private static final long serialVersionUID = 4235134532452345324L;
@@ -31,6 +28,7 @@ public class MainMenuPanel extends JPanel {
 	private JButton btnStaffManagement;
 	
 	MainMenuPanel() {
+		setBackground(SystemColor.control);
 		setLayout(null);
 		setBounds(0, 0, 995, 670);
 		
@@ -74,10 +72,47 @@ public class MainMenuPanel extends JPanel {
 		});
 		add(btnStaffManagement);
 		
+		JPanel panel = new JPanel();
+		panel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		panel.setBounds(262, 95, 576, 128);
+		add(panel);
+		panel.setLayout(null);
 		
-		JTextPane txtpnWer = new JTextPane();
-		txtpnWer.setText("General Background Information:\r\n\r\nYour Name:\r\nLast Logged In:");
-		txtpnWer.setBounds(312, 95, 643, 386);
-		add(txtpnWer);
+		JLabel lblEldertrackWelcomePage = new JLabel("ElderTrack Welcome Page");
+		lblEldertrackWelcomePage.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblEldertrackWelcomePage.setBounds(10, 11, 247, 31);
+		panel.add(lblEldertrackWelcomePage);
+		
+		JLabel lblYouAreLogged = new JLabel("You are logged in as: STAFF NAME HERE");
+		lblYouAreLogged.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblYouAreLogged.setBounds(10, 45, 289, 21);
+		panel.add(lblYouAreLogged);
+		
+		JLabel lblYouLastLogged = new JLabel("You last logged in on:");
+		lblYouLastLogged.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblYouLastLogged.setBounds(10, 95, 289, 21);
+		panel.add(lblYouLastLogged);
+		
+		JLabel lblNric = new JLabel("Your NRIC:");
+		lblNric.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNric.setBounds(10, 69, 289, 21);
+		panel.add(lblNric);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(10, 150, 556, 190);
+		panel.add(textArea);
+		
+		JLabel lblYourNotes = new JLabel("Sticky Notes:");
+		lblYourNotes.setBounds(263, 242, 72, 14);
+		add(lblYourNotes);
+		
+		JTextArea textArea_1 = new JTextArea();
+		textArea_1.setBackground(new Color(230, 230, 250));
+		textArea_1.setBounds(262, 258, 576, 189);
+		add(textArea_1);
+		
+		JButton btnSaveNotes = new JButton("Save Notes");
+		btnSaveNotes.setBounds(749, 458, 89, 23);
+		add(btnSaveNotes);
 	}
 }
