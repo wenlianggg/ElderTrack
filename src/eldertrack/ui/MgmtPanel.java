@@ -223,17 +223,17 @@ public class MgmtPanel extends JPanel {
 			panel_1.setVisible(false);
 			panel_1.setLayout(null);
 			
-			JLabel label_9 = new JLabel("STAFF ID");
+			JLabel label_9 = new JLabel("FIRST NAME");
 			label_9.setFont(new Font("Calibri", Font.PLAIN, 24));
 			label_9.setBounds(19, 64, 123, 25);
 			panel_1.add(label_9);
 			
-			JLabel label_10 = new JLabel("FIRST NAME");
+			JLabel label_10 = new JLabel("LAST NAME");
 			label_10.setFont(new Font("Calibri", Font.PLAIN, 24));
 			label_10.setBounds(18, 102, 124, 25);
 			panel_1.add(label_10);
 			
-			JLabel label_11 = new JLabel("LAST NAME");
+			JLabel label_11 = new JLabel("STAFF ID");
 			label_11.setFont(new Font("Calibri", Font.PLAIN, 24));
 			label_11.setBounds(19, 27, 123, 25);
 			panel_1.add(label_11);
