@@ -79,14 +79,16 @@ public class MgmtPanel extends JPanel {
 		scrollPane2.setViewportView(staffTable);
 		
 		JButton button = new JButton("Save Changes");
+		
 		button.setBounds(474, 499, 132, 25);
 		add(button);
 		
 		JButton button_1 = new JButton("Discard Changes");
+
 		button_1.setBounds(638, 499, 132, 25);
 		add(button_1);
 		
-		JButton button_2 = new JButton("Remove Elderly");
+		JButton button_2 = new JButton("Remove Selected");
 		button_2.setBounds(795, 499, 132, 25);
 		add(button_2);
 		
@@ -351,5 +353,31 @@ public class MgmtPanel extends JPanel {
 				}
 			});
 			
+			button.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JOptionPane pane = new JOptionPane();
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
+				}
+			});
+			
+			button_1.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JOptionPane pane = new JOptionPane();
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to discard changes?");
+				}
+			});
+			
+			button_2.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JOptionPane pane = new JOptionPane();
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the selected person?");
+				}
+			});
 	}
 }
