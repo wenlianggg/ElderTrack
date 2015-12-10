@@ -140,13 +140,17 @@ public class MedDosagePanel extends JPanel {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
-                	Object [][] rawData=DosageTable.getData(); 
-                	for(int i=0;i<5;i++){
-                		if((boolean) (rawData[4][i]=Boolean.FALSE)){
-                			JOptionPane.showMessageDialog(btnNextEldery, "Please Check Again");
-                		}
-                	}
-                	
+                	JOptionPane.showMessageDialog(null, "Record Has Been Saved");
+                	//Object [][] rawData=DosageTable.getData(); 
+                	//for(int i=0;i<5;i++){
+                	//	if((boolean) (rawData[4][i]=Boolean.FALSE)){
+                	//		System.out.println("test");
+                //		}
+                //	}
+                	NameField.setText("");
+                	AgeField.setText("");
+                	GenderField.setText("");
+                	textPane.setText("");
                   }
 			}
 			

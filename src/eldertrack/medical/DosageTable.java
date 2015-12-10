@@ -19,10 +19,11 @@ public class DosageTable extends AbstractTableModel {
 	    return columnNames.length;
 	  }
 	
+	  	
 	  public static Object[][] getData(){
 		return rowData;
 	  }
-	  public String getColumnName(int column) {
+	  	  public String getColumnName(int column) {
 	    return columnNames[column];
 	  }
 
