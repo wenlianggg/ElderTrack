@@ -31,35 +31,46 @@ public class LoginPanel extends JPanel {
 		setLayout(null);
 		setBounds(0, 0, 995, 670);
 		
-		lblEldertrackLogin = new JLabel("ElderTrack Login");
+		lblEldertrackLogin = new JLabel("ElderTrack Authentication");
 		lblEldertrackLogin.setBounds(10, 0, 754, 54);
 		lblEldertrackLogin.setForeground(SystemColor.textHighlight);
-		lblEldertrackLogin.setFont(new Font("Segoe UI", Font.PLAIN, 40));
+		lblEldertrackLogin.setFont(new Font("Segoe UI", Font.ITALIC, 40));
+		add(lblEldertrackLogin);
 		
-		lblLogin = new JLabel("Login:");
-		lblLogin.setBounds(298, 209, 66, 32);
-		add(lblLogin);
-		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		
-		lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(300, 303, 101, 19);
-		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(272, 175, 449, 281);
+		add(panel);
+		panel.setLayout(null);
 		
 		loginField = new JTextField();
+		loginField.setBounds(25, 61, 400, 32);
+		panel.add(loginField);
 		loginField.setToolTipText("Enter your login username that you were assigned");
-		loginField.setBounds(298, 249, 400, 32);
 		loginField.setFont(new Font("Segoe UI", Font.PLAIN, 19));
 		loginField.setBackground(Color.LIGHT_GRAY);
 		
-		JPasswordField passwordField = new JPasswordField();
+		lblLogin = new JLabel("Login:");
+		lblLogin.setBounds(25, 21, 66, 32);
+		panel.add(lblLogin);
+		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		lblPassword = new JLabel("Password:");
+		lblPassword.setBounds(27, 121, 101, 19);
+		panel.add(lblPassword);
+		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(25, 148, 400, 30);
+		panel.add(passwordField);
 		passwordField.setToolTipText("Enter your login password that you were assigned");
-		passwordField.setBounds(298, 330, 400, 30);
 		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 17));
 		passwordField.setBackground(Color.LIGHT_GRAY);
 		
-		JButton loginButton = new JButton("Login");
+		loginButton = new JButton("Login");
+		loginButton.setBounds(25, 211, 400, 32);
+		panel.add(loginButton);
 		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		loginButton.setBounds(604, 392, 94, 42);
 		
 
 		// On login button pressed, 
@@ -82,13 +93,10 @@ public class LoginPanel extends JPanel {
 				}
 			}
 		});
-		
-		add(loginButton);
-		add(loginField);
-		add(passwordField);
-		add(lblEldertrackLogin);
-		add(lblPassword);
 	}
 	
-	
+	StaffSession getStaffSession() {
+		StaffSession gettableSession = this.session;
+		return gettableSession;
+	}
 }
