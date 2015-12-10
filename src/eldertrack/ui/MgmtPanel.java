@@ -37,11 +37,15 @@ public class MgmtPanel extends JPanel {
 	private JTextField textField_5;
 	private JTextField textField_6;
 	private JTextField textField_7;
+	private JTextField textField_8;
+	private JTextField textField_9;
+	private JTextField textField_10;
 	MgmtPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
-		lblEManagementLbl = new JLabel("ElderTrack Elderly Management");
-		lblEManagementLbl.setBounds(407, 5, 181, 16);
+		lblEManagementLbl = new JLabel("ElderTrack Management");
+		lblEManagementLbl.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		lblEManagementLbl.setBounds(26, 5, 430, 61);
 		add(lblEManagementLbl);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -91,12 +95,12 @@ public class MgmtPanel extends JPanel {
 		add(panel);
 		panel.setLayout(null);
 		
-		JLabel label = new JLabel("NRIC");
+		JLabel label = new JLabel("NAME");
 		label.setBounds(19, 64, 109, 25);
 		panel.add(label);
 		label.setFont(new Font("Calibri", Font.PLAIN, 24));
 		
-		JLabel label_1 = new JLabel("NAME");
+		JLabel label_1 = new JLabel("DOB");
 		label_1.setBounds(18, 102, 109, 25);
 		panel.add(label_1);
 		label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
@@ -106,12 +110,12 @@ public class MgmtPanel extends JPanel {
 			panel.add(lblNewLabel);
 			lblNewLabel.setFont(new Font("Calibri", Font.PLAIN, 24));
 			
-			JLabel label_2 = new JLabel("AGE");
+			JLabel label_2 = new JLabel("NRIC");
 			label_2.setBounds(18, 141, 109, 25);
 			panel.add(label_2);
 			label_2.setFont(new Font("Calibri", Font.PLAIN, 24));
 			
-			JLabel label_7 = new JLabel("ROOM ID");
+			JLabel label_7 = new JLabel("GENDER");
 			label_7.setBounds(19, 179, 121, 25);
 			panel.add(label_7);
 			label_7.setFont(new Font("Calibri", Font.PLAIN, 24));
@@ -162,9 +166,54 @@ public class MgmtPanel extends JPanel {
 			textField_3.setColumns(10);
 			
 			textField_4 = new JTextField();
-			textField_4.setBounds(181, 179, 116, 22);
+			textField_4.setBounds(179, 181, 116, 22);
 			panel.add(textField_4);
 			textField_4.setColumns(10);
+			
+			JLabel label_15 = new JLabel("AGE");
+			label_15.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_15.setBounds(19, 212, 121, 25);
+			panel.add(label_15);
+			
+			JLabel label_16 = new JLabel(":");
+			label_16.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_16.setBounds(152, 212, 23, 25);
+			panel.add(label_16);
+			
+			textField_8 = new JTextField();
+			textField_8.setColumns(10);
+			textField_8.setBounds(179, 214, 116, 22);
+			panel.add(textField_8);
+			
+			JLabel label_17 = new JLabel("ROOM");
+			label_17.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_17.setBounds(19, 247, 121, 25);
+			panel.add(label_17);
+			
+			JLabel label_18 = new JLabel(":");
+			label_18.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_18.setBounds(152, 247, 23, 25);
+			panel.add(label_18);
+			
+			textField_9 = new JTextField();
+			textField_9.setColumns(10);
+			textField_9.setBounds(179, 249, 116, 22);
+			panel.add(textField_9);
+			
+			JLabel label_19 = new JLabel("ADDRESS");
+			label_19.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_19.setBounds(19, 282, 121, 25);
+			panel.add(label_19);
+			
+			JLabel label_20 = new JLabel(":");
+			label_20.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_20.setBounds(152, 282, 23, 25);
+			panel.add(label_20);
+			
+			textField_10 = new JTextField();
+			textField_10.setColumns(10);
+			textField_10.setBounds(179, 284, 116, 22);
+			panel.add(textField_10);
 			
 			JPanel panel_1 = new JPanel();
 			panel_1.setBounds(479, 79, 448, 396);
@@ -244,7 +293,30 @@ public class MgmtPanel extends JPanel {
 						ResultSet rs = SQLConnect.getResultSet(sql, table_clicked);
 						
 						while(rs.next()){
-							System.out.println(rs.getString(1));
+							String add1 = rs.getString("id");
+							textField.setText(add1);
+							
+							String add2 = rs.getString("name");
+							textField_1.setText(add2);
+							
+							String add3 = rs.getString("dob");
+							textField_2.setText(add3);
+							
+							String add4 = rs.getString("nric");
+							textField_3.setText(add4);
+							
+							String add5 = rs.getString("gender");
+							textField_4.setText(add5);
+							
+							String add6 = rs.getString("age");
+							textField_8.setText(add6);
+							
+							String add7 = rs.getString("room");
+							textField_9.setText(add7);
+							
+							String add8 = rs.getString("address");
+							textField_10.setText(add8);
+							
 						}
 						
 					}catch(Exception e1){

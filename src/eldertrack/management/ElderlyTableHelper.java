@@ -16,7 +16,7 @@ import eldertrack.db.SQLConnect;
 public class ElderlyTableHelper {
 	public static DefaultTableModel getElderlyFromQuery(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
-		return buildTableModel(SQLConnect.getResultSet("SELECT id, nric, name, age, room FROM et_elderly WHERE name LIKE ?", search));
+		return buildTableModel(SQLConnect.getResultSet("SELECT id, name, dob, nric, gender, age , room, address FROM et_elderly WHERE name LIKE ?", search));
 	}
 	
 	// Method from http://stackoverflow.com/questions/10620448/most-simple-code-to-populate-jtable-from-resultset
@@ -26,9 +26,12 @@ public class ElderlyTableHelper {
 	    int columnCount = metaData.getColumnCount();
 	    columnNames.add("ID");
 	    columnNames.add("NAME");
+	    columnNames.add("DOB");
 	    columnNames.add("NRIC");
+	    columnNames.add("GENDER");
 	    columnNames.add("AGE");
 	    columnNames.add("ROOM");
+	    columnNames.add("ADDRESS");
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	    while (rs.next()) {
 	        Vector<Object> vector = new Vector<Object>();
