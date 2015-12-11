@@ -9,13 +9,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import eldertrack.db.SQLConnect;
+import eldertrack.db.SQLObject;
 import eldertrack.diet.TableHelper;
 
+import java.awt.CardLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -41,6 +46,7 @@ public class MgmtPanel extends JPanel {
 	private JTextField textField_9;
 	private JTextField textField_10;
 	MgmtPanel() {
+		
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		lblEManagementLbl = new JLabel("ElderTrack Management");
@@ -272,6 +278,18 @@ public class MgmtPanel extends JPanel {
 			btnNewButton.setBounds(29, 569, 97, 25);
 			add(btnNewButton);
 			
+			// Add this to each panel
+			JButton btnMainMenu = new JButton("Back to Main Menu");
+			btnMainMenu.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+					parentCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
+				}
+			});
+			btnMainMenu.setBounds(820, 15, 139, 40);
+			add(btnMainMenu);
+
+
 			//Event Listeners
 			tabbedPane.addChangeListener(new ChangeListener() {
 			    public void stateChanged(ChangeEvent e) {
@@ -370,11 +388,17 @@ public class MgmtPanel extends JPanel {
 								String room = label_17.getText();
 								String address = label_19.getText();
 								
-								String sql = "UPDATE et_elderly set id = '"+id+"', name = '"+name+"', dob = '"+dob+"', nric = '"+nric+"', gender = '"+gender+"', age = '"+age+"', room = '"+room+"', address = '"+address+"' ";
-								int row = staffTable.getSelectedRow();
-								String table_clicked1 = (staffTable.getModel().getValueAt(row, 0).toString());
-								ResultSet rs = SQLConnect.getResultSet(sql, table_clicked1);
+								ArrayList<String> info = new ArrayList<String>();
+								info.add(name);
+								info.add(dob);
+								info.add(gender);
+								info.add(age);
+								info.add(room);
+								info.add(address);
 								
+								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, age = ?, room = ?, address = ? WHERE id = " + id;
+								SQLObject so = new SQLObject();
+								System.out.println(so.executeUpdate(sql, info));
 								
 							}catch(Exception e1){
 								JOptionPane.showMessageDialog(null,e1);	
