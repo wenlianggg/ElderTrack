@@ -10,7 +10,7 @@ public class SQLObject {
 	Connection c = null;
 	PreparedStatement prpstmt = null;
 	
-	SQLObject() throws SQLException {
+	public SQLObject() throws SQLException {
 		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
 		c.setAutoCommit(false);
 	}
