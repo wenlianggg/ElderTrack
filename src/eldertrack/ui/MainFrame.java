@@ -10,8 +10,16 @@ import javax.swing.JComboBox;
 
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
+
+import eldertrack.login.StaffSession;
+
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -19,9 +27,15 @@ public class MainFrame extends JFrame {
     final static String MEDICATIONPANEL = "Medication Panel";
     final static String DIETPANEL = "Diet Panel";
     final static String MGMTPANEL = "Management Panel";
-	private JPanel MasterPane;
-	private JPanel CardsPanel;
-	// a freaking small change, wl i love you :D
+    final static String MENUPANEL = "Main Menu Panel";
+    private JPanel MasterPane;
+    private static LoginPanel LoginPanel;
+    private DietPanel DietPanel;
+    private MedPanel MedPanel;
+    private MgmtPanel MgmtPanel;
+    private MainMenuPanel MainMenu;
+    static JPanel CardsPanel;
+	StaffSession session;  
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
@@ -32,9 +46,11 @@ public class MainFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Make program look like windows software
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true); // Set the main frame as visible
+					showWeatherPanel(frame.MasterPane);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,7 +65,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 810);
+		setBounds(0, 0, 1000, 810);
 		setResizable(false);
 		
 		MasterPane = new JPanel();
@@ -57,13 +73,14 @@ public class MainFrame extends JFrame {
 		MasterPane.setLayout(null);
 		setContentPane(MasterPane);
 		
-		JPanel WeatherPanel = new WeatherPanel();
-		WeatherPanel.setLocation(790, 671);
-		JPanel LoginPanel = new LoginPanel();
+
+		
+		LoginPanel = new LoginPanel();
 		LoginPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		JPanel DietPanel = new DietPanel();
-		JPanel MedPanel = new MedPanel();
-		JPanel MgmtPanel = new MgmtPanel();
+		DietPanel = new DietPanel();
+		MedPanel = new MedPanel();
+		MgmtPanel = new MgmtPanel();
+		MainMenu = new MainMenuPanel();
 		
 		CardsPanel = new JPanel(new CardLayout());
 		MasterPane.add(CardsPanel);
@@ -71,11 +88,11 @@ public class MainFrame extends JFrame {
 		CardsPanel.add(DietPanel, DIETPANEL);
 		CardsPanel.add(MedPanel, MEDICATIONPANEL);
 		CardsPanel.add(MgmtPanel, MGMTPANEL);
+		CardsPanel.add(MainMenu, MENUPANEL);
 		CardsPanel.setLocation(0, 0);
 		CardsPanel.setSize(994, 671);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
 		
-		MasterPane.add(WeatherPanel);
 		
 		/**
 		 * COMBO BOX FOR TEST GUI
@@ -91,9 +108,15 @@ public class MainFrame extends JFrame {
 		});
 		comboBox.setSize(174, 26);
 		comboBox.setLocation(10, 682);
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {LOGINPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL}));
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {LOGINPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, MENUPANEL}));
 		comboBox.setSelectedIndex(0);
 		MasterPane.add(comboBox);
-		
 	}
+	
+	private static void showWeatherPanel(JPanel MasterPane) {
+		JPanel WeatherPanel = new WeatherPanel();
+		WeatherPanel.setLocation(790, 671);
+		MasterPane.add(WeatherPanel);
+	}
+	
 }

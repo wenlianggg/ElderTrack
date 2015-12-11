@@ -1,50 +1,32 @@
 package eldertrack.ui;
 
-import java.awt.Font;
-import java.awt.SystemColor;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
+import java.awt.CardLayout;
 
 public class DietPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
-	JLabel lblDietLabel;
-	JLabel lblSelectElderly;
-	private JTable table;
+    final static String DMAINPANEL = "Diet Main Panel";
+	final static String DADDPANEL = "Diet Add Panel";
+    final static String DMODPANEL = "Diet Modify Panel";
+    final static String DMENUPANEL = "Diet Menu Panel";
+	static JPanel CardsPanel;
 	
 	// Constructor
 	DietPanel() {
-		setBounds(0, 0, 995, 670);
+		JPanel DietMainPanel = new DietMainPanel();
+		JPanel DietAddPanel = new DietAddPanel();
+		JPanel DietModifyPanel = new DietModifyPanel();
+		JPanel DietMenuPanel = new DietMenuPanel();
+		
+		CardsPanel = new JPanel(new CardLayout());
+		CardsPanel.add(DietMainPanel, DMAINPANEL);
+		CardsPanel.add(DietAddPanel, DADDPANEL);
+		CardsPanel.add(DietModifyPanel, DMODPANEL);
+		CardsPanel.add(DietMenuPanel, DMENUPANEL);
+		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, DMAINPANEL);
+		
 		setLayout(null);
-        String[] columnNames = {"First Name", "Last Name", "Sport", "# of Years"};
-
-		Object[][] data = {{"Kathy", "Smith", "Snowboarding", new Integer(5)},
-		{"John", "Doe", "Rowing", new Integer(3)},
-		{"Sue", "Black", "Knitting", new Integer(2)},
-		{"Jane", "White", "Speed reading", new Integer(20)},
-		{"Joe", "Brown", "Pool", new Integer(10)}};
-		
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setViewportBorder(null);
-		scrollPane.setBounds(10, 99, 336, 328);
-		add(scrollPane);
-		
-		table = new JTable(data, columnNames);
-		scrollPane.setViewportView(table);
-		
-		lblDietLabel = new JLabel("ElderTrack Diet Management");
-		lblDietLabel.setForeground(SystemColor.textHighlight);
-		lblDietLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		lblDietLabel.setBounds(10, 0, 557, 54);
-		
-		lblSelectElderly = new JLabel("Select Elderly");
-		lblSelectElderly.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblSelectElderly.setBounds(10, 65, 119, 34);
-		
-		add(lblDietLabel);
-		add(lblSelectElderly);
-
+		CardsPanel.setBounds(0, 0, 994, 671);
+		add(CardsPanel);
 	}
 }
