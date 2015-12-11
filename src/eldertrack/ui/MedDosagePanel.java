@@ -141,12 +141,12 @@ public class MedDosagePanel extends JPanel {
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
                 	JOptionPane.showMessageDialog(null, "Record Has Been Saved");
-                	//Object [][] rawData=DosageTable.getData(); 
-                	//for(int i=0;i<5;i++){
-                	//	if((boolean) (rawData[4][i]=Boolean.FALSE)){
-                	//		System.out.println("test");
-                //		}
-                //	}
+                	Object [][] rawData=DosageTable.getData(); 
+                	for(int i=0;i<5;i++){
+                		if((boolean) (rawData[4][i]=Boolean.FALSE)){
+                			JOptionPane.showMessageDialog(null, "Record Has Been Saved");
+                		}
+                	}
                 	NameField.setText("");
                 	AgeField.setText("");
                 	GenderField.setText("");
