@@ -32,12 +32,18 @@ public class SQLObject {
 		return prpstmt.executeQuery();
 	}
 	
-	// Takes in a statement
+	// Takes in a statement to retrieve data table
 	public ResultSet getResultSet(String statement) throws SQLException {
 		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
 		c.setAutoCommit(false);
 		PreparedStatement prpstmt = c.prepareStatement(statement);
 		return prpstmt.executeQuery();
+	}
+	
+	// Takes in a prepared statement to retrieve data
+	public ResultSet getResultSet(PreparedStatement prpstmt) throws SQLException {
+		this.prpstmt = prpstmt;
+		return this.prpstmt.executeQuery();
 	}
 	
 	// Takes in a statement to update table
@@ -53,6 +59,12 @@ public class SQLObject {
 		ArrayList<String> qarray = new ArrayList<String>();
 		qarray.add(toUpdate);
 		return executeUpdate(statement, qarray);
+	}
+	
+	// Takes in a prepared statement to update table
+	public int executeUpdate(PreparedStatement prpstmt) throws SQLException {
+		this.prpstmt = prpstmt;
+		return this.prpstmt.executeUpdate();
 	}
 	
 	// Takes in a statement and many variables to update
