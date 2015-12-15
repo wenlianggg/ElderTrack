@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class SQLConnect {
 	static Connection c = null;
+	static final String connString = "jdbc:sqlite:db\\SQLiteDB.db";
 	// Takes in a statement and a query
 	public static ResultSet getResultSet(String statement, String query) throws SQLException {
 		ArrayList<String> qarray = new ArrayList<String>();
