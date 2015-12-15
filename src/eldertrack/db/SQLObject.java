@@ -29,6 +29,7 @@ public class SQLObject {
 				System.out.println(queries.get(i-1));
 				prpstmt.setString(i, queries.get(i-1));
 			}
+		this.prpstmt = prpstmt;
 		return prpstmt.executeQuery();
 	}
 	
@@ -37,6 +38,7 @@ public class SQLObject {
 		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
 		c.setAutoCommit(false);
 		PreparedStatement prpstmt = c.prepareStatement(statement);
+		this.prpstmt = prpstmt;
 		return prpstmt.executeQuery();
 	}
 	
@@ -46,12 +48,22 @@ public class SQLObject {
 		return this.prpstmt.executeQuery();
 	}
 	
+	// Execute Prepared Statement from Object to get Result Set
+	public ResultSet getResultSet() throws SQLException {
+		if (this.prpstmt == null)
+			return null;
+		else
+			return this.prpstmt.executeQuery();
+	}
+	
+	
 	// Takes in a statement to update table
 	public int executeUpdate(String statement) throws SQLException {
 		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
 		c.setAutoCommit(false);
 		PreparedStatement prpstmt = c.prepareStatement(statement);
-		return prpstmt.executeUpdate();
+		this.prpstmt = prpstmt;
+		return this.prpstmt.executeUpdate();
 	}
 	
 	// Takes in a statement to update table
@@ -61,11 +73,7 @@ public class SQLObject {
 		return executeUpdate(statement, qarray);
 	}
 	
-	// Takes in a prepared statement to update table
-	public int executeUpdate(PreparedStatement prpstmt) throws SQLException {
-		this.prpstmt = prpstmt;
-		return this.prpstmt.executeUpdate();
-	}
+
 	
 	// Takes in a statement and many variables to update
 	public int executeUpdate(String statement, ArrayList<String> variables) throws SQLException{
@@ -81,10 +89,38 @@ public class SQLObject {
 		return rowchanges;
 	}
 	
+	// Takes in a prepared statement to update table
+	public int executeUpdate(PreparedStatement prpstmt) throws SQLException {
+		this.prpstmt = prpstmt;
+		return this.prpstmt.executeUpdate();
+	}
+	
+	// Update using Prepared Statement within Object
+	public int executeUpdate() throws SQLException {
+		if (this.prpstmt == null)
+			return 0;
+		else
+			return this.prpstmt.executeUpdate();
+	}
+	
+	// Getter and mutator methods
+	public Connection getC() {
+		return c;
+	}
+	public void setC(Connection c) {
+		this.c = c;
+	}
+	public PreparedStatement getPrpstmt() {
+		return prpstmt;
+	}
+	public void setPrpstmt(PreparedStatement prpstmt) {
+		this.prpstmt = prpstmt;
+	}
 	public void close() throws SQLException {
 		c.close();
 	}
 
+	// Main method for testing purposes
 	public static void main(String args[]) {
 		try {
 			SQLObject so = new SQLObject();

@@ -36,6 +36,11 @@ public class SQLConnect {
 		return prpstmt.executeQuery();
 	}
 	
+	// Takes in a prepared statement to retrieve data
+	public ResultSet getResultSet(PreparedStatement prpstmt) throws SQLException {
+		return prpstmt.executeQuery();
+	}
+	
 	// Takes in a statement to update table
 	public static int executeUpdate(String statement) throws SQLException {
 		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
@@ -63,6 +68,11 @@ public class SQLConnect {
 		}
 		rowchanges = prpstmt.executeUpdate();
 		return rowchanges;
+	}
+	
+	// Takes in a prepared statement to update table
+	public int executeUpdate(PreparedStatement prpstmt) throws SQLException {
+		return prpstmt.executeUpdate();
 	}
 	
 	public static void main(String args[]) {
