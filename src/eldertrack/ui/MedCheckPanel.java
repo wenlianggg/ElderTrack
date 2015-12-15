@@ -165,5 +165,36 @@ public class MedCheckPanel extends JPanel {
 		btnNextElderly.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnNextElderly.setBounds(664, 411, 151, 23);
 		add(btnNextElderly);
+		
+		btnNextElderly.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			    
+			    int dialogButton = JOptionPane.YES_NO_OPTION;
+                int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure?","Warning",dialogButton);
+                if(dialogResult == JOptionPane.YES_OPTION){
+                		if(textField.getText().equals("")||textField_1.getText().equals("")||textField_2.getText().equals("")||textField_3.getText().equals("")){
+                			
+                			JOptionPane.showMessageDialog(null, "Please Check Again");
+                		}
+                		else{
+                			
+                			JOptionPane.showMessageDialog(null, "Record Has Been Saved");
+                			JPanel getSearchDosage=new MedDosageSearchPanel ();
+                            getSearchDosage.setVisible(true);
+                     		textField.setText("");	
+                     		textField_1.setText("");	
+                     		textField_2.setText("");	
+                     		textField_3.setText("");
+                     		CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+                     		mainCards.show(MedPanel.MedCardPanel, MedPanel.MCHECKPANEL);
+                		}
+                        }
+              
+                    }
+			
+			});
+		
+		}
 	}
-}
+
