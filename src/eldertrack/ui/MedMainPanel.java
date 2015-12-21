@@ -33,9 +33,9 @@ public class MedMainPanel extends JPanel {
 		TabbedPanel.setBounds(10, 85, 975, 510);
 		TabbedPanel.setFont( new Font( "Segoe UI", Font.BOLD|Font.ITALIC, 20 ) );
 		
-		MedDosageSearchPanel medDosageSearchPanel = new MedDosageSearchPanel();
 		
-		TabbedPanel.add("Dosage", medDosageSearchPanel);
+		
+		TabbedPanel.add("Dosage",new MedDosageSearchPanel());
 		TabbedPanel.add("Check-Up",new MedCheckSearchPanel());
 		add(TabbedPanel);
 		JButton btnMainMenu = new JButton("Back to Main Menu");
