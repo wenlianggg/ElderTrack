@@ -52,7 +52,6 @@ public class MedDosagePanel extends JPanel {
 		
 		NameField = new JTextField();
 		NameField.setBounds(201, 100, 145, 30);
-		NameField.setText("Roy");
 		NameField.setEditable(false);
 		add(NameField);
 		NameField.setColumns(10);
@@ -67,7 +66,6 @@ public class MedDosagePanel extends JPanel {
 		AgeField = new JTextField();
 		AgeField.setBounds(201, 138, 145, 30);
 		AgeField.setEditable(false);
-		AgeField.setText("69");
 		add(AgeField);
 		AgeField.setColumns(10);
 		
@@ -82,7 +80,6 @@ public class MedDosagePanel extends JPanel {
 		GenderField.setColumns(10);
 		GenderField.setBounds(201, 176, 145, 30);
 		GenderField.setEditable(false);
-		GenderField.setText("Male");
 		add(GenderField);
 		
 		// Summary
@@ -95,7 +92,6 @@ public class MedDosagePanel extends JPanel {
 		JTextPane textPane = new JTextPane();
 		textPane.setBounds(391, 138, 424, 68);
 		textPane.setEditable(false);
-		textPane.setText("Has a bad temper when eating tablet types of medication");
 		add(textPane);
 		// DosageTable
 		
@@ -141,12 +137,12 @@ public class MedDosagePanel extends JPanel {
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
                 	JOptionPane.showMessageDialog(null, "Record Has Been Saved");
-                	//Object [][] rawData=DosageTable.getData(); 
-                	//for(int i=0;i<5;i++){
-                	//	if((boolean) (rawData[4][i]=Boolean.FALSE)){
-                	//		System.out.println("test");
-                //		}
-                //	}
+                	Object [][] rawData=DosageTable.getData(); 
+                	for(int i=0;i<5;i++){
+                		if((boolean) (rawData[4][i]=Boolean.FALSE)){
+                			JOptionPane.showMessageDialog(null, "Record Has Been Saved");
+                		}
+                	}
                 	NameField.setText("");
                 	AgeField.setText("");
                 	GenderField.setText("");
