@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class SQLConnect {
 	static Connection c = null;
+	static final String connString = "jdbc:sqlite:db\\SQLiteDB.db";
 	// Takes in a statement and a query
 	public static ResultSet getResultSet(String statement, String query) throws SQLException {
 		ArrayList<String> qarray = new ArrayList<String>();
@@ -33,6 +34,11 @@ public class SQLConnect {
 		c = DriverManager.getConnection("jdbc:sqlite:db\\SQLiteDB.db");
 		c.setAutoCommit(false);
 		PreparedStatement prpstmt = c.prepareStatement(statement);
+		return prpstmt.executeQuery();
+	}
+	
+	// Takes in a prepared statement to retrieve data
+	public ResultSet getResultSet(PreparedStatement prpstmt) throws SQLException {
 		return prpstmt.executeQuery();
 	}
 	
@@ -63,6 +69,11 @@ public class SQLConnect {
 		}
 		rowchanges = prpstmt.executeUpdate();
 		return rowchanges;
+	}
+	
+	// Takes in a prepared statement to update table
+	public int executeUpdate(PreparedStatement prpstmt) throws SQLException {
+		return prpstmt.executeUpdate();
 	}
 	
 	public static void main(String args[]) {
