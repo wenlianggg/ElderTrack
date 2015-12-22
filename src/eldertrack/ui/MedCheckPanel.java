@@ -16,11 +16,14 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.JInternalFrame;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class MedCheckPanel extends JPanel {
 
 
 	private static final long serialVersionUID = -1155434751690765910L;
+	private JTextField textField;
+	
 
 
 	public MedCheckPanel() {
@@ -74,10 +77,10 @@ public class MedCheckPanel extends JPanel {
 		lblSummary.setForeground(new Color(0, 128, 128));
 		add(lblSummary);
 				
-		JTextPane txtpnHadSomeCough = new JTextPane();
-		txtpnHadSomeCough.setBounds(391, 138, 424, 68);
-		txtpnHadSomeCough.setEditable(false);
-		add(txtpnHadSomeCough);
+		JTextPane txtSummary = new JTextPane();
+		txtSummary.setBounds(391, 138, 424, 68);
+		txtSummary.setEditable(false);
+		add(txtSummary);
 		
 		//Checking 
 		JTabbedPane CheckTabbed=new JTabbedPane();
@@ -85,13 +88,83 @@ public class MedCheckPanel extends JPanel {
 		CheckTabbed.setBounds(120, 253, 695, 300);
 		add(CheckTabbed);
 		
+		JPanel GeneralCheck=new JPanel();
+		GeneralCheck.setLayout(null);
+		JLabel lblHeartRate = new JLabel("Heart Rate:");
+		lblHeartRate.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		lblHeartRate.setBounds(29, 10, 90, 30);
+		GeneralCheck.add(lblHeartRate);
+		
+		JTextField HeartField = new JTextField();
+		HeartField.setBounds(148, 17, 90, 25);
+		HeartField.setColumns(10);
+		GeneralCheck.add(HeartField);
+		
+		JLabel lblEye= new JLabel("Eye Infection:");
+		lblEye.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		lblEye.setBounds(29, 92, 112, 30);
+		GeneralCheck.add(lblEye);
+		
+		JComboBox comboEye = new JComboBox();
+		comboEye.setBounds(148, 101, 90, 20);
+		comboEye.addItem(" ");
+		comboEye.addItem("Yes");
+		comboEye.addItem("No");
+		GeneralCheck.add(comboEye);
+		
+		JLabel lblEar= new JLabel("Ear Infection:");
+		lblEar.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		lblEar.setBounds(29, 133, 112, 30);
+		GeneralCheck.add(lblEar);
+		
+		JComboBox comboEar = new JComboBox();
+		comboEar.setBounds(148, 142, 90, 20);
+		comboEar.addItem(" ");
+		comboEar.addItem("Yes");
+		comboEar.addItem("No");
+		GeneralCheck.add(comboEar);
+		
+		
+		
+		
+		
+		JLabel lblAddition= new JLabel("Additional Notes: ");
+		lblAddition.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		lblAddition.setBounds(298, 10, 151, 30);
+		GeneralCheck.add(lblAddition);
+		
+		JTextPane textAddition = new JTextPane();
+		textAddition.setBounds(298, 51, 357, 112);
+		GeneralCheck.add(textAddition);
+		
+		JTabbedPane SpecialCheck=new JTabbedPane();
+		SpecialCheck.setLayout(null);
+		
 	
 		
-		JPanel GeneralCheck=new JPanel();
 		
 		
-		CheckTabbed.add(GeneralCheck);
 		
+		
+		
+		
+		CheckTabbed.add(GeneralCheck,"Genearal");
+		
+		JLabel lblSugarLv= new JLabel("Sugar Level: ");
+		lblSugarLv.setBounds(29, 51, 112, 30);
+		GeneralCheck.add(lblSugarLv);
+		lblSugarLv.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(148, 56, 90, 25);
+		GeneralCheck.add(textField);
+		
+		
+		
+		
+		CheckTabbed.add(SpecialCheck,"Specialised Checking");
+		CheckTabbed.setFont( new Font( "Segoe UI", Font.BOLD|Font.ITALIC, 20 ) );
 		
 		}
 	}
