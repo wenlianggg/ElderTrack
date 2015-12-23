@@ -86,12 +86,12 @@ public class MedDosageSearchPanel extends JPanel {
 		txtpnRoomNumber.setBounds(551, 155, 339, 226);
 		add(txtpnRoomNumber);
 		
-		JButton btnGetDosage_1 = new JButton("Get Dosage");
-		btnGetDosage_1.setBounds(90, 256, 312, 31);
-		btnGetDosage_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		add(btnGetDosage_1);
+		JButton btnGetDosage = new JButton("Get Dosage");
+		btnGetDosage.setBounds(90, 256, 312, 31);
+		btnGetDosage.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		add(btnGetDosage);
 		
-		btnGetDosage_1.addActionListener(new ActionListener() {
+		btnGetDosage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JPanel getDosage=new MedDosagePanel();
 				getDosage.setVisible(true);
