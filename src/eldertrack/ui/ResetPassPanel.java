@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.font.TextAttribute;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,11 +15,9 @@ import javax.swing.JTextField;
 
 import eldertrack.login.SessionTools;
 import eldertrack.login.StaffSession;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Component;
 import javax.swing.Box;
-import java.awt.Dimension;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
