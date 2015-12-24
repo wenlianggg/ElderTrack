@@ -20,9 +20,7 @@ import javax.swing.JSeparator;
 import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
-import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
-import javax.swing.UIManager;
 
 public class ReportMainPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
@@ -252,8 +250,8 @@ public class ReportMainPanel extends JPanel {
 		add(btnAddMeal);
 		btnAddMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        CardLayout parentCards = (CardLayout) ReportPanel.CardsPanel.getLayout();
-		        parentCards.show(ReportPanel.CardsPanel, ReportPanel.DADDPANEL);
+		       // CardLayout parentCards = (CardLayout) ReportPanel.CardsPanel.getLayout();
+		       // parentCards.show(ReportPanel.CardsPanel, ReportPanel.DADDPANEL);
 			}
 		});
 		
@@ -262,8 +260,8 @@ public class ReportMainPanel extends JPanel {
 		add(btnModifyMeals);
 		btnModifyMeals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        CardLayout parentCards = (CardLayout) ReportPanel.CardsPanel.getLayout();
-		        parentCards.show(ReportPanel.CardsPanel, ReportPanel.DMODPANEL);
+		        //CardLayout parentCards = (CardLayout) ReportPanel.CardsPanel.getLayout();
+		        //parentCards.show(ReportPanel.CardsPanel, ReportPanel.DMODPANEL);
 			}
 		});
 		
@@ -272,8 +270,8 @@ public class ReportMainPanel extends JPanel {
 		add(btnMenuManagement);
 		btnMenuManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        CardLayout parentCards = (CardLayout) ReportPanel.CardsPanel.getLayout();
-		        parentCards.show(ReportPanel.CardsPanel, ReportPanel.DMENUPANEL);
+		        //CardLayout parentCards = (CardLayout) ReportPanel.CardsPanel.getLayout();
+		        //parentCards.show(ReportPanel.CardsPanel, ReportPanel.DMENUPANEL);
 			}
 		});
 		
