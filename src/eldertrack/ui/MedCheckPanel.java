@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
+import eldertrack.db.SQLConnect;
 import eldertrack.medical.CheckUpObject;
 
 import javax.swing.JComboBox;
@@ -31,8 +34,10 @@ public class MedCheckPanel extends JPanel {
 	
 
 
-	public MedCheckPanel() {
+	public MedCheckPanel(){
+
 		setLayout(null);
+
 		
 		JLabel lblNewLabel = new JLabel("Check Up");
 		lblNewLabel.setForeground(UIManager.getColor("TextField.selectionBackground"));
@@ -51,6 +56,9 @@ public class MedCheckPanel extends JPanel {
 		NameField.setEditable(false);
 		add(NameField);
 		NameField.setColumns(10);
+		
+		
+		
 		
 		JLabel lblAge = new JLabel("Age: ");
 		lblAge.setFont(new Font("Segoe UI", Font.PLAIN, 20));
@@ -159,14 +167,31 @@ public class MedCheckPanel extends JPanel {
 		textAddition.setBounds(393, 279, 422, 149);
 		add(textAddition);
 		
+		//Date
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		Date date = new Date();
+		String reportDate=dateFormat.format(date);
+		//Date
+		
+		//DataBase
+		ResultSet rs;
+		try {
+			rs = SQLConnect.getResultSet("SELECT * FROM et_elderly");
+			NameField.setText(rs.getString("name"));
+			AgeField.setText(rs.getString("age"));
+			GenderField.setText(rs.getString("gender"));
+			
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
 		JButton btnSaveQuit = new JButton("Save And Quit");
 		btnSaveQuit.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnSaveQuit.setBounds(391, 441, 150, 35);
 		add(btnSaveQuit);
-		
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-		Date date = new Date();
-		String reportDate=dateFormat.format(date);
 		
 		btnSaveQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -210,6 +235,7 @@ public class MedCheckPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please Check Again");
 				}
 				else{
+					
 					CheckUpObject checkElder=new CheckUpObject();
 					checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
 					checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
@@ -221,7 +247,9 @@ public class MedCheckPanel extends JPanel {
 						checkElder.setElderEar(true);
 					}
 					checkElder.setElderDate(reportDate);
-					checkElder.view();
+					//checkElder.view();
+					
+				
 				}
 				
 				

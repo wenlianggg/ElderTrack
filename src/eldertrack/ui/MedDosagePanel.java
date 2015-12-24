@@ -12,6 +12,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JTextField;
 import javax.swing.table.TableModel;
@@ -19,7 +21,10 @@ import javax.swing.JButton;
 
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
+
+import eldertrack.db.SQLConnect;
 import eldertrack.medical.*;
+import javax.swing.SwingConstants;
 
 public class MedDosagePanel extends JPanel {
 
@@ -51,6 +56,7 @@ public class MedDosagePanel extends JPanel {
 		add(lblName);
 		
 		NameField = new JTextField();
+		NameField.setHorizontalAlignment(SwingConstants.CENTER);
 		NameField.setBounds(201, 100, 145, 30);
 		NameField.setEditable(false);
 		add(NameField);
@@ -64,6 +70,7 @@ public class MedDosagePanel extends JPanel {
 		add(lblAge);
 		
 		AgeField = new JTextField();
+		AgeField.setHorizontalAlignment(SwingConstants.CENTER);
 		AgeField.setBounds(201, 138, 145, 30);
 		AgeField.setEditable(false);
 		add(AgeField);
@@ -77,6 +84,7 @@ public class MedDosagePanel extends JPanel {
 		add(lblGender);
 		
 		GenderField= new JTextField();
+		GenderField.setHorizontalAlignment(SwingConstants.CENTER);
 		GenderField.setColumns(10);
 		GenderField.setBounds(201, 176, 145, 30);
 		GenderField.setEditable(false);
@@ -93,6 +101,21 @@ public class MedDosagePanel extends JPanel {
 		textPane.setBounds(391, 138, 424, 68);
 		textPane.setEditable(false);
 		add(textPane);
+		
+		// Database
+		ResultSet rs;
+		try {
+			rs = SQLConnect.getResultSet("SELECT * FROM et_elderly");
+			NameField.setText(rs.getString("name"));
+			AgeField.setText(rs.getString("age"));
+			GenderField.setText(rs.getString("gender"));
+			
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		// DosageTable
 		
 		

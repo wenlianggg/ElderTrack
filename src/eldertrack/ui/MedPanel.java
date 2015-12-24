@@ -3,6 +3,7 @@ package eldertrack.ui;
 
 import javax.swing.JPanel;
 import java.awt.CardLayout;
+import java.sql.SQLException;
 
 
 
@@ -17,7 +18,7 @@ public class MedPanel extends JPanel {
 	static JPanel MedCardPanel;
 	CardLayout mainCards;
 	
-	MedPanel() {
+	MedPanel(){
 		JPanel MedMainPanel = new MedMainPanel();
 		JPanel MedDosageSearchPanel = new MedDosageSearchPanel();
 		JPanel MedDosagePanel = new MedDosagePanel();

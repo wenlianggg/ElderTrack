@@ -10,11 +10,7 @@ private boolean elderEar =false;
 private String elderDate;
 
 	public CheckUpObject(){
-	
 	}
-	
-
-
 	public CheckUpObject(double elderTemp, int elderBlood, int elderHeart, boolean elderEye, boolean elderEar, String elderDate) {
 		this.elderTemp = elderTemp;
 		this.elderBlood = elderBlood;
