@@ -11,6 +11,6 @@ public static void main(String[] args) throws SQLException {
 		while(rs.next()){
 		System.out.println("Name: "+rs.getString("firstname")+" " +rs.getString("lastname") );
 		System.out.println("");
+		}
 	}
-}
 }

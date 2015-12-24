@@ -461,6 +461,10 @@ public class MgmtPanel extends JPanel {
 							
 							String add3 = rs1.getString("lastname");
 							textField_7.setText(add3);
+							
+							String add4 = rs1.getString("dob");
+							textField_11.setText(add4);
+							
 						}
 						
 					}catch(Exception e1){
