@@ -8,7 +8,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import eldertrack.db.SQLConnect;
 import eldertrack.db.SQLObject;
 import eldertrack.diet.TableHelper;
 
@@ -30,6 +29,7 @@ import javax.swing.JTabbedPane;
 import eldertrack.management.*;
 
 public class MgmtPanel extends JPanel {
+	SQLObject wanker = new SQLObject();
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblEManagementLbl;
 	private JTable elderlyTable;
@@ -372,7 +372,7 @@ public class MgmtPanel extends JPanel {
 								info.add(address);
 								
 								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, age = ?, room = ?, address = ? WHERE id = " + id;
-								SQLObject so = new SQLObject();
+								wanker so = new wanker();
 								System.out.println(so.executeUpdate(sql, info));
 								
 							}catch(Exception e1){
@@ -408,7 +408,7 @@ public class MgmtPanel extends JPanel {
 						int row = elderlyTable.getSelectedRow();
 						String table_clicked = (elderlyTable.getModel().getValueAt(row, 0).toString());
 						String sql = "SELECT * FROM et_elderly WHERE id=?";
-						ResultSet rs = SQLConnect.getResultSet(sql, table_clicked);
+						ResultSet rs = wanker.getResultSet(sql, table_clicked);
 						
 						while(rs.next()){
 							String add1 = rs.getString("id");
@@ -450,7 +450,7 @@ public class MgmtPanel extends JPanel {
 						int row1 = staffTable.getSelectedRow();
 						String table_clicked1 = (staffTable.getModel().getValueAt(row1, 0).toString());
 						String sql1 = "SELECT * FROM et_staff WHERE staffid=?";
-						ResultSet rs1 = SQLConnect.getResultSet(sql1, table_clicked1);
+						ResultSet rs1 = wanker.getResultSet(sql1, table_clicked1);
 						
 						while(rs1.next()){
 							String add1 = rs1.getString("staffid");
