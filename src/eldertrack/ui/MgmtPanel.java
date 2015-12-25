@@ -359,7 +359,6 @@ public class MgmtPanel extends JPanel {
 								String dob = label_1.getText();
 								String nric = label_2.getText();
 								String gender = label_7.getText();
-								String age = label_15.getText();
 								String room = label_17.getText();
 								String address = label_19.getText();
 								
@@ -367,12 +366,11 @@ public class MgmtPanel extends JPanel {
 								info.add(name);
 								info.add(dob);
 								info.add(gender);
-								info.add(age);
 								info.add(room);
 								info.add(address);
 								
-								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, age = ?, room = ?, address = ? WHERE id = " + id;
-								wanker so = new wanker();
+								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, room = ?, address = ? WHERE id = " + id;
+								SQLObject so = new SQLObject();
 								System.out.println(so.executeUpdate(sql, info));
 								
 							}catch(Exception e1){
@@ -425,9 +423,6 @@ public class MgmtPanel extends JPanel {
 							
 							String add5 = rs.getString("gender");
 							textField_4.setText(add5);
-							
-							String add6 = rs.getString("age");
-							textField_8.setText(add6);
 							
 							String add7 = rs.getString("room");
 							textField_9.setText(add7);
