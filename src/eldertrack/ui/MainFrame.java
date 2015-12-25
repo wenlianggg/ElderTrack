@@ -34,7 +34,6 @@ public class MainFrame extends JFrame {
     private MedPanel MedPanel;
     private MgmtPanel MgmtPanel;
     private MainMenuPanel MainMenu;
-    private static JButton btnMainMenu;
     static JPanel CardsPanel;
 	StaffSession session;  
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
@@ -74,15 +73,8 @@ public class MainFrame extends JFrame {
 		MasterPane.setLayout(null);
 		setContentPane(MasterPane);
 		
-		btnMainMenu = new JButton("Back to Main Menu");
-		btnMainMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				((CardLayout)CardsPanel.getLayout()).show(CardsPanel, MENUPANEL);
-			}
-		});
-		btnMainMenu.setBounds(820, 15, 139, 40);
 
-		MasterPane.add(btnMainMenu);
+		
 		LoginPanel = new LoginPanel();
 		LoginPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		DietPanel = new DietPanel();
@@ -119,22 +111,6 @@ public class MainFrame extends JFrame {
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {LOGINPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, MENUPANEL}));
 		comboBox.setSelectedIndex(0);
 		MasterPane.add(comboBox);
-		
-		btnMainMenu.setVisible(true);
-//		Timer t = new Timer();
-//		t.scheduleAtFixedRate(new TimerTask() {
-//		    public void run() {
-//		    	if (!LoginPanel.getStaffSession().isAuthenticated())
-//		    	System.out.println("Not Logged In");
-//		    		if (btnMainMenu.isVisible())
-//		    			btnMainMenu.setVisible(false);
-//		    	else if (LoginPanel.getStaffSession().isAuthenticated())
-//		    	System.out.println("Is Logged In");
-//		    		if (!btnMainMenu.isVisible())
-//		    			btnMainMenu.setVisible(true);
-//		    }
-//		}, 0, 1000);
-		// 1000ms
 	}
 	
 	private static void showWeatherPanel(JPanel MasterPane) {
@@ -144,4 +120,3 @@ public class MainFrame extends JFrame {
 	}
 	
 }
-

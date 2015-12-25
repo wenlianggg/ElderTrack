@@ -9,13 +9,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import eldertrack.db.SQLConnect;
+import eldertrack.db.SQLObject;
 import eldertrack.diet.TableHelper;
 
+import java.awt.CardLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -41,6 +46,7 @@ public class MgmtPanel extends JPanel {
 	private JTextField textField_9;
 	private JTextField textField_10;
 	MgmtPanel() {
+		
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		lblEManagementLbl = new JLabel("ElderTrack Management");
@@ -107,10 +113,10 @@ public class MgmtPanel extends JPanel {
 		panel.add(label_1);
 		label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
 		
-			JLabel lblNewLabel = new JLabel("ID");
-			lblNewLabel.setBounds(19, 27, 109, 25);
-			panel.add(lblNewLabel);
-			lblNewLabel.setFont(new Font("Calibri", Font.PLAIN, 24));
+			JLabel label1 = new JLabel("ID");
+			label1.setBounds(19, 27, 109, 25);
+			panel.add(label1);
+			label1.setFont(new Font("Calibri", Font.PLAIN, 24));
 			
 			JLabel label_2 = new JLabel("NRIC");
 			label_2.setBounds(18, 141, 109, 25);
@@ -272,6 +278,18 @@ public class MgmtPanel extends JPanel {
 			btnNewButton.setBounds(29, 569, 97, 25);
 			add(btnNewButton);
 			
+			// Add this to each panel
+			JButton btnMainMenu = new JButton("Back to Main Menu");
+			btnMainMenu.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+					parentCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
+				}
+			});
+			btnMainMenu.setBounds(820, 15, 139, 40);
+			add(btnMainMenu);
+
+
 			//Event Listeners
 			tabbedPane.addChangeListener(new ChangeListener() {
 			    public void stateChanged(ChangeEvent e) {
@@ -359,6 +377,34 @@ public class MgmtPanel extends JPanel {
 					JOptionPane pane = new JOptionPane();
 					int dialogButton = JOptionPane.YES_NO_OPTION;
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
+						if (dialogResult == JOptionPane.YES_OPTION){
+							try{
+								String id = label1.getText();
+								String name = label.getText();
+								String dob = label_1.getText();
+								String nric = label_2.getText();
+								String gender = label_7.getText();
+								String age = label_15.getText();
+								String room = label_17.getText();
+								String address = label_19.getText();
+								
+								ArrayList<String> info = new ArrayList<String>();
+								info.add(name);
+								info.add(dob);
+								info.add(gender);
+								info.add(age);
+								info.add(room);
+								info.add(address);
+								
+								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, age = ?, room = ?, address = ? WHERE id = " + id;
+								SQLObject so = new SQLObject();
+								System.out.println(so.executeUpdate(sql, info));
+								
+							}catch(Exception e1){
+								JOptionPane.showMessageDialog(null,e1);	
+							}
+						}
+							
 				}
 			});
 			
