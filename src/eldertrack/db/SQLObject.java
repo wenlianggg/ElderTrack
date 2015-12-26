@@ -18,9 +18,8 @@ public class SQLObject {
 	public SQLObject() {
 		try { 
 			Class.forName("org.gjt.mm.mysql.Driver"); 
-			System.out.println("Driver Successfully Found."); 
 			con = DriverManager.getConnection(url, dbuser, dbpw); 
-			System.out.println("Successfully connected to " + url); 
+			System.out.println("Database Connection Initiated, SOURCE: " + new Exception().getStackTrace()[1].getClassName()); 
 		} catch (ClassNotFoundException e) { 
 			System.out.println("Driver Not Found, exiting.."); 
 			e.printStackTrace();
@@ -163,7 +162,6 @@ public class SQLObject {
 		PreparedStatement prpstmt = con.prepareStatement(statement);
 		if (queries.size() != 0)
 			for(int i = 1; i <= queries.size(); i++) {
-				System.out.println(queries.get(i-1));
 				prpstmt.setString(i, queries.get(i-1));
 			}
 		this.prpstmt = prpstmt;
@@ -213,7 +211,6 @@ public class SQLObject {
 		con.setAutoCommit(false);
 		PreparedStatement prpstmt = con.prepareStatement(statement);
 		for(int i = 1; i <= variables.size(); i++) {
-			System.out.println(variables.get(i-1));
 			prpstmt.setString(i, variables.get(i-1));
 		}
 		rowchanges = prpstmt.executeUpdate();
