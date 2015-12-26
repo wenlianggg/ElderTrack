@@ -2,15 +2,15 @@ package eldertrack.management;
 
 import java.sql.*;
 
-import eldertrack.db.SQLConnect;
+import eldertrack.db.SQLObject;
 
 
 public class DisplayElderInfo {
 	public static void main(String[] args) throws SQLException {
 		Connection c = null;
-		ResultSet rs = SQLConnect.getResultSet("SELECT * FROM et_elderly");
+		SQLObject wanker = new SQLObject();
 		try{
-			
+			ResultSet rs = wanker.getResultSet("SELECT * FROM et_elderly");
 		}catch (Exception e){
 			
 		}
