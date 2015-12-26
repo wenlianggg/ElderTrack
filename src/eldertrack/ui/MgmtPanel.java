@@ -8,7 +8,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import eldertrack.db.SQLConnect;
 import eldertrack.db.SQLObject;
 import eldertrack.diet.TableHelper;
 
@@ -30,6 +29,7 @@ import javax.swing.JTabbedPane;
 import eldertrack.management.*;
 
 public class MgmtPanel extends JPanel {
+	SQLObject wanker = new SQLObject();
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblEManagementLbl;
 	private JTable elderlyTable;
@@ -45,6 +45,7 @@ public class MgmtPanel extends JPanel {
 	private JTextField textField_8;
 	private JTextField textField_9;
 	private JTextField textField_10;
+	private JTextField textField_11;
 	MgmtPanel() {
 		
 		setBounds(0, 0, 995, 670);
@@ -84,21 +85,8 @@ public class MgmtPanel extends JPanel {
 		
 		scrollPane2.setViewportView(staffTable);
 		
-		JButton button = new JButton("Save Changes");
-		
-		button.setBounds(474, 499, 132, 25);
-		add(button);
-		
-		JButton button_1 = new JButton("Discard Changes");
-
-		button_1.setBounds(638, 499, 132, 25);
-		add(button_1);
-		
-		JButton button_2 = new JButton("Remove Selected");
-		button_2.setBounds(795, 499, 132, 25);
-		add(button_2);
-		
 		JPanel panel = new JPanel();
+		panel.setVisible(true);
 		panel.setBounds(479, 79, 448, 396);
 		add(panel);
 		panel.setLayout(null);
@@ -244,6 +232,11 @@ public class MgmtPanel extends JPanel {
 			label_11.setBounds(19, 27, 123, 25);
 			panel_1.add(label_11);
 			
+			JLabel label_21 = new JLabel("DOB");
+			label_21.setBounds(19, 140, 109, 25);
+			panel_1.add(label_21);
+			label_21.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
 			JLabel label_12 = new JLabel(":");
 			label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
 			label_12.setBounds(152, 27, 23, 25);
@@ -269,6 +262,16 @@ public class MgmtPanel extends JPanel {
 			textField_6.setBounds(180, 67, 116, 22);
 			panel_1.add(textField_6);
 			
+			JLabel label_22 = new JLabel(":");
+			label_22.setBounds(152, 140, 23, 25);
+			panel_1.add(label_22);
+			label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			textField_11 = new JTextField();
+			textField_11.setBounds(180, 141, 116, 22);
+			panel_1.add(textField_11);
+			textField_11.setColumns(10);
+			
 			textField_7 = new JTextField();
 			textField_7.setColumns(10);
 			textField_7.setBounds(180, 105, 116, 22);
@@ -288,6 +291,95 @@ public class MgmtPanel extends JPanel {
 			});
 			btnMainMenu.setBounds(820, 15, 139, 40);
 			add(btnMainMenu);
+			
+			JPanel panel_2 = new JPanel();
+			panel_2.setVisible(true);
+			panel_2.setBounds(474, 499, 453, 25);
+			add(panel_2);
+			panel_2.setLayout(null);
+			
+			JButton button = new JButton("Save Changes");
+			button.setBounds(0, 0, 132, 25);
+			panel_2.add(button);
+			
+			JButton button_1 = new JButton("Discard Changes");
+			button_1.setBounds(165, 0, 132, 25);
+			panel_2.add(button_1);
+			
+			JButton button_2 = new JButton("Remove Selected");
+			button_2.setBounds(321, 0, 132, 25);
+			panel_2.add(button_2);
+			
+			JPanel panel_3 = new JPanel();
+			panel_3.setBounds(474, 499, 453, 25);
+			add(panel_3);
+			panel_3.setVisible(false);
+			panel_3.setLayout(null);
+			
+			JButton button_3 = new JButton("Save Changes");
+			button_3.setBounds(0, 0, 132, 25);
+			panel_3.add(button_3);
+			
+			JButton button_4 = new JButton("Discard Changes");
+			button_4.setBounds(165, 0, 132, 25);
+			panel_3.add(button_4);
+			
+			JButton button_5 = new JButton("Remove Selected");
+			button_5.setBounds(321, 0, 132, 25);
+			panel_3.add(button_5);
+			
+			button_2.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JOptionPane pane = new JOptionPane();
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the selected person?");
+				}
+			});
+			
+			button_1.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JOptionPane pane = new JOptionPane();
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to discard changes?");
+				}
+			});
+			
+			button.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JOptionPane pane = new JOptionPane();
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
+						if (dialogResult == JOptionPane.YES_OPTION){
+							try{
+								String id = label1.getText();
+								String name = label.getText();
+								String dob = label_1.getText();
+								String nric = label_2.getText();
+								String gender = label_7.getText();
+								String room = label_17.getText();
+								String address = label_19.getText();
+								
+								ArrayList<String> info = new ArrayList<String>();
+								info.add(name);
+								info.add(dob);
+								info.add(gender);
+								info.add(room);
+								info.add(address);
+								
+								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, room = ?, address = ? WHERE id = " + id;
+								SQLObject so = new SQLObject();
+								System.out.println(so.executeUpdate(sql, info));
+								
+							}catch(Exception e1){
+								JOptionPane.showMessageDialog(null,e1);	
+							}
+						}
+							
+				}
+			});
 
 
 			//Event Listeners
@@ -296,9 +388,13 @@ public class MgmtPanel extends JPanel {
 			    if (panel.isVisible()) {
 			    	panel_1.setVisible(true);
 			    	panel.setVisible(false);
+			    	panel_3.setVisible(true);
+			    	panel_2.setVisible(false);
 			    } else {
 			    	panel_1.setVisible(false);
 			    	panel.setVisible(true);
+			    	panel_3.setVisible(false);
+			    	panel_2.setVisible(true);
 			    }
 			    }
 			});
@@ -310,7 +406,7 @@ public class MgmtPanel extends JPanel {
 						int row = elderlyTable.getSelectedRow();
 						String table_clicked = (elderlyTable.getModel().getValueAt(row, 0).toString());
 						String sql = "SELECT * FROM et_elderly WHERE id=?";
-						ResultSet rs = SQLConnect.getResultSet(sql, table_clicked);
+						ResultSet rs = wanker.getResultSet(sql, table_clicked);
 						
 						while(rs.next()){
 							String add1 = rs.getString("id");
@@ -327,9 +423,6 @@ public class MgmtPanel extends JPanel {
 							
 							String add5 = rs.getString("gender");
 							textField_4.setText(add5);
-							
-							String add6 = rs.getString("age");
-							textField_8.setText(add6);
 							
 							String add7 = rs.getString("room");
 							textField_9.setText(add7);
@@ -352,7 +445,7 @@ public class MgmtPanel extends JPanel {
 						int row1 = staffTable.getSelectedRow();
 						String table_clicked1 = (staffTable.getModel().getValueAt(row1, 0).toString());
 						String sql1 = "SELECT * FROM et_staff WHERE staffid=?";
-						ResultSet rs1 = SQLConnect.getResultSet(sql1, table_clicked1);
+						ResultSet rs1 = wanker.getResultSet(sql1, table_clicked1);
 						
 						while(rs1.next()){
 							String add1 = rs1.getString("staffid");
@@ -363,66 +456,15 @@ public class MgmtPanel extends JPanel {
 							
 							String add3 = rs1.getString("lastname");
 							textField_7.setText(add3);
+							
+							String add4 = rs1.getString("dob");
+							textField_11.setText(add4);
+							
 						}
 						
 					}catch(Exception e1){
 						JOptionPane.showMessageDialog(null, e1);
 					}
-				}
-			});
-			
-			button.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					JOptionPane pane = new JOptionPane();
-					int dialogButton = JOptionPane.YES_NO_OPTION;
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
-						if (dialogResult == JOptionPane.YES_OPTION){
-							try{
-								String id = label1.getText();
-								String name = label.getText();
-								String dob = label_1.getText();
-								String nric = label_2.getText();
-								String gender = label_7.getText();
-								String age = label_15.getText();
-								String room = label_17.getText();
-								String address = label_19.getText();
-								
-								ArrayList<String> info = new ArrayList<String>();
-								info.add(name);
-								info.add(dob);
-								info.add(gender);
-								info.add(age);
-								info.add(room);
-								info.add(address);
-								
-								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, age = ?, room = ?, address = ? WHERE id = " + id;
-								SQLObject so = new SQLObject();
-								System.out.println(so.executeUpdate(sql, info));
-								
-							}catch(Exception e1){
-								JOptionPane.showMessageDialog(null,e1);	
-							}
-						}
-							
-				}
-			});
-			
-			button_1.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					JOptionPane pane = new JOptionPane();
-					int dialogButton = JOptionPane.YES_NO_OPTION;
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to discard changes?");
-				}
-			});
-			
-			button_2.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					JOptionPane pane = new JOptionPane();
-					int dialogButton = JOptionPane.YES_NO_OPTION;
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the selected person?");
 				}
 			});
 	}
