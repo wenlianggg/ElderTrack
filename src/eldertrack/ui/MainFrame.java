@@ -10,16 +10,10 @@ import javax.swing.JComboBox;
 
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
 import eldertrack.login.StaffSession;
-
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;

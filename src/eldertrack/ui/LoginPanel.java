@@ -15,11 +15,9 @@ import javax.swing.JTextField;
 
 import eldertrack.login.SessionTools;
 import eldertrack.login.StaffSession;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Component;
 import javax.swing.Box;
-import java.awt.Dimension;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
