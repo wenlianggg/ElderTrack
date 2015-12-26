@@ -1,9 +1,10 @@
 package eldertrack.diet;
 
-public class Nutrition {
+public class Nutrition implements java.io.Serializable {
+	private static final long serialVersionUID = 3000L;
 	int calories;
 	int fat;
-	int carbohydrates;
+	int carbs;
 	int iron;
 	int sodium;
 	int potassium;
@@ -17,5 +18,16 @@ public class Nutrition {
 	public Nutrition() {
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	void print() {
+		System.out.println();
+		System.out.println("Calories: \t" + calories + " kcal");
+		System.out.println("Fat: \t\t" + fat + " g");
+		System.out.println("Carbs: \t\t" + carbs + " g");
+		System.out.println("Iron: \t\t" + iron + " mg");
+		System.out.println("Sodium: \t" + sodium + " mg");
+		System.out.println("Potassium: \t" + potassium + " mg");
+		System.out.println("Calcium: \t" + calcium + " mg");
+		System.out.println("Phosporous: \t" + phosporous + " mg");
+	}
 }

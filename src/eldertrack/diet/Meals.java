@@ -18,4 +18,5 @@ public class Meals implements java.io.Serializable {
 		nutrition.add(new Nutrition());
 		mealprop.add(new MealProperties());
 	}
+	
 }
