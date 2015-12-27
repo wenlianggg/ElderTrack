@@ -24,4 +24,7 @@ public class MealProperties implements java.io.Serializable {
 		System.out.println("Created By: " + createdby);
 		System.out.println("Created: " + datef.format(created));
 	}
+	
+	void modify() {
+	}
 }
