@@ -3,6 +3,8 @@ package eldertrack.diet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import eldertrack.ui.MainFrame;
+
 public class MealProperties implements java.io.Serializable {
 	private static final long serialVersionUID = 2000L;
 	String lasteditedby;
@@ -26,5 +28,7 @@ public class MealProperties implements java.io.Serializable {
 	}
 	
 	void modify() {
+		lasteditedby = MainFrame.getInstance().getCurrentSession().getFullName();
+		lastedited = new Date();
 	}
 }
