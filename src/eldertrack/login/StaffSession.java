@@ -2,7 +2,8 @@ package eldertrack.login;
 
 import java.sql.*;
 
-import eldertrack.db.SQLConnect;
+import eldertrack.db.SQLObject;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class StaffSession{
@@ -15,12 +16,14 @@ public class StaffSession{
 	private boolean passwordcorrect = false;
 	
 	StaffSession(String username, char[] password) throws WrongPasswordException, NoSuchUserException {
-		// If username does not exist, throw NoSuchUserException
+		// If user does not exist, throw NoSuchUserException
 		ResultSet rs = null;
+		SQLObject so;
 		try {
-			// Get resultset
-			rs = SQLConnect.getResultSet("SELECT * FROM et_staff WHERE username = ?", username.toLowerCase());
-			// If resultset is null, it means that no such user is found
+			so = new SQLObject();
+			// Get ResultSet
+			rs = so.getResultSet("SELECT * FROM et_staff WHERE username = ?", username.toLowerCase());
+			// If ResultSet is null, it means that no such user is found
 			if (rs == null || rs.next() == false) {
 				throw new NoSuchUserException();
 			}

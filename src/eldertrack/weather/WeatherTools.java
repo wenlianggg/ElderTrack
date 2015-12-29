@@ -63,7 +63,6 @@ public class WeatherTools {
 	
 	// Method to cast a double onto Long or Double
 	public static double doubleCaster(Object toCast) {
-		System.out.println(toCast.getClass().getName());
 		if (toCast instanceof Long) {
 			return Long.valueOf((long)toCast).doubleValue();
 		} else {

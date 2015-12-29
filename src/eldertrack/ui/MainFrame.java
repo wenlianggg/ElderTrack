@@ -10,16 +10,10 @@ import javax.swing.JComboBox;
 
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
 import eldertrack.login.StaffSession;
-
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -35,7 +29,9 @@ public class MainFrame extends JFrame {
     private MgmtPanel MgmtPanel;
     private MainMenuPanel MainMenu;
     static JPanel CardsPanel;
-	StaffSession session;  
+	private StaffSession session;
+	// Singleton Class Design
+	private static MainFrame frame;
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
@@ -47,10 +43,9 @@ public class MainFrame extends JFrame {
 			public void run() {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
-					MainFrame frame = new MainFrame();
+					frame = new MainFrame();
 					frame.setVisible(true); // Set the main frame as visible
 					showWeatherPanel(frame.MasterPane);
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -62,7 +57,7 @@ public class MainFrame extends JFrame {
 	 * Create the frame!
 	 */
 	
-	public MainFrame() {
+	private MainFrame() {
 		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 1000, 810);
@@ -72,8 +67,6 @@ public class MainFrame extends JFrame {
 		MasterPane.setBorder(null);
 		MasterPane.setLayout(null);
 		setContentPane(MasterPane);
-		
-
 		
 		LoginPanel = new LoginPanel();
 		LoginPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -119,4 +112,12 @@ public class MainFrame extends JFrame {
 		MasterPane.add(WeatherPanel);
 	}
 	
+	// Singleton Class Design
+	public static MainFrame getInstance() {
+		return frame;
+	}
+	
+	public StaffSession getCurrentSession() {
+		return this.session;
+	}
 }
