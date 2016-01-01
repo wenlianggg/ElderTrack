@@ -1,5 +1,10 @@
 package eldertrack.medical;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import eldertrack.db.SQLObject;
+
 public class DosageObject {
 private String MedDescrip;
 private String MedPrescrip;
@@ -39,5 +44,18 @@ private String MedDosage;
 	public void setMedDosage(String medDosage) {
 		this.MedDosage = medDosage;
 	}
+public static void main(String[] args) throws SQLException {
+	SQLObject so = new SQLObject();
+	ResultSet rs=so.getResultSet("SELECT * FROM et_elderly");
+	try {
+		while(rs.next()){
+		
+		}
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 	
+	
+}
 }

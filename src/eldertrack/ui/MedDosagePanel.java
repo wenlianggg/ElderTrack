@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import javax.swing.table.TableModel;
@@ -22,7 +23,8 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
 
-import eldertrack.db.SQLConnect;
+
+import eldertrack.db.SQLObject;
 import eldertrack.medical.*;
 import javax.swing.SwingConstants;
 
@@ -32,9 +34,6 @@ public class MedDosagePanel extends JPanel {
 	private JTextField NameField;
 	private JTextField AgeField;
 	private JTextField GenderField;
-	
-	
-	
 	
 	public MedDosagePanel() {
 	
@@ -102,19 +101,27 @@ public class MedDosagePanel extends JPanel {
 		textPane.setEditable(false);
 		add(textPane);
 		
-		// Database
+		// Display of information
+		SQLObject so = new SQLObject();
+		ArrayList<DosageData> DosageList=new ArrayList<DosageData>();
 		ResultSet rs;
+		int counter=0;
 		try {
-			rs = SQLConnect.getResultSet("SELECT * FROM et_elderly");
-			NameField.setText(rs.getString("name"));
-			AgeField.setText(rs.getString("age"));
-			GenderField.setText(rs.getString("gender"));
-			
-			
+		rs = so.getResultSet("SELECT * FROM et_elderly");
+			while(rs.next()){
+			DosageData data=new DosageData();
+			data.setElderName(rs.getString("name"));
+			data.setElderAge(10);
+			data.setElderGender(rs.getString("gender"));
+			DosageList.add(data);
+			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		DisplayInformation(DosageList, counter);
+		
 		
 		// DosageTable
 		
@@ -153,27 +160,32 @@ public class MedDosagePanel extends JPanel {
 		btnNextEldery.setBounds(638, 436, 177, 27);
 		add(btnNextEldery);
 		btnNextEldery.addActionListener(new ActionListener() {
+			int counter=0;
 			public void actionPerformed(ActionEvent e) {
-				
+				counter++;
+				DisplayInformation(DosageList, counter);
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
                 	JOptionPane.showMessageDialog(null, "Record Has Been Saved");
                 	Object [][] rawData=DosageTable.getData(); 
+                	
                 	for(int i=0;i<5;i++){
                 		if((boolean) (rawData[4][i]=Boolean.FALSE)){
                 			JOptionPane.showMessageDialog(null, "Record Has Been Saved");
+                			
                 		}
                 	}
-                	NameField.setText("");
-                	AgeField.setText("");
-                	GenderField.setText("");
-                	textPane.setText("");
+                	
                   }
 			}
 			
 		});
 	}
-	
+	public void DisplayInformation(ArrayList<DosageData> DosageList, int counter){
+		NameField.setText(DosageList.get(counter).getElderName());
+		AgeField.setText("10");
+		GenderField.setText(DosageList.get(counter).getElderGender());
+	}
 }

@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
-import eldertrack.db.SQLConnect;
+
 import eldertrack.medical.CheckUpObject;
 
 import javax.swing.JComboBox;
@@ -30,9 +30,6 @@ public class MedCheckPanel extends JPanel {
 
 
 	private static final long serialVersionUID = -1155434751690765910L;
-
-	
-
 
 	public MedCheckPanel(){
 
@@ -174,18 +171,7 @@ public class MedCheckPanel extends JPanel {
 		//Date
 		
 		//DataBase
-		ResultSet rs;
-		try {
-			rs = SQLConnect.getResultSet("SELECT * FROM et_elderly");
-			NameField.setText(rs.getString("name"));
-			AgeField.setText(rs.getString("age"));
-			GenderField.setText(rs.getString("gender"));
-			
-			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
 		
 		
 		JButton btnSaveQuit = new JButton("Save And Quit");
