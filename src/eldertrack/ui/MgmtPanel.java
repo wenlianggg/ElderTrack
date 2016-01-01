@@ -19,7 +19,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -406,6 +410,7 @@ public class MgmtPanel extends JPanel {
 						int row = elderlyTable.getSelectedRow();
 						String table_clicked = (elderlyTable.getModel().getValueAt(row, 0).toString());
 						String sql = "SELECT * FROM et_elderly WHERE id=?";
+						String age = "SELECT dob FROM et_elderly WHERE id=?";
 						ResultSet rs = wanker.getResultSet(sql, table_clicked);
 						
 						while(rs.next()){
@@ -430,6 +435,19 @@ public class MgmtPanel extends JPanel {
 							String add8 = rs.getString("address");
 							textField_10.setText(add8);
 							
+							//Getting age from dob
+							Calendar dob = Calendar.getInstance();  
+							dob.setTime((Date)wanker.getResultSet(age,table_clicked));  
+							Calendar today = Calendar.getInstance(); 
+							int age1 = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);  
+							if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)) {
+							  age1--;  
+							} else if (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH)
+							    && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH)) {
+							  age1--;  
+							}
+							
+							textField_8.setText(Integer.toString(age1));
 						}
 						
 					}catch(Exception e1){
