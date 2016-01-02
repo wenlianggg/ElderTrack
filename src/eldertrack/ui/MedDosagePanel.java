@@ -162,12 +162,12 @@ public class MedDosagePanel extends JPanel {
 		btnNextEldery.addActionListener(new ActionListener() {
 			int counter=0;
 			public void actionPerformed(ActionEvent e) {
-				counter++;
-				DisplayInformation(DosageList, counter);
+				
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                	
+                	counter++;
+    				DisplayInformation(DosageList, counter);
                 	JOptionPane.showMessageDialog(null, "Record Has Been Saved");
                 	Object [][] rawData=DosageTable.getData(); 
                 	
