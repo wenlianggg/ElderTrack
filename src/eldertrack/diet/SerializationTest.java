@@ -1,60 +1,48 @@
 package eldertrack.diet;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import eldertrack.db.SQLObject;
 
 public class SerializationTest {
-	public static void main(String[] args) {
-		serialize();
+	static final String SQL_WRITE = "UPDATE et_elderly SET diet = ? WHERE id = ?";
+	static final String SQL_READ = "SELECT diet FROM et_elderly WHERE id = ?";
+	static final SQLObject so = new SQLObject();
+
+	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
+		//serialize();
 		deserialize();
 	}
 	
-	public static void serialize()  {
-		Meals m = new Meals();
-		m.addTestMeal();
-		try {
-			new File(System.getProperty("user.home") + "/tmp").mkdir();
-			FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/tmp/Meals.ser");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(m);
-			out.close();
-			fileOut.close();
-			System.out.println("Serialized data is saved in " + System.getProperty("user.home") + "\\tmp\\Meals.ser");
-		} catch(IOException i) {
-			i.printStackTrace();
-		}
-	}
+	  public static void serialize() throws SQLException {
+		  Meals m = new Meals();
+		  m.addTestMeal();
+		  PreparedStatement ps = so.getPreparedStatementWithKey(SQL_WRITE);
+		  ps.setObject(1, m);
+		  ps.setInt(2, 1);
+		  ps.executeUpdate();
+	  }
 	
-	public static void deserialize() {
-		Meals m = null;
-	      try
-	      {
-	         FileInputStream fileIn = new FileInputStream(System.getProperty("user.home") + "/tmp/Meals.ser");
-	         ObjectInputStream in = new ObjectInputStream(fileIn);
-	         m = (Meals) in.readObject();
-	         in.close();
-	         fileIn.close();
-	      }catch(IOException i)
-	      {
-	         i.printStackTrace();
-	         return;
-	      }catch(ClassNotFoundException c)
-	      {
-	         System.out.println("Meal class not found");
-	         c.printStackTrace();
-	         return;
-	      }
-	      System.out.println("Deserialized Meal...");
-	      System.out.println("Date and Time: " + m.datetime.get(0).getTime());
-	      System.out.println("Meal Name: " + m.mealname.get(0));
-	      System.out.print("Meal Property: ");
-	      m.mealprop.get(0).print();
-	      System.out.print("Nutrition: ");
-	      m.nutrition.get(0).print();
+	public static void deserialize() throws SQLException, ClassNotFoundException, IOException {
+	    PreparedStatement ps = so.getPreparedStatementWithKey(SQL_READ);
+		ps.setInt(1, 1);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+	    ByteArrayInputStream in = new ByteArrayInputStream(rs.getBytes(1));
+	    ObjectInputStream is = new ObjectInputStream(in);
+		Meals m = (Meals) is.readObject();
+		System.out.println("Deserialized Meal...");
+		System.out.println("Date and Time: " + m.datetime.get(0).getTime());
+		System.out.println("Meal Name: " + m.mealname.get(0));
+		System.out.print("Meal Property: ");
+		m.mealprop.get(0).print();
+		System.out.print("Nutrition: ");
+		m.nutrition.get(0).print();
 	}
 
 }
