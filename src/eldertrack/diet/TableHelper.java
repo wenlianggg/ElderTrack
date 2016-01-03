@@ -36,7 +36,14 @@ public class TableHelper {
 	        }
 	        data.add(vector);
 	    }
-	    return new DefaultTableModel(data, columnNames);
+	    DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
+			private static final long serialVersionUID = 4234183862785566645L;
+			@Override
+	        public boolean isCellEditable(int row, int column) {
+	           return false;
+	        }
+	    };
+	    return dtm;
 	}
 	
 	// Debug-able main method
