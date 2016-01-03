@@ -265,6 +265,15 @@ public class DietMenuPanel extends JPanel {
 		JButton btnNewButton = new JButton("New Menu Entry");
 		btnNewButton.setBounds(782, 118, 203, 109);
 		add(btnNewButton);
-
+		
+		JButton btnMainMenu = new JButton("Back to Main Menu");
+		btnMainMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+				parentCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
+			}
+		});
+		btnMainMenu.setBounds(820, 15, 139, 40);
+		add(btnMainMenu);
 	}
 }
