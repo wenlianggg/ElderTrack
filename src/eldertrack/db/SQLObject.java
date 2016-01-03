@@ -9,8 +9,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SQLObject {
+	private static int DEBUG_LEVEL = 2;
+	/************************************
+	 * Debug Levels
+	 * ---------------------
+	 * 0 - Show no SQL Information in Console
+	 * 1 - Show source of SQL in Console
+	 * 2 - Show query executed in Console
+	 ************************************/
 	private Connection con;
-	private PreparedStatement prpstmt;
 	private String url = "jdbc:mysql://eldertrackdb.ctfjtggc5l0j.ap-southeast-1.rds.amazonaws.com:3306/eldertrack";
 	private String dbuser = "eldertrackadmin";
 	private String dbpw = "eldertrack4321";
@@ -19,7 +26,8 @@ public class SQLObject {
 		try { 
 			Class.forName("org.gjt.mm.mysql.Driver"); 
 			con = DriverManager.getConnection(url, dbuser, dbpw); 
-			System.out.println("Database Connection Initiated, SOURCE: " + new Exception().getStackTrace()[1].getClassName()); 
+			if (DEBUG_LEVEL >= 1)
+				System.out.println("DB Connection Initiated, SOURCE: " + new Exception().getStackTrace()[1].getClassName());
 		} catch (ClassNotFoundException e) { 
 			System.out.println("Driver Not Found, exiting.."); 
 			e.printStackTrace();
@@ -33,7 +41,7 @@ public class SQLObject {
 	 * Method Name : testDriver
 	 * Input Parameter : nil 
 	 * Purpose : To test if the driver is properly installed
-	 * Return :nil
+	 * Returns : void
 	 *******************************************************/
 	public void testDriver() throws Exception { 
 		System.out.println("Testing Driver... "); 
@@ -50,11 +58,12 @@ public class SQLObject {
 	 * Method Name : readRequest 
 	 * Input Parameter : String (database query) 
 	 * Purpose : Obtain the result set from the database query 
-	 * Return : resultSet (records from the query)
+	 * Returns : resultSet (records from the query)
 	 ************************************************************/
-	public ResultSet readRequest(String dbQuery) {
+	public ResultSet getResultSet(String dbQuery) {
 		ResultSet rs = null;
-		System.out.println("DB Query: " + dbQuery);
+		if (DEBUG_LEVEL >= 2)
+			System.out.println("DB Query: " + dbQuery);
 		try {
 			// create a statement object
 			Statement stmt = con.createStatement();
@@ -67,14 +76,15 @@ public class SQLObject {
 	}
 	
 	/***********************************************************
-	 * Method Name : updateRequest 
+	 * Method Name : executeUpdate 
 	 * Input Parameter : String (database query) 
 	 * Purpose : Execute update using the database query 
 	 * Return : int (count is 1 if successful)
 	 ***********************************************************/
-	public int updateRequest(String dbQuery) {
+	public int executeUpdate(String dbQuery) {
 		int count = 0;
-		System.out.println("DB Query: " + dbQuery);
+		if (DEBUG_LEVEL >= 2)
+			System.out.println("DB Query: " + dbQuery);
 		try {
 			// create a statement object
 			Statement stmt = con.createStatement();
@@ -90,14 +100,16 @@ public class SQLObject {
 	 * Method Name : getPreparedStatement 
 	 * Input Parameter : String (database query) 
 	 * Purpose : Gets Prepared Statement using the database query 
-	 * Return : Prepared Statement
+	 * Returns : Prepared Statement
 	 ***********************************************************/
 	public PreparedStatement getPreparedStatementWithKey(String dbQuery) {
 		PreparedStatement pstmt = null;
-		System.out.println("DB prepare statement: " + dbQuery);
 		try {
 			// create a statement object
+			if (DEBUG_LEVEL >= 2)
+				System.out.println("DB Preparing Statement: " + dbQuery);
 			pstmt = con.prepareStatement(dbQuery,Statement.RETURN_GENERATED_KEYS);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -108,15 +120,14 @@ public class SQLObject {
 	 * Method Name : getPreparedStatement 
 	 * Input Parameter : String (database query) 
 	 * Purpose : Gets Prepared Statement using the database query 
-	 * Return : Prepared Statement
+	 * Returns : Prepared Statement
 	 ***********************************************************/
 	public PreparedStatement getPreparedStatement(String dbQuery) {
 		PreparedStatement pstmt = null;
-		System.out.println("DB prepare statement: " + dbQuery);
+		System.out.println("DB Preparing Statement: " + dbQuery);
 		try {
 			// create a statement object
-			
-				pstmt = con.prepareStatement(dbQuery);
+			pstmt = con.prepareStatement(dbQuery);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -128,8 +139,8 @@ public class SQLObject {
 	 * Method Name : terminate 
 	 * Input Parameter : nil 
 	 * Purpose : Close database connection 
-	 * Return : nil
-	 **********************************************************/
+	 * Returns : void
+	 ***********************************************************/
 	public void terminate() {
 		// close connection
 		try {
@@ -139,77 +150,38 @@ public class SQLObject {
 			e.printStackTrace();
 		}
 	}
-	public static void main(String[] arg)throws Exception{
-		SQLObject db = new SQLObject();
-		ResultSet rs = db.getResultSet("SELECT * FROM et_staff;");
-		while (rs.next()) {
-			System.out.println("\tID = " + rs.getInt("staffid") );
-			System.out.println("\tUSERNAME = " + rs.getString("username") );
-			System.out.println("\tPASSWORD = " + rs.getString("password"));
-			System.out.println("\tPERSON NAME = " + rs.getString("firstname") + " " + rs.getString("lastname"));
-		}
-		db.terminate();
-	}
+
 	
-	public ResultSet getResultSet(String statement, String query) throws SQLException {
-		ArrayList<String> qarray = new ArrayList<String>();
-		qarray.add(query);
-		return getResultSet(statement, qarray);
+	// Takes in a statement and a query
+	public ResultSet getResultSet(String statement, String toRetrieve) throws SQLException {
+		PreparedStatement prpstmt = this.getPreparedStatementWithKey(statement);
+		prpstmt.setString(1, toRetrieve);
+		return prpstmt.executeQuery();
 	}
 	
 	// Takes in a statement and many queries
 	public ResultSet getResultSet(String statement, ArrayList<String> queries) throws SQLException{
-		PreparedStatement prpstmt = con.prepareStatement(statement);
+		PreparedStatement prpstmt = this.getPreparedStatementWithKey(statement);
 		if (queries.size() != 0)
 			for(int i = 1; i <= queries.size(); i++) {
 				prpstmt.setString(i, queries.get(i-1));
 			}
-		this.prpstmt = prpstmt;
 		return prpstmt.executeQuery();
 	}
 	
-	// Takes in a statement to retrieve data table
-	public ResultSet getResultSet(String statement) throws SQLException {
-		con.setAutoCommit(false);
-		PreparedStatement prpstmt = con.prepareStatement(statement);
-		this.prpstmt = prpstmt;
-		return prpstmt.executeQuery();
-	}
-	
-	// Takes in a prepared statement to retrieve data
-	public ResultSet getResultSet(PreparedStatement prpstmt) throws SQLException {
-		this.prpstmt = prpstmt;
-		return this.prpstmt.executeQuery();
-	}
-	
-	// Execute Prepared Statement from Object to get Result Set
-	public ResultSet getResultSet() throws SQLException {
-		if (this.prpstmt == null)
-			return null;
-		else
-			return this.prpstmt.executeQuery();
-	}
-	
-	// Takes in a statement to update table
-	public int executeUpdate(String statement) throws SQLException {
-		con.setAutoCommit(false);
-		PreparedStatement prpstmt = con.prepareStatement(statement);
-		this.prpstmt = prpstmt;
-		return this.prpstmt.executeUpdate();
-	}
 	
 	// Takes in a statement to update table
 	public int executeUpdate(String statement, String toUpdate) throws SQLException {
-		ArrayList<String> qarray = new ArrayList<String>();
-		qarray.add(toUpdate);
-		return executeUpdate(statement, qarray);
+		int rowchanges = -1;
+		PreparedStatement prpstmt = this.getPreparedStatementWithKey(statement);
+		rowchanges = prpstmt.executeUpdate();
+		return rowchanges;
 	}
 	
 	// Takes in a statement and many variables to update
 	public int executeUpdate(String statement, ArrayList<String> variables) throws SQLException{
 		int rowchanges = -1;
-		con.setAutoCommit(false);
-		PreparedStatement prpstmt = con.prepareStatement(statement);
+		PreparedStatement prpstmt = this.getPreparedStatementWithKey(statement);
 		for(int i = 1; i <= variables.size(); i++) {
 			prpstmt.setString(i, variables.get(i-1));
 		}
@@ -217,17 +189,15 @@ public class SQLObject {
 		return rowchanges;
 	}
 	
-	// Takes in a prepared statement to update table
-	public int executeUpdate(PreparedStatement prpstmt) throws SQLException {
-		this.prpstmt = prpstmt;
-		return this.prpstmt.executeUpdate();
-	}
-	
-	// Update using Prepared Statement within Object
-	public int executeUpdate() throws SQLException {
-		if (this.prpstmt == null)
-			return 0;
-		else
-			return this.prpstmt.executeUpdate();
+	public static void main(String[] arg)throws Exception{
+		SQLObject so = new SQLObject();
+		ResultSet rs = so.getPreparedStatement("SELECT * FROM et_staff;").executeQuery();
+		while (rs.next()) {
+			System.out.println("\tID = " + rs.getInt("staffid") );
+			System.out.println("\tUSERNAME = " + rs.getString("username") );
+			System.out.println("\tPASSWORD = " + rs.getString("password"));
+			System.out.println("\tPERSON NAME = " + rs.getString("firstname") + " " + rs.getString("lastname"));
+		}
+		so.terminate();
 	}
 }
