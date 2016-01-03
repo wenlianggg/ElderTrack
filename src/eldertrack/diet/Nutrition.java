@@ -15,8 +15,8 @@ public class Nutrition implements java.io.Serializable {
 	int vitd;
 	int vite;
 	int vitk;
-	public Nutrition() {
-		// TODO Auto-generated constructor stub
+	Nutrition() {
+		// TODO: Remove this comment from this constructor
 	}
 	
 	void print() {
