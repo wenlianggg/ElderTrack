@@ -45,10 +45,10 @@ public class StaffSession{
 	public boolean isAuthenticated() {
 		if(accesslevel > 0 && passwordcorrect == true)
 			return true;
-		else if (passwordcorrect == true) {
+		else if (passwordcorrect != true) {
 			System.out.println("Password incorrect!");
 			return false;
-		} else if (accesslevel < 0) {
+		} else if (accesslevel == 0) {
 			System.out.println("Password accepted, access not authorized!");
 			return false;
 		} else
