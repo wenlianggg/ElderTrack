@@ -1,12 +1,5 @@
 package eldertrack.medical;
 
-import java.io.*;
-import java.sql.*;
-
-
-
-import eldertrack.db.SQLObject;
-
 public class DosageObject implements java.io.Serializable{
 
 private static final long serialVersionUID = 5857426734879201401L;
