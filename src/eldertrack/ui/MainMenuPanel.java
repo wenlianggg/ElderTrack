@@ -59,6 +59,12 @@ public class MainMenuPanel extends JPanel {
 		add(btnDietManagement);
 		
 		btnReportGeneration = new JButton("Report Generation");
+		btnReportGeneration.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+		        parentCards.show(MainFrame.CardsPanel, MainFrame.REPORTPANEL);
+			}
+		});
 		btnReportGeneration.setBounds(10, 361, 242, 120);
 		add(btnReportGeneration);
 		
@@ -74,7 +80,7 @@ public class MainMenuPanel extends JPanel {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
-		panel.setBounds(262, 95, 576, 128);
+		panel.setBounds(262, 95, 723, 128);
 		add(panel);
 		panel.setLayout(null);
 		
@@ -83,10 +89,10 @@ public class MainMenuPanel extends JPanel {
 		lblEldertrackWelcomePage.setBounds(10, 11, 247, 31);
 		panel.add(lblEldertrackWelcomePage);
 		
-		JLabel lblYouAreLogged = new JLabel("You are logged in as: STAFF NAME HERE");
-		lblYouAreLogged.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblYouAreLogged.setBounds(10, 45, 289, 21);
-		panel.add(lblYouAreLogged);
+		JLabel lblLoggedInAs = new JLabel("You are logged in as:");
+		lblLoggedInAs.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblLoggedInAs.setBounds(10, 45, 289, 21);
+		panel.add(lblLoggedInAs);
 		
 		JLabel lblYouLastLogged = new JLabel("You last logged in on:");
 		lblYouLastLogged.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -95,35 +101,34 @@ public class MainMenuPanel extends JPanel {
 		
 		JLabel lblNric = new JLabel("Your NRIC:");
 		lblNric.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNric.setBounds(10, 69, 289, 21);
+		lblNric.setBounds(10, 70, 289, 21);
 		panel.add(lblNric);
 		
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(10, 150, 556, 190);
 		panel.add(textArea);
 		
-		JLabel lblYourNotes = new JLabel("Sticky Notes:");
-		lblYourNotes.setBounds(263, 242, 72, 14);
-		add(lblYourNotes);
-		
-		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setBackground(new Color(230, 230, 250));
-		textArea_1.setBounds(262, 258, 576, 189);
-		add(textArea_1);
-		
-		JButton btnSaveNotes = new JButton("Save Notes");
-		btnSaveNotes.setBounds(749, 458, 89, 23);
-		add(btnSaveNotes);
-		
 		JButton btnNewButton = new JButton("Sign Out");
+		btnNewButton.setBounds(585, 12, 128, 36);
+		panel.add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
-				mainCards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
-				System.out.println("Discarding current user session");
+				MainFrame.getInstance().endCurrentSession();
 			}
 		});
-		btnNewButton.setBounds(10, 623, 242, 36);
-		add(btnNewButton);
+		
+		JLabel lblYourNotes = new JLabel("Sticky Notes:");
+		lblYourNotes.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblYourNotes.setBounds(262, 248, 120, 25);
+		add(lblYourNotes);
+		
+		JTextArea txtarea_stickynotes = new JTextArea();
+		txtarea_stickynotes.setBackground(new Color(230, 230, 250));
+		txtarea_stickynotes.setBounds(262, 278, 723, 189);
+		add(txtarea_stickynotes);
+		
+		JButton btnSaveNotes = new JButton("Save Notes");
+		btnSaveNotes.setBounds(855, 474, 130, 47);
+		add(btnSaveNotes);
 	}
 }
