@@ -117,7 +117,17 @@ public class MainFrame extends JFrame {
 		return frame;
 	}
 	
+	// For getting logged in user information
 	public StaffSession getCurrentSession() {
 		return this.session;
+	}
+	
+	// Triggers on logout
+	boolean endCurrentSession() {
+		this.session = null;
+		if (this.session == null)
+			return true;
+		else
+			return false;
 	}
 }
