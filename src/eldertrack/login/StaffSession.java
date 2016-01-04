@@ -12,8 +12,8 @@ public class StaffSession{
 	private String firstname;
 	private String lastname;
 	private boolean exists = false;
-	private boolean accesslevel = false;
 	private boolean passwordcorrect = false;
+	private int accesslevel = 0;
 	
 	StaffSession(String username, char[] password) throws WrongPasswordException, NoSuchUserException {
 		// If user does not exist, throw NoSuchUserException
@@ -32,7 +32,7 @@ public class StaffSession{
 			System.out.println("User Input: " + DigestUtils.sha512Hex(new String(password)) + " vs " + rs.getString("password"));
 			if (rs.getString("password").equals(DigestUtils.sha512Hex(new String(password)))) {
 				this.staffid = rs.getInt("staffid");
-				this.accesslevel = rs.getBoolean("accesslevel");
+				this.accesslevel = rs.getInt("accesslevel");
 				passwordcorrect = true;
 			} else {
 				throw new WrongPasswordException();
@@ -43,9 +43,15 @@ public class StaffSession{
 	}
 	
 	public boolean isAuthenticated() {
-		if(accesslevel == true && passwordcorrect == true)
+		if(accesslevel > 0 && passwordcorrect == true)
 			return true;
-		else
+		else if (passwordcorrect == true) {
+			System.out.println("Password incorrect!");
+			return false;
+		} else if (accesslevel < 0) {
+			System.out.println("Password accepted, access not authorized!");
+			return false;
+		} else
 			return false;
 	}
 	

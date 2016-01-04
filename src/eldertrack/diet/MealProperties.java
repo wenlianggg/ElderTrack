@@ -6,12 +6,14 @@ import java.util.Date;
 import eldertrack.ui.MainFrame;
 
 public class MealProperties implements java.io.Serializable {
-	private static final long serialVersionUID = 2000L;
+	private static final long serialVersionUID = 2001L;
+	String mealdescription;
 	String lasteditedby;
 	Date lastedited;
 	String createdby;
 	Date created;
-	public MealProperties() {
+	
+	MealProperties() {
 		lasteditedby = "--";
 		lastedited = new Date();
 		createdby = "Random Person";
@@ -21,6 +23,7 @@ public class MealProperties implements java.io.Serializable {
 	void print() {
 		SimpleDateFormat datef = new SimpleDateFormat("dd MMMM yyyy, HH:mm:ss, zzzz");
 		System.out.println();
+		System.out.println("Meal description: " + mealdescription);
 		System.out.println("Last Edited By: " + lasteditedby);
 		System.out.println("Last Edited: " + datef.format(lastedited));
 		System.out.println("Created By: " + createdby);

@@ -114,5 +114,16 @@ public class MainMenuPanel extends JPanel {
 		JButton btnSaveNotes = new JButton("Save Notes");
 		btnSaveNotes.setBounds(749, 458, 89, 23);
 		add(btnSaveNotes);
+		
+		JButton btnNewButton = new JButton("Sign Out");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+				mainCards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
+				System.out.println("Discarding current user session");
+			}
+		});
+		btnNewButton.setBounds(10, 623, 242, 36);
+		add(btnNewButton);
 	}
 }

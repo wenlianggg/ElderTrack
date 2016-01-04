@@ -1,5 +1,6 @@
 package eldertrack.ui;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -98,6 +99,8 @@ public class LoginPanel extends JPanel {
 						passwordField.setText("");
 					} else if (session.isAuthenticated()) {
 						loginMessage = "Login successful!";
+						CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+						mainCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
 					}
 					JOptionPane.showMessageDialog(null, loginMessage);
 				} else {
