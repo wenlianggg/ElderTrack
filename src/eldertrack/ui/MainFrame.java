@@ -17,19 +17,23 @@ import eldertrack.login.StaffSession;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-    final static String LOGINPANEL = "Login Panel";
+    private static final EtchedBorder lBorder = new EtchedBorder(EtchedBorder.LOWERED, null, null);
+	final static String LOGINPANEL = "Login Panel";
     final static String MEDICATIONPANEL = "Medication Panel";
     final static String DIETPANEL = "Diet Panel";
     final static String MGMTPANEL = "Management Panel";
+    final static String REPORTPANEL = "Report Panel";
     final static String MENUPANEL = "Main Menu Panel";
     private JPanel MasterPane;
-    private static LoginPanel LoginPanel;
+    private LoginPanel LoginPanel;
     private DietPanel DietPanel;
     private MedPanel MedPanel;
+    private ReportMainPanel ReportPanel;
     private MgmtPanel MgmtPanel;
     private MainMenuPanel MainMenu;
     static JPanel CardsPanel;
-	private StaffSession session;
+	private static StaffSession session;
+	JComboBox<String> comboBox;
 	// Singleton Class Design
 	private static MainFrame frame;
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
@@ -45,7 +49,7 @@ public class MainFrame extends JFrame {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
 					frame = new MainFrame();
 					frame.setVisible(true); // Set the main frame as visible
-					showWeatherPanel(frame.MasterPane);
+					frame.showWeatherPanel();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -69,29 +73,39 @@ public class MainFrame extends JFrame {
 		setContentPane(MasterPane);
 		
 		LoginPanel = new LoginPanel();
-		LoginPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		DietPanel = new DietPanel();
-		MedPanel = new MedPanel();
-		MgmtPanel = new MgmtPanel();
-		MainMenu = new MainMenuPanel();
+		LoginPanel.setBorder(lBorder);
 		
 		CardsPanel = new JPanel(new CardLayout());
 		MasterPane.add(CardsPanel);
 		CardsPanel.add(LoginPanel, LOGINPANEL);
-		CardsPanel.add(DietPanel, DIETPANEL);
-		CardsPanel.add(MedPanel, MEDICATIONPANEL);
-		CardsPanel.add(MgmtPanel, MGMTPANEL);
-		CardsPanel.add(MainMenu, MENUPANEL);
+
 		CardsPanel.setLocation(0, 0);
 		CardsPanel.setSize(994, 671);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
 		
-		
-		/**
-		 * COMBO BOX FOR TEST GUI
-		 */
-		
-		JComboBox<String> comboBox = new JComboBox<>();
+
+
+
+	}
+	
+	void constructPanels() {
+		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
+		DietPanel = new DietPanel();
+		DietPanel.setBorder(lBorder);
+		MedPanel = new MedPanel();
+		MedPanel.setBorder(lBorder);
+		MgmtPanel = new MgmtPanel();
+		MgmtPanel.setBorder(lBorder);
+		ReportPanel = new ReportMainPanel();
+		ReportPanel.setBorder(lBorder);
+		MainMenu = new MainMenuPanel();
+		MainMenu.setBorder(lBorder);
+		CardsPanel.add(DietPanel, DIETPANEL);
+		CardsPanel.add(MedPanel, MEDICATIONPANEL);
+		CardsPanel.add(ReportPanel, REPORTPANEL);
+		CardsPanel.add(MgmtPanel, MGMTPANEL);
+		CardsPanel.add(MainMenu, MENUPANEL);		
+		comboBox = new JComboBox<>();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent evt) {
 		        JComboBox<?> jcb = (JComboBox<?>) evt.getSource();
@@ -101,15 +115,34 @@ public class MainFrame extends JFrame {
 		});
 		comboBox.setSize(174, 26);
 		comboBox.setLocation(10, 682);
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {LOGINPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, MENUPANEL}));
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MENUPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, REPORTPANEL}));
 		comboBox.setSelectedIndex(0);
 		MasterPane.add(comboBox);
+		MainMenu.fillDetails();
 	}
 	
-	private static void showWeatherPanel(JPanel MasterPane) {
+	void deconstructPanels() {
+		System.out.println("--------------------- DECONSTRUCTING ALL PANELS NOW! ---------------------");
+		comboBox.setVisible(false);
+		CardsPanel.remove(DietPanel);
+		CardsPanel.remove(MedPanel);
+		CardsPanel.remove(ReportPanel);
+		CardsPanel.remove(MgmtPanel);
+		CardsPanel.remove(MainMenu);
+		MasterPane.remove(comboBox);
+		comboBox = null;
+		DietPanel = null;
+		MedPanel = null;
+		ReportPanel = null;
+		MgmtPanel = null;
+		MainMenu = null;
+		System.out.println("Panels deconstructed!");
+	}
+	
+	private void showWeatherPanel() {
 		JPanel WeatherPanel = new WeatherPanel();
 		WeatherPanel.setLocation(790, 671);
-		MasterPane.add(WeatherPanel);
+		getInstance().MasterPane.add(WeatherPanel);
 	}
 	
 	// Singleton Class Design
@@ -117,7 +150,27 @@ public class MainFrame extends JFrame {
 		return frame;
 	}
 	
-	public StaffSession getCurrentSession() {
-		return this.session;
+	// For getting logged in user information
+	public StaffSession getSessionInstance() {
+		return MainFrame.session;
+	}
+	
+	StaffSession setSessionInstance(StaffSession session) {
+		MainFrame.session = session;
+		return MainFrame.session;
+	}
+	
+	// Triggers on logout
+	boolean endCurrentSession() {
+		MainFrame.session = null;
+		if (MainFrame.session == null) {
+			CardLayout cards = (CardLayout) MainFrame.CardsPanel.getLayout();
+			cards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
+			deconstructPanels();
+			System.out.println("Successfully logged out!");
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
