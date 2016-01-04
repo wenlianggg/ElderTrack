@@ -123,7 +123,7 @@ public class LoginPanel extends JPanel {
 	// Check if login fields are null, if not, process login.
 	private void checkLogin() {
 		if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
-			session = SessionTools.createSession(loginField.getText(), passwordField.getPassword());
+			session = MainFrame.getInstance().setSessionInstance(SessionTools.createSession(loginField.getText(), passwordField.getPassword()));
 			passwordField.setText("");
 			if (session == null) {
 				loginMessage = "Login failed, try again!";

@@ -32,7 +32,7 @@ public class MainFrame extends JFrame {
     private MgmtPanel MgmtPanel;
     private MainMenuPanel MainMenu;
     static JPanel CardsPanel;
-	private StaffSession session;
+	private static StaffSession session;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
 	private static MainFrame frame;
@@ -118,6 +118,7 @@ public class MainFrame extends JFrame {
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MENUPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, REPORTPANEL}));
 		comboBox.setSelectedIndex(0);
 		MasterPane.add(comboBox);
+		MainMenu.fillDetails();
 	}
 	
 	void deconstructPanels() {
@@ -150,14 +151,19 @@ public class MainFrame extends JFrame {
 	}
 	
 	// For getting logged in user information
-	public StaffSession getCurrentSession() {
-		return this.session;
+	public StaffSession getSessionInstance() {
+		return MainFrame.session;
+	}
+	
+	StaffSession setSessionInstance(StaffSession session) {
+		MainFrame.session = session;
+		return MainFrame.session;
 	}
 	
 	// Triggers on logout
 	boolean endCurrentSession() {
-		this.session = null;
-		if (this.session == null) {
+		MainFrame.session = null;
+		if (MainFrame.session == null) {
 			CardLayout cards = (CardLayout) MainFrame.CardsPanel.getLayout();
 			cards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
 			deconstructPanels();

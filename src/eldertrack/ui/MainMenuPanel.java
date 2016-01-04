@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import eldertrack.login.StaffSession;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
@@ -17,26 +16,30 @@ import javax.swing.JTextArea;
 
 public class MainMenuPanel extends JPanel {
 	private static final long serialVersionUID = 4235134532452345324L;
-	StaffSession session;
-	JLabel lblEldertrackLogin;
-	JPasswordField passwordField;
-	JButton loginButton;
-	String loginMessage = "Outcome Undefined";
+	private JLabel lblTitle;
 	private JButton btnMedTrack;
 	private JButton btnDietManagement;
 	private JButton btnReportGeneration;
 	private JButton btnStaffManagement;
+	private JPanel detailsPanel;
+	private JLabel lblEldertrackWelcomePage;
+	private JLabel lblLoggedInAs;
+	private JLabel lblLastLogin;
+	private JLabel lblLoginNric;
+	private JButton btnLogout;
+	private JLabel lblYourNotes;
+	private JTextArea txtarea_stickynotes;
 	
 	MainMenuPanel() {
 		setBackground(SystemColor.control);
 		setLayout(null);
 		setBounds(0, 0, 995, 670);
 		
-		lblEldertrackLogin = new JLabel("Welcome to ElderTrack!");
-		lblEldertrackLogin.setBounds(10, 0, 754, 54);
-		lblEldertrackLogin.setForeground(SystemColor.textHighlight);
-		lblEldertrackLogin.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		add(lblEldertrackLogin);
+		lblTitle = new JLabel("Welcome to ElderTrack!");
+		lblTitle.setBounds(10, 0, 754, 54);
+		lblTitle.setForeground(SystemColor.textHighlight);
+		lblTitle.setFont(new Font("Segoe UI", Font.ITALIC, 40));
+		add(lblTitle);
 		
 		btnMedTrack = new JButton("Medication Tracking");
 		btnMedTrack.addActionListener(new ActionListener() {
@@ -78,57 +81,75 @@ public class MainMenuPanel extends JPanel {
 		});
 		add(btnStaffManagement);
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
-		panel.setBounds(262, 95, 723, 128);
-		add(panel);
-		panel.setLayout(null);
+		detailsPanel = new JPanel();
+		detailsPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		detailsPanel.setBounds(262, 95, 723, 128);
+		add(detailsPanel);
+		detailsPanel.setLayout(null);
 		
-		JLabel lblEldertrackWelcomePage = new JLabel("ElderTrack Welcome Page");
+		lblEldertrackWelcomePage = new JLabel("ElderTrack Welcome Page");
 		lblEldertrackWelcomePage.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblEldertrackWelcomePage.setBounds(10, 11, 247, 31);
-		panel.add(lblEldertrackWelcomePage);
+		detailsPanel.add(lblEldertrackWelcomePage);
 		
-		JLabel lblLoggedInAs = new JLabel("You are logged in as:");
+		lblLoggedInAs = new JLabel("Logged In:");
 		lblLoggedInAs.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblLoggedInAs.setBounds(10, 45, 289, 21);
-		panel.add(lblLoggedInAs);
+		lblLoggedInAs.setBounds(10, 45, 467, 21);
+		detailsPanel.add(lblLoggedInAs);
 		
-		JLabel lblYouLastLogged = new JLabel("You last logged in on:");
-		lblYouLastLogged.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblYouLastLogged.setBounds(10, 95, 289, 21);
-		panel.add(lblYouLastLogged);
+		lblLastLogin = new JLabel("Last Login:");
+		lblLastLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblLastLogin.setBounds(10, 95, 467, 21);
+		detailsPanel.add(lblLastLogin);
 		
-		JLabel lblNric = new JLabel("Your NRIC:");
-		lblNric.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNric.setBounds(10, 70, 289, 21);
-		panel.add(lblNric);
+		lblLoginNric = new JLabel("Login NRIC: ");
+		lblLoginNric.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblLoginNric.setBounds(10, 70, 467, 21);
+		detailsPanel.add(lblLoginNric);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(10, 150, 556, 190);
-		panel.add(textArea);
-		
-		JButton btnNewButton = new JButton("Sign Out");
-		btnNewButton.setBounds(585, 12, 128, 36);
-		panel.add(btnNewButton);
-		btnNewButton.addActionListener(new ActionListener() {
+		btnLogout = new JButton("Sign Out");
+		btnLogout.setBounds(585, 12, 128, 36);
+		detailsPanel.add(btnLogout);
+		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				MainFrame.getInstance().endCurrentSession();
 			}
 		});
 		
-		JLabel lblYourNotes = new JLabel("Sticky Notes:");
+		lblYourNotes = new JLabel("Sticky Notes:");
 		lblYourNotes.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblYourNotes.setBounds(262, 248, 120, 25);
+		lblYourNotes.setBounds(262, 230, 120, 25);
 		add(lblYourNotes);
 		
-		JTextArea txtarea_stickynotes = new JTextArea();
+		txtarea_stickynotes = new JTextArea();
+		txtarea_stickynotes.setFont(new Font("Arial", Font.PLAIN, 18));
 		txtarea_stickynotes.setBackground(new Color(230, 230, 250));
-		txtarea_stickynotes.setBounds(262, 278, 723, 189);
+		txtarea_stickynotes.setBounds(262, 258, 723, 296);
 		add(txtarea_stickynotes);
 		
 		JButton btnSaveNotes = new JButton("Save Notes");
-		btnSaveNotes.setBounds(855, 474, 130, 47);
+		btnSaveNotes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainFrame.getInstance().getSessionInstance().setNotes(txtarea_stickynotes.getText());
+			}
+		});
+		btnSaveNotes.setBounds(855, 565, 130, 47);
 		add(btnSaveNotes);
 	}
+	
+	void fillDetails() {
+		StaffSession session = MainFrame.getInstance().getSessionInstance();
+		lblLoggedInAs.setText("Logged In: " + session.getFullName() + " [ID:" + session.getStaffid() + "]");
+		lblLoginNric.setText("Login NRIC: " + session.getNric());
+		lblLastLogin.setText("Last Login: " + session.getLastLoginTimeString());
+		txtarea_stickynotes.setText(MainFrame.getInstance().getSessionInstance().getNotes());
+	}
+	
+	void clearDetails() {
+		lblLoggedInAs.setText("Logged In: ");
+		lblLoginNric.setText("Login NRIC: ");
+		lblLastLogin.setText("Last Login: ");
+		txtarea_stickynotes.setText("");
+	}
+	
 }
