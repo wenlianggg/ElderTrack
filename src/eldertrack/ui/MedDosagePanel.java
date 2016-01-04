@@ -183,6 +183,7 @@ public class MedDosagePanel extends JPanel {
 			
 		});
 	}
+	
 	public void DisplayInformation(ArrayList<DosageData> DosageList, int counter){
 		NameField.setText(DosageList.get(counter).getElderName());
 		AgeField.setText("10");

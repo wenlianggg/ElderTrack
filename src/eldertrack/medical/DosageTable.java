@@ -1,13 +1,5 @@
 package eldertrack.medical;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
 
 public class DosageTable extends AbstractTableModel {
@@ -43,10 +35,11 @@ public class DosageTable extends AbstractTableModel {
 	    return rowData[row][column];
 	  }
 
-	  public Class getColumnClass(int column) {
-	    return (getValueAt(0, column).getClass());
-	  }
-
+//	  public Class getColumnClass(int column) {
+//	    return (getValueAt(0, column).getClass());
+//	  }
+// Not used and causing warnings, sorry for my OCD :( -WL
+	  
 	  public void setValueAt(Object value, int row, int column) {
 	    rowData[row][column] = value;
 	  }
