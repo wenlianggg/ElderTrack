@@ -29,11 +29,25 @@ public class SQLObject {
 			if (DEBUG_LEVEL >= 1)
 				System.out.println("DB Connection Initiated, SOURCE: " + new Exception().getStackTrace()[1].getClassName());
 		} catch (ClassNotFoundException e) { 
-			System.out.println("Driver Not Found, exiting.."); 
+			System.out.println("Driver Not Found!"); 
 			e.printStackTrace();
+			try {
+			Thread.sleep(30);
+			} catch (InterruptedException e1) {
+				e.printStackTrace();
+			}
+			System.out.println("Exiting!");
+			System.exit(1);
 		} catch (java.sql.SQLException e) { 
-			System.out.println("Failed to connect to "+ url); 
+			System.out.println("Failed to connect to: " + url);
 			e.printStackTrace();
+			try {
+			Thread.sleep(30);
+			} catch (InterruptedException e1) {
+				e.printStackTrace();
+			}
+			System.out.println("Exiting!");
+			System.exit(1);
 		}
 	}
 	
