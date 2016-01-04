@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SQLObject {
-	private static int DEBUG_LEVEL = 2;
+	private static int DEBUG_LEVEL = 1;
 	/************************************
 	 * Debug Levels
 	 * ---------------------
