@@ -1,5 +1,13 @@
 package eldertrack.medical;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 public class DosageTable extends AbstractTableModel {
@@ -46,5 +54,8 @@ public class DosageTable extends AbstractTableModel {
 	  public boolean isCellEditable(int row, int column) {
 	    return (column != 0);
 	  }
-	
+	  
+	 
+
+	  
 }
