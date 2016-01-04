@@ -31,7 +31,7 @@ public class MealProperties implements java.io.Serializable {
 	}
 	
 	void modify() {
-		lasteditedby = MainFrame.getInstance().getCurrentSession().getFullName();
+		lasteditedby = MainFrame.getInstance().getSessionInstance().getFullName();
 		lastedited = new Date();
 	}
 }

@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SQLObject {
-	private static int DEBUG_LEVEL = 2;
+	private static int DEBUG_LEVEL = 1;
 	/************************************
 	 * Debug Levels
 	 * ---------------------
@@ -27,7 +27,7 @@ public class SQLObject {
 			Class.forName("org.gjt.mm.mysql.Driver"); 
 			con = DriverManager.getConnection(url, dbuser, dbpw); 
 			if (DEBUG_LEVEL >= 1)
-				System.out.println("DB Connection Initiated, SOURCE: " + new Exception().getStackTrace()[1].getClassName());
+				System.out.println("DB Connection Initiated | SOURCE: " + new Exception().getStackTrace()[1].getClassName());
 		} catch (ClassNotFoundException e) { 
 			System.out.println("Driver Not Found!"); 
 			e.printStackTrace();
@@ -77,7 +77,7 @@ public class SQLObject {
 	public ResultSet getResultSet(String dbQuery) {
 		ResultSet rs = null;
 		if (DEBUG_LEVEL >= 2)
-			System.out.println("DB Query: " + dbQuery);
+			System.out.println("DB Query | " + dbQuery);
 		try {
 			// create a statement object
 			Statement stmt = con.createStatement();
@@ -98,7 +98,7 @@ public class SQLObject {
 	public int executeUpdate(String dbQuery) {
 		int count = 0;
 		if (DEBUG_LEVEL >= 2)
-			System.out.println("DB Query: " + dbQuery);
+			System.out.println("DB Query | " + dbQuery);
 		try {
 			// create a statement object
 			Statement stmt = con.createStatement();
@@ -121,7 +121,7 @@ public class SQLObject {
 		try {
 			// create a statement object
 			if (DEBUG_LEVEL >= 2)
-				System.out.println("DB Preparing Statement: " + dbQuery);
+				System.out.println("DB Preparing Statement \t| " + dbQuery);
 			pstmt = con.prepareStatement(dbQuery,Statement.RETURN_GENERATED_KEYS);
 			
 		} catch (Exception e) {
@@ -138,7 +138,7 @@ public class SQLObject {
 	 ***********************************************************/
 	public PreparedStatement getPreparedStatement(String dbQuery) {
 		PreparedStatement pstmt = null;
-		System.out.println("DB Preparing Statement: " + dbQuery);
+		System.out.println("DB Preparing Statement \t| " + dbQuery);
 		try {
 			// create a statement object
 			pstmt = con.prepareStatement(dbQuery);
