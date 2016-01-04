@@ -7,10 +7,10 @@ import eldertrack.db.SQLObject;
 
 public class DisplayElderInfo {
 	public static void main(String[] args) throws SQLException {
-		Connection c = null;
-		SQLObject wanker = new SQLObject();
+		SQLObject so = new SQLObject();
 		try{
-			ResultSet rs = wanker.getResultSet("SELECT * FROM et_elderly");
+			ResultSet rs = so.getResultSet("SELECT * FROM et_elderly");
+			rs.next();
 		}catch (Exception e){
 			
 		}

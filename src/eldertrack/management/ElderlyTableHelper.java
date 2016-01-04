@@ -11,7 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import eldertrack.db.SQLConnect;
 import eldertrack.db.SQLObject;
 
 public class ElderlyTableHelper {
