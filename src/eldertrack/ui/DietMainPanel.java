@@ -14,6 +14,8 @@ import javax.swing.JButton;
 
 import eldertrack.diet.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 
@@ -25,7 +27,7 @@ public class DietMainPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	JLabel lblSelectElderly;
-	private JTable table;
+	private JTable eldersTable;
 	private JTextField searchField;
 	private JButton btnSearch;
 	CardLayout parentCards;
@@ -35,19 +37,28 @@ public class DietMainPanel extends JPanel {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 
-		JScrollPane tableScrollPane = new JScrollPane(table);
+		JScrollPane tableScrollPane = new JScrollPane(eldersTable);
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 130, 283, 529);
 		add(tableScrollPane);
 		
 		try {
 			DefaultTableModel allEldersData = TableHelper.getElderlyFromQuery("");
-			table = new JTable(allEldersData);
+			eldersTable = new JTable(allEldersData);
+			eldersTable.addMouseListener(new MouseAdapter() {
+			    @Override
+			    public void mouseClicked(MouseEvent evt) {
+			        int row = eldersTable.getSelectedRow();
+			        if (row >= 0) {
+			        	System.out.println(eldersTable.getValueAt(row, 0));
+			        }
+			    }
+			});
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		table.getColumnModel().getColumn(0).setPreferredWidth(36);
-		tableScrollPane.setViewportView(table);
+		eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
+		tableScrollPane.setViewportView(eldersTable);
 		
 		lblDietLabel = new JLabel("ElderTrack Diet Management");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
@@ -70,7 +81,7 @@ public class DietMainPanel extends JPanel {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					table.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
+					eldersTable.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				};
