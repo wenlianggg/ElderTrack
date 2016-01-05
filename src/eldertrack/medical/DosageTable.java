@@ -35,10 +35,11 @@ public class DosageTable extends AbstractTableModel {
 	    return rowData[row][column];
 	  }
 
-	  public Class getColumnClass(int column) {
-	    return (getValueAt(0, column).getClass());
-	  }
-
+//	  public Class getColumnClass(int column) {
+//	    return (getValueAt(0, column).getClass());
+//	  }
+// Not used and causing warnings, sorry for my OCD :( -WL
+	  
 	  public void setValueAt(Object value, int row, int column) {
 	    rowData[row][column] = value;
 	  }
@@ -46,5 +47,8 @@ public class DosageTable extends AbstractTableModel {
 	  public boolean isCellEditable(int row, int column) {
 	    return (column != 0);
 	  }
-	
+	  
+	 
+
+	  
 }

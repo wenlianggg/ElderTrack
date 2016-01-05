@@ -175,7 +175,7 @@ public class DietMainPanel extends JPanel {
 		add(btnAddMeal);
 		btnAddMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        CardLayout parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
+		        parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
 		        parentCards.show(DietPanel.CardsPanel, DietPanel.DADDPANEL);
 			}
 		});
@@ -185,7 +185,7 @@ public class DietMainPanel extends JPanel {
 		add(btnModifyMeals);
 		btnModifyMeals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        CardLayout parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
+		        parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
 		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMODPANEL);
 			}
 		});
@@ -195,7 +195,7 @@ public class DietMainPanel extends JPanel {
 		add(btnMenuManagement);
 		btnMenuManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        CardLayout parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
+		        parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
 		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMENUPANEL);
 			}
 		});
@@ -203,5 +203,15 @@ public class DietMainPanel extends JPanel {
 		JButton btnViewInMgmt = new JButton("View Elderly in Management Panel");
 		btnViewInMgmt.setBounds(759, 611, 216, 45);
 		add(btnViewInMgmt);
+		
+		JButton btnMainMenu = new JButton("Back to Main Menu");
+		btnMainMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+				mainCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
+			}
+		});
+		btnMainMenu.setBounds(820, 15, 139, 40);
+		add(btnMainMenu);
 	}
 }
