@@ -12,12 +12,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
 import javax.swing.JTextField;
-import javax.swing.table.TableModel;
+
+import javax.swing.table.DefaultTableModel;
+
 import javax.swing.JButton;
 
 import javax.swing.UIManager;
@@ -25,6 +30,7 @@ import javax.swing.JTextPane;
 
 
 import eldertrack.db.SQLObject;
+import eldertrack.diet.TableHelper;
 import eldertrack.medical.*;
 import javax.swing.SwingConstants;
 
@@ -124,14 +130,21 @@ public class MedDosagePanel extends JPanel {
 
 
 		// DosageTable
-
-
-		TableModel model = new DosageTable();
-		JTable table= new JTable(model);
-		JScrollPane scrollPane=new JScrollPane(table);
-		scrollPane.setBounds(121, 278, 694, 106);
-		add(scrollPane, BorderLayout.CENTER);
-
+		
+		JTable toDoTable;
+		try {
+			DefaultTableModel allDosageData = DosageTableHelper.getElderlyFromQueryDos("");
+			toDoTable = new JTable(allDosageData);
+			JScrollPane scrollPane = new JScrollPane(toDoTable);
+			scrollPane.setBounds(121, 278, 694, 106);
+			add(scrollPane, BorderLayout.CENTER);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	    
+	    
+		
 		JButton btnSaveAndQuit = new JButton("Save and Quit");
 		btnSaveAndQuit.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		btnSaveAndQuit.setBounds(120, 436, 177, 27);
@@ -183,10 +196,11 @@ public class MedDosagePanel extends JPanel {
 
 		});
 	}
-
+	
 	public void DisplayInformation(ArrayList<DosageData> DosageList, int counter){
 		NameField.setText(DosageList.get(counter).getElderName());
 		AgeField.setText("10");
 		GenderField.setText(DosageList.get(counter).getElderGender());
 	}
+	
 }
