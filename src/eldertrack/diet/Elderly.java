@@ -91,7 +91,7 @@ public class Elderly {
 		return eldermap;
 	}
 	
-	public static boolean updateElerlyInDb(Elderly el) {
+	public static boolean updateElderlyInDb(Elderly el) {
 		return SerializerSQL.storeMeals(el.getId(), el.getMeals(), so);
 	}
 }
