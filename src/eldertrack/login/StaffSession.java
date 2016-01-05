@@ -46,7 +46,11 @@ public class StaffSession{
 				this.nric = rs.getString("nric");
 				this.stickynotes = rs.getString("staffnotes");
 				passwordcorrect = true;
-				this.lastlogin = new Date(rs.getTimestamp("lastlogin").getTime());
+				Timestamp ts = rs.getTimestamp("lastlogin");
+				if (ts != null)
+					this.lastlogin = new Date(ts.getTime());
+				else
+					this.lastlogin = new Date();
 				Date date = new Date();
 				Timestamp timenow = new Timestamp(date.getTime());
 				PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET lastlogin=? WHERE staffid=?");
