@@ -32,9 +32,9 @@ public class MainFrame extends JFrame {
     private MgmtPanel MgmtPanel;
     private MainMenuPanel MainMenu;
     static JPanel CardsPanel;
-	private static StaffSession session;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
+	private static StaffSession session;
 	private static MainFrame frame;
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
