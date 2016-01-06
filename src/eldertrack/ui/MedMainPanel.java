@@ -15,7 +15,7 @@ import javax.swing.JTabbedPane;
 public class MedMainPanel extends JPanel {
 
 	private static final long serialVersionUID = -2955963900083964862L;
-	static JTabbedPane TabbedPanel=new JTabbedPane();
+	JTabbedPane TabbedPanel=new JTabbedPane();
 	JLabel lblMedPanelLbl;
 	
 	
