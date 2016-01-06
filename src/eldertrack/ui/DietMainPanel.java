@@ -253,11 +253,14 @@ public class DietMainPanel extends JPanel {
 	private void presentData(String id) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
 		Elderly el = eldermap.get(Integer.parseInt(id));
+		
 		lblInfoName.setText(el.getName());
 		lblElderid.setText("ElderID: " + el.getId());
 		lblAge.setText("Age: " + el.getAge());
 		lblRoomNumber.setText("Room Number: " + el.getRoomnum());
 		lblNric.setText("NRIC: " + el.getNric());
+		
+		el.getMeals();
 		lblCalories.setText("RDA Calories (kcal): (x% of RDA)");
 		lblCarbohydrates.setText("Carbohydrates (g): --- (x% of RDA)");
 		lblProtein.setText("Protein(g) :  --- (x% of RDA)");		
