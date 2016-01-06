@@ -26,25 +26,42 @@ public class DosageTableHelper {
 			return buildTableModel(so.getResultSet("SELECT medication FROM et_elderly WHERE name LIKE ?", search));
 		}
 		// Method from http://stackoverflow.com/questions/10620448/most-simple-code-to-populate-jtable-from-resultset
+	  
+		@SuppressWarnings("unchecked")
 		public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
 			ArrayList<DosageObject> retrieveDosBlob = null;
+			ArrayList<ArrayList> storeList=new ArrayList<ArrayList>();
+			int counter=1;
 			try {
+				while(rs.next()){
 				ResultSetMetaData metaData = rs.getMetaData();
 			    System.out.println(metaData.getColumnCount());
 			    PreparedStatement statement = so.getPreparedStatementWithKey("SELECT medication FROM et_elderly WHERE id = ?");
-				statement.setInt(1, 1);
+				statement.setInt(1, counter);
 				ResultSet rs1 = statement.executeQuery();
 				rs1.next();
 				ByteArrayInputStream in = new ByteArrayInputStream(rs1.getBytes(1));
 				ObjectInputStream is;
 				is = new ObjectInputStream(in);
 				retrieveDosBlob = (ArrayList<DosageObject>) is.readObject();
+				storeList.add(retrieveDosBlob);
+				counter++;
+				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			
+			// storing array list in an array list for future uses
+			for(int i=0;i<storeList.size();i++){
+				ArrayList<DosageObject> nowList=storeList.get(i);
+				System.out.println(i);
+				for(int k=0;k<nowList.size();k++){
+					nowList.get(k).print();
+				}
 			}
 		    Vector<String> columnNames = new Vector<String>();
 		    
@@ -88,6 +105,7 @@ public class DosageTableHelper {
 		    JScrollPane jpane = new JScrollPane(toDoTable);
 		    JPanel panel = new JPanel();
 		    JFrame frame = new JFrame();
+		    frame.setBounds(0, 0, 700, 500);
 		    panel.add(jpane);
 		    frame.getContentPane().add(new JScrollPane(panel));
 		    frame.setVisible(true);

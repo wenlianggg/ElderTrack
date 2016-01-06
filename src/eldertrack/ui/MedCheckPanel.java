@@ -6,8 +6,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JLabel;
@@ -18,14 +21,16 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
-
-import eldertrack.medical.CheckUpObject;
+import eldertrack.db.SQLObject;
+import eldertrack.medical.*;
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 public class MedCheckPanel extends JPanel {
-
+private JTextField NameField;
+private JTextField AgeField;
+private JTextField GenderField;
 
 	private static final long serialVersionUID = -1155434751690765910L;
 
@@ -46,7 +51,7 @@ public class MedCheckPanel extends JPanel {
 		lblName.setBounds(120, 95, 70, 30);
 		add(lblName);
 		
-		JTextField NameField = new JTextField();
+		NameField = new JTextField();
 		NameField.setBounds(201, 100, 145, 30);
 		NameField.setEditable(false);
 		add(NameField);
@@ -61,7 +66,7 @@ public class MedCheckPanel extends JPanel {
 		lblAge.setBounds(120, 133, 70, 30);
 		add(lblAge);
 		
-		JTextField AgeField = new JTextField();
+		AgeField= new JTextField();
 		AgeField.setBounds(201, 138, 145, 30);
 		AgeField.setEditable(false);
 		add(AgeField);
@@ -73,7 +78,7 @@ public class MedCheckPanel extends JPanel {
 		lblGender.setBounds(120, 171, 70, 30);
 		add(lblGender);
 				
-		JTextField GenderField = new JTextField();
+		GenderField= new JTextField();
 		GenderField.setColumns(10);
 		GenderField.setBounds(201, 176, 145, 30);
 		GenderField.setEditable(false);
@@ -169,7 +174,26 @@ public class MedCheckPanel extends JPanel {
 		//Date
 		
 		//DataBase
+		SQLObject so = new SQLObject();
+		ArrayList<DosageData> DosageList=new ArrayList<DosageData>();
+		ResultSet rs;
+		int counter=0;
+		try {
+			rs = so.getResultSet("SELECT * FROM et_elderly");
+			while(rs.next()){
+				DosageData data=new DosageData();
+				data.setElderName(rs.getString("name"));
+				data.setElderAge(10);
+				data.setElderGender(rs.getString("gender"));
+				DosageList.add(data);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
+		DisplayInformation(DosageList, counter);
+		
 		
 		
 		JButton btnSaveQuit = new JButton("Save And Quit");
@@ -219,7 +243,8 @@ public class MedCheckPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please Check Again");
 				}
 				else{
-					
+					int counter=0;
+					counter++;
 					CheckUpObject checkElder=new CheckUpObject();
 					checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
 					checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
@@ -241,6 +266,11 @@ public class MedCheckPanel extends JPanel {
 		});
 		
 		
+	}
+	public void DisplayInformation(ArrayList<DosageData> DosageList, int counter){
+		NameField.setText(DosageList.get(counter).getElderName());
+		AgeField.setText("10");
+		GenderField.setText(DosageList.get(counter).getElderGender());
 	}
 }
 

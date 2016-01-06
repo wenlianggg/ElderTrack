@@ -30,7 +30,6 @@ import javax.swing.JTextPane;
 
 
 import eldertrack.db.SQLObject;
-import eldertrack.diet.TableHelper;
 import eldertrack.medical.*;
 import javax.swing.SwingConstants;
 

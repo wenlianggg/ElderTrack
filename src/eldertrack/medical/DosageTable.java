@@ -1,25 +1,8 @@
 package eldertrack.medical;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
-import eldertrack.db.SQLObject;
-
-public class DosageTable  {
+public class DosageTable  extends AbstractTableModel{
 
 
 	private static final long serialVersionUID = -5565944268398825729L;
