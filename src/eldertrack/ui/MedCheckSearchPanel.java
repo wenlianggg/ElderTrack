@@ -83,9 +83,7 @@ public class MedCheckSearchPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JPanel getCheck=new MedDosagePanel();
 				getCheck.setVisible(true);
-				
-				
-				
+
 				CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 			    mainCards.show(MedPanel.MedCardPanel, MedPanel.MCHECKPANEL);
 			}

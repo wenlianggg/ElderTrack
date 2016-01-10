@@ -20,7 +20,9 @@ import eldertrack.db.SQLObject;
 
 public class DosageTableHelper {
 	static final SQLObject so = new SQLObject();
-
+	static int counter=1;
+	
+	
 	public static DefaultTableModel getElderlyFromQueryDos(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
 		return buildTableModel(so.getResultSet("SELECT medication FROM et_elderly WHERE name LIKE ?", search));
@@ -31,7 +33,7 @@ public class DosageTableHelper {
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
 		ArrayList<DosageObject> retrieveDosBlob = null;
 		ArrayList<ArrayList> storeList=new ArrayList<ArrayList>();
-		int counter=1;
+		
 		try {
 			while(rs.next()){
 				ResultSetMetaData metaData = rs.getMetaData();
@@ -64,6 +66,7 @@ public class DosageTableHelper {
 		columnNames.add("Medication Type");
 		columnNames.add("Dosage");
 		columnNames.add("Checked");
+		
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		// database print all IDs
 		// vector due to table

@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -31,7 +32,7 @@ public class MedCheckPanel extends JPanel {
 private JTextField NameField;
 private JTextField AgeField;
 private JTextField GenderField;
-
+static final SQLObject so = new SQLObject();
 	private static final long serialVersionUID = -1155434751690765910L;
 
 	public MedCheckPanel(){
@@ -188,7 +189,7 @@ private JTextField GenderField;
 				DosageList.add(data);
 			}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+		
 			e1.printStackTrace();
 		}
 
@@ -235,7 +236,7 @@ private JTextField GenderField;
 		add(btnNextElder);
 		btnNextElder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				int counter=0;
 				if(TempField.getText().equals("") ||  BloodField.getText().equals("") || 
 				   HeartField.getText().equals("") || SugarField.getText().equals("")|| 
 				   comboEye.getSelectedItem().toString().equals(" ") || comboEar.getSelectedItem().toString().equals(" ")
@@ -243,22 +244,36 @@ private JTextField GenderField;
 					JOptionPane.showMessageDialog(null, "Please Check Again");
 				}
 				else{
-					int counter=0;
-					counter++;
+					int id=1;
+				
 					CheckUpObject checkElder=new CheckUpObject();
 					checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
 					checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
 					checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+					checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
 					if(comboEye.getSelectedItem().toString().equals("Yes")){
 						checkElder.setElderEye(true);
 					}
 					if(comboEar.getSelectedItem().toString().equals("Yes")){
 						checkElder.setElderEar(true);
 					}
-					checkElder.setElderDate(reportDate);
-					//checkElder.view();
+					String name=NameField.getText();
+					try {
+						StoreCheckUp(name,reportDate, id,checkElder);
+					} catch (SQLException e1) {
+						
+						e1.printStackTrace();
+					}
+					id+=1;
+					counter++;
+					DisplayInformation(DosageList,counter);
 					
-				
+					TempField.setText(null);
+					BloodField.setText(null);
+					HeartField.setText(null);
+					SugarField.setText(null);
+					comboEye.setSelectedItem(null);
+					comboEar.setSelectedItem(null);
 				}
 				
 				
@@ -268,9 +283,25 @@ private JTextField GenderField;
 		
 	}
 	public void DisplayInformation(ArrayList<DosageData> DosageList, int counter){
+		System.out.println(DosageList.size());
 		NameField.setText(DosageList.get(counter).getElderName());
 		AgeField.setText("10");
 		GenderField.setText(DosageList.get(counter).getElderGender());
 	}
+	
+	public static  void  StoreCheckUp(String name, String elderDate, int id,CheckUpObject checkup) throws SQLException{
+		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date)"+"values(?,?,?)");
+		statement.setInt(1, id);
+		statement.setString(2,name);
+		statement.setString(3, elderDate);
+		statement.executeUpdate();
+		
+		PreparedStatement statementBlob = so.getPreparedStatementWithKey("UPDATE et_elderly_checkup SET checkup = ? WHERE id = ?");
+		
+		statementBlob.setObject(1, checkup);
+		statementBlob.setInt(2, id);
+		statementBlob.executeUpdate();
+	}
+
 }
 
