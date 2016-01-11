@@ -6,8 +6,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -139,9 +137,9 @@ public class MedCheckPanel extends JPanel {
 		lblEye.setBounds(120, 401, 130, 30);
 		add(lblEye);
 		
-		JComboBox comboEye = new JComboBox();
+		JComboBox<String> comboEye = new JComboBox<String>();
 		comboEye.setBounds(260, 411, 90, 20);
-		comboEye.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ","Yes", "No" }));
+		comboEye.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { " ","Yes", "No" }));
 		add(comboEye);
 		
 		JLabel lblEar= new JLabel("Ear Infection:");
@@ -149,9 +147,9 @@ public class MedCheckPanel extends JPanel {
 		lblEar.setBounds(120, 442, 130, 30);
 		add(lblEar);
 		
-		JComboBox comboEar = new JComboBox();
+		JComboBox<String> comboEar = new JComboBox<String>();
 		comboEar.setBounds(260, 452, 90, 20);
-		comboEar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ","Yes", "No" }));
+		comboEar.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { " ","Yes", "No" }));
 		add(comboEar);
 		
 		
