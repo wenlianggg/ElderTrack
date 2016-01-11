@@ -19,6 +19,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +41,6 @@ public class MgmtPanel extends JPanel {
 	JLabel lblEManagementLbl;
 	private JTable elderlyTable;
 	private JTable staffTable;
-	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
@@ -46,7 +48,6 @@ public class MgmtPanel extends JPanel {
 	private JTextField textField_5;
 	private JTextField textField_6;
 	private JTextField textField_7;
-	private JTextField textField_8;
 	private JTextField textField_9;
 	private JTextField textField_10;
 	private JTextField textField_11;
@@ -146,11 +147,6 @@ public class MgmtPanel extends JPanel {
 			panel.add(label_8);
 			label_8.setFont(new Font("Calibri", Font.PLAIN, 24));
 			
-			textField = new JTextField();
-			textField.setBounds(179, 29, 116, 22);
-			panel.add(textField);
-			textField.setColumns(10);
-			
 			textField_1 = new JTextField();
 			textField_1.setBounds(180, 67, 116, 22);
 			panel.add(textField_1);
@@ -181,11 +177,6 @@ public class MgmtPanel extends JPanel {
 			label_16.setBounds(152, 212, 23, 25);
 			panel.add(label_16);
 			
-			textField_8 = new JTextField();
-			textField_8.setColumns(10);
-			textField_8.setBounds(179, 214, 116, 22);
-			panel.add(textField_8);
-			
 			JLabel label_17 = new JLabel("ROOM");
 			label_17.setFont(new Font("Calibri", Font.PLAIN, 24));
 			label_17.setBounds(19, 247, 121, 25);
@@ -215,6 +206,14 @@ public class MgmtPanel extends JPanel {
 			textField_10.setColumns(10);
 			textField_10.setBounds(179, 284, 116, 22);
 			panel.add(textField_10);
+			
+			JLabel label_23 = new JLabel("");
+			label_23.setBounds(180, 32, 56, 16);
+			panel.add(label_23);
+			
+			JLabel agelabel = new JLabel("");
+			agelabel.setBounds(180, 216, 56, 16);
+			panel.add(agelabel);
 			
 			JPanel panel_1 = new JPanel();
 			panel_1.setBounds(479, 79, 448, 341);
@@ -461,7 +460,7 @@ public class MgmtPanel extends JPanel {
 						
 						while(rs.next()){
 							String add1 = rs.getString("id");
-							textField.setText(add1);
+							label_23.setText(add1);
 							
 							String add2 = rs.getString("name");
 							textField_1.setText(add2);
@@ -481,19 +480,7 @@ public class MgmtPanel extends JPanel {
 							String add8 = rs.getString("address");
 							textField_10.setText(add8);
 							
-							//Getting age from dob
-							Calendar dob = Calendar.getInstance();  
-							dob.setTime((Date)wanker.getResultSet(age,table_clicked));  
-							Calendar today = Calendar.getInstance(); 
-							int age1 = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);  
-							if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)) {
-							  age1--;  
-							} else if (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH)
-							    && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH)) {
-							  age1--;  
-							}
-							
-							textField_8.setText(Integer.toString(age1));
+							//agelabel.setText(Integer.toString(age1));
 						}
 						
 					}catch(Exception e1){
