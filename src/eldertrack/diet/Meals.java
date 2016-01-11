@@ -33,6 +33,11 @@ public class Meals implements java.io.Serializable {
 		return this;
 	}
 	
+	public Nutrition getNutritionToday() {
+		ArrayList<Nutrition> nt = new ArrayList<Nutrition>();
+		return null;
+		//TODO: WORK!
+	}
 	
 	// Getters and Mutator
 	public String getMealName(int i) {

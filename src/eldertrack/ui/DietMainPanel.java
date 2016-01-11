@@ -3,6 +3,7 @@ package eldertrack.ui;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,13 +32,38 @@ public class DietMainPanel extends JPanel {
 	private JTextField searchField;
 	private JButton btnSearch;
 	CardLayout parentCards;
+	private JLabel lblSearch;
+	private JPanel infoPanel;
+	private JLabel lblElderid;
+	private JLabel lblInfoName;
+	private JLabel lblAge;
+	private JLabel lblRoomNumber;
+	private JLabel lblNric;
+	private JSeparator separator;
+	private JLabel lblStatisticsForToday;
+	private JLabel lblCalories;
+	private JLabel lblCarbohydrates;
+	private JLabel lblProtein;
+	private JLabel lblIron;
+	private JLabel lblVitaminA;
+	private JLabel lblVitaminC;
+	private JLabel lblVitaminD;
+	private JLabel lblVitaminE;
+	private JLabel lblPreviousMeal;
+	private JLabel lblReviewInfo;
+	private JButton btnAddMeal;
+	private JButton btnModifyMeals;
+	private JButton btnMenuManagement;
+	private JButton btnViewInMgmt;
+	private JButton btnMainMenu;
+	private JScrollPane tableScrollPane;
 	
 	// Constructor
 	DietMainPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 
-		JScrollPane tableScrollPane = new JScrollPane(eldersTable);
+		tableScrollPane = new JScrollPane(eldersTable);
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 130, 283, 529);
 		add(tableScrollPane);
@@ -50,7 +76,7 @@ public class DietMainPanel extends JPanel {
 			    public void mouseClicked(MouseEvent evt) {
 			        int row = eldersTable.getSelectedRow();
 			        if (row >= 0) {
-			        	System.out.println(eldersTable.getValueAt(row, 0));
+			        	presentData((String)eldersTable.getValueAt(row, 0));
 			        }
 			    }
 			});
@@ -90,92 +116,90 @@ public class DietMainPanel extends JPanel {
 		btnSearch.setBounds(228, 99, 65, 23);
 		add(btnSearch);
 		
-		JLabel lblSearch = new JLabel("Search:");
+		lblSearch = new JLabel("Search:");
 		lblSearch.setBounds(10, 97, 47, 22);
 		add(lblSearch);
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
-		panel.setBounds(310, 97, 665, 468);
-		add(panel);
-		panel.setLayout(null);
+		infoPanel = new JPanel();
+		infoPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		infoPanel.setBounds(310, 97, 665, 468);
+		add(infoPanel);
+		infoPanel.setLayout(null);
 		
-		JLabel lblElderid = new JLabel("ElderID:");
+		lblElderid = new JLabel("ElderID:");
 		lblElderid.setBounds(10, 55, 209, 14);
-		panel.add(lblElderid);
+		infoPanel.add(lblElderid);
 		
-		JLabel lblInfoName = new JLabel("Elderly Name");
+		lblInfoName = new JLabel("Elderly Name");
 		lblInfoName.setForeground(new Color(0, 128, 128));
 		lblInfoName.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblInfoName.setBounds(10, 11, 645, 37);
-		panel.add(lblInfoName);
+		infoPanel.add(lblInfoName);
 		
-		JLabel lblAge = new JLabel("Age: --");
+		lblAge = new JLabel("Age: --");
 		lblAge.setBounds(10, 95, 209, 14);
-		panel.add(lblAge);
+		infoPanel.add(lblAge);
 		
-		JLabel lblRoomNumber = new JLabel("Room Number: --");
+		lblRoomNumber = new JLabel("Room Number: --");
 		lblRoomNumber.setBounds(10, 75, 209, 14);
-		panel.add(lblRoomNumber);
+		infoPanel.add(lblRoomNumber);
 		
-		JLabel lblNric = new JLabel("NRIC: SXXXXXXXA");
+		lblNric = new JLabel("NRIC: SXXXXXXXA");
 		lblNric.setBounds(10, 115, 209, 14);
-		panel.add(lblNric);
+		infoPanel.add(lblNric);
 		
-		JSeparator separator = new JSeparator();
+		separator = new JSeparator();
 		separator.setBounds(3, 139, 659, 3);
-		panel.add(separator);
+		infoPanel.add(separator);
 		
-		JLabel lblStatisticsForToday = new JLabel("Statistics For Today");
+		lblStatisticsForToday = new JLabel("Statistics For Today");
 		lblStatisticsForToday.setForeground(new Color(0, 128, 128));
 		lblStatisticsForToday.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblStatisticsForToday.setBounds(10, 145, 209, 29);
-		panel.add(lblStatisticsForToday);
+		infoPanel.add(lblStatisticsForToday);
 		
-		JLabel lblCalories = new JLabel("RDA Calories (kcal):  --- (x% of RDA)");
+		lblCalories = new JLabel("RDA Calories (kcal):  --- (x% of RDA)");
 		lblCalories.setBounds(10, 181, 209, 14);
-		panel.add(lblCalories);
+		infoPanel.add(lblCalories);
 		
-		JLabel lblCarbohydrates = new JLabel("Carbohydrates (g): --- (x% of RDA)");
+		lblCarbohydrates = new JLabel("Carbohydrates (g): --- (x% of RDA)");
 		lblCarbohydrates.setBounds(10, 201, 209, 14);
-		panel.add(lblCarbohydrates);
+		infoPanel.add(lblCarbohydrates);
 		
-		JLabel lblProtein = new JLabel("Protein(g) :  --- (x% of RDA)");
+		lblProtein = new JLabel("Protein(g) :  --- (x% of RDA)");
 		lblProtein.setBounds(10, 221, 209, 14);
-		panel.add(lblProtein);
+		infoPanel.add(lblProtein);
 		
-		JLabel lblIron = new JLabel("Iron(mg):  --- (x% of RDA)");
+		lblIron = new JLabel("Iron(mg):  --- (x% of RDA)");
 		lblIron.setBounds(11, 241, 208, 14);
-		panel.add(lblIron);
+		infoPanel.add(lblIron);
 		
-		JLabel lblVitaminA = new JLabel("Vitamin A (mg):  --- (x% of RDA)");
+		lblVitaminA = new JLabel("Vitamin A (mg):  --- (x% of RDA)");
 		lblVitaminA.setBounds(10, 261, 209, 14);
-		panel.add(lblVitaminA);
+		infoPanel.add(lblVitaminA);
 		
-		JLabel lblVitaminC = new JLabel("Vitamin C (mg):  --- (x% of RDA)");
+		lblVitaminC = new JLabel("Vitamin C (mg):  --- (x% of RDA)");
 		lblVitaminC.setBounds(10, 281, 209, 14);
-		panel.add(lblVitaminC);
+		infoPanel.add(lblVitaminC);
 		
-		JLabel lblVitaminD = new JLabel("Vitamin D (mg):  --- (x% of RDA)");
+		lblVitaminD = new JLabel("Vitamin D (mg):  --- (x% of RDA)");
 		lblVitaminD.setBounds(10, 321, 209, 14);
-		panel.add(lblVitaminD);
+		infoPanel.add(lblVitaminD);
 		
-		JLabel lblVitaminE = new JLabel("Vitamin E (mg):  --- (x% of RDA)");
+		lblVitaminE = new JLabel("Vitamin E (mg):  --- (x% of RDA)");
 		lblVitaminE.setBounds(10, 301, 209, 14);
-		panel.add(lblVitaminE);
+		infoPanel.add(lblVitaminE);
 		
-		JLabel lblPreviousMeal = new JLabel("Previous Meal: ______________________");
+		lblPreviousMeal = new JLabel("Previous Meal: ______________________");
 		lblPreviousMeal.setBounds(9, 357, 209, 14);
-		panel.add(lblPreviousMeal);
+		infoPanel.add(lblPreviousMeal);
 		
-		JLabel lblReviewInfo = new JLabel("Review Information");
+		lblReviewInfo = new JLabel("Review Information");
 		lblReviewInfo.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		lblReviewInfo.setBounds(310, 59, 665, 31);
 		add(lblReviewInfo);
 		
-
-		
-		JButton btnAddMeal = new JButton("Add Meal");
+		btnAddMeal = new JButton("Add Meal");
 		btnAddMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JPanel dietAddPanel = new DietAddPanel();
@@ -191,7 +215,7 @@ public class DietMainPanel extends JPanel {
 			}
 		});
 		
-		JButton btnModifyMeals = new JButton("Update Existing Meals");
+		btnModifyMeals = new JButton("Update Existing Meals");
 		btnModifyMeals.setBounds(534, 576, 215, 83);
 		add(btnModifyMeals);
 		btnModifyMeals.addActionListener(new ActionListener() {
@@ -201,7 +225,7 @@ public class DietMainPanel extends JPanel {
 			}
 		});
 		
-		JButton btnMenuManagement = new JButton("Modify Menu Available");
+		btnMenuManagement = new JButton("Modify Menu Available");
 		btnMenuManagement.setBounds(759, 576, 216, 29);
 		add(btnMenuManagement);
 		btnMenuManagement.addActionListener(new ActionListener() {
@@ -211,11 +235,11 @@ public class DietMainPanel extends JPanel {
 			}
 		});
 		
-		JButton btnViewInMgmt = new JButton("View Elderly in Management Panel");
+		btnViewInMgmt = new JButton("View Elderly in Management Panel");
 		btnViewInMgmt.setBounds(759, 611, 216, 45);
 		add(btnViewInMgmt);
 		
-		JButton btnMainMenu = new JButton("Back to Main Menu");
+		btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
@@ -224,5 +248,28 @@ public class DietMainPanel extends JPanel {
 		});
 		btnMainMenu.setBounds(820, 15, 139, 40);
 		add(btnMainMenu);
+	}
+	
+	private void presentData(String id) {
+		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
+		Elderly el = eldermap.get(Integer.parseInt(id));
+		
+		lblInfoName.setText(el.getName());
+		lblElderid.setText("ElderID: " + el.getId());
+		lblAge.setText("Age: " + el.getAge());
+		lblRoomNumber.setText("Room Number: " + el.getRoomnum());
+		lblNric.setText("NRIC: " + el.getNric());
+		
+		el.getMeals();
+		lblCalories.setText("RDA Calories (kcal): (x% of RDA)");
+		lblCarbohydrates.setText("Carbohydrates (g): --- (x% of RDA)");
+		lblProtein.setText("Protein(g) :  --- (x% of RDA)");		
+		lblIron.setText("Iron(mg):  --- (x% of RDA)");		
+		lblVitaminA.setText("Vitamin A (mg):  --- (x% of RDA)");		
+		lblVitaminC.setText("Vitamin C (mg):  --- (x% of RDA)");		
+		lblVitaminD.setText("Vitamin D (mg):  --- (x% of RDA)");		
+		lblVitaminE.setText("Vitamin E (mg):  --- (x% of RDA)");
+		lblPreviousMeal.setText("Previous Meal: ______________________");
+
 	}
 }
