@@ -11,9 +11,8 @@ import eldertrack.db.SQLObject;
 public class SerializerSQL {
 	static final String SQL_WRITE = "UPDATE et_elderly SET diet = ? WHERE id = ?";
 	static final String SQL_READ = "SELECT diet FROM et_elderly WHERE id = ?";
-	private static SQLObject so = new SQLObject();
-    private ObjectInputStream is;
-	public boolean store(int id, Meals m) {
+    private static ObjectInputStream is;
+	public static boolean storeMeals(int id, Meals m, SQLObject so) {
 			  PreparedStatement ps;
 			  try {
 				  ps = so.getPreparedStatementWithKey(SQL_WRITE);
@@ -31,7 +30,7 @@ public class SerializerSQL {
 			  return true;
 	}
 
-	public Meals retrieve(int id) {
+	public static Meals retrieveMeals(int id, SQLObject so) {
 	    PreparedStatement ps;
 	    Meals m;
 	    try {
