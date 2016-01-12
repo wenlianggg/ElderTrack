@@ -22,7 +22,7 @@ public class CheckUpObject  implements Serializable {
 	private boolean elderEye =false;
 	private boolean elderEar =false;
 	private String elderDate;
-	static final SQLObject so = new SQLObject();
+	
 
 	public CheckUpObject(){
 	}
@@ -91,6 +91,7 @@ public class CheckUpObject  implements Serializable {
 	}
 
 	public static  void  StoreCheckUp(String name, String elderDate, int id,CheckUpObject checkup) throws SQLException{
+		SQLObject so = new SQLObject();
 		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date)"+"values(?,?,?)");
 		statement.setInt(1, id);
 		statement.setString(2,name);
@@ -106,6 +107,7 @@ public class CheckUpObject  implements Serializable {
 
 
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
+		SQLObject so = new SQLObject();
 		ResultSet rs = so.getResultSet("SELECT name,date FROM et_elderly_checkup " );
 
 		while(rs.next()){

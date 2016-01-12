@@ -19,12 +19,13 @@ import javax.swing.table.DefaultTableModel;
 import eldertrack.db.SQLObject;
 
 public class DosageTableHelper {
-	static final SQLObject so = new SQLObject();
+	
 	static int counter=1;
 	
 	
 	public static DefaultTableModel getElderlyFromQueryDos(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
+		SQLObject so = new SQLObject();
 		return buildTableModel(so.getResultSet("SELECT medication FROM et_elderly WHERE name LIKE ?", search));
 	}
 	// Method from http://stackoverflow.com/questions/10620448/most-simple-code-to-populate-jtable-from-resultset
@@ -33,7 +34,7 @@ public class DosageTableHelper {
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
 		ArrayList<DosageObject> retrieveDosBlob = null;
 		ArrayList<ArrayList> storeList=new ArrayList<ArrayList>();
-		
+		SQLObject so = new SQLObject();
 		try {
 			while(rs.next()){
 				//testing colum can remove any time
