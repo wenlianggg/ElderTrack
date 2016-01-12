@@ -3,7 +3,9 @@ package eldertrack.diet;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -59,35 +61,37 @@ public class Elderly {
 	}
 	
 	public static HashMap<Integer,Elderly> getElderlyMap() {
-		Elderly.eldermap = null;
-		PreparedStatement ps;
-		ResultSet rs;
-		HashMap<Integer,Elderly> eldermap = new HashMap<Integer,Elderly>();
-		try {
-			ps = so.getPreparedStatement("SELECT id,name,nric,roomnum FROM et_elderly");
-			ps.executeQuery();
-			rs = ps.executeQuery();
-			while(rs.next()) {
-				// Get elderly fields
-				Integer id = rs.getInt("id");
-				String name = rs.getString("name");
-				String nric = rs.getString("nric");
-				Integer roomnum = rs.getInt("room");
-				// Calculate age from Date of Birth
-				Date dob = rs.getDate("dob");
-				LocalDate doblocaldate = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-				Integer age = (int) doblocaldate.until(LocalDate.now(), ChronoUnit.YEARS);
-				// Obtain meals for the elderly in question
-				Meals m = SerializerSQL.retrieveMeals(id, so);
-				// Instantiate the elderly object
-				Elderly el = new Elderly(id, name, age, roomnum, nric, m);
-				// Put elderly into HashMap
-				eldermap.put(id, el);
+		if (Elderly.eldermap == null) {
+			PreparedStatement ps;
+			ResultSet rs;
+			HashMap<Integer,Elderly> eldermap = new HashMap<Integer,Elderly>();
+			try {
+				ps = so.getPreparedStatement("SELECT id,name,dob,nric,room FROM et_elderly");
+				ps.executeQuery();
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					// Get elderly fields
+					Integer id = rs.getInt("id");
+					String name = rs.getString("name");
+					String nric = rs.getString("nric");
+					Integer roomnum = rs.getInt("room");
+					// Calculate age from Date of Birth
+					Date dob = rs.getDate("dob");
+					LocalDate doblocaldate = LocalDateTime.ofInstant
+						(Instant.ofEpochMilli(dob.getTime()), ZoneId.systemDefault()).toLocalDate();
+					Integer age = (int) doblocaldate.until(LocalDate.now(), ChronoUnit.YEARS);
+					// Obtain meals for the elderly in question
+					Meals m = SerializerSQL.retrieveMeals(id, so);
+					// Instantiate the elderly object
+					Elderly el = new Elderly(id, name, age, roomnum, nric, m);
+					// Put elderly into HashMap
+					eldermap.put(id, el);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			Elderly.eldermap = eldermap;
 		}
-		Elderly.eldermap = eldermap;
 		return eldermap;
 	}
 	
