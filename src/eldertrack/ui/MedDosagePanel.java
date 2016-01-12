@@ -12,7 +12,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.sql.SQLException;
@@ -28,9 +28,9 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
 
-
 import eldertrack.db.SQLObject;
 import eldertrack.medical.*;
+import eldertrack.ui.*;
 import javax.swing.SwingConstants;
 
 public class MedDosagePanel extends JPanel {
@@ -112,7 +112,26 @@ public class MedDosagePanel extends JPanel {
 		ResultSet rs;
 		int counter=0;
 		try {
-			rs = so.getResultSet("SELECT * FROM et_elderly");
+			
+			String output=MedDosageSearchPanel.getSelect();
+			System.out.println(output);
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
+			stmt.setString(1, output);
+			stmt.executeQuery();
+			System.out.println(stmt);
+			rs = stmt.getResultSet();
+			
+			
+		//	PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
+		//	statement.setString(1, "101");
+		//	statement.executeQuery();
+		//	System.out.println(statement);
+		//	String output=statement.toString();
+		//	System.out.println(output);
+		//	rs = so.getResultSet("SELECT * FROM et_elderly WHERE room = 101");
+			
+			
+			
 			while(rs.next()){
 				ElderData data=new ElderData();
 				data.setElderName(rs.getString("name"));
@@ -156,8 +175,7 @@ public class MedDosagePanel extends JPanel {
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to Save and Quit","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 
-					JPanel getSearchDosage=new MedDosageSearchPanel ();
-					getSearchDosage.setVisible(true);
+					
 
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);

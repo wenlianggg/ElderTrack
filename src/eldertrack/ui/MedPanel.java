@@ -3,7 +3,6 @@ package eldertrack.ui;
 
 import javax.swing.JPanel;
 import java.awt.CardLayout;
-import java.sql.SQLException;
 
 
 

@@ -2,6 +2,7 @@ package eldertrack.ui;
 
 
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JLabel;
@@ -185,9 +187,15 @@ public class MedCheckPanel extends JPanel {
 			rs = so.getResultSet("SELECT * FROM et_elderly");
 			while(rs.next()){
 				ElderData data=new ElderData();
+				java.sql.Date birthDate=rs.getDate("dob");
+				DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+				String text = df.format(birthDate);
+				String year=text.substring(0, 4);
+				String month=text.substring(5,7);
+				String day=text.substring(8,10);
 				data.setElderID(rs.getString("elderid"));
 				data.setElderName(rs.getString("name"));
-				data.setElderAge(10);
+				data.setElderAge(getAge(year,month,day));
 				data.setElderGender(rs.getString("gender"));
 				DosageList.add(data);
 			}
@@ -223,18 +231,8 @@ public class MedCheckPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please Check Again");
 				}
 				else{
-					CheckUpObject checkElder=new CheckUpObject();
-					checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-					checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
-					checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-					if(comboEye.getSelectedItem().toString().equals("Yes")){
-						checkElder.setElderEye(true);
-					}
-					if(comboEar.getSelectedItem().toString().equals("Yes")){
-						checkElder.setElderEar(true);
-					}
-					checkElder.setElderDate(reportDate);
-					checkElder.view();
+					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 				}
 
 
@@ -288,7 +286,6 @@ public class MedCheckPanel extends JPanel {
 					}
 					try{
 						String comments=textAddition.getText();
-
 						StoreComments(id,comments);
 					}
 					catch (SQLException e1) {
@@ -315,11 +312,29 @@ public class MedCheckPanel extends JPanel {
 	}
 	public void DisplayInformation(ArrayList<ElderData> DosageList,ArrayList<String> commentsList, int counter){
 		NameField.setText(DosageList.get(counter).getElderName());
-		AgeField.setText("10");
+		AgeField.setText(Integer.toString(DosageList.get(counter).getElderAge()));
 		GenderField.setText(DosageList.get(counter).getElderGender());
 		txtSummary.setText(commentsList.get(counter));
 	}
-
+	private static int getAge(String year, String month, String day)
+	{
+		
+		Calendar calDOB = Calendar.getInstance();
+		calDOB.set( Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day) );
+		
+		Calendar calNow = Calendar.getInstance();
+		calNow.setTime(new java.util.Date());
+		
+		int ageYr = (calNow.get(Calendar.YEAR) - calDOB.get(Calendar.YEAR));
+		
+		int ageMo = (calNow.get(Calendar.MONTH) - calDOB.get(Calendar.MONTH));
+		if (ageMo < 0)
+		{
+			
+			ageYr--;
+		}
+		return ageYr;
+	}
 	public static  void  StoreCheckUp(String name,String elderID, String elderDate, int id,CheckUpObject checkup) throws SQLException{
 		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,elderid,name,date)"+"values(?,?,?,?)");
 		statement.setInt(1, id);

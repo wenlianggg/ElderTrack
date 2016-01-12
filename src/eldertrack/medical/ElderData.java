@@ -6,7 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+
 
 import eldertrack.db.SQLObject;
 
@@ -15,12 +15,26 @@ public class ElderData{
 	private String elderID;
 	private int elderAge;
 	private String elderGender;
-
+	
+	public static String roomNum;
 
 	public ElderData(){
 
 	}
-
+	
+	public ElderData(String roomNum){
+		this.roomNum=roomNum;
+		
+	}
+	
+	public static String getRoomNum(){
+		return roomNum;
+	}
+	
+	public  void setRoomNum(String selected){
+		this.roomNum=selected;
+	}
+	
 	public ElderData(String elderName,String elderID, int elderAge, String elderGender) {
 		this.elderName = elderName;
 		this.elderID=elderID;
@@ -122,6 +136,10 @@ public class ElderData{
 			System.out.println();
 		}
 	}
+
+	
+
+	
 }
 
 
