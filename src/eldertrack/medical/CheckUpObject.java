@@ -14,15 +14,15 @@ import java.util.Date;
 import eldertrack.db.SQLObject;
 
 public class CheckUpObject  implements Serializable {
-	
-private double elderTemp;
-private int elderBlood;
-private int elderHeart;
-private int elderSugar;
-private boolean elderEye =false;
-private boolean elderEar =false;
-private String elderDate;
-static final SQLObject so = new SQLObject();
+
+	private double elderTemp;
+	private int elderBlood;
+	private int elderHeart;
+	private int elderSugar;
+	private boolean elderEye =false;
+	private boolean elderEar =false;
+	private String elderDate;
+	static final SQLObject so = new SQLObject();
 
 	public CheckUpObject(){
 	}
@@ -33,6 +33,7 @@ static final SQLObject so = new SQLObject();
 		this.elderSugar=elderSugar;
 		this.elderEye = elderEye;
 		this.elderEar = elderEar;
+
 	}
 
 	public int getElderSugar() {
@@ -77,7 +78,8 @@ static final SQLObject so = new SQLObject();
 	public void setElderDate(String elderDate) {
 		this.elderDate = elderDate;
 	}
-	
+
+
 	public void view(){
 		System.out.println(getElderTemp());
 		System.out.println(getElderBlood());
@@ -85,33 +87,34 @@ static final SQLObject so = new SQLObject();
 		System.out.println(isElderEye());
 		System.out.println(isElderEar());
 		System.out.println(getElderDate());
+
 	}
-	
+
 	public static  void  StoreCheckUp(String name, String elderDate, int id,CheckUpObject checkup) throws SQLException{
 		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date)"+"values(?,?,?)");
 		statement.setInt(1, id);
 		statement.setString(2,name);
 		statement.setString(3, elderDate);
 		statement.executeUpdate();
-		
+
 		PreparedStatement statementBlob = so.getPreparedStatementWithKey("UPDATE et_elderly_checkup SET checkup = ? WHERE id = ?");
-		
+
 		statementBlob.setObject(1, checkup);
 		statementBlob.setInt(2, id);
 		statementBlob.executeUpdate();
 	}
-	
-	
+
+
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
 		ResultSet rs = so.getResultSet("SELECT name,date FROM et_elderly_checkup " );
-		
+
 		while(rs.next()){
 			String name=rs.getString("name");
 			String date=rs.getString("date");
 			System.out.println(name);
 			System.out.println(date);
 		}
-		
+
 		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup FROM et_elderly_checkup WHERE id = ?");
 		statement.setInt(1, id);
 		ResultSet rs1 = statement.executeQuery();
@@ -129,7 +132,7 @@ static final SQLObject so = new SQLObject();
 		int id=1;
 		//CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
 		//StoreCheckUp("Ang Siew Fong",reportDate,id, checking);
-		
+
 		RetrieveCheckUp(id);
 	}
 }

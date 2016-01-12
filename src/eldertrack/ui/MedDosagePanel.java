@@ -108,20 +108,20 @@ public class MedDosagePanel extends JPanel {
 
 		// Display of information
 		SQLObject so = new SQLObject();
-		ArrayList<DosageData> DosageList=new ArrayList<DosageData>();
+		ArrayList<ElderData> DosageList=new ArrayList<ElderData>();
 		ResultSet rs;
 		int counter=0;
 		try {
 			rs = so.getResultSet("SELECT * FROM et_elderly");
 			while(rs.next()){
-				DosageData data=new DosageData();
+				ElderData data=new ElderData();
 				data.setElderName(rs.getString("name"));
 				data.setElderAge(10);
 				data.setElderGender(rs.getString("gender"));
 				DosageList.add(data);
 			}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 
@@ -196,7 +196,7 @@ public class MedDosagePanel extends JPanel {
 		});
 	}
 	
-	public void DisplayInformation(ArrayList<DosageData> DosageList, int counter){
+	public void DisplayInformation(ArrayList<ElderData> DosageList, int counter){
 		NameField.setText(DosageList.get(counter).getElderName());
 		AgeField.setText("10");
 		GenderField.setText(DosageList.get(counter).getElderGender());

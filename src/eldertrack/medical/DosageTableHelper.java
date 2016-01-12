@@ -36,13 +36,17 @@ public class DosageTableHelper {
 		
 		try {
 			while(rs.next()){
+				//testing colum can remove any time
 				ResultSetMetaData metaData = rs.getMetaData();
+				
 				System.out.println(metaData.getColumnCount());
+				
 				PreparedStatement statement = so.getPreparedStatementWithKey("SELECT medication FROM et_elderly WHERE id = ?");
 				statement.setInt(1, counter);
+				
 				ResultSet rs1 = statement.executeQuery();
 				rs1.next();
-				ByteArrayInputStream in = new ByteArrayInputStream(rs1.getBytes(1));
+				ByteArrayInputStream in = new ByteArrayInputStream(rs.getBytes(1));
 				ObjectInputStream is;
 				is = new ObjectInputStream(in);
 				retrieveDosBlob = (ArrayList<DosageObject>) is.readObject();
