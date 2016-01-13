@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import eldertrack.db.SQLObject;
 
 public class TableHelper {
-	private static SQLObject so = new SQLObject();
+	static SQLObject so = new SQLObject();
 	public static DefaultTableModel getElderlyFromQuery(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
 		String[] columns = {"ID", "Elderly Name", "Room Number"};
@@ -52,6 +52,10 @@ public class TableHelper {
 	        }
 	    };
 	    return dtm;
+	}
+	
+	public static SQLObject getSQLInstance() {
+		return so;
 	}
 	
 	// Debug-able main method

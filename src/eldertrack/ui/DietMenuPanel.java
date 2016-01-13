@@ -6,17 +6,33 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Enumeration;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import eldertrack.db.SQLObject;
+import eldertrack.diet.Nutrition;
+import eldertrack.diet.SerializerSQL;
 import eldertrack.diet.TableHelper;
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 
 public class DietMenuPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
@@ -33,10 +49,16 @@ public class DietMenuPanel extends JPanel {
 	private JTextField fieldCalories;
 	private JTextField searchQuery;
 	private JTextField fieldMealName;
-	JLabel lblRda;
-	JLabel lblAddedOnDdmmyy;
-	JLabel lblAddedByDdmmyy;
-	JLabel lblLastModifiedDdmmyy;
+	private JLabel lblRda;
+	private JLabel lblAddedOnDdmmyy;
+	private JLabel lblAddedByDdmmyy;
+	private JLabel lblLastModifiedDdmmyy;
+	private JCheckBox chckbxHalal;
+	private Integer selectedRow = -1;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JRadioButton rdbtnBreakfast;
+	private JRadioButton rdbtnLunch;
+	private JRadioButton rdbtnDinner;
 	
 	// Constructor
 	DietMenuPanel() {
@@ -71,12 +93,22 @@ public class DietMenuPanel extends JPanel {
 		});
 		
 		JButton btnRemoveEntry = new JButton("Remove Menu Entry");
+		btnRemoveEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				removeEntry();
+			}
+		});
 		btnRemoveEntry.setBounds(782, 358, 203, 109);
 		add(btnRemoveEntry);
 		
-		JButton btnModifyEntry = new JButton("Modify Menu Entry");
-		btnModifyEntry.setBounds(782, 238, 203, 109);
-		add(btnModifyEntry);
+		JButton btnUpdateEntry = new JButton("Update Menu Entry");
+		btnUpdateEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				updateMenu();
+			}
+		});
+		btnUpdateEntry.setBounds(782, 238, 203, 109);
+		add(btnUpdateEntry);
 		btnBackToMain.setBounds(782, 611, 203, 48);
 		add(btnBackToMain);
 		
@@ -100,33 +132,34 @@ public class DietMenuPanel extends JPanel {
 		lblCarbohydrates.setBounds(10, 145, 100, 14);
 		nutriInfoPanel.add(lblCarbohydrates);
 		
+		JLabel lblFatg = new JLabel("Fat (g):");
+		lblFatg.setBounds(11, 169, 100, 14);
+		nutriInfoPanel.add(lblFatg);
+		
 		JLabel lblProtein = new JLabel("Protein(g):");
-		lblProtein.setBounds(10, 187, 100, 14);
+		lblProtein.setBounds(10, 195, 100, 14);
 		nutriInfoPanel.add(lblProtein);
 		
 		JLabel lblIron = new JLabel("Iron(mg):");
-		lblIron.setBounds(10, 212, 100, 14);
+		lblIron.setBounds(10, 220, 100, 14);
 		nutriInfoPanel.add(lblIron);
 		
-		JLabel lblVitaminA = new JLabel("Vitamin A (mg):");
-		lblVitaminA.setBounds(11, 237, 100, 14);
+		JLabel lblVitaminA = new JLabel("Vitamin A (%):");
+		lblVitaminA.setBounds(11, 255, 100, 14);
 		nutriInfoPanel.add(lblVitaminA);
 		
-		JLabel lblVitaminC = new JLabel("Vitamin C (mg):");
-		lblVitaminC.setBounds(10, 262, 100, 14);
+		JLabel lblVitaminC = new JLabel("Vitamin C (%):");
+		lblVitaminC.setBounds(10, 280, 100, 14);
 		nutriInfoPanel.add(lblVitaminC);
 		
-		JLabel lblVitaminE = new JLabel("Vitamin E (mg):");
-		lblVitaminE.setBounds(11, 287, 100, 14);
+		JLabel lblVitaminE = new JLabel("Vitamin E (%):");
+		lblVitaminE.setBounds(11, 305, 100, 14);
 		nutriInfoPanel.add(lblVitaminE);
 		
-		JLabel lblVitaminD = new JLabel("Vitamin D (mg):");
-		lblVitaminD.setBounds(11, 312, 100, 14);
+		JLabel lblVitaminD = new JLabel("Vitamin D (%):");
+		lblVitaminD.setBounds(11, 330, 100, 14);
 		nutriInfoPanel.add(lblVitaminD);
-		
-		JLabel lblFatg = new JLabel("Fat (g):");
-		lblFatg.setBounds(10, 337, 100, 14);
-		nutriInfoPanel.add(lblFatg);
+
 		
 		JLabel lblMealName = new JLabel("Meal Name");
 		lblMealName.setForeground(Color.BLACK);
@@ -146,37 +179,37 @@ public class DietMenuPanel extends JPanel {
 		
 		fieldProtein = new JTextField();
 		fieldProtein.setColumns(10);
-		fieldProtein.setBounds(109, 184, 207, 20);
+		fieldProtein.setBounds(109, 192, 207, 20);
 		nutriInfoPanel.add(fieldProtein);
 		
 		fieldIron = new JTextField();
 		fieldIron.setColumns(10);
-		fieldIron.setBounds(109, 209, 207, 20);
+		fieldIron.setBounds(109, 217, 207, 20);
 		nutriInfoPanel.add(fieldIron);
 		
 		fieldVitA = new JTextField();
-		fieldVitA.setBounds(109, 234, 207, 20);
+		fieldVitA.setBounds(109, 252, 207, 20);
 		nutriInfoPanel.add(fieldVitA);
 		fieldVitA.setColumns(10);
 		
 		fieldVitC = new JTextField();
-		fieldVitC.setBounds(109, 259, 207, 20);
+		fieldVitC.setBounds(109, 277, 207, 20);
 		nutriInfoPanel.add(fieldVitC);
 		fieldVitC.setColumns(10);
 		
 		fieldVitE = new JTextField();
 		fieldVitE.setColumns(10);
-		fieldVitE.setBounds(109, 284, 207, 20);
+		fieldVitE.setBounds(109, 302, 207, 20);
 		nutriInfoPanel.add(fieldVitE);
 		
 		fieldVitD = new JTextField();
 		fieldVitD.setColumns(10);
-		fieldVitD.setBounds(109, 309, 207, 20);
+		fieldVitD.setBounds(109, 327, 207, 20);
 		nutriInfoPanel.add(fieldVitD);
 		
 		fieldFat = new JTextField();
 		fieldFat.setColumns(10);
-		fieldFat.setBounds(109, 334, 207, 20);
+		fieldFat.setBounds(109, 167, 208, 20);
 		nutriInfoPanel.add(fieldFat);
 		
 		lblRda = new JLabel("Recommended Daily Allowance (%):");
@@ -204,6 +237,25 @@ public class DietMenuPanel extends JPanel {
 		nutriInfoPanel.add(fieldMealName);
 		fieldMealName.setColumns(10);
 		
+		chckbxHalal = new JCheckBox(" Item Halal");
+		chckbxHalal.setBounds(10, 354, 77, 23);
+		nutriInfoPanel.add(chckbxHalal);
+		
+		rdbtnBreakfast = new JRadioButton("Breakfast");
+		buttonGroup.add(rdbtnBreakfast);
+		rdbtnBreakfast.setBounds(109, 354, 71, 23);
+		nutriInfoPanel.add(rdbtnBreakfast);
+		
+		rdbtnLunch = new JRadioButton("Lunch");
+		buttonGroup.add(rdbtnLunch);
+		rdbtnLunch.setBounds(182, 354, 53, 23);
+		nutriInfoPanel.add(rdbtnLunch);
+		
+		rdbtnDinner = new JRadioButton("Dinner");
+		buttonGroup.add(rdbtnDinner);
+		rdbtnDinner.setBounds(237, 354, 65, 23);
+		nutriInfoPanel.add(rdbtnDinner);
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 156, 364, 503);
 		add(scrollPane);
@@ -211,6 +263,16 @@ public class DietMenuPanel extends JPanel {
 		try {
 			availMealsTable = new JTable(TableHelper.getMeals(""));
 			setColumnWidths();
+			availMealsTable.addMouseListener(new MouseAdapter() {
+			    @Override
+			    public void mouseClicked(MouseEvent evt) {
+			        int row = availMealsTable.getSelectedRow();
+			        if (row >= 0) {
+			        	selectedRow = (Integer) availMealsTable.getValueAt(row, 0);
+			        	presentData(selectedRow.toString());
+			        }
+			    }
+			});
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -259,12 +321,123 @@ public class DietMenuPanel extends JPanel {
 	}
 	
 	private void setColumnWidths() {
+		availMealsTable.getTableHeader().setResizingAllowed(false);
+		availMealsTable.getTableHeader().setReorderingAllowed(false);
 		availMealsTable.getColumnModel().getColumn(0).setPreferredWidth(25);
-		availMealsTable.getColumnModel().getColumn(0).setMaxWidth(25);
-		availMealsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
-		availMealsTable.getColumnModel().getColumn(0).setMaxWidth(40);
+		availMealsTable.getColumnModel().getColumn(0).setMaxWidth(35);
+		availMealsTable.getColumnModel().getColumn(1).setPreferredWidth(70);
+		availMealsTable.getColumnModel().getColumn(1).setMaxWidth(80);
 		availMealsTable.getColumnModel().getColumn(2).setPreferredWidth(130);
-		availMealsTable.getColumnModel().getColumn(3).setPreferredWidth(60);
-		availMealsTable.getColumnModel().getColumn(3).setMaxWidth(60);
+		availMealsTable.getColumnModel().getColumn(3).setPreferredWidth(55);
+		availMealsTable.getColumnModel().getColumn(3).setMaxWidth(70);
 	}
+	
+	private void presentData(String id) {
+		try {
+			SQLObject so = TableHelper.getSQLInstance();
+			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", id);
+			rs.next();
+			String name = rs.getString("name");
+			byte[] ba = rs.getBytes("nutrition");
+			boolean isHalal = rs.getBoolean("halal");
+			Nutrition n = null;
+			if (ba != null) {
+				ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(ba));
+				n = (Nutrition) is.readObject();
+			}
+			fieldMealName.setText(name);
+			chckbxHalal.setSelected(isHalal);
+			if (n != null) {
+				fieldVitA.setText(Integer.toString(n.getVita()));
+				fieldVitC.setText(Integer.toString(n.getVitc()));
+				fieldVitD.setText(Integer.toString(n.getVitd()));
+				fieldVitE.setText(Integer.toString(n.getVite()));
+				fieldFat.setText(Integer.toString(n.getFat()));
+				fieldIron.setText(Integer.toString(n.getIron()));
+				fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
+				fieldCalories.setText(Integer.toString(n.getCalories()));
+				fieldProtein.setText(Integer.toString(n.getProtein()));
+			} else {
+				fieldVitA.setText("");
+				fieldVitC.setText("");
+				fieldVitD.setText("");
+				fieldVitE.setText("");
+				fieldFat.setText("");
+				fieldIron.setText("");
+				fieldCarbohydrates.setText("");
+				fieldCalories.setText("");
+				fieldProtein.setText("");
+			}
+			switch(rs.getString("category")) {
+				case "Breakfast":
+					rdbtnBreakfast.setSelected(true);
+					break;
+				case "Lunch":
+					rdbtnLunch.setSelected(true);
+					break;
+				case "Dinner":
+					rdbtnDinner.setSelected(true);
+					break;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateMenu() {
+		try {
+			int cal = Integer.parseInt(fieldCalories.getText()),
+				prot = Integer.parseInt(fieldProtein.getText()),
+				fat = Integer.parseInt(fieldFat.getText()),
+				carbs = Integer.parseInt(fieldCarbohydrates.getText()),
+				iron = Integer.parseInt(fieldIron.getText()),
+				vita = Integer.parseInt(fieldVitA.getText()),
+				vitc = Integer.parseInt(fieldVitC.getText()),
+				vitd = Integer.parseInt(fieldVitD.getText()),
+				vite = Integer.parseInt(fieldVitE.getText());
+				Nutrition n = new Nutrition(cal, prot, fat, carbs, iron, vita, vitc, vitd, vite);
+				if (selectedRow != -1) {
+					SerializerSQL.storeNutrition(selectedRow, n, TableHelper.getSQLInstance());
+					PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET category=?, name=?, halal=? WHERE itemid=?");
+					ps.setString(1, buttonGroup.getSelection().toString());
+					ps.setString(2, fieldMealName.getText());
+					ps.setBoolean(3, chckbxHalal.isSelected());
+					ps.setInt(4, selectedRow);
+					ps.executeUpdate();
+				}
+				availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
+				setColumnWidths();
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void removeEntry() {
+		try {
+		PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("DELETE FROM et_menu WHERE itemid=?");
+		ps.setInt(1, selectedRow);
+		ps.executeUpdate();
+		availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
+		setColumnWidths();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getSelectedButtonText(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+        return null;
+    }
 }
