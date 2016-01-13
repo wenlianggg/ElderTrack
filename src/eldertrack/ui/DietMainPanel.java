@@ -108,6 +108,7 @@ public class DietMainPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					eldersTable.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
+					eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				};

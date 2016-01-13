@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,12 +15,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
+
+import eldertrack.diet.TableHelper;
 
 public class DietMenuPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
-	private JTable prevMealsTable;
+	private JTable availMealsTable;
 	private JTextField fieldVitA;
 	private JTextField fieldVitC;
 	private JTextField fieldVitE;
@@ -29,8 +31,12 @@ public class DietMenuPanel extends JPanel {
 	private JTextField fieldProtein;
 	private JTextField fieldCarbohydrates;
 	private JTextField fieldCalories;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField searchQuery;
+	private JTextField fieldMealName;
+	JLabel lblRda;
+	JLabel lblAddedOnDdmmyy;
+	JLabel lblAddedByDdmmyy;
+	JLabel lblLastModifiedDdmmyy;
 	
 	// Constructor
 	DietMenuPanel() {
@@ -173,85 +179,50 @@ public class DietMenuPanel extends JPanel {
 		fieldFat.setBounds(109, 334, 207, 20);
 		nutriInfoPanel.add(fieldFat);
 		
-		JLabel lblRda = new JLabel("Recommended Daily Allowance (%):");
+		lblRda = new JLabel("Recommended Daily Allowance (%):");
 		lblRda.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblRda.setBounds(12, 419, 306, 29);
 		nutriInfoPanel.add(lblRda);
 		
-		JLabel lblAddedOnDdmmyy = new JLabel("Added On: dd/mm/yy hh:mmAM");
+		lblAddedOnDdmmyy = new JLabel("Added On: dd/mm/yy hh:mmAM");
 		lblAddedOnDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblAddedOnDdmmyy.setBounds(12, 475, 306, 20);
 		nutriInfoPanel.add(lblAddedOnDdmmyy);
 		
-		JLabel lblAddedByDdmmyy = new JLabel("Added By: PERSON NAME");
+		lblAddedByDdmmyy = new JLabel("Added By: PERSON NAME");
 		lblAddedByDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblAddedByDdmmyy.setBounds(12, 494, 257, 20);
 		nutriInfoPanel.add(lblAddedByDdmmyy);
 		
-		JLabel lblLastModifiedDdmmyy = new JLabel("Last Modified: dd/mm/yy hh:mmAM by PERSON NAME");
+		lblLastModifiedDdmmyy = new JLabel("Last Modified: dd/mm/yy hh:mmAM by PERSON NAME");
 		lblLastModifiedDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblLastModifiedDdmmyy.setBounds(12, 514, 318, 20);
 		nutriInfoPanel.add(lblLastModifiedDdmmyy);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(146, 63, 232, 33);
-		nutriInfoPanel.add(textField_1);
-		textField_1.setColumns(10);
+		fieldMealName = new JTextField();
+		fieldMealName.setBounds(146, 63, 232, 33);
+		nutriInfoPanel.add(fieldMealName);
+		fieldMealName.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 156, 364, 503);
 		add(scrollPane);
 		
-		prevMealsTable = new JTable();
-		prevMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		prevMealsTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-			},
-			new String[] {
-				"ID", "Meal", "% RDA"
-			}
-		));
-		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(25);
-		prevMealsTable.getColumnModel().getColumn(0).setMaxWidth(25);
-		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(130);
-		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(70);
-		prevMealsTable.getColumnModel().getColumn(2).setMaxWidth(70);
-		scrollPane.setViewportView(prevMealsTable);
+		try {
+			availMealsTable = new JTable(TableHelper.getMeals(""));
+			setColumnWidths();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		availMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
+
+		scrollPane.setViewportView(availMealsTable);
 		
-		textField = new JTextField();
-		textField.setBounds(67, 120, 181, 27);
-		add(textField);
-		textField.setColumns(10);
+		searchQuery = new JTextField();
+		searchQuery.setBounds(67, 120, 181, 27);
+		add(searchQuery);
+		searchQuery.setColumns(10);
 		
 		JLabel lblSearch = new JLabel("Search:");
 		lblSearch.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -261,6 +232,16 @@ public class DietMenuPanel extends JPanel {
 		JButton btnMenuSearch = new JButton("Search Menu");
 		btnMenuSearch.setBounds(258, 116, 111, 33);
 		add(btnMenuSearch);
+		btnMenuSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
+					setColumnWidths();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				};
+			}
+		});
 		
 		JButton btnNewButton = new JButton("New Menu Entry");
 		btnNewButton.setBounds(782, 118, 203, 109);
@@ -275,5 +256,15 @@ public class DietMenuPanel extends JPanel {
 		});
 		btnMainMenu.setBounds(820, 15, 139, 40);
 		add(btnMainMenu);
+	}
+	
+	private void setColumnWidths() {
+		availMealsTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+		availMealsTable.getColumnModel().getColumn(0).setMaxWidth(25);
+		availMealsTable.getColumnModel().getColumn(1).setPreferredWidth(40);
+		availMealsTable.getColumnModel().getColumn(0).setMaxWidth(40);
+		availMealsTable.getColumnModel().getColumn(2).setPreferredWidth(130);
+		availMealsTable.getColumnModel().getColumn(3).setPreferredWidth(60);
+		availMealsTable.getColumnModel().getColumn(3).setMaxWidth(60);
 	}
 }
