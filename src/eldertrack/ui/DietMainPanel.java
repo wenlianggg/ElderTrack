@@ -108,6 +108,7 @@ public class DietMainPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					eldersTable.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
+					eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				};
@@ -225,8 +226,8 @@ public class DietMainPanel extends JPanel {
 			}
 		});
 		
-		btnMenuManagement = new JButton("Modify Menu Available");
-		btnMenuManagement.setBounds(759, 576, 216, 29);
+		btnMenuManagement = new JButton("Edit Menu");
+		btnMenuManagement.setBounds(759, 576, 216, 54);
 		add(btnMenuManagement);
 		btnMenuManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -236,7 +237,7 @@ public class DietMainPanel extends JPanel {
 		});
 		
 		btnViewInMgmt = new JButton("View Elderly in Management Panel");
-		btnViewInMgmt.setBounds(759, 611, 216, 45);
+		btnViewInMgmt.setBounds(759, 631, 216, 28);
 		add(btnViewInMgmt);
 		
 		btnMainMenu = new JButton("Back to Main Menu");

@@ -88,7 +88,7 @@ public class DietModifyPanel extends JPanel {
 		btnRemoveEntry.setBounds(782, 156, 203, 109);
 		add(btnRemoveEntry);
 		
-		JButton btnModifyEntry = new JButton("Remove Meal Entry");
+		JButton btnModifyEntry = new JButton("Modify Meal Entry");
 		btnModifyEntry.setBounds(782, 276, 203, 109);
 		add(btnModifyEntry);
 		btnBackToMain.setBounds(782, 611, 203, 48);
