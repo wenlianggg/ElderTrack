@@ -1,9 +1,7 @@
 package eldertrack.ui;
 
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,8 +17,9 @@ public class MedCheckSearchPanel extends JPanel {
 
 
 	private static final long serialVersionUID = -1155434751690765910L;
-
-
+	private JComboBox<String> roomComboBox;
+	
+	public static String selected;
 	public MedCheckSearchPanel() {
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
@@ -38,7 +37,7 @@ public class MedCheckSearchPanel extends JPanel {
 		lblRoomNumber.setForeground(new Color(0, 128, 128));
 		add(lblRoomNumber);
 		
-		JComboBox<String> roomComboBox = new JComboBox<String>();
+		roomComboBox = new JComboBox<String>();
 		roomComboBox.setBackground(UIManager.getColor("TextField.highlight"));
 		roomComboBox.setBounds(241, 124, 125, 31);
 		roomComboBox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
@@ -81,12 +80,19 @@ public class MedCheckSearchPanel extends JPanel {
 		add(btnGetCheck);
 		btnGetCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JPanel getCheck=new MedDosagePanel();
-				getCheck.setVisible(true);
-
+				setCheckSelect(roomComboBox.getSelectedItem().toString());
+				JPanel gottenCheckup=new MedCheckPanel();
+				MedPanel.MedCardPanel.add(gottenCheckup,MedPanel.MCHECKPANEL);
+				
 				CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 			    mainCards.show(MedPanel.MedCardPanel, MedPanel.MCHECKPANEL);
 			}
 		});
+	}
+	public void setCheckSelect(String select){
+		this.selected=select;
+	}
+	public static  String getCheckSelect(){
+		return selected;
 	}
 }

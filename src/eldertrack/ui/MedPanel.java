@@ -16,21 +16,18 @@ public class MedPanel extends JPanel {
 	static final String MCHECKPANEL="Medical Check Up Panel";
 	static JPanel MedCardPanel;
 	CardLayout mainCards;
-	
+
 	MedPanel(){
 		JPanel MedMainPanel = new MedMainPanel();
-		JPanel MedDosageSearchPanel = new MedDosageSearchPanel();
-		JPanel MedDosagePanel = new MedDosagePanel();
+		JPanel MedDosageSearchPanel = new MedDosageSearchPanel();	
 		JPanel MedCheckSearchPanel = new MedCheckSearchPanel();
-		JPanel MedCheckPanel=new MedCheckPanel();
+
 		
 		
 		MedCardPanel = new JPanel(new CardLayout());
 		MedCardPanel.add(MedMainPanel, MMAINPANEL);
 		MedCardPanel.add(MedDosageSearchPanel, MDOSSEARCHPANEL);
-		MedCardPanel.add(MedDosagePanel, MDOSPANEL);
 		MedCardPanel.add(MedCheckSearchPanel,MCHECKSEARCHPANEL);
-		MedCardPanel.add(MedCheckPanel,MCHECKPANEL);
 		
 		((CardLayout)MedCardPanel.getLayout()).show(MedCardPanel, "Main Medical Panel");
 		

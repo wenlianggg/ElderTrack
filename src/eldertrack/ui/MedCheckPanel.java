@@ -184,7 +184,14 @@ public class MedCheckPanel extends JPanel {
 		ResultSet rs;
 		int counter=0;
 		try {
-			rs = so.getResultSet("SELECT * FROM et_elderly");
+			String output=MedCheckSearchPanel.getCheckSelect();
+			System.out.println(output);
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
+			stmt.setString(1, output);
+			stmt.executeQuery();
+			System.out.println(stmt);
+			rs = stmt.getResultSet();
+			
 			while(rs.next()){
 				ElderData data=new ElderData();
 				java.sql.Date birthDate=rs.getDate("dob");

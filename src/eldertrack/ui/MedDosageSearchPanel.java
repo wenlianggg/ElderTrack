@@ -53,6 +53,7 @@ public class MedDosageSearchPanel extends JPanel {
 		Calendar cal = Calendar.getInstance();
 		combobox = new JComboBox<String>();
 		combobox.setBackground(UIManager.getColor("TextField.highlight"));
+		combobox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
 		combobox.setBounds(277, 124, 125, 31);
 		combobox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {"101 ","102", "103" }));
 		add(combobox);
@@ -107,7 +108,10 @@ public class MedDosageSearchPanel extends JPanel {
 					
 				}
 				else{
-					setSelect(combobox.getSelectedItem().toString());
+					setDosageSelect(combobox.getSelectedItem().toString());
+					JPanel gottenDosage=new MedDosagePanel();
+					MedPanel.MedCardPanel.add(gottenDosage,MedPanel.MDOSPANEL);
+					
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 				    mainCards.show(MedPanel.MedCardPanel, MedPanel.MDOSPANEL);
 				}
@@ -115,10 +119,10 @@ public class MedDosageSearchPanel extends JPanel {
 			}
 		});
 	}
-	public void setSelect(String select){
+	public void setDosageSelect(String select){
 		this.selected=select;
 	}
-	public static  String getSelect(){
+	public static  String getDosageSelect(){
 		return selected;
 	}
 }

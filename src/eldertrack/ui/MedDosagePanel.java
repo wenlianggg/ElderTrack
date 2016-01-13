@@ -30,7 +30,6 @@ import javax.swing.JTextPane;
 
 import eldertrack.db.SQLObject;
 import eldertrack.medical.*;
-import eldertrack.ui.*;
 import javax.swing.SwingConstants;
 
 public class MedDosagePanel extends JPanel {
@@ -113,24 +112,13 @@ public class MedDosagePanel extends JPanel {
 		int counter=0;
 		try {
 			
-			String output=MedDosageSearchPanel.getSelect();
+			String output=MedDosageSearchPanel.getDosageSelect();
 			System.out.println(output);
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
 			stmt.setString(1, output);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
-			
-			
-		//	PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
-		//	statement.setString(1, "101");
-		//	statement.executeQuery();
-		//	System.out.println(statement);
-		//	String output=statement.toString();
-		//	System.out.println(output);
-		//	rs = so.getResultSet("SELECT * FROM et_elderly WHERE room = 101");
-			
-			
 			
 			while(rs.next()){
 				ElderData data=new ElderData();
@@ -199,14 +187,7 @@ public class MedDosagePanel extends JPanel {
 					counter++;
 					DisplayInformation(DosageList, counter);
 					JOptionPane.showMessageDialog(null, "Record Has Been Saved");
-					Object [][] rawData=DosageTable.getData(); 
-
-					for(int i=0;i<5;i++){
-						if((boolean) (rawData[4][i]=Boolean.FALSE)){
-							JOptionPane.showMessageDialog(null, "Record Has Been Saved");
-
-						}
-					}
+					
 
 				}
 			}
