@@ -17,16 +17,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.swing.JTextField;
@@ -358,25 +362,27 @@ public class MgmtPanel extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
 						if (dialogResult == JOptionPane.YES_OPTION){
 							try{
-								String id = label1.getText();
-								String name = label.getText();
-								String dob = label_1.getText();
-								String nric = label_2.getText();
-								String gender = label_7.getText();
-								String room = label_17.getText();
-								String address = label_19.getText();
-								
-								ArrayList<String> info = new ArrayList<String>();
-								info.add(name);
-								info.add(dob);
-								info.add(gender);
-								info.add(room);
-								info.add(address);
-								
-								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, room = ?, address = ? WHERE id = " + id;
+								String id = label_23.getText();
+								String name = textField_1.getText();
+								String birthString = textField_2.getText();
+								//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy, d, MMMM", Locale.ENGLISH);
+								//LocalDate localDOB = LocalDate.parse(birthString, formatter);
+								String nric = textField_3.getText();
+								String gender = textField_4.getText();
+								String room = textField_9.getText();
+								String address = textField_10.getText();
+			
 								SQLObject so = new SQLObject();
-								System.out.println(so.executeUpdate(sql, info));
+								PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, nric=?, gender=?, room=?, address=? WHERE id=?");
+								ps.setString(1, name);
+								//ps.setDate(2, java.sql.Date.valueOf(localDOB));
+								ps.setString(2, nric);
+								ps.setString(3, gender);
+								ps.setString(4, room);
+								ps.setString(5, address);
+								ps.setInt(6, Integer.parseInt(id));
 								
+								ps.executeUpdate();
 							}catch(Exception e1){
 								JOptionPane.showMessageDialog(null,e1);	
 							}
@@ -433,6 +439,7 @@ public class MgmtPanel extends JPanel {
 							String add8 = rs.getString("address");
 							textField_10.setText(add8);
 							
+							//Calculation of age from date of birth
 							Calendar birthdate = Calendar.getInstance();
 							birthdate.setTime(rs.getDate("dob"));
 							Calendar today = Calendar.getInstance();
@@ -445,7 +452,6 @@ public class MgmtPanel extends JPanel {
 								}
 							agelabel.setText(Integer.toString(years));
 						}
-						
 					}catch(Exception e1){
 						JOptionPane.showMessageDialog(null, e1);
 					}
