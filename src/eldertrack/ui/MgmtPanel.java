@@ -23,6 +23,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,7 +52,6 @@ public class MgmtPanel extends JPanel {
 	private JTextField textField_9;
 	private JTextField textField_10;
 	private JTextField textField_11;
-	private JTable table;
 	MgmtPanel() {
 		
 		setBounds(0, 0, 995, 670);
@@ -298,7 +298,7 @@ public class MgmtPanel extends JPanel {
 			
 			JPanel panel_2 = new JPanel();
 			panel_2.setVisible(true);
-			panel_2.setBounds(479, 569, 453, 25);
+			panel_2.setBounds(479, 447, 453, 25);
 			add(panel_2);
 			panel_2.setLayout(null);
 			
@@ -315,7 +315,7 @@ public class MgmtPanel extends JPanel {
 			panel_2.add(button_2);
 			
 			JPanel panel_3 = new JPanel();
-			panel_3.setBounds(479, 569, 453, 25);
+			panel_3.setBounds(479, 447, 453, 25);
 			add(panel_3);
 			panel_3.setVisible(false);
 			panel_3.setLayout(null);
@@ -331,29 +331,6 @@ public class MgmtPanel extends JPanel {
 			JButton button_5 = new JButton("Remove Selected");
 			button_5.setBounds(321, 0, 132, 25);
 			panel_3.add(button_5);
-			
-			JScrollPane scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(479, 433, 448, 83);
-			add(scrollPane_1);
-			
-			table = new JTable();
-			table.setModel(new DefaultTableModel(
-				new Object[][] {
-					{null, null, null, null},
-				},
-				new String[] {
-					"1", "2", "3", "4"
-				}
-			));
-			scrollPane_1.setViewportView(table);
-			
-			JButton btnAddRow = new JButton("Add Row");
-			btnAddRow.setBounds(479, 529, 97, 25);
-			add(btnAddRow);
-			
-			JButton btnRemoveRow = new JButton("Remove Row");
-			btnRemoveRow.setBounds(588, 529, 114, 25);
-			add(btnRemoveRow);
 			
 			button_2.addMouseListener(new MouseAdapter() {
 				@Override
@@ -407,30 +384,6 @@ public class MgmtPanel extends JPanel {
 							
 				}
 			});
-
-
-			//Event Listeners
-			btnAddRow.addActionListener(new ActionListener()
-		    {
-		        @Override
-		        public void actionPerformed(ActionEvent e)
-		        {
-		            System.out.println("'Add' button pressed.");
-		            DefaultTableModel model = (DefaultTableModel)table.getModel();
-		            model.addRow(new String[model.getColumnCount()]);
-		        }
-		    });
-			
-			btnRemoveRow.addActionListener(new ActionListener()
-		    {
-		        @Override
-		        public void actionPerformed(ActionEvent e)
-		        {
-		        	DefaultTableModel model = (DefaultTableModel)table.getModel();
-		        	model.removeRow(table.getSelectedRow());
-		        	}
-		        }
-		    );
 			
 			tabbedPane.addChangeListener(new ChangeListener() {
 			    public void stateChanged(ChangeEvent e) {
@@ -480,7 +433,17 @@ public class MgmtPanel extends JPanel {
 							String add8 = rs.getString("address");
 							textField_10.setText(add8);
 							
-							//agelabel.setText(Integer.toString(age1));
+							Calendar birthdate = Calendar.getInstance();
+							birthdate.setTime(rs.getDate("dob"));
+							Calendar today = Calendar.getInstance();
+							int years = today.get(Calendar.YEAR) - birthdate.get(Calendar.YEAR);  
+							if (today.get(Calendar.MONTH) < birthdate.get(Calendar.MONTH)) {
+								  years--;  
+								} else if (today.get(Calendar.MONTH) == birthdate.get(Calendar.MONTH)
+								    && today.get(Calendar.DAY_OF_MONTH) < birthdate.get(Calendar.DAY_OF_MONTH)) {
+								  years--;  
+								}
+							agelabel.setText(Integer.toString(years));
 						}
 						
 					}catch(Exception e1){
