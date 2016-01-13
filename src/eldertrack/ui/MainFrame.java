@@ -13,6 +13,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
+import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
 
 public class MainFrame extends JFrame {
@@ -82,29 +83,33 @@ public class MainFrame extends JFrame {
 		CardsPanel.setLocation(0, 0);
 		CardsPanel.setSize(994, 671);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
-		
-
-
-
 	}
 	
 	void constructPanels() {
 		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
+		// Initialize Diet Panel
 		DietPanel = new DietPanel();
 		DietPanel.setBorder(lBorder);
+		CardsPanel.add(DietPanel, DIETPANEL);
+		// Initialize Med Panel
 		MedPanel = new MedPanel();
 		MedPanel.setBorder(lBorder);
-		MgmtPanel = new MgmtPanel();
-		MgmtPanel.setBorder(lBorder);
+		CardsPanel.add(MedPanel, MEDICATIONPANEL);
+		// Initialize Management Panel
+		if(session.getAccessLevel() == AccessLevel.MANAGER || session.getAccessLevel() == AccessLevel.SRSTAFF) {
+			MgmtPanel = new MgmtPanel();
+			MgmtPanel.setBorder(lBorder);
+			CardsPanel.add(MgmtPanel, MGMTPANEL);
+		}
+		// Initialize Report Panel
 		ReportPanel = new ReportMainPanel();
 		ReportPanel.setBorder(lBorder);
+		CardsPanel.add(ReportPanel, REPORTPANEL);
+		// Initialize Main Menu Panel
 		MainMenu = new MainMenuPanel();
 		MainMenu.setBorder(lBorder);
-		CardsPanel.add(DietPanel, DIETPANEL);
-		CardsPanel.add(MedPanel, MEDICATIONPANEL);
-		CardsPanel.add(ReportPanel, REPORTPANEL);
-		CardsPanel.add(MgmtPanel, MGMTPANEL);
-		CardsPanel.add(MainMenu, MENUPANEL);		
+		CardsPanel.add(MainMenu, MENUPANEL);	
+		// Add menus to combo box
 		comboBox = new JComboBox<>();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent evt) {
@@ -127,7 +132,8 @@ public class MainFrame extends JFrame {
 		CardsPanel.remove(DietPanel);
 		CardsPanel.remove(MedPanel);
 		CardsPanel.remove(ReportPanel);
-		CardsPanel.remove(MgmtPanel);
+		if(isManagementShown())
+			CardsPanel.remove(MgmtPanel);
 		CardsPanel.remove(MainMenu);
 		MasterPane.remove(comboBox);
 		comboBox = null;
@@ -162,15 +168,19 @@ public class MainFrame extends JFrame {
 	
 	// Triggers on logout
 	boolean endCurrentSession() {
-		MainFrame.session = null;
-		if (MainFrame.session == null) {
 			CardLayout cards = (CardLayout) MainFrame.CardsPanel.getLayout();
 			cards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
 			deconstructPanels();
+			MainFrame.session = null;
 			System.out.println("Successfully logged out!");
 			return true;
-		} else {
+	}
+	
+	boolean isManagementShown() {
+		AccessLevel al = MainFrame.getInstance().getSessionInstance().getAccessLevel();
+		if (al == AccessLevel.MANAGER || al == AccessLevel.SRSTAFF)
+			return true;
+		else
 			return false;
-		}
 	}
 }

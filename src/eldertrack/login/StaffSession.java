@@ -11,6 +11,8 @@ import eldertrack.db.SQLObject;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+
+
 public class StaffSession{
 	private int staffid = 0;
 	private String username = "";
@@ -21,7 +23,7 @@ public class StaffSession{
 	private Date lastlogin;
 	private boolean exists = false;
 	private boolean passwordcorrect = false;
-	private int accesslevel = 0;
+	private AccessLevel accesslevel = AccessLevel.NOACCESS;
 	SQLObject so;
 	
 	StaffSession(String username, char[] password) throws WrongPasswordException, NoSuchUserException {
@@ -40,7 +42,23 @@ public class StaffSession{
 			System.out.println("User Input: " + DigestUtils.sha512Hex(new String(password)) + " vs " + rs.getString("password"));
 			if (rs.getString("password").equals(DigestUtils.sha512Hex(new String(password)))) {
 				this.staffid = rs.getInt("staffid");
-				this.accesslevel = rs.getInt("accesslevel");
+				switch(rs.getInt("accesslevel")) {
+					case 1:
+						this.accesslevel = AccessLevel.JRSTAFF;
+						break;
+					case 2:
+						this.accesslevel = AccessLevel.STAFF;
+						break;
+					case 3:
+						this.accesslevel = AccessLevel.SRSTAFF;
+						break;
+					case 4:
+						this.accesslevel = AccessLevel.MANAGER;
+						break;
+					default:
+						this.accesslevel = AccessLevel.NOACCESS;
+						break;
+				}
 				this.firstname = rs.getString("firstname");
 				this.lastname = rs.getString("lastname");
 				this.nric = rs.getString("nric");
@@ -66,12 +84,12 @@ public class StaffSession{
 	}
 	
 	public boolean isAuthenticated() {
-		if(accesslevel > 0 && passwordcorrect == true)
+		if(accesslevel != AccessLevel.NOACCESS && passwordcorrect == true)
 			return true;
 		else if (passwordcorrect != true) {
 			System.out.println("Password incorrect!");
 			return false;
-		} else if (accesslevel == 0) {
+		} else if (accesslevel == AccessLevel.NOACCESS) {
 			System.out.println("Password accepted, access level not authorized!");
 			return false;
 		} else
@@ -96,6 +114,10 @@ public class StaffSession{
 	
 	public String getNotes() {
 		return this.stickynotes;
+	}
+	
+	public AccessLevel getAccessLevel() {
+		return this.accesslevel;
 	}
 	
 	public void setNotes(String text) {
