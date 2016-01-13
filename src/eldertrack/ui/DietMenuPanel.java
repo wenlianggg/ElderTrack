@@ -403,7 +403,7 @@ public class DietMenuPanel extends JPanel {
 				if (selectedRow != -1) {
 					SerializerSQL.storeNutrition(selectedRow, n, TableHelper.getSQLInstance());
 					PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET category=?, name=?, halal=? WHERE itemid=?");
-					ps.setString(1, buttonGroup.getSelection().toString());
+					ps.setString(1, this.getSelectedRedio());
 					ps.setString(2, fieldMealName.getText());
 					ps.setBoolean(3, chckbxHalal.isSelected());
 					ps.setInt(4, selectedRow);
@@ -431,7 +431,7 @@ public class DietMenuPanel extends JPanel {
 		}
 	}
 	
-	public String getSelectedButtonText(ButtonGroup buttonGroup) {
+	private String getSelectedRedio() {
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
             if (button.isSelected()) {
