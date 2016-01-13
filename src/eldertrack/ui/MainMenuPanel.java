@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import eldertrack.login.StaffSession;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
@@ -71,15 +72,17 @@ public class MainMenuPanel extends JPanel {
 		btnReportGeneration.setBounds(10, 361, 242, 120);
 		add(btnReportGeneration);
 		
-		btnStaffManagement = new JButton("Staff/Elderly Management");
-		btnStaffManagement.setBounds(10, 492, 242, 120);
-		btnStaffManagement.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-		        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
-		        parentCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
-			}
-		});
-		add(btnStaffManagement);
+		if(MainFrame.getInstance().isManagementShown()) {
+			btnStaffManagement = new JButton("Staff/Elderly Management");
+			btnStaffManagement.setBounds(10, 492, 242, 120);
+			btnStaffManagement.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+			        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+			        parentCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
+				}
+			});
+			add(btnStaffManagement);
+		}
 		
 		detailsPanel = new JPanel();
 		detailsPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
@@ -152,4 +155,5 @@ public class MainMenuPanel extends JPanel {
 		txtarea_stickynotes.setText("");
 	}
 	
+
 }
