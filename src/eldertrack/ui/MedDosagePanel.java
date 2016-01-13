@@ -12,7 +12,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.sql.SQLException;
@@ -28,9 +28,7 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
 
-
 import eldertrack.db.SQLObject;
-import eldertrack.diet.TableHelper;
 import eldertrack.medical.*;
 import javax.swing.SwingConstants;
 
@@ -109,20 +107,28 @@ public class MedDosagePanel extends JPanel {
 
 		// Display of information
 		SQLObject so = new SQLObject();
-		ArrayList<DosageData> DosageList=new ArrayList<DosageData>();
+		ArrayList<ElderData> DosageList=new ArrayList<ElderData>();
 		ResultSet rs;
 		int counter=0;
 		try {
-			rs = so.getResultSet("SELECT * FROM et_elderly");
+			
+			String output=MedDosageSearchPanel.getDosageSelect();
+			System.out.println(output);
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
+			stmt.setString(1, output);
+			stmt.executeQuery();
+			System.out.println(stmt);
+			rs = stmt.getResultSet();
+			
 			while(rs.next()){
-				DosageData data=new DosageData();
+				ElderData data=new ElderData();
 				data.setElderName(rs.getString("name"));
 				data.setElderAge(10);
 				data.setElderGender(rs.getString("gender"));
 				DosageList.add(data);
 			}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 
@@ -157,8 +163,7 @@ public class MedDosagePanel extends JPanel {
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to Save and Quit","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 
-					JPanel getSearchDosage=new MedDosageSearchPanel ();
-					getSearchDosage.setVisible(true);
+					
 
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
@@ -182,14 +187,7 @@ public class MedDosagePanel extends JPanel {
 					counter++;
 					DisplayInformation(DosageList, counter);
 					JOptionPane.showMessageDialog(null, "Record Has Been Saved");
-					Object [][] rawData=DosageTable.getData(); 
-
-					for(int i=0;i<5;i++){
-						if((boolean) (rawData[4][i]=Boolean.FALSE)){
-							JOptionPane.showMessageDialog(null, "Record Has Been Saved");
-
-						}
-					}
+					
 
 				}
 			}
@@ -197,7 +195,7 @@ public class MedDosagePanel extends JPanel {
 		});
 	}
 	
-	public void DisplayInformation(ArrayList<DosageData> DosageList, int counter){
+	public void DisplayInformation(ArrayList<ElderData> DosageList, int counter){
 		NameField.setText(DosageList.get(counter).getElderName());
 		AgeField.setText("10");
 		GenderField.setText(DosageList.get(counter).getElderGender());
