@@ -305,9 +305,14 @@ public class DietMenuPanel extends JPanel {
 			}
 		});
 		
-		JButton btnNewButton = new JButton("New Menu Entry");
-		btnNewButton.setBounds(782, 118, 203, 109);
-		add(btnNewButton);
+		JButton btnCreateNewMeal = new JButton("Create Menu Entry");
+		btnCreateNewMeal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				addEntry();
+			}
+		});
+		btnCreateNewMeal.setBounds(782, 118, 203, 109);
+		add(btnCreateNewMeal);
 		
 		JButton btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.addActionListener(new ActionListener() {
@@ -390,20 +395,10 @@ public class DietMenuPanel extends JPanel {
 	
 	private void updateMenu() {
 		try {
-			int cal = Integer.parseInt(fieldCalories.getText()),
-				prot = Integer.parseInt(fieldProtein.getText()),
-				fat = Integer.parseInt(fieldFat.getText()),
-				carbs = Integer.parseInt(fieldCarbohydrates.getText()),
-				iron = Integer.parseInt(fieldIron.getText()),
-				vita = Integer.parseInt(fieldVitA.getText()),
-				vitc = Integer.parseInt(fieldVitC.getText()),
-				vitd = Integer.parseInt(fieldVitD.getText()),
-				vite = Integer.parseInt(fieldVitE.getText());
-				Nutrition n = new Nutrition(cal, prot, fat, carbs, iron, vita, vitc, vitd, vite);
 				if (selectedRow != -1) {
-					SerializerSQL.storeNutrition(selectedRow, n, TableHelper.getSQLInstance());
+					SerializerSQL.storeNutrition(selectedRow, getNutritionFromFields(), TableHelper.getSQLInstance());
 					PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET category=?, name=?, halal=? WHERE itemid=?");
-					ps.setString(1, this.getSelectedRedio());
+					ps.setString(1, getSelectedRadio());
 					ps.setString(2, fieldMealName.getText());
 					ps.setBoolean(3, chckbxHalal.isSelected());
 					ps.setInt(4, selectedRow);
@@ -431,7 +426,34 @@ public class DietMenuPanel extends JPanel {
 		}
 	}
 	
-	private String getSelectedRedio() {
+	private void addEntry() {
+		try {
+			PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatementWithKey
+				("INSERT INTO et_menu (category, name, halal, nutrition) VALUES (?, ?, ?, ?)");
+			ps.setString(1, getSelectedRadio());
+			ps.setString(2, fieldMealName.getText());
+			ps.setBoolean(3, chckbxHalal.isSelected());
+			ps.setObject(4, getNutritionFromFields());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private Nutrition getNutritionFromFields() {
+		int cal = Integer.parseInt(fieldCalories.getText()),
+				prot = Integer.parseInt(fieldProtein.getText()),
+				fat = Integer.parseInt(fieldFat.getText()),
+				carbs = Integer.parseInt(fieldCarbohydrates.getText()),
+				iron = Integer.parseInt(fieldIron.getText()),
+				vita = Integer.parseInt(fieldVitA.getText()),
+				vitc = Integer.parseInt(fieldVitC.getText()),
+				vitd = Integer.parseInt(fieldVitD.getText()),
+				vite = Integer.parseInt(fieldVitE.getText());
+		return new Nutrition(cal, prot, fat, carbs, iron, vita, vitc, vitd, vite);
+	}
+	
+	private String getSelectedRadio() {
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
             if (button.isSelected()) {
