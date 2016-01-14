@@ -434,6 +434,9 @@ public class DietMenuPanel extends JPanel {
 			ps.setString(2, fieldMealName.getText());
 			ps.setBoolean(3, chckbxHalal.isSelected());
 			ps.setObject(4, getNutritionFromFields());
+			ps.executeUpdate();
+			availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
+			setColumnWidths();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
