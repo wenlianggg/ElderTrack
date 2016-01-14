@@ -127,7 +127,7 @@ public class MainFrame extends JFrame {
 	
 	boolean isManagementShown() {
 		AccessLevel al = MainFrame.getInstance().getSessionInstance().getAccessLevel();
-		if (al == AccessLevel.MANAGER || al == AccessLevel.SRSTAFF)
+		if (al == AccessLevel.MANAGER || al == AccessLevel.ADMIN)
 			return true;
 		else
 			return false;
@@ -156,67 +156,75 @@ public class MainFrame extends JFrame {
 	};
 	
 	private Runnable constructTask = () -> {
-	JProgressBar jpbar = LoginPanel.progressBar;
-	System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
-	jpbar.setValue(25);
-	jpbar.setString("Initializing Diet Management...");
-	jpbar.update(jpbar.getGraphics());
-	// Initialize Diet Panel
-	DietPanel = new DietPanel();
-	DietPanel.setBorder(lBorder);
-	CardsPanel.add(DietPanel, DIETPANEL);
-	jpbar.setValue(50);
-	jpbar.setString("Initializing Medication...");
-	jpbar.update(jpbar.getGraphics());
-	// Initialize Med Panel
-	MedPanel = new MedPanel();
-	MedPanel.setBorder(lBorder);
-	CardsPanel.add(MedPanel, MEDICATIONPANEL);
-	jpbar.setValue(65);
-	jpbar.setString("Initializing Management...");
-	jpbar.update(jpbar.getGraphics());
-	// Initialize Management Panel
-	if(session.getAccessLevel() == AccessLevel.MANAGER || session.getAccessLevel() == AccessLevel.SRSTAFF) {
-		MgmtPanel = new MgmtPanel();
-		MgmtPanel.setBorder(lBorder);
-		CardsPanel.add(MgmtPanel, MGMTPANEL);
+		JProgressBar jpbar = LoginPanel.progressBar;
+		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
+		jpbar.setValue(25);
 
-	}
-	jpbar.setValue(85);
-	jpbar.setString("Initializing Report Generation...");
-	jpbar.update(jpbar.getGraphics());
-	// Initialize Report Panel
-	ReportPanel = new ReportMainPanel();
-	ReportPanel.setBorder(lBorder);
-	CardsPanel.add(ReportPanel, REPORTPANEL);
-	jpbar.setString("Initializing Main Menu...");
-	LoginPanel.progressBar.setValue(90);
-	jpbar.update(jpbar.getGraphics());
-	// Initialize Main Menu Panel
-	MainMenu = new MainMenuPanel();
-	MainMenu.setBorder(lBorder);
-	CardsPanel.add(MainMenu, MENUPANEL);
-	jpbar.setValue(95);
-	jpbar.update(jpbar.getGraphics());
-	// Add menus to combo box
-	comboBox = new JComboBox<>();
-	comboBox.addItemListener(new ItemListener() {
-		public void itemStateChanged(ItemEvent evt) {
-	        JComboBox<?> jcb = (JComboBox<?>) evt.getSource();
-	        CardLayout cl = (CardLayout) CardsPanel.getLayout();
-	        cl.show(CardsPanel, jcb.getSelectedItem().toString());
+		// Initialize Diet Panel
+		jpbar.setString("Initializing Diet Management...");
+		jpbar.update(jpbar.getGraphics());
+		DietPanel = new DietPanel();
+		DietPanel.setBorder(lBorder);
+		CardsPanel.add(DietPanel, DIETPANEL);
+		jpbar.setValue(50);
+
+		
+		// Initialize Med Panel
+		jpbar.setString("Initializing Medication...");
+		jpbar.update(jpbar.getGraphics());
+		MedPanel = new MedPanel();
+		MedPanel.setBorder(lBorder);
+		CardsPanel.add(MedPanel, MEDICATIONPANEL);
+		jpbar.setValue(65);
+
+		
+		// Initialize Management Panel
+		jpbar.setString("Initializing Management...");
+		jpbar.update(jpbar.getGraphics());
+		if(session.getAccessLevel() == AccessLevel.MANAGER || session.getAccessLevel() == AccessLevel.SRSTAFF) {
+			MgmtPanel = new MgmtPanel();
+			MgmtPanel.setBorder(lBorder);
+			CardsPanel.add(MgmtPanel, MGMTPANEL);
+	
 		}
-	});
-	comboBox.setSize(174, 26);
-	comboBox.setLocation(10, 682);
-	comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MENUPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, REPORTPANEL}));
-	comboBox.setSelectedIndex(0);
-	jpbar.setValue(98);
-	jpbar.update(jpbar.getGraphics());
+		jpbar.setValue(85);
 
-	MasterPane.add(comboBox);
-	MainMenu.fillDetails();
-	jpbar.setValue(100);
-	jpbar.update(jpbar.getGraphics());
+		// Initialize Report Panel
+		jpbar.setString("Initializing Report Generation...");
+		jpbar.update(jpbar.getGraphics());
+		ReportPanel = new ReportMainPanel();
+		ReportPanel.setBorder(lBorder);
+		CardsPanel.add(ReportPanel, REPORTPANEL);
+
+		// Initialize Main Menu Panel
+		jpbar.setString("Initializing Main Menu...");
+		LoginPanel.progressBar.setValue(90);
+		jpbar.update(jpbar.getGraphics());
+		MainMenu = new MainMenuPanel();
+		MainMenu.setBorder(lBorder);
+		CardsPanel.add(MainMenu, MENUPANEL);
+		jpbar.setValue(95);
+		jpbar.update(jpbar.getGraphics());
+		
+		// Add menus to combo box
+		comboBox = new JComboBox<>();
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent evt) {
+		        JComboBox<?> jcb = (JComboBox<?>) evt.getSource();
+		        CardLayout cl = (CardLayout) CardsPanel.getLayout();
+		        cl.show(CardsPanel, jcb.getSelectedItem().toString());
+			}
+		});
+		comboBox.setSize(174, 26);
+		comboBox.setLocation(10, 682);
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MENUPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, REPORTPANEL}));
+		comboBox.setSelectedIndex(0);
+		jpbar.setValue(98);
+		jpbar.update(jpbar.getGraphics());
+	
+		MasterPane.add(comboBox);
+		MainMenu.fillDetails();
+		jpbar.setValue(100);
+		jpbar.update(jpbar.getGraphics());
 	};
 }
