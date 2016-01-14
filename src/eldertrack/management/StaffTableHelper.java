@@ -11,13 +11,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import eldertrack.db.SQLObject;
 
 public class StaffTableHelper {
 	public static DefaultTableModel getStaffFromQuery(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
-		SQLObject so = new SQLObject();
-		return buildTableModel(so.getResultSet("SELECT staffid, firstname, lastname FROM et_staff WHERE firstname LIKE ?", search));
+		return buildTableModel(ElderlyTableHelper.so.getResultSet("SELECT staffid, firstname, lastname, dob FROM et_staff WHERE firstname LIKE ?", search));
 	}
 	
 	// Method from http://stackoverflow.com/questions/10620448/most-simple-code-to-populate-jtable-from-resultset
@@ -28,6 +26,7 @@ public class StaffTableHelper {
 	    columnNames.add("Staff ID");
 	    columnNames.add("First Name");
 	    columnNames.add("Last Name");
+	    columnNames.add("Date of Birth");
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	    while (rs.next()) {
 	        Vector<Object> vector = new Vector<Object>();
