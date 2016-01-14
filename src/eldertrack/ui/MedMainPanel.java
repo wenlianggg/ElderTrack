@@ -37,6 +37,7 @@ public class MedMainPanel extends JPanel {
 		
 		TabbedPanel.add("Dosage",new MedDosageSearchPanel());
 		TabbedPanel.add("Check-Up",new MedCheckSearchPanel());
+		TabbedPanel.add("Manage",new MedManageSearchPanel());
 		add(TabbedPanel);
 		JButton btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.addActionListener(new ActionListener() {
