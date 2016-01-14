@@ -403,6 +403,7 @@ public class DietMenuPanel extends JPanel {
 					ps.setBoolean(3, chckbxHalal.isSelected());
 					ps.setInt(4, selectedRow);
 					ps.executeUpdate();
+					System.out.println("Meal Successfully Updated!");
 				}
 				availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 				setColumnWidths();
@@ -421,6 +422,7 @@ public class DietMenuPanel extends JPanel {
 		ps.executeUpdate();
 		availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 		setColumnWidths();
+		JOptionPane.showMessageDialog(null, "Meal Removed!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -428,18 +430,29 @@ public class DietMenuPanel extends JPanel {
 	
 	private void addEntry() {
 		try {
-			PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatementWithKey
+			PreparedStatement ps1 = TableHelper.getSQLInstance().getPreparedStatement
+				("SELECT * FROM et_menu WHERE name LIKE ?");
+			ps1.setString(1, fieldMealName.getText());
+			ResultSet rs1 = ps1.executeQuery();
+			if(rs1.next()) {
+				JOptionPane.showMessageDialog(null, "Meal Exists!");
+				return;
+			}
+			PreparedStatement ps2 = TableHelper.getSQLInstance().getPreparedStatementWithKey
 				("INSERT INTO et_menu (category, name, halal, nutrition) VALUES (?, ?, ?, ?)");
-			ps.setString(1, getSelectedRadio());
-			ps.setString(2, fieldMealName.getText());
-			ps.setBoolean(3, chckbxHalal.isSelected());
-			ps.setObject(4, getNutritionFromFields());
-			ps.executeUpdate();
+			ps2.setString(1, getSelectedRadio());
+			ps2.setString(2, fieldMealName.getText());
+			ps2.setBoolean(3, chckbxHalal.isSelected());
+			ps2.setObject(4, getNutritionFromFields());
+			ps2.executeUpdate();
 			availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 			setColumnWidths();
+			JOptionPane.showMessageDialog(null, "Meal Added!");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
 		}
 	}
 	
