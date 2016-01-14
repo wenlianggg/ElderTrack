@@ -17,16 +17,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.swing.JTextField;
@@ -42,20 +46,223 @@ public class MgmtPanel extends JPanel {
 	JLabel lblEManagementLbl;
 	private JTable elderlyTable;
 	private JTable staffTable;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTextField textField_9;
-	private JTextField textField_10;
-	private JTextField textField_11;
+	private JTextField elderlyNameValue;
+	private JTextField elderlyDobValue;
+	private JTextField elderlyNricValue;
+	private JTextField elderlyGenderValue;
+	private JTextField staffIdValue;
+	private JTextField staffFirstNameValue;
+	private JTextField staffLastNameValue;
+	private JTextField elderlyRoomValue;
+	private JTextField elderlyAddressValue;
+	private JTextField staffDobValue;
 	MgmtPanel() {
 		
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
+		
+		JPanel staffManagementPanel = new JPanel();
+		staffManagementPanel.setBounds(479, 79, 448, 341);
+		add(staffManagementPanel);
+		staffManagementPanel.setVisible(false);
+		staffManagementPanel.setLayout(null);
+		
+		JLabel staffFirstName = new JLabel("FIRST NAME");
+		staffFirstName.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffFirstName.setBounds(19, 60, 123, 25);
+		staffManagementPanel.add(staffFirstName);
+		
+		JLabel staffLastName = new JLabel("LAST NAME");
+		staffLastName.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffLastName.setBounds(19, 90, 124, 25);
+		staffManagementPanel.add(staffLastName);
+		
+		JLabel staffId = new JLabel("STAFF ID");
+		staffId.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffId.setBounds(19, 30, 123, 25);
+		staffManagementPanel.add(staffId);
+		
+		JLabel staffDob = new JLabel("DOB");
+		staffDob.setBounds(19, 120, 109, 25);
+		staffManagementPanel.add(staffDob);
+		staffDob.setFont(new Font("Calibri", Font.PLAIN, 24));
+		
+		JLabel label_12 = new JLabel(":");
+		label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_12.setBounds(152, 30, 23, 25);
+		staffManagementPanel.add(label_12);
+		
+		JLabel label_13 = new JLabel(":");
+		label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_13.setBounds(152, 60, 23, 25);
+		staffManagementPanel.add(label_13);
+		
+		JLabel label_14 = new JLabel(":");
+		label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_14.setBounds(152, 90, 23, 25);
+		staffManagementPanel.add(label_14);
+		
+		staffIdValue = new JTextField();
+		staffIdValue.setColumns(10);
+		staffIdValue.setBounds(180, 30, 116, 22);
+		staffManagementPanel.add(staffIdValue);
+		
+		staffFirstNameValue = new JTextField();
+		staffFirstNameValue.setColumns(10);
+		staffFirstNameValue.setBounds(180, 60, 116, 22);
+		staffManagementPanel.add(staffFirstNameValue);
+		
+		JLabel label_22 = new JLabel(":");
+		label_22.setBounds(152, 120, 23, 25);
+		staffManagementPanel.add(label_22);
+		label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
+		
+		staffDobValue = new JTextField();
+		staffDobValue.setBounds(180, 120, 116, 22);
+		staffManagementPanel.add(staffDobValue);
+		staffDobValue.setColumns(10);
+		
+		staffLastNameValue = new JTextField();
+		staffLastNameValue.setColumns(10);
+		staffLastNameValue.setBounds(180, 90, 116, 22);
+		staffManagementPanel.add(staffLastNameValue);
+		
+		JLabel staffAge = new JLabel("AGE");
+		staffAge.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffAge.setBounds(19, 150, 109, 25);
+		staffManagementPanel.add(staffAge);
+		
+		JLabel label = new JLabel(":");
+		label.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label.setBounds(152, 150, 23, 25);
+		staffManagementPanel.add(label);
+		
+		JLabel staffAgeValue = new JLabel("");
+		staffAgeValue.setBounds(180, 150, 56, 16);
+		staffManagementPanel.add(staffAgeValue);
+		
+		JPanel elderlyManagementPanel = new JPanel();
+		elderlyManagementPanel.setBounds(479, 79, 448, 327);
+		add(elderlyManagementPanel);
+		elderlyManagementPanel.setLayout(null);
+		
+		JLabel elderlyName = new JLabel("NAME");
+		elderlyName.setBounds(19, 60, 109, 25);
+		elderlyManagementPanel.add(elderlyName);
+		elderlyName.setFont(new Font("Calibri", Font.PLAIN, 24));
+		
+		JLabel elderlyDob = new JLabel("DOB");
+		elderlyDob.setBounds(18, 90, 109, 25);
+		elderlyManagementPanel.add(elderlyDob);
+		elderlyDob.setFont(new Font("Calibri", Font.PLAIN, 24));
+		
+			JLabel elderlyId = new JLabel("ID");
+			elderlyId.setBounds(19, 30, 109, 25);
+			elderlyManagementPanel.add(elderlyId);
+			elderlyId.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel elderlyNric = new JLabel("NRIC");
+			elderlyNric.setBounds(18, 120, 109, 25);
+			elderlyManagementPanel.add(elderlyNric);
+			elderlyNric.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel elderlyGender = new JLabel("GENDER");
+			elderlyGender.setBounds(19, 150, 121, 25);
+			elderlyManagementPanel.add(elderlyGender);
+			elderlyGender.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel label_3 = new JLabel(":");
+			label_3.setBounds(152, 30, 23, 25);
+			elderlyManagementPanel.add(label_3);
+			label_3.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel label_4 = new JLabel(":");
+			label_4.setBounds(152, 60, 23, 25);
+			elderlyManagementPanel.add(label_4);
+			label_4.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel label_5 = new JLabel(":");
+			label_5.setBounds(152, 90, 23, 25);
+			elderlyManagementPanel.add(label_5);
+			label_5.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel label_6 = new JLabel(":");
+			label_6.setBounds(153, 120, 23, 25);
+			elderlyManagementPanel.add(label_6);
+			label_6.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel label_8 = new JLabel(":");
+			label_8.setBounds(153, 150, 23, 25);
+			elderlyManagementPanel.add(label_8);
+			label_8.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			elderlyNameValue = new JTextField();
+			elderlyNameValue.setBounds(180, 60, 116, 22);
+			elderlyManagementPanel.add(elderlyNameValue);
+			elderlyNameValue.setColumns(10);
+			
+			elderlyDobValue = new JTextField();
+			elderlyDobValue.setBounds(180, 90, 116, 22);
+			elderlyManagementPanel.add(elderlyDobValue);
+			elderlyDobValue.setColumns(10);
+			
+			elderlyNricValue = new JTextField();
+			elderlyNricValue.setBounds(180, 120, 116, 22);
+			elderlyManagementPanel.add(elderlyNricValue);
+			elderlyNricValue.setColumns(10);
+			
+			elderlyGenderValue = new JTextField();
+			elderlyGenderValue.setBounds(179, 150, 116, 22);
+			elderlyManagementPanel.add(elderlyGenderValue);
+			elderlyGenderValue.setColumns(10);
+			
+			JLabel elderlyAge = new JLabel("AGE");
+			elderlyAge.setFont(new Font("Calibri", Font.PLAIN, 24));
+			elderlyAge.setBounds(19, 180, 121, 25);
+			elderlyManagementPanel.add(elderlyAge);
+			
+			JLabel label_16 = new JLabel(":");
+			label_16.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_16.setBounds(152, 180, 23, 25);
+			elderlyManagementPanel.add(label_16);
+			
+			JLabel elderlyRoom = new JLabel("ROOM");
+			elderlyRoom.setFont(new Font("Calibri", Font.PLAIN, 24));
+			elderlyRoom.setBounds(19, 210, 121, 25);
+			elderlyManagementPanel.add(elderlyRoom);
+			
+			JLabel label_18 = new JLabel(":");
+			label_18.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_18.setBounds(152, 210, 23, 25);
+			elderlyManagementPanel.add(label_18);
+			
+			elderlyRoomValue = new JTextField();
+			elderlyRoomValue.setColumns(10);
+			elderlyRoomValue.setBounds(179, 210, 116, 22);
+			elderlyManagementPanel.add(elderlyRoomValue);
+			
+			JLabel elderlyAddress = new JLabel("ADDRESS");
+			elderlyAddress.setFont(new Font("Calibri", Font.PLAIN, 24));
+			elderlyAddress.setBounds(19, 240, 121, 25);
+			elderlyManagementPanel.add(elderlyAddress);
+			
+			JLabel label_20 = new JLabel(":");
+			label_20.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_20.setBounds(152, 240, 23, 25);
+			elderlyManagementPanel.add(label_20);
+			
+			elderlyAddressValue = new JTextField();
+			elderlyAddressValue.setColumns(10);
+			elderlyAddressValue.setBounds(179, 240, 116, 22);
+			elderlyManagementPanel.add(elderlyAddressValue);
+			
+			JLabel elderlyIdValue = new JLabel("");
+			elderlyIdValue.setBounds(180, 30, 56, 16);
+			elderlyManagementPanel.add(elderlyIdValue);
+			
+			JLabel elderlyAgeValue = new JLabel("");
+			elderlyAgeValue.setBounds(180, 180, 56, 16);
+			elderlyManagementPanel.add(elderlyAgeValue);
 		lblEManagementLbl = new JLabel("ElderTrack Management");
 		lblEManagementLbl.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lblEManagementLbl.setBounds(26, 5, 430, 61);
@@ -90,196 +297,6 @@ public class MgmtPanel extends JPanel {
 		}
 		
 		scrollPane2.setViewportView(staffTable);
-		
-		JPanel panel = new JPanel();
-		panel.setVisible(true);
-		panel.setBounds(479, 79, 448, 327);
-		add(panel);
-		panel.setLayout(null);
-		
-		JLabel label = new JLabel("NAME");
-		label.setBounds(19, 64, 109, 25);
-		panel.add(label);
-		label.setFont(new Font("Calibri", Font.PLAIN, 24));
-		
-		JLabel label_1 = new JLabel("DOB");
-		label_1.setBounds(18, 102, 109, 25);
-		panel.add(label_1);
-		label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-		
-			JLabel label1 = new JLabel("ID");
-			label1.setBounds(19, 27, 109, 25);
-			panel.add(label1);
-			label1.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_2 = new JLabel("NRIC");
-			label_2.setBounds(18, 141, 109, 25);
-			panel.add(label_2);
-			label_2.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_7 = new JLabel("GENDER");
-			label_7.setBounds(19, 179, 121, 25);
-			panel.add(label_7);
-			label_7.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_3 = new JLabel(":");
-			label_3.setBounds(152, 29, 23, 25);
-			panel.add(label_3);
-			label_3.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_4 = new JLabel(":");
-			label_4.setBounds(152, 66, 23, 25);
-			panel.add(label_4);
-			label_4.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_5 = new JLabel(":");
-			label_5.setBounds(152, 103, 23, 25);
-			panel.add(label_5);
-			label_5.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_6 = new JLabel(":");
-			label_6.setBounds(153, 141, 23, 25);
-			panel.add(label_6);
-			label_6.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_8 = new JLabel(":");
-			label_8.setBounds(153, 179, 23, 25);
-			panel.add(label_8);
-			label_8.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			textField_1 = new JTextField();
-			textField_1.setBounds(180, 67, 116, 22);
-			panel.add(textField_1);
-			textField_1.setColumns(10);
-			
-			textField_2 = new JTextField();
-			textField_2.setBounds(180, 105, 116, 22);
-			panel.add(textField_2);
-			textField_2.setColumns(10);
-			
-			textField_3 = new JTextField();
-			textField_3.setBounds(180, 143, 116, 22);
-			panel.add(textField_3);
-			textField_3.setColumns(10);
-			
-			textField_4 = new JTextField();
-			textField_4.setBounds(179, 181, 116, 22);
-			panel.add(textField_4);
-			textField_4.setColumns(10);
-			
-			JLabel label_15 = new JLabel("AGE");
-			label_15.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_15.setBounds(19, 212, 121, 25);
-			panel.add(label_15);
-			
-			JLabel label_16 = new JLabel(":");
-			label_16.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_16.setBounds(152, 212, 23, 25);
-			panel.add(label_16);
-			
-			JLabel label_17 = new JLabel("ROOM");
-			label_17.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_17.setBounds(19, 247, 121, 25);
-			panel.add(label_17);
-			
-			JLabel label_18 = new JLabel(":");
-			label_18.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_18.setBounds(152, 247, 23, 25);
-			panel.add(label_18);
-			
-			textField_9 = new JTextField();
-			textField_9.setColumns(10);
-			textField_9.setBounds(179, 249, 116, 22);
-			panel.add(textField_9);
-			
-			JLabel label_19 = new JLabel("ADDRESS");
-			label_19.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_19.setBounds(19, 282, 121, 25);
-			panel.add(label_19);
-			
-			JLabel label_20 = new JLabel(":");
-			label_20.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_20.setBounds(152, 282, 23, 25);
-			panel.add(label_20);
-			
-			textField_10 = new JTextField();
-			textField_10.setColumns(10);
-			textField_10.setBounds(179, 284, 116, 22);
-			panel.add(textField_10);
-			
-			JLabel label_23 = new JLabel("");
-			label_23.setBounds(180, 32, 56, 16);
-			panel.add(label_23);
-			
-			JLabel agelabel = new JLabel("");
-			agelabel.setBounds(180, 216, 56, 16);
-			panel.add(agelabel);
-			
-			JPanel panel_1 = new JPanel();
-			panel_1.setBounds(479, 79, 448, 341);
-			add(panel_1);
-			panel_1.setVisible(false);
-			panel_1.setLayout(null);
-			
-			JLabel label_9 = new JLabel("FIRST NAME");
-			label_9.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_9.setBounds(19, 64, 123, 25);
-			panel_1.add(label_9);
-			
-			JLabel label_10 = new JLabel("LAST NAME");
-			label_10.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_10.setBounds(18, 102, 124, 25);
-			panel_1.add(label_10);
-			
-			JLabel label_11 = new JLabel("STAFF ID");
-			label_11.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_11.setBounds(19, 27, 123, 25);
-			panel_1.add(label_11);
-			
-			JLabel label_21 = new JLabel("DOB");
-			label_21.setBounds(19, 140, 109, 25);
-			panel_1.add(label_21);
-			label_21.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_12 = new JLabel(":");
-			label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_12.setBounds(152, 27, 23, 25);
-			panel_1.add(label_12);
-			
-			JLabel label_13 = new JLabel(":");
-			label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_13.setBounds(152, 66, 23, 25);
-			panel_1.add(label_13);
-			
-			JLabel label_14 = new JLabel(":");
-			label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_14.setBounds(152, 103, 23, 25);
-			panel_1.add(label_14);
-			
-			textField_5 = new JTextField();
-			textField_5.setColumns(10);
-			textField_5.setBounds(180, 29, 116, 22);
-			panel_1.add(textField_5);
-			
-			textField_6 = new JTextField();
-			textField_6.setColumns(10);
-			textField_6.setBounds(180, 67, 116, 22);
-			panel_1.add(textField_6);
-			
-			JLabel label_22 = new JLabel(":");
-			label_22.setBounds(152, 140, 23, 25);
-			panel_1.add(label_22);
-			label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			textField_11 = new JTextField();
-			textField_11.setBounds(180, 141, 116, 22);
-			panel_1.add(textField_11);
-			textField_11.setColumns(10);
-			
-			textField_7 = new JTextField();
-			textField_7.setColumns(10);
-			textField_7.setBounds(180, 105, 116, 22);
-			panel_1.add(textField_7);
 			
 			JButton btnNewButton = new JButton("Back");
 			btnNewButton.setBounds(29, 569, 97, 25);
@@ -298,41 +315,41 @@ public class MgmtPanel extends JPanel {
 			
 			JPanel panel_2 = new JPanel();
 			panel_2.setVisible(true);
-			panel_2.setBounds(479, 447, 453, 25);
+			panel_2.setBounds(479, 485, 453, 25);
 			add(panel_2);
 			panel_2.setLayout(null);
 			
-			JButton button = new JButton("Save Changes");
-			button.setBounds(0, 0, 132, 25);
-			panel_2.add(button);
+			JButton elderlySave = new JButton("Save Changes");
+			elderlySave.setBounds(0, 0, 132, 25);
+			panel_2.add(elderlySave);
 			
-			JButton button_1 = new JButton("Discard Changes");
-			button_1.setBounds(165, 0, 132, 25);
-			panel_2.add(button_1);
+			JButton elderlyDiscardChanges = new JButton("Discard Changes");
+			elderlyDiscardChanges.setBounds(165, 0, 132, 25);
+			panel_2.add(elderlyDiscardChanges);
 			
-			JButton button_2 = new JButton("Remove Selected");
-			button_2.setBounds(321, 0, 132, 25);
-			panel_2.add(button_2);
+			JButton elderlyRemove = new JButton("Remove Selected");
+			elderlyRemove.setBounds(321, 0, 132, 25);
+			panel_2.add(elderlyRemove);
 			
 			JPanel panel_3 = new JPanel();
-			panel_3.setBounds(479, 447, 453, 25);
+			panel_3.setBounds(479, 485, 453, 25);
 			add(panel_3);
 			panel_3.setVisible(false);
 			panel_3.setLayout(null);
 			
-			JButton button_3 = new JButton("Save Changes");
-			button_3.setBounds(0, 0, 132, 25);
-			panel_3.add(button_3);
+			JButton staffSave = new JButton("Save Changes");
+			staffSave.setBounds(0, 0, 132, 25);
+			panel_3.add(staffSave);
 			
-			JButton button_4 = new JButton("Discard Changes");
-			button_4.setBounds(165, 0, 132, 25);
-			panel_3.add(button_4);
+			JButton staffDiscardChanges = new JButton("Discard Changes");
+			staffDiscardChanges.setBounds(165, 0, 132, 25);
+			panel_3.add(staffDiscardChanges);
 			
-			JButton button_5 = new JButton("Remove Selected");
-			button_5.setBounds(321, 0, 132, 25);
-			panel_3.add(button_5);
+			JButton staffRemove = new JButton("Remove Selected");
+			staffRemove.setBounds(321, 0, 132, 25);
+			panel_3.add(staffRemove);
 			
-			button_2.addMouseListener(new MouseAdapter() {
+			elderlyRemove.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					JOptionPane pane = new JOptionPane();
@@ -341,7 +358,7 @@ public class MgmtPanel extends JPanel {
 				}
 			});
 			
-			button_1.addMouseListener(new MouseAdapter() {
+			elderlyDiscardChanges.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					JOptionPane pane = new JOptionPane();
@@ -350,7 +367,7 @@ public class MgmtPanel extends JPanel {
 				}
 			});
 			
-			button.addMouseListener(new MouseAdapter() {
+			elderlySave.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					JOptionPane pane = new JOptionPane();
@@ -358,25 +375,27 @@ public class MgmtPanel extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
 						if (dialogResult == JOptionPane.YES_OPTION){
 							try{
-								String id = label1.getText();
-								String name = label.getText();
-								String dob = label_1.getText();
-								String nric = label_2.getText();
-								String gender = label_7.getText();
-								String room = label_17.getText();
-								String address = label_19.getText();
-								
-								ArrayList<String> info = new ArrayList<String>();
-								info.add(name);
-								info.add(dob);
-								info.add(gender);
-								info.add(room);
-								info.add(address);
-								
-								String sql = "UPDATE et_elderly set  name = ?, dob = ?, gender = ?, room = ?, address = ? WHERE id = " + id;
+								String id = elderlyIdValue.getText();
+								String name = elderlyNameValue.getText();
+								String birthString = elderlyDobValue.getText();
+								//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy, d, MMMM", Locale.ENGLISH);
+								//LocalDate localDOB = LocalDate.parse(birthString, formatter);
+								String nric = elderlyNricValue.getText();
+								String gender = elderlyGenderValue.getText();
+								String room = elderlyRoomValue.getText();
+								String address = elderlyAddressValue.getText();
+			
 								SQLObject so = new SQLObject();
-								System.out.println(so.executeUpdate(sql, info));
+								PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, nric=?, gender=?, room=?, address=? WHERE id=?");
+								ps.setString(1, name);
+								//ps.setDate(2, java.sql.Date.valueOf(localDOB));
+								ps.setString(2, nric);
+								ps.setString(3, gender);
+								ps.setString(4, room);
+								ps.setString(5, address);
+								ps.setInt(6, Integer.parseInt(id));
 								
+								ps.executeUpdate();
 							}catch(Exception e1){
 								JOptionPane.showMessageDialog(null,e1);	
 							}
@@ -387,14 +406,14 @@ public class MgmtPanel extends JPanel {
 			
 			tabbedPane.addChangeListener(new ChangeListener() {
 			    public void stateChanged(ChangeEvent e) {
-			    if (panel.isVisible()) {
-			    	panel_1.setVisible(true);
-			    	panel.setVisible(false);
+			    if (elderlyManagementPanel.isVisible()) {
+			    	staffManagementPanel.setVisible(true);
+			    	elderlyManagementPanel.setVisible(false);
 			    	panel_3.setVisible(true);
 			    	panel_2.setVisible(false);
 			    } else {
-			    	panel_1.setVisible(false);
-			    	panel.setVisible(true);
+			    	staffManagementPanel.setVisible(false);
+			    	elderlyManagementPanel.setVisible(true);
 			    	panel_3.setVisible(false);
 			    	panel_2.setVisible(true);
 			    }
@@ -413,26 +432,27 @@ public class MgmtPanel extends JPanel {
 						
 						while(rs.next()){
 							String add1 = rs.getString("id");
-							label_23.setText(add1);
+							elderlyIdValue.setText(add1);
 							
 							String add2 = rs.getString("name");
-							textField_1.setText(add2);
+							elderlyNameValue.setText(add2);
 							
 							String add3 = rs.getString("dob");
-							textField_2.setText(add3);
+							elderlyDobValue.setText(add3);
 							
 							String add4 = rs.getString("nric");
-							textField_3.setText(add4);
+							elderlyNricValue.setText(add4);
 							
 							String add5 = rs.getString("gender");
-							textField_4.setText(add5);
+							elderlyGenderValue.setText(add5);
 							
 							String add7 = rs.getString("room");
-							textField_9.setText(add7);
+							elderlyRoomValue.setText(add7);
 							
 							String add8 = rs.getString("address");
-							textField_10.setText(add8);
+							elderlyAddressValue.setText(add8);
 							
+							//Calculation of age from date of birth
 							Calendar birthdate = Calendar.getInstance();
 							birthdate.setTime(rs.getDate("dob"));
 							Calendar today = Calendar.getInstance();
@@ -443,9 +463,8 @@ public class MgmtPanel extends JPanel {
 								    && today.get(Calendar.DAY_OF_MONTH) < birthdate.get(Calendar.DAY_OF_MONTH)) {
 								  years--;  
 								}
-							agelabel.setText(Integer.toString(years));
+							elderlyAgeValue.setText(Integer.toString(years));
 						}
-						
 					}catch(Exception e1){
 						JOptionPane.showMessageDialog(null, e1);
 					}
@@ -463,16 +482,28 @@ public class MgmtPanel extends JPanel {
 						
 						while(rs1.next()){
 							String add1 = rs1.getString("staffid");
-							textField_5.setText(add1);
+							staffIdValue.setText(add1);
 							
 							String add2 = rs1.getString("firstname");
-							textField_6.setText(add2);
+							staffFirstNameValue.setText(add2);
 							
 							String add3 = rs1.getString("lastname");
-							textField_7.setText(add3);
+							staffLastNameValue.setText(add3);
 							
 							String add4 = rs1.getString("dob");
-							textField_11.setText(add4);
+							staffDobValue.setText(add4);
+							
+							Calendar birthdate = Calendar.getInstance();
+							birthdate.setTime(rs1.getDate("dob"));
+							Calendar today = Calendar.getInstance();
+							int years = today.get(Calendar.YEAR) - birthdate.get(Calendar.YEAR);  
+							if (today.get(Calendar.MONTH) < birthdate.get(Calendar.MONTH)) {
+								  years--;  
+								} else if (today.get(Calendar.MONTH) == birthdate.get(Calendar.MONTH)
+								    && today.get(Calendar.DAY_OF_MONTH) < birthdate.get(Calendar.DAY_OF_MONTH)) {
+								  years--;  
+								}
+							staffAgeValue.setText(Integer.toString(years));
 							
 						}
 						
