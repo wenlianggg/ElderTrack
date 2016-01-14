@@ -76,7 +76,7 @@ public class DietMainPanel extends JPanel {
 			    public void mouseClicked(MouseEvent evt) {
 			        int row = eldersTable.getSelectedRow();
 			        if (row >= 0) {
-			        	presentData((String)eldersTable.getValueAt(row, 0));
+			        	presentData(eldersTable.getValueAt(row, 0).toString());
 			        }
 			    }
 			});

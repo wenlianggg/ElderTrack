@@ -177,39 +177,39 @@ public class DietAddPanel extends JPanel {
 		lblStatisticsForToday.setForeground(new Color(0, 128, 128));
 		lblStatisticsForToday.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		
-		JLabel lblCalories = new JLabel("RDA Calories (kcal):  --- (x% of RDA)");
+		JLabel lblCalories = new JLabel("RDA Calories (kcal):  --- ");
 		lblCalories.setBounds(12, 80, 209, 14);
 		nutriInfoPanel.add(lblCalories);
 		
-		JLabel lblCarbohydrates = new JLabel("Carbohydrates (g): --- (x% of RDA)");
+		JLabel lblCarbohydrates = new JLabel("Carbohydrates (g): --- ");
 		lblCarbohydrates.setBounds(12, 100, 209, 14);
 		nutriInfoPanel.add(lblCarbohydrates);
 		
-		JLabel lblProtein = new JLabel("Protein(g) :  --- (x% of RDA)");
+		JLabel lblProtein = new JLabel("Protein(g) :  --- ");
 		lblProtein.setBounds(12, 120, 209, 14);
 		nutriInfoPanel.add(lblProtein);
 		
-		JLabel lblIron = new JLabel("Iron(mg):  --- (x% of RDA)");
+		JLabel lblIron = new JLabel("Iron(mg):  --- ");
 		lblIron.setBounds(13, 140, 208, 14);
 		nutriInfoPanel.add(lblIron);
 		
-		JLabel lblVitaminA = new JLabel("Vitamin A (mg):  --- (x% of RDA)");
+		JLabel lblVitaminA = new JLabel("Vitamin A (%):  --- ");
 		lblVitaminA.setBounds(12, 160, 209, 14);
 		nutriInfoPanel.add(lblVitaminA);
 		
-		JLabel lblVitaminC = new JLabel("Vitamin C (mg):  --- (x% of RDA)");
+		JLabel lblVitaminC = new JLabel("Vitamin C (%):  --- ");
 		lblVitaminC.setBounds(12, 180, 209, 14);
 		nutriInfoPanel.add(lblVitaminC);
 		
-		JLabel lblVitaminE = new JLabel("Vitamin E (mg):  --- (x% of RDA)");
+		JLabel lblVitaminE = new JLabel("Vitamin E (%):  --- ");
 		lblVitaminE.setBounds(12, 200, 209, 14);
 		nutriInfoPanel.add(lblVitaminE);
 		
-		JLabel lblVitaminD = new JLabel("Vitamin D (mg):  --- (x% of RDA)");
+		JLabel lblVitaminD = new JLabel("Vitamin D (%):  --- ");
 		lblVitaminD.setBounds(12, 220, 209, 14);
 		nutriInfoPanel.add(lblVitaminD);
 		
-		JLabel lblFatg = new JLabel("Fat (g): --- (x% of RDA)");
+		JLabel lblFatg = new JLabel("Fat (g): --- ");
 		lblFatg.setBounds(11, 239, 209, 14);
 		nutriInfoPanel.add(lblFatg);
 		

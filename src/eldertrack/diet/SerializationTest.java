@@ -18,7 +18,7 @@ public class SerializationTest {
 	  public static void serialize() throws SQLException {
 		  Meals m = new Meals();
 		  m.addTestMeal();
-		  SerializerSQL.storeMeals(1, m, so);
+		  SerializerSQL.storeMeals(2, m, so);
 	  }
 	
 	public static void deserialize() throws SQLException, ClassNotFoundException, IOException {
