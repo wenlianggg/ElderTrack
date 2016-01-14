@@ -53,7 +53,7 @@ public class DosageSQL {
 		//	serializeDos(k);
 		//}
 		for(int k=1;k<9;k++){
-			System.out.println(k);
+			
 			deserializeDos(k);
 		}
 
