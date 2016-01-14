@@ -19,7 +19,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -34,7 +42,6 @@ public class MgmtPanel extends JPanel {
 	JLabel lblEManagementLbl;
 	private JTable elderlyTable;
 	private JTable staffTable;
-	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
@@ -42,7 +49,6 @@ public class MgmtPanel extends JPanel {
 	private JTextField textField_5;
 	private JTextField textField_6;
 	private JTextField textField_7;
-	private JTextField textField_8;
 	private JTextField textField_9;
 	private JTextField textField_10;
 	private JTextField textField_11;
@@ -87,7 +93,7 @@ public class MgmtPanel extends JPanel {
 		
 		JPanel panel = new JPanel();
 		panel.setVisible(true);
-		panel.setBounds(479, 79, 448, 396);
+		panel.setBounds(479, 79, 448, 327);
 		add(panel);
 		panel.setLayout(null);
 		
@@ -141,11 +147,6 @@ public class MgmtPanel extends JPanel {
 			panel.add(label_8);
 			label_8.setFont(new Font("Calibri", Font.PLAIN, 24));
 			
-			textField = new JTextField();
-			textField.setBounds(179, 29, 116, 22);
-			panel.add(textField);
-			textField.setColumns(10);
-			
 			textField_1 = new JTextField();
 			textField_1.setBounds(180, 67, 116, 22);
 			panel.add(textField_1);
@@ -175,11 +176,6 @@ public class MgmtPanel extends JPanel {
 			label_16.setFont(new Font("Calibri", Font.PLAIN, 24));
 			label_16.setBounds(152, 212, 23, 25);
 			panel.add(label_16);
-			
-			textField_8 = new JTextField();
-			textField_8.setColumns(10);
-			textField_8.setBounds(179, 214, 116, 22);
-			panel.add(textField_8);
 			
 			JLabel label_17 = new JLabel("ROOM");
 			label_17.setFont(new Font("Calibri", Font.PLAIN, 24));
@@ -211,8 +207,16 @@ public class MgmtPanel extends JPanel {
 			textField_10.setBounds(179, 284, 116, 22);
 			panel.add(textField_10);
 			
+			JLabel label_23 = new JLabel("");
+			label_23.setBounds(180, 32, 56, 16);
+			panel.add(label_23);
+			
+			JLabel agelabel = new JLabel("");
+			agelabel.setBounds(180, 216, 56, 16);
+			panel.add(agelabel);
+			
 			JPanel panel_1 = new JPanel();
-			panel_1.setBounds(479, 79, 448, 396);
+			panel_1.setBounds(479, 79, 448, 341);
 			add(panel_1);
 			panel_1.setVisible(false);
 			panel_1.setLayout(null);
@@ -294,7 +298,7 @@ public class MgmtPanel extends JPanel {
 			
 			JPanel panel_2 = new JPanel();
 			panel_2.setVisible(true);
-			panel_2.setBounds(474, 499, 453, 25);
+			panel_2.setBounds(479, 447, 453, 25);
 			add(panel_2);
 			panel_2.setLayout(null);
 			
@@ -311,7 +315,7 @@ public class MgmtPanel extends JPanel {
 			panel_2.add(button_2);
 			
 			JPanel panel_3 = new JPanel();
-			panel_3.setBounds(474, 499, 453, 25);
+			panel_3.setBounds(479, 447, 453, 25);
 			add(panel_3);
 			panel_3.setVisible(false);
 			panel_3.setLayout(null);
@@ -380,9 +384,7 @@ public class MgmtPanel extends JPanel {
 							
 				}
 			});
-
-
-			//Event Listeners
+			
 			tabbedPane.addChangeListener(new ChangeListener() {
 			    public void stateChanged(ChangeEvent e) {
 			    if (panel.isVisible()) {
@@ -406,11 +408,12 @@ public class MgmtPanel extends JPanel {
 						int row = elderlyTable.getSelectedRow();
 						String table_clicked = (elderlyTable.getModel().getValueAt(row, 0).toString());
 						String sql = "SELECT * FROM et_elderly WHERE id=?";
+						String age = "SELECT dob FROM et_elderly WHERE id=?";
 						ResultSet rs = wanker.getResultSet(sql, table_clicked);
 						
 						while(rs.next()){
 							String add1 = rs.getString("id");
-							textField.setText(add1);
+							label_23.setText(add1);
 							
 							String add2 = rs.getString("name");
 							textField_1.setText(add2);
@@ -430,6 +433,17 @@ public class MgmtPanel extends JPanel {
 							String add8 = rs.getString("address");
 							textField_10.setText(add8);
 							
+							Calendar birthdate = Calendar.getInstance();
+							birthdate.setTime(rs.getDate("dob"));
+							Calendar today = Calendar.getInstance();
+							int years = today.get(Calendar.YEAR) - birthdate.get(Calendar.YEAR);  
+							if (today.get(Calendar.MONTH) < birthdate.get(Calendar.MONTH)) {
+								  years--;  
+								} else if (today.get(Calendar.MONTH) == birthdate.get(Calendar.MONTH)
+								    && today.get(Calendar.DAY_OF_MONTH) < birthdate.get(Calendar.DAY_OF_MONTH)) {
+								  years--;  
+								}
+							agelabel.setText(Integer.toString(years));
 						}
 						
 					}catch(Exception e1){

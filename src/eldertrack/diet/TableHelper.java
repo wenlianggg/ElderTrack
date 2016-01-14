@@ -14,20 +14,28 @@ import javax.swing.table.DefaultTableModel;
 import eldertrack.db.SQLObject;
 
 public class TableHelper {
+	static SQLObject so = new SQLObject();
 	public static DefaultTableModel getElderlyFromQuery(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
-		SQLObject so = new SQLObject();
-		return buildTableModel(so.getResultSet("SELECT id, name, room FROM et_elderly WHERE name LIKE ?", search));
+		String[] columns = {"ID", "Elderly Name", "Room Number"};
+		ResultSet rs = so.getResultSet("SELECT id, name, room FROM et_elderly WHERE name LIKE ?", search);
+		return getModel(rs, columns);
 	}
 	
-	// Method from http://stackoverflow.com/questions/10620448/most-simple-code-to-populate-jtable-from-resultset
-	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
+	public static DefaultTableModel getMeals(String search) throws SQLException {
+		search = (search.equalsIgnoreCase("")) ? "%" : search;
+		String[] columns = {"ID", "Category", "Name", "Halal?"};
+		ResultSet rs = so.getResultSet("SELECT itemid, category, name, halal FROM et_menu WHERE name LIKE ?", search);
+		return getModel(rs, columns);
+	}
+	
+	// Generate Default Table Model for Search String
+	public static DefaultTableModel getModel(ResultSet rs, String[] colnames) throws SQLException {
 	    ResultSetMetaData metaData = rs.getMetaData();
 	    Vector<String> columnNames = new Vector<String>();
 	    int columnCount = metaData.getColumnCount();
-	    columnNames.add("ID");
-	    columnNames.add("Elderly Name");
-	    columnNames.add("Room Number");
+	    for(int i = 0; i < colnames.length; i++)
+	    	columnNames.add(colnames[i]);
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	    while (rs.next()) {
 	        Vector<Object> vector = new Vector<Object>();
@@ -37,13 +45,17 @@ public class TableHelper {
 	        data.add(vector);
 	    }
 	    DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
-			private static final long serialVersionUID = 4234183862785566645L;
+			private static final long serialVersionUID = 123L;
 			@Override
 	        public boolean isCellEditable(int row, int column) {
 	           return false;
 	        }
 	    };
 	    return dtm;
+	}
+	
+	public static SQLObject getSQLInstance() {
+		return so;
 	}
 	
 	// Debug-able main method
