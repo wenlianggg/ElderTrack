@@ -261,22 +261,18 @@ public class DietMenuPanel extends JPanel {
 		scrollPane.setBounds(10, 156, 364, 503);
 		add(scrollPane);
 		
-		try {
-			availMealsTable = new JTable(TableHelper.getMeals(""));
-			setColumnWidths();
-			availMealsTable.addMouseListener(new MouseAdapter() {
-			    @Override
-			    public void mouseClicked(MouseEvent evt) {
-			        int row = availMealsTable.getSelectedRow();
-			        if (row >= 0) {
-			        	selectedRow = (Integer) availMealsTable.getValueAt(row, 0);
-			        	presentData(selectedRow.toString());
-			        }
-			    }
-			});
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		availMealsTable = new JTable(TableHelper.getMeals(""));
+		setColumnWidths();
+		availMealsTable.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		        int row = availMealsTable.getSelectedRow();
+		        if (row >= 0) {
+		        	selectedRow = (Integer) availMealsTable.getValueAt(row, 0);
+		        	presentData(selectedRow.toString());
+		        }
+		    }
+		});
 		availMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 
@@ -297,12 +293,8 @@ public class DietMenuPanel extends JPanel {
 		add(btnMenuSearch);
 		btnMenuSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
-					setColumnWidths();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				};
+				availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
+				setColumnWidths();
 			}
 		});
 		

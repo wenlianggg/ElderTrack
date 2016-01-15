@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -38,45 +37,7 @@ public class DietAddPanel extends JPanel {
 		tableScrollPane.setBounds(10, 220, 283, 439);
 		add(tableScrollPane);
 		
-		try {
-			DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
-			mealSearchTable = new JTable(allEldersData);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		mealSearchTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-			},
-			new String[] {
-				"ID", "Menu Item"
-			}
-		));
+		mealSearchTable = new JTable(TableHelper.getMeals(""));
 		mealSearchTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 		mealSearchTable.getColumnModel().getColumn(1).setPreferredWidth(165);
 		tableScrollPane.setViewportView(mealSearchTable);
@@ -102,11 +63,7 @@ public class DietAddPanel extends JPanel {
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					mealSearchTable.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				};
+				mealSearchTable.setModel(TableHelper.getMeals("%" + searchField.getText() + "%"));
 			}
 		});
 		btnSearch.setBounds(228, 190, 65, 23);

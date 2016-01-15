@@ -2,7 +2,6 @@ package eldertrack.ui;
 
 import java.awt.Font;
 import java.awt.SystemColor;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import javax.swing.JLabel;
@@ -69,22 +68,17 @@ public class DietMainPanel extends JPanel {
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 130, 283, 529);
 		add(tableScrollPane);
-		
-		try {
-			DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
-			eldersTable = new JTable(allEldersData);
-			eldersTable.addMouseListener(new MouseAdapter() {
-			    @Override
-			    public void mouseClicked(MouseEvent evt) {
-			        int row = eldersTable.getSelectedRow();
-			        if (row >= 0) {
-			        	presentData(eldersTable.getValueAt(row, 0).toString());
-			        }
-			    }
-			});
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
+		eldersTable = new JTable(allEldersData);
+		eldersTable.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		        int row = eldersTable.getSelectedRow();
+		        if (row >= 0) {
+		        	presentData(eldersTable.getValueAt(row, 0).toString());
+		        }
+		    }
+		});
 		eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 		tableScrollPane.setViewportView(eldersTable);
 		
@@ -108,12 +102,8 @@ public class DietMainPanel extends JPanel {
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					eldersTable.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
-					eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				};
+				eldersTable.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
+				eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 			}
 		});
 		btnSearch.setBounds(228, 99, 65, 23);

@@ -20,7 +20,7 @@ public class TableHelper {
 	 * @param search - Search Query
 	 * @return DefaultTableModel - Search Results in a DefaultTableModel
 	 */
-	public static DefaultTableModel getElderlyBasic(String search) throws SQLException {
+	public static DefaultTableModel getElderlyBasic(String search) {
 		ResultSet rs = null;
 		boolean editable = false;
 		String[] columns = {"ID", "Elderly Name", "Room Number"};
@@ -38,7 +38,7 @@ public class TableHelper {
 	 * @param search - Search Query
 	 * @return DefaultTableModel - Search Results in a DefaultTableModel
 	 */
-	public static DefaultTableModel getElderlyDetailed(String search) throws SQLException {
+	public static DefaultTableModel getElderlyDetailed(String search) {
 		ResultSet rs = null;
 		boolean editable = false;
 		String[] columns = {"ID", "NAME", "DOB", "NRIC", "G", "R", "B", "ADDRESS"};
@@ -56,7 +56,7 @@ public class TableHelper {
 	 * @param search - Search Query
 	 * @return DefaultTableModel - Search Results in a DefaultTableModel
 	 */
-	public static DefaultTableModel getStaff(String search) throws SQLException {
+	public static DefaultTableModel getStaff(String search) {
 		ResultSet rs = null;
 		boolean editable = false;
 		String[] columns = {"Staff ID", "First Name", "Last Name", "Date of Birth", "NRIC"};
@@ -74,7 +74,7 @@ public class TableHelper {
 	 * @param search - Search Query
 	 * @return DefaultTableModel - Search Results in a DefaultTableModel
 	 */
-	public static DefaultTableModel getMeals(String search) throws SQLException {
+	public static DefaultTableModel getMeals(String search) {
 		ResultSet rs = null;
 		boolean editable = false;
 		String[] columns = {"ID", "Category", "Name", "Halal?"};
