@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 public class StaffTableHelper {
 	public static DefaultTableModel getStaffFromQuery(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
-		return buildTableModel(ElderlyTableHelper.so.getResultSet("SELECT staffid, firstname, lastname, dob FROM et_staff WHERE firstname LIKE ?", search));
+		return buildTableModel(ElderlyTableHelper.so.getResultSet("SELECT staffid, firstname, lastname, dob, nric FROM et_staff WHERE firstname LIKE ?", search));
 	}
 	
 	// Method from http://stackoverflow.com/questions/10620448/most-simple-code-to-populate-jtable-from-resultset
@@ -27,6 +27,7 @@ public class StaffTableHelper {
 	    columnNames.add("First Name");
 	    columnNames.add("Last Name");
 	    columnNames.add("Date of Birth");
+	    columnNames.add("Nric");
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	    while (rs.next()) {
 	        Vector<Object> vector = new Vector<Object>();

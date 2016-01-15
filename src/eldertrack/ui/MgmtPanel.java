@@ -499,19 +499,32 @@ public class MgmtPanel extends JPanel {
 								String address = elderlyAddressValue.getText();
 								String bed = elderlyBedValue.getText();
 								
-								PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, bed=?, address=? WHERE id=?");
-							
+								PreparedStatement ps1 = so.getPreparedStatement("SELECT bed FROM et_elderly WHERE room=? AND id NOT IN (?)");
+								ps1.setString(1, room);
+								ps1.setString(2, id);
+								ResultSet check = ps1.executeQuery();
+								
+								//Check for duplicate beds and exceeding bed limit
+								boolean dupe = checkDuplicateBeds(nric, Integer.parseInt(bed), check);
+								
+								if(dupe == true){
+									JOptionPane.showMessageDialog(null, "There are duplicate bed numbers! Please check your entries!");
+								}else if(Integer.parseInt(bed) > 10){
+									JOptionPane.showMessageDialog(null, "There cannot be more than 10 beds in a room!");
+								}
+								else{
+									PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, bed=?, address=? WHERE id=?");
 									ps.setString(1, name);
 									ps.setDate(2, java.sql.Date.valueOf(localDOB));
 									ps.setString(3, nric);
 									ps.setString(4, gender);
 									ps.setString(5, room);
-									ps.setString(6, bed);
+									ps.setInt(6, Integer.parseInt(bed));
 									ps.setString(7, address);
 									ps.setInt(8, Integer.parseInt(id));
 									ps.executeUpdate();
 									JOptionPane.showMessageDialog(null, "Update successfully completed!");	
-											
+								}	
 																	
 								try{
 									elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
@@ -653,7 +666,6 @@ public class MgmtPanel extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to add?");
 					if (dialogResult == JOptionPane.YES_OPTION){
 						try{
-						PreparedStatement ps = so.getPreparedStatement("INSERT INTO et_elderly (name, dob, nric, gender, room, address, bed) VALUES (?, ?, ?, ?, ?, ?, ?)");
 						String name = elderlyNameValue.getText();
 						String birthString = elderlyDobValue.getText();
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
@@ -665,6 +677,18 @@ public class MgmtPanel extends JPanel {
 						String bedString = elderlyBedValue.getText();
 						int bed = Integer.parseInt(bedString);
 						
+						PreparedStatement ps1 = so.getPreparedStatement("SELECT bed FROM et_elderly WHERE room=?");
+						ps1.setString(1, room);
+						ResultSet check = ps1.executeQuery();
+						
+						//Check for duplicate beds and exceeding bed limit
+						boolean dupe = checkDuplicateBeds(nric, bed, check);
+						if(dupe == true){
+							JOptionPane.showMessageDialog(null,"There are duplicate beds! Please check your entries!");
+						}else if(bed > 10){
+							JOptionPane.showMessageDialog(null,"There cannot be more than 10 beds!");
+						}else{
+						PreparedStatement ps = so.getPreparedStatement("INSERT INTO et_elderly (name, dob, nric, gender, room, address, bed) VALUES (?, ?, ?, ?, ?, ?, ?)");
 						ps.setString(1, name);
 						ps.setDate(2, java.sql.Date.valueOf(dob));
 						ps.setString(3,nric);
@@ -675,7 +699,7 @@ public class MgmtPanel extends JPanel {
 						ps.executeUpdate();
 						
 						JOptionPane.showMessageDialog(null, "Person has successfully been added to database!");
-						
+						}
 						try{
 							elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
 							setColumnWidths();
@@ -724,7 +748,32 @@ public class MgmtPanel extends JPanel {
 		elderlyTable.getColumnModel().getColumn(1).setMaxWidth(145);
 		elderlyTable.getColumnModel().getColumn(2).setPreferredWidth(115);
 		elderlyTable.getColumnModel().getColumn(2).setMaxWidth(125);
-		elderlyTable.getColumnModel().getColumn(3).setPreferredWidth(55);
-		elderlyTable.getColumnModel().getColumn(3).setMaxWidth(70);
+		elderlyTable.getColumnModel().getColumn(3).setPreferredWidth(115);
+		elderlyTable.getColumnModel().getColumn(3).setMaxWidth(125);
+		elderlyTable.getColumnModel().getColumn(4).setPreferredWidth(15);
+		elderlyTable.getColumnModel().getColumn(4).setMaxWidth(25);
+		elderlyTable.getColumnModel().getColumn(5).setPreferredWidth(30);
+		elderlyTable.getColumnModel().getColumn(5).setMaxWidth(35);
+		elderlyTable.getColumnModel().getColumn(6).setPreferredWidth(25);
+		elderlyTable.getColumnModel().getColumn(6).setMaxWidth(35);
+	}
+	
+	private boolean checkDuplicateBeds(String nric, int bed, ResultSet rs){
+		boolean result = false;
+		ResultSet check = rs;
+		
+		
+		try {
+			while(check.next()){
+				if(check.getInt("bed") == bed){
+					result = true;
+					break;
+				}else
+					result = false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
