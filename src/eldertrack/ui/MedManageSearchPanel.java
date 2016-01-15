@@ -1,35 +1,29 @@
 package eldertrack.ui;
 
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+public class MedManageSearchPanel extends JPanel {
 
-public class MedCheckSearchPanel extends JPanel {
-
-
-	private static final long serialVersionUID = -1155434751690765910L;
+	private static final long serialVersionUID = 4090792694881415463L;
 	private JComboBox<String> roomComboBox;
 	
-	public static String selected;
-	public MedCheckSearchPanel() {
+	
+	public MedManageSearchPanel() {
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
-		
-		JLabel lblCheckUpSystem = new JLabel("Check Up System");
-		lblCheckUpSystem.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblCheckUpSystem.setBounds(25, 25, 232, 41);
-		lblCheckUpSystem.setForeground(UIManager.getColor("EditorPane.selectionBackground"));
-		add(lblCheckUpSystem);
-		
+
+		JLabel lblManage = new JLabel("Dosage Management");
+		lblManage.setForeground(UIManager.getColor("TextField.selectionBackground"));
+		lblManage.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		lblManage.setBounds(25, 25, 300, 41);
+		add(lblManage);
 		
 		JLabel lblRoomNumber = new JLabel("Room Number: ");
 		lblRoomNumber.setBounds(90, 117, 151, 41);
@@ -73,26 +67,6 @@ public class MedCheckSearchPanel extends JPanel {
 		txtpnRoomNumber.setText("Room Number: ~\r\nTotal Number of Elderly: ~\r\nTotal Number of Male: ~\r\nTotal Number of Female: ~\r\nRecommandard Helper: ~\r\nAlert:\r\nPatient: ~, cough last time\r\n");
 		txtpnRoomNumber.setBounds(551, 155, 339, 226);
 		add(txtpnRoomNumber);
-		
-		JButton btnGetCheck = new JButton("Start Check-Up");
-		btnGetCheck.setBounds(90, 256, 279, 31);
-		btnGetCheck.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		add(btnGetCheck);
-		btnGetCheck.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setCheckSelect(roomComboBox.getSelectedItem().toString());
-				JPanel gottenCheckup=new MedCheckPanel();
-				MedPanel.MedCardPanel.add(gottenCheckup,MedPanel.MCHECKPANEL);
-				
-				CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
-			    mainCards.show(MedPanel.MedCardPanel, MedPanel.MCHECKPANEL);
-			}
-		});
 	}
-	public void setCheckSelect(String select){
-		this.selected=select;
-	}
-	public static  String getCheckSelect(){
-		return selected;
-	}
+
 }

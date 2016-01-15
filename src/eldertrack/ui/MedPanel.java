@@ -3,7 +3,6 @@ package eldertrack.ui;
 
 import javax.swing.JPanel;
 import java.awt.CardLayout;
-import java.sql.SQLException;
 
 
 
@@ -15,23 +14,24 @@ public class MedPanel extends JPanel {
 	static final String MDOSPANEL="Medical Dosage Panel";
 	static final String MCHECKSEARCHPANEL="Medical Check Up Search Panel";
 	static final String MCHECKPANEL="Medical Check Up Panel";
+	static final String MMANAGESEARCHPANEL="Medical Management Search Panel";
+	
+	
 	static JPanel MedCardPanel;
 	CardLayout mainCards;
-	
+
 	MedPanel(){
 		JPanel MedMainPanel = new MedMainPanel();
-		JPanel MedDosageSearchPanel = new MedDosageSearchPanel();
-		JPanel MedDosagePanel = new MedDosagePanel();
+		JPanel MedDosageSearchPanel = new MedDosageSearchPanel();	
 		JPanel MedCheckSearchPanel = new MedCheckSearchPanel();
-		JPanel MedCheckPanel=new MedCheckPanel();
+		JPanel MedManageSearchPanel=new MedManageSearchPanel();
 		
 		
 		MedCardPanel = new JPanel(new CardLayout());
 		MedCardPanel.add(MedMainPanel, MMAINPANEL);
 		MedCardPanel.add(MedDosageSearchPanel, MDOSSEARCHPANEL);
-		MedCardPanel.add(MedDosagePanel, MDOSPANEL);
 		MedCardPanel.add(MedCheckSearchPanel,MCHECKSEARCHPANEL);
-		MedCardPanel.add(MedCheckPanel,MCHECKPANEL);
+		MedCardPanel.add(MedManageSearchPanel,MMANAGESEARCHPANEL);
 		
 		((CardLayout)MedCardPanel.getLayout()).show(MedCardPanel, "Main Medical Panel");
 		

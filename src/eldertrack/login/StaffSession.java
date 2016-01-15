@@ -44,13 +44,13 @@ public class StaffSession{
 				this.staffid = rs.getInt("staffid");
 				switch(rs.getInt("accesslevel")) {
 					case 1:
-						this.accesslevel = AccessLevel.JRSTAFF;
-						break;
-					case 2:
 						this.accesslevel = AccessLevel.STAFF;
 						break;
-					case 3:
+					case 2:
 						this.accesslevel = AccessLevel.SRSTAFF;
+						break;
+					case 3:
+						this.accesslevel = AccessLevel.ADMIN;
 						break;
 					case 4:
 						this.accesslevel = AccessLevel.MANAGER;
