@@ -418,15 +418,16 @@ public class MgmtPanel extends JPanel {
 								String address = elderlyAddressValue.getText();
 								String bed = elderlyBedValue.getText();
 								
-								PreparedStatement ps1 = so.getPreparedStatement("SELECT bed FROM et_elderly WHERE room=? AND id NOT IN (?)");
+								PreparedStatement ps1 = so.getPreparedStatement("SELECT bed, nric FROM et_elderly WHERE room=? AND id NOT IN (?)");
 								ps1.setString(1, room);
 								ps1.setString(2, id);
 								ResultSet check = ps1.executeQuery();
 								
 								//Check for duplicate beds and exceeding bed limit
-								boolean dupe = checkDuplicateBeds(nric, Integer.parseInt(bed), check);
+								boolean dupeBed = checkDuplicateBeds(Integer.parseInt(bed), check);
+								boolean dupeNric = checkDuplicateNrics(nric, check);
 								
-								if(dupe == true){
+								if(dupeBed == true){
 									JOptionPane.showMessageDialog(null, "There are duplicate bed numbers! Please check your entries!");
 								}else if(Integer.parseInt(bed) > 10){
 									JOptionPane.showMessageDialog(null, "There cannot be more than 10 beds in a room!");
@@ -525,6 +526,9 @@ public class MgmtPanel extends JPanel {
 			    	//Search Buttons
 			    	staffSearchBtn.setVisible(true);
 			    	elderlySearchBtn.setVisible(false);
+			    	//Search Fields
+			    	staffSearchField.setVisible(true);
+			    	elderlySearchField.setVisible(false);
 			    	//Remove Buttons
 			    	staffRemove.setVisible(true);
 			    	elderlyRemove.setVisible(false);
@@ -541,6 +545,9 @@ public class MgmtPanel extends JPanel {
 			    	//Search Buttons
 			    	staffSearchBtn.setVisible(false);
 			    	elderlySearchBtn.setVisible(true);
+			    	//Search Fields
+			    	staffSearchField.setVisible(false);
+			    	elderlySearchField.setVisible(true);
 			    	//Remove Buttons
 			    	staffRemove.setVisible(false);
 			    	elderlyRemove.setVisible(true);
@@ -668,7 +675,7 @@ public class MgmtPanel extends JPanel {
 						ResultSet check = ps1.executeQuery();
 						
 						//Check for duplicate beds and exceeding bed limit
-						boolean dupe = checkDuplicateBeds(nric, bed, check);
+						boolean dupe = checkDuplicateBeds(bed, check);
 						if(dupe == true){
 							JOptionPane.showMessageDialog(null,"There are duplicate beds! Please check your entries!");
 						}else if(bed > 10){
@@ -744,7 +751,7 @@ public class MgmtPanel extends JPanel {
 		elderlyTable.getColumnModel().getColumn(6).setMaxWidth(35);
 	}
 	
-	private boolean checkDuplicateBeds(String nric, int bed, ResultSet rs){
+	private boolean checkDuplicateBeds(int bed, ResultSet rs){
 		boolean result = false;
 		ResultSet check = rs;
 		
@@ -762,4 +769,24 @@ public class MgmtPanel extends JPanel {
 		}
 		return result;
 	}
-}
+	
+	private boolean checkDuplicateNrics(String nric, ResultSet rs){
+		boolean result = false;
+		ResultSet check = rs;
+		
+		try{
+			while(check.next()){
+				if(check.getString("nric") == nric){
+					result = true;
+					break;
+				}else
+					result = false;
+				}
+			}catch (SQLException e){
+				e.printStackTrace();
+			}
+		
+		return result;
+		
+		}
+	}
