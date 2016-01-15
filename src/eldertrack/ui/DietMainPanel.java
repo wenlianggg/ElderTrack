@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import eldertrack.diet.*;
+import eldertrack.misc.TableHelper;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -69,7 +71,7 @@ public class DietMainPanel extends JPanel {
 		add(tableScrollPane);
 		
 		try {
-			DefaultTableModel allEldersData = TableHelper.getElderlyFromQuery("");
+			DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
 			eldersTable = new JTable(allEldersData);
 			eldersTable.addMouseListener(new MouseAdapter() {
 			    @Override
@@ -107,7 +109,7 @@ public class DietMainPanel extends JPanel {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					eldersTable.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
+					eldersTable.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
 					eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 				} catch (SQLException e1) {
 					e1.printStackTrace();

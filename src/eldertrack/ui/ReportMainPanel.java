@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import eldertrack.diet.*;
+import eldertrack.misc.TableHelper;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
@@ -42,7 +44,7 @@ public class ReportMainPanel extends JPanel {
 		add(tableScrollPane);
 		
 		try {
-			DefaultTableModel allEldersData = TableHelper.getElderlyFromQuery("");
+			DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
 			table = new JTable(allEldersData);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,7 +73,7 @@ public class ReportMainPanel extends JPanel {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					table.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
+					table.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				};

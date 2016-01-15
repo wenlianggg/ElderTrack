@@ -28,7 +28,8 @@ import javax.swing.border.LineBorder;
 import eldertrack.db.SQLObject;
 import eldertrack.diet.Nutrition;
 import eldertrack.diet.SerializerSQL;
-import eldertrack.diet.TableHelper;
+import eldertrack.misc.TableHelper;
+
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.AbstractButton;

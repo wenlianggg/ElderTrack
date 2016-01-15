@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import eldertrack.diet.TableHelper;
+import eldertrack.misc.TableHelper;
 
 public class DietAddPanel extends JPanel {
 	private static final long serialVersionUID = 4318548492960279050L;
@@ -39,7 +39,7 @@ public class DietAddPanel extends JPanel {
 		add(tableScrollPane);
 		
 		try {
-			DefaultTableModel allEldersData = TableHelper.getElderlyFromQuery("");
+			DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
 			mealSearchTable = new JTable(allEldersData);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -103,7 +103,7 @@ public class DietAddPanel extends JPanel {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					mealSearchTable.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
+					mealSearchTable.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				};
