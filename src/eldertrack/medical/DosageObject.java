@@ -1,6 +1,8 @@
 package eldertrack.medical;
 
-public class DosageObject implements java.io.Serializable{
+import java.io.Serializable;
+
+public class DosageObject implements Serializable{
 
 private static final long serialVersionUID = 5857426734879201401L;
 	

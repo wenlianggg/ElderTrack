@@ -11,31 +11,27 @@ import java.util.Calendar;
 import eldertrack.db.SQLObject;
 
 public class ElderData{
+	private int elderBed;
 	private String elderName;
-	private String elderID;
+	private int elderID;
 	private int elderAge;
 	private String elderGender;
 	
-	public static String roomNum;
 
 	public ElderData(){
 
 	}
 	
-	public ElderData(String roomNum){
-		this.roomNum=roomNum;
-		
+	public int getElderBed() {
+		return elderBed;
 	}
 	
-	public static String getRoomNum(){
-		return roomNum;
+	public void setElderBed(int elderBed) {
+		this.elderBed = elderBed;
 	}
-	
-	public  void setRoomNum(String selected){
-		this.roomNum=selected;
-	}
-	
-	public ElderData(String elderName,String elderID, int elderAge, String elderGender) {
+
+	public ElderData(int elderBed,String elderName,int elderID, int elderAge, String elderGender) {
+		this.elderBed=elderBed;
 		this.elderName = elderName;
 		this.elderID=elderID;
 		this.elderAge = elderAge;
@@ -50,11 +46,11 @@ public class ElderData{
 		this.elderName = elderName;
 	}
 
-	public String getElderID() {
+	public int getElderID() {
 		return elderID;
 	}
 
-	public void setElderID(String elderID) {
+	public void setElderID(int elderID) {
 		this.elderID = elderID;
 	}
 	public int getElderAge() {
@@ -75,13 +71,14 @@ public class ElderData{
 
 
 	public void print(){
+		System.out.println("ElderBed: "+getElderBed());
 		System.out.println("ElderID: "+getElderID());
 		System.out.println("Name: "+getElderName());
 		System.out.println("Age: "+getElderAge());
 		System.out.println("Gender: "+getElderGender());
 
 	}
-	private static int getAge(String year, String month, String day)
+	public static int getAge(String year, String month, String day)
 	{
 		
 		Calendar calDOB = Calendar.getInstance();
@@ -115,16 +112,13 @@ public class ElderData{
 				String year=text.substring(0, 4);
 				String month=text.substring(5,7);
 				String day=text.substring(8,10);
-				data.setElderID(rs.getString("elderid"));
+				data.setElderBed(rs.getInt("bed"));
+				data.setElderID(rs.getInt("id"));
 				data.setElderName(rs.getString("name"));
 				data.setElderAge(getAge(year,month,day));
 				data.setElderGender(rs.getString("gender"));
 
 				DosageList.add(data);
-				
-				
-				
-				
 				
 			}
 		} catch (SQLException e1) {

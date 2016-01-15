@@ -28,9 +28,9 @@ public class MedDosageSearchPanel extends JPanel {
 
 	private static final long serialVersionUID = -2593071831861718177L;
 	private JComboBox<String> combobox;
-	
-	public static String selected;
-	
+	private JComboBox<String> timeCombobox;
+	public static String roomselected;
+	public static String timeselected;
 	public MedDosageSearchPanel() {
 		
 		setBounds(5, 5, 975, 510);
@@ -64,14 +64,12 @@ public class MedDosageSearchPanel extends JPanel {
 		lblTime.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		lblTime.setForeground(new Color(0, 128, 128));
 		add(lblTime);
-		JTextField textField=new JTextField();
-		textField = new JTextField();
-		textField.setBounds(277, 184, 125, 31);
-		textField.setHorizontalAlignment(SwingConstants.CENTER);
-		textField.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
-		textField.setText(dateFormat.format(cal.getTime()));
-		textField.setColumns(10);
-		add(textField);
+		timeCombobox = new JComboBox<String>();
+		timeCombobox.setBackground(UIManager.getColor("TextField.highlight"));
+		timeCombobox.setBounds(277, 183, 125, 31);
+		timeCombobox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
+		timeCombobox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {"Morning ","Afternoon", "Noon" }));
+		add(timeCombobox);
 		
 		
 		
@@ -109,6 +107,7 @@ public class MedDosageSearchPanel extends JPanel {
 				}
 				else{
 					setDosageSelect(combobox.getSelectedItem().toString());
+					setDosageTimeSelect(timeCombobox.getSelectedItem().toString());
 					JPanel gottenDosage=new MedDosagePanel();
 					MedPanel.MedCardPanel.add(gottenDosage,MedPanel.MDOSPANEL);
 					
@@ -119,10 +118,16 @@ public class MedDosageSearchPanel extends JPanel {
 			}
 		});
 	}
-	public void setDosageSelect(String select){
-		this.selected=select;
+	public void setDosageSelect(String selectDosageRoom){
+		this.roomselected=selectDosageRoom;
 	}
-	public static  String getDosageSelect(){
-		return selected;
+	public static String getDosageSelect(){
+		return roomselected;
+	}
+	public void setDosageTimeSelect(String selectDosageTime){
+		this.timeselected=selectDosageTime;
+	}
+	public static String getDosageTimeSelect(){
+		return timeselected;
 	}
 }

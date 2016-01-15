@@ -14,7 +14,7 @@ public class DosageSQL {
 		ArrayList<DosageObject> DosingList=new ArrayList<DosageObject>();
 
 		DosageObject dos1=new DosageObject("Head","For Head","Tablet","10");
-		DosageObject dos2=new DosageObject("Body","For Body","Tablet","20");
+		DosageObject dos2=new DosageObject("Body","For Body","Tablet","10000");
 		DosageObject dos3=new DosageObject("Toes","For Toes","Cream","30 Rubs");
 
 		DosingList.add(dos1);
@@ -49,9 +49,9 @@ public class DosageSQL {
 		}
 	}
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-		//for(int k=1;k<9;k++){
-		//	serializeDos(k);
-		//}
+		
+			serializeDos(2);
+		
 		for(int k=1;k<9;k++){
 			
 			deserializeDos(k);
