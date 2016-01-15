@@ -38,8 +38,7 @@ public class DietAddPanel extends JPanel {
 		add(tableScrollPane);
 		
 		mealSearchTable = new JTable(TableHelper.getMeals(""));
-		mealSearchTable.getColumnModel().getColumn(0).setPreferredWidth(36);
-		mealSearchTable.getColumnModel().getColumn(1).setPreferredWidth(165);
+		setMenuColumnWidths();
 		tableScrollPane.setViewportView(mealSearchTable);
 		
 		lblDietLabel = new JLabel("ElderTrack Diet Management");
@@ -205,5 +204,21 @@ public class DietAddPanel extends JPanel {
 		});
 		btnMainMenu.setBounds(820, 15, 139, 40);
 		add(btnMainMenu);
+	}
+	
+	private void setMenuColumnWidths() {
+		mealSearchTable.getTableHeader().setResizingAllowed(false);
+		mealSearchTable.getTableHeader().setReorderingAllowed(false);
+		mealSearchTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+		mealSearchTable.getColumnModel().getColumn(0).setMaxWidth(35);
+		mealSearchTable.getColumnModel().getColumn(1).setPreferredWidth(70);
+		mealSearchTable.getColumnModel().getColumn(1).setMaxWidth(80);
+		mealSearchTable.getColumnModel().getColumn(2).setPreferredWidth(130);
+		mealSearchTable.getColumnModel().getColumn(3).setPreferredWidth(55);
+		mealSearchTable.getColumnModel().getColumn(3).setMaxWidth(70);
+	}
+	
+	private void presentData() {
+		
 	}
 }
