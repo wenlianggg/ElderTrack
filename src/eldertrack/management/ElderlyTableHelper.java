@@ -30,9 +30,9 @@ public class ElderlyTableHelper {
 	    columnNames.add("NAME");
 	    columnNames.add("DOB");
 	    columnNames.add("NRIC");
-	    columnNames.add("GENDER");
-	    columnNames.add("ROOM");
-	    columnNames.add("BED");
+	    columnNames.add("G");
+	    columnNames.add("R");
+	    columnNames.add("B");
 	    columnNames.add("ADDRESS");
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	    while (rs.next()) {
