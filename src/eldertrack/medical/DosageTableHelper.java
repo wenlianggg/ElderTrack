@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -112,7 +113,11 @@ public class DosageTableHelper  {
 
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return !( rowIndex == 1 && columnIndex == 1 );
+				  if (columnIndex < 4) {
+		                return false;
+		            } else {
+		                return true;
+		            }
 			}
 
 
@@ -129,7 +134,7 @@ public class DosageTableHelper  {
 		nameList.add("Lee Ching Chong");
 
 		toDoTable =new JTable(getElderlyFromQueryDos("morning",nameList.get(0)));
-
+		
 
 		String[] values = new String[] { "Not Feed", "Feed" };
 		TableColumn col = toDoTable.getColumnModel().getColumn(4);
@@ -149,6 +154,24 @@ public class DosageTableHelper  {
 		btnNext.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				int notfeed=0;
+				int feed=0;
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
+				if(dialogResult == JOptionPane.YES_OPTION){
+				for(int k=0;k<toDoTable.getRowCount();k++){
+					Object o=toDoTable.getValueAt(k, 4);
+					if(o=="Not Feed" || o==null){
+						notfeed++;
+					}
+					else{
+						feed++;
+					}
+				}
+				
+				
+				if(feed==toDoTable.getRowCount()){
+				
 				try {
 					toDoTable.setModel(DosageTableHelper.getElderlyFromQueryDos("morning",nameList.get(counter)));
 					String[] values = new String[] { "Not Feed", "Feed" };
@@ -159,13 +182,15 @@ public class DosageTableHelper  {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
-
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
+				}
 
 				counter++;
 
 			}
-
+			}
 		});
 
 	}

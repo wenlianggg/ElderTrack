@@ -16,10 +16,14 @@ public class DosageSQL {
 		DosageObject dos1=new DosageObject("Head","For Head","Tablet","10");
 		DosageObject dos2=new DosageObject("Body","For Body","Tablet","1000");
 		DosageObject dos3=new DosageObject("Toes","For Toes","Syrup","10ml");
+		DosageObject dos4=new DosageObject("Toes","For Toes","Syrup","10ml");
+		DosageObject dos5=new DosageObject("Toes","For Toes","Syrup","10ml");
 
 		DosingList.add(dos1);
 		DosingList.add(dos2);
 		DosingList.add(dos3);
+		DosingList.add(dos4);
+		DosingList.add(dos5);
 
 		PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningdosage = ? WHERE id = ?");
 		statement.setObject(1, DosingList);
@@ -49,12 +53,12 @@ public class DosageSQL {
 		}
 	}
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-		
-			serializeDos(3);
-		
+		for(int i=1;i<11;i++){
+			serializeDos(i);
+		}
 	
 			
-			deserializeDos(3);
+			deserializeDos(1);
 		
 
 	}

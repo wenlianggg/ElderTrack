@@ -106,7 +106,6 @@ public class ElderData{
 
 	public void print(){
 		System.out.println("ElderBed: "+getElderBed());
-		System.out.println("ElderID: "+getElderID());
 		System.out.println("Name: "+getElderName());
 		System.out.println("Age: "+getElderAge());
 		System.out.println("Gender: "+getElderGender());
