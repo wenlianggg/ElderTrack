@@ -14,14 +14,14 @@ public class DosageSQL {
 		ArrayList<DosageObject> DosingList=new ArrayList<DosageObject>();
 
 		DosageObject dos1=new DosageObject("Head","For Head","Tablet","10");
-		DosageObject dos2=new DosageObject("Body","For Body","Tablet","10000");
-		DosageObject dos3=new DosageObject("Toes","For Toes","Cream","30 Rubs");
+		DosageObject dos2=new DosageObject("Body","For Body","Tablet","1000");
+		DosageObject dos3=new DosageObject("Toes","For Toes","Syrup","10ml");
 
 		DosingList.add(dos1);
 		DosingList.add(dos2);
 		DosingList.add(dos3);
 
-		PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET medication = ? WHERE id = ?");
+		PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningdosage = ? WHERE id = ?");
 		statement.setObject(1, DosingList);
 		statement.setInt(2, id);
 		statement.executeUpdate();
@@ -30,7 +30,7 @@ public class DosageSQL {
 
 	@SuppressWarnings("unchecked")
 	public static void deserializeDos(int id) throws SQLException, ClassNotFoundException, IOException {
-		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT medication FROM et_elderly WHERE id = ?");
+		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT morningdosage FROM et_elderly WHERE id = ?");
 		statement.setInt(1, id);
 		ResultSet rs = statement.executeQuery();
 		rs.next();
@@ -50,12 +50,12 @@ public class DosageSQL {
 	}
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
 		
-			serializeDos(2);
+			serializeDos(3);
 		
-		for(int k=1;k<9;k++){
+	
 			
-			deserializeDos(k);
-		}
+			deserializeDos(3);
+		
 
 	}
 }

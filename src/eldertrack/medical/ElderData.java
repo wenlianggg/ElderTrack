@@ -16,18 +16,22 @@ public class ElderData{
 	private int elderID;
 	private int elderAge;
 	private String elderGender;
-	
+
+
+
+	private int elderNum;
+	private int elderNumMale;
+	private int elderNumFemale;
+
 
 	public ElderData(){
 
 	}
-	
-	public int getElderBed() {
-		return elderBed;
-	}
-	
-	public void setElderBed(int elderBed) {
-		this.elderBed = elderBed;
+
+	public ElderData(int elderNum, int elderNumMale, int elderNumFemale) {
+		this.elderNum = elderNum;
+		this.elderNumMale = elderNumMale;
+		this.elderNumFemale = elderNumFemale;
 	}
 
 	public ElderData(int elderBed,String elderName,int elderID, int elderAge, String elderGender) {
@@ -36,6 +40,13 @@ public class ElderData{
 		this.elderID=elderID;
 		this.elderAge = elderAge;
 		this.elderGender = elderGender;
+	}
+	public int getElderBed() {
+		return elderBed;
+	}
+
+	public void setElderBed(int elderBed) {
+		this.elderBed = elderBed;
 	}
 
 	public String getElderName() {
@@ -69,6 +80,29 @@ public class ElderData{
 		this.elderGender = elderGender;
 	}
 
+	public int getElderNum() {
+		return elderNum;
+	}
+
+	public void setElderNum(int elderNum) {
+		this.elderNum += elderNum;
+	}
+
+	public int getElderNumMale() {
+		return elderNumMale;
+	}
+
+	public void setElderNumMale(int elderNumMale) {
+		this.elderNumMale += elderNumMale;
+	}
+
+	public int getElderNumFemale() {
+		return elderNumFemale;
+	}
+
+	public void setElderNumFemale(int elderNumFemale) {
+		this.elderNumFemale += elderNumFemale;
+	}
 
 	public void print(){
 		System.out.println("ElderBed: "+getElderBed());
@@ -80,19 +114,19 @@ public class ElderData{
 	}
 	public static int getAge(String year, String month, String day)
 	{
-		
+
 		Calendar calDOB = Calendar.getInstance();
 		calDOB.set( Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day) );
-		
+
 		Calendar calNow = Calendar.getInstance();
 		calNow.setTime(new java.util.Date());
-		
+
 		int ageYr = (calNow.get(Calendar.YEAR) - calDOB.get(Calendar.YEAR));
-		
+
 		int ageMo = (calNow.get(Calendar.MONTH) - calDOB.get(Calendar.MONTH));
 		if (ageMo < 0)
 		{
-			
+
 			ageYr--;
 		}
 		return ageYr;
@@ -119,7 +153,7 @@ public class ElderData{
 				data.setElderGender(rs.getString("gender"));
 
 				DosageList.add(data);
-				
+
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -131,9 +165,9 @@ public class ElderData{
 		}
 	}
 
-	
 
-	
+
+
 }
 
 

@@ -11,7 +11,7 @@ private String MedDescrip;
 private String MedPrescrip;
 private String MedType;
 private String MedDosage;
-	
+
 	public DosageObject(){
 		
 	}

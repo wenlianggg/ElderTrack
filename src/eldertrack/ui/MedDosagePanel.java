@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,10 +24,11 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
-import javax.swing.table.DefaultTableModel;
-
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-
+import javax.swing.JComboBox;
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
 
@@ -43,7 +45,10 @@ public class MedDosagePanel extends JPanel {
 	private JTextField BedField;
 	private JTable toDoTable;
 	private JScrollPane scrollPane ;
+	
+	
 	private int counter;
+	private int numofElder;
 	public MedDosagePanel() {
 
 
@@ -127,33 +132,77 @@ public class MedDosagePanel extends JPanel {
 		SQLObject so = new SQLObject();
 		ArrayList<ElderData> DosageList=new ArrayList<ElderData>();
 		ResultSet rs;
+		String dosageTime=MedDosageSearchPanel.getDosageTimeSelect();
+		String roomNum=MedDosageSearchPanel.getDosageRoom();
 		counter=0;
-		try {
-			
-			String output=MedDosageSearchPanel.getDosageSelect();
-			
+		numofElder = 0;
+		try {	
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
-			stmt.setString(1, output);
+			stmt.setString(1, roomNum);
 			stmt.executeQuery();
 			rs = stmt.getResultSet();
 			
 			while(rs.next()){
 				ElderData data=new ElderData();
 				
-				// calculate the age
-				java.sql.Date reportDate=rs.getDate("dob");
-				DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-				String text = df.format(reportDate);
-				String year=text.substring(0, 4);
-				String month=text.substring(5,7);
-				String day=text.substring(8,10);
+				if(dosageTime.equalsIgnoreCase("morning")){
+					if(rs.getInt("morningtaken")==0){
+						// calculate the age
+						java.sql.Date reportDate=rs.getDate("dob");
+						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+						String text = df.format(reportDate);
+						String year=text.substring(0, 4);
+						String month=text.substring(5,7);
+						String day=text.substring(8,10);
+						
+						// setting the information
+						data.setElderBed(rs.getInt("bed"));
+						data.setElderName(rs.getString("name"));
+						data.setElderAge(ElderData.getAge(year,month,day));
+						data.setElderGender(rs.getString("gender"));
+						DosageList.add(data);	
+						numofElder++;
+					}
+				}
+				else if (dosageTime.equalsIgnoreCase("afternoon")){
+					if(rs.getInt("afternoontaken")==0){
+						// calculate the age
+						java.sql.Date reportDate=rs.getDate("dob");
+						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+						String text = df.format(reportDate);
+						String year=text.substring(0, 4);
+						String month=text.substring(5,7);
+						String day=text.substring(8,10);
+						
+						// setting the information
+						data.setElderBed(rs.getInt("bed"));
+						data.setElderName(rs.getString("name"));
+						data.setElderAge(ElderData.getAge(year,month,day));
+						data.setElderGender(rs.getString("gender"));
+						DosageList.add(data);	
+						numofElder++;
+					}
+				}
+				else if (dosageTime.equalsIgnoreCase("noon")){
+					if(rs.getInt("noontaken")==0){
+						// calculate the age
+						java.sql.Date reportDate=rs.getDate("dob");
+						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+						String text = df.format(reportDate);
+						String year=text.substring(0, 4);
+						String month=text.substring(5,7);
+						String day=text.substring(8,10);
+						
+						// setting the information
+						data.setElderBed(rs.getInt("bed"));
+						data.setElderName(rs.getString("name"));
+						data.setElderAge(ElderData.getAge(year,month,day));
+						data.setElderGender(rs.getString("gender"));
+						DosageList.add(data);	
+						numofElder++;
+					}
+				}
 				
-				// setting the nessary information
-				data.setElderBed(rs.getInt("bed"));
-				data.setElderName(rs.getString("name"));
-				data.setElderAge(ElderData.getAge(year,month,day));
-				data.setElderGender(rs.getString("gender"));
-				DosageList.add(data);
 			}
 		} catch (SQLException e1) {
 			
@@ -165,12 +214,18 @@ public class MedDosagePanel extends JPanel {
 
 		// DosageTable
 		
-	
+		
+		
 		try {
-			toDoTable = new JTable( DosageTableHelper.getElderlyFromQueryDos(DosageList.get(counter).getElderName()));
+			
+			toDoTable = new JTable( DosageTableHelper.getElderlyFromQueryDos(dosageTime,DosageList.get(counter).getElderName()));
 			scrollPane = new JScrollPane(toDoTable);
 			scrollPane.setBounds(121, 257, 694, 120);
 			add(scrollPane, BorderLayout.CENTER);
+			String[] values = new String[] { "Not Feed", "Feed" };
+			TableColumn col = toDoTable.getColumnModel().getColumn(4);
+			col.setCellEditor(new MyComboBoxEditor(values));
+			col.setCellRenderer(new MyComboBoxRenderer(values));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -190,8 +245,6 @@ public class MedDosagePanel extends JPanel {
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to Save and Quit","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 
-					
-
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 				}
@@ -205,7 +258,7 @@ public class MedDosagePanel extends JPanel {
 		btnNextEldery.setBounds(638, 436, 177, 27);
 		add(btnNextEldery);
 		
-		JLabel lblElderLeft = new JLabel("Number of Elderly Left:");
+		JLabel lblElderLeft = new JLabel("Number of Elderly Left: "+numofElder);
 		lblElderLeft.setBounds(670, 377, 145, 14);
 		add(lblElderLeft);
 		
@@ -217,11 +270,15 @@ public class MedDosagePanel extends JPanel {
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 					counter++;
+					numofElder--;
 					DisplayInformation(DosageList, counter);
 					try {
 						
-						toDoTable.setModel(DosageTableHelper.getElderlyFromQueryDos(DosageList.get(counter).getElderName()));
-						
+						toDoTable.setModel(DosageTableHelper.getElderlyFromQueryDos(dosageTime,DosageList.get(counter).getElderName()));
+						String[] values = new String[] { "Not Feed", "Feed" };
+						TableColumn col = toDoTable.getColumnModel().getColumn(4);
+						col.setCellEditor(new MyComboBoxEditor(values));
+						col.setCellRenderer(new MyComboBoxRenderer(values));
 						
 					} catch (SQLException e1) {
 						e1.printStackTrace();
@@ -245,4 +302,36 @@ public class MedDosagePanel extends JPanel {
 		GenderField.setText(DosageList.get(counter).getElderGender());
 	}
 	
+}
+@SuppressWarnings("rawtypes")
+class MyComboBoxRenderer extends JComboBox implements TableCellRenderer {
+	private static final long serialVersionUID = -3468519501551728022L;
+
+	@SuppressWarnings("unchecked")
+	public MyComboBoxRenderer(String[] items) {
+		super(items);
+	}
+
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+			boolean hasFocus, int row, int column) {
+		if (isSelected) {
+			setForeground(table.getSelectionForeground());
+			super.setBackground(table.getSelectionBackground());
+		} else {
+			setForeground(table.getForeground());
+			setBackground(table.getBackground());
+		}
+		setSelectedItem(value);
+		return this;
+	}
+}
+
+class MyComboBoxEditor extends DefaultCellEditor {
+
+	private static final long serialVersionUID = -1702063500403826596L;
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public MyComboBoxEditor(String[] items) {
+		super(new JComboBox(items));
+	}
 }

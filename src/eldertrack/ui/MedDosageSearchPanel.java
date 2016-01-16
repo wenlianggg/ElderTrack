@@ -5,10 +5,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.PreparedStatement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,9 +17,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+
 import javax.swing.UIManager;
+
+import eldertrack.db.SQLObject;
+import eldertrack.medical.ElderData;
+
 import javax.swing.JTextPane;
 
 
@@ -27,107 +31,294 @@ import javax.swing.JTextPane;
 public class MedDosageSearchPanel extends JPanel {
 
 	private static final long serialVersionUID = -2593071831861718177L;
-	private JComboBox<String> combobox;
+	private JComboBox<String> roomcombobox;
 	private JComboBox<String> timeCombobox;
+	private JTextPane txtpnOverview;
 	public static String roomselected;
 	public static String timeselected;
+
+
+	private ElderData room101=new ElderData();
+	private ElderData room102=new ElderData();
+	private ElderData room103=new ElderData();
+	private ElderData room104=new ElderData();
+	private ElderData room105=new ElderData();
+	private ElderData room201=new ElderData();
+	private ElderData room202=new ElderData();
+	private ElderData room203=new ElderData();
+
 	public MedDosageSearchPanel() {
-		
+
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
-		
-		
+
+
 		JLabel lblDosageTrackingSystem = new JLabel("Dosage Tracking System");
 		lblDosageTrackingSystem.setForeground(UIManager.getColor("EditorPane.selectionBackground"));
 		lblDosageTrackingSystem.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		lblDosageTrackingSystem.setBounds(25, 25, 349, 41);
 		add(lblDosageTrackingSystem);
-		
-		
+
+
 		JLabel lblRoomNumber = new JLabel("Room Number: ");
 		lblRoomNumber.setBounds(90, 117, 151, 41);
 		lblRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		lblRoomNumber.setForeground(new Color(0, 128, 128));
 		add(lblRoomNumber);
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		Calendar cal = Calendar.getInstance();
-		combobox = new JComboBox<String>();
-		combobox.setBackground(UIManager.getColor("TextField.highlight"));
-		combobox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
-		combobox.setBounds(277, 124, 125, 31);
-		combobox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {"101 ","102", "103" }));
-		add(combobox);
-		
-		
+
+
+		roomcombobox = new JComboBox<String>();
+		roomcombobox.setBackground(UIManager.getColor("TextField.highlight"));
+		roomcombobox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
+		roomcombobox.setBounds(277, 124, 125, 31);
+		roomcombobox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {" ","101","102","103","104","105","201","202","203" }));
+		add(roomcombobox);
+		// proccessing of summary for elderly
+
+
+		ResultSet rs;
+		// Room 101
+
+
+		try {
+			SQLObject so = new SQLObject();
+			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
+			rs = statement.executeQuery();
+			while(rs.next()){
+				String roomNum=rs.getString("room");
+				String roomGender=rs.getString("gender");
+				if(roomNum.equalsIgnoreCase("101")){
+					room101.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room101.setElderNumMale(1);
+					}
+					else{
+						room101.setElderNumFemale(1);
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("102")){
+					room102.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room102.setElderNumMale(1);
+					}
+					else{
+						room102.setElderNumFemale(1);
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("103")){
+					room103.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room103.setElderNumMale(1);
+					}
+					else{
+						room103.setElderNumFemale(1);
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("104")){
+					room104.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room104.setElderNumMale(1);
+					}
+					else{
+						room104.setElderNumFemale(1);
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("105")){
+					room105.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room105.setElderNumMale(1);
+					}
+					else{
+						room105.setElderNumFemale(1);
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("201")){
+					room201.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room201.setElderNumMale(1);
+					}
+					else{
+						room201.setElderNumFemale(1);
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("202")){
+					room202.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room202.setElderNumMale(1);
+					}
+					else{
+						room202.setElderNumFemale(1);
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("203")){
+					room203.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room203.setElderNumMale(1);
+					}
+					else{
+						room203.setElderNumFemale(1);
+					}
+				}
+			}
+
+		} catch (SQLException e1) {
+
+			e1.printStackTrace();
+		}
+
+		roomcombobox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if(roomcombobox.getSelectedItem().toString().equals("101")){
+					txtpnOverview.setText("Room Number: 101 \r\nTotal number of elderly: "+room101.getElderNum() +"\r\nTotal Male elderly: " +room101.getElderNumMale() +"\r\nTotal Female elderly:" +room101.getElderNumFemale());
+				}
+				else if (roomcombobox.getSelectedItem().toString().equals("102")){
+					txtpnOverview.setText("Room Number: 102 \r\nTotal number of elderly: "+room102.getElderNum() +"\r\nTotal Male elderly: " +room102.getElderNumMale() +"\r\nTotal Female elderly:" +room102.getElderNumFemale());
+				}
+				else if (roomcombobox.getSelectedItem().toString().equals("103")){
+					txtpnOverview.setText("Room Number: 103 \r\nTotal number of elderly: "+room103.getElderNum() +"\r\nTotal Male elderly: " +room103.getElderNumMale() +"\r\nTotal Female elderly:" +room103.getElderNumFemale());
+				}
+				else if (roomcombobox.getSelectedItem().toString().equals("104")){
+					txtpnOverview.setText("Room Number: 104 \r\nTotal number of elderly: "+room104.getElderNum() +"\r\nTotal Male elderly: " +room104.getElderNumMale() +"\r\nTotal Female elderly:" +room104.getElderNumFemale());
+				}
+				else if (roomcombobox.getSelectedItem().toString().equals("105")){
+					txtpnOverview.setText("Room Number: 105 \r\nTotal number of elderly: "+room105.getElderNum() +"\r\nTotal Male elderly: " +room105.getElderNumMale() +"\r\nTotal Female elderly:" +room105.getElderNumFemale());
+				}
+				else if (roomcombobox.getSelectedItem().toString().equals("201")){
+					txtpnOverview.setText("Room Number: 201 \r\nTotal number of elderly: "+room201.getElderNum() +"\r\nTotal Male elderly: " +room201.getElderNumMale() +"\r\nTotal Female elderly:" +room201.getElderNumFemale());
+				}
+				else if (roomcombobox.getSelectedItem().toString().equals("202")){
+					txtpnOverview.setText("Room Number: 202 \r\nTotal number of elderly: "+room202.getElderNum() +"\r\nTotal Male elderly: " +room202.getElderNumMale() +"\r\nTotal Female elderly:" +room202.getElderNumFemale());
+				}
+				else if (roomcombobox.getSelectedItem().toString().equals("203")){
+					txtpnOverview.setText("Room Number: 203 \r\nTotal number of elderly: "+room203.getElderNum() +"\r\nTotal Male elderly: " +room203.getElderNumMale() +"\r\nTotal Female elderly:" +room203.getElderNumFemale());
+				}
+
+				else{
+					txtpnOverview.setText("Room Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
+				}
+			}
+		});
+
 		JLabel lblTime = new JLabel("Time: ");
 		lblTime.setBounds(90, 177, 80, 41);
 		lblTime.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		lblTime.setForeground(new Color(0, 128, 128));
 		add(lblTime);
+
 		timeCombobox = new JComboBox<String>();
 		timeCombobox.setBackground(UIManager.getColor("TextField.highlight"));
 		timeCombobox.setBounds(277, 183, 125, 31);
 		timeCombobox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
-		timeCombobox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {"Morning ","Afternoon", "Noon" }));
+		timeCombobox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {"Morning","Afternoon", "Noon" }));
 		add(timeCombobox);
-		
-		
-		
+
+
+
 		JLabel lblOverview = new JLabel("Overview:");
 		lblOverview.setForeground(new Color(0, 128, 128));
 		lblOverview.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		lblOverview.setBounds(551, 117, 151, 41);
 		add(lblOverview);
-		
-		JTextPane txtpnRoomNumber = new JTextPane();
-		txtpnRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtpnRoomNumber.setText("Room Number: ~\r\nTotal Number of Elderly: ~\r\nTotal Number of Male: ~\r\nTotal Number of Female: ~\r\nRecommandard Helper: ~\r\n");
-		txtpnRoomNumber.setBounds(551, 155, 339, 226);
-		add(txtpnRoomNumber);
-		
+
+		txtpnOverview = new JTextPane();
+		txtpnOverview.setText("Room Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
+		txtpnOverview.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtpnOverview.setEditable(false);
+		txtpnOverview.setBounds(551, 155, 339, 226);
+		add(txtpnOverview);
+
 		JButton btnGetDosage = new JButton("Get Dosage");
 		btnGetDosage.setBounds(90, 256, 312, 31);
 		btnGetDosage.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		add(btnGetDosage);
 
 		// testing for choosing room options
-		
-		
+
+
 		btnGetDosage.addActionListener(new ActionListener() {
-			
+
 
 			public void actionPerformed(ActionEvent e) {
-				
-				if(combobox.getSelectedItem().toString().equals(" ")){
-					
+
+				if(roomcombobox.getSelectedItem().toString().equals(" ")){
+
 					JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
-					
-					
-					
+
 				}
 				else{
-					setDosageSelect(combobox.getSelectedItem().toString());
+					setDosageRoom(roomcombobox.getSelectedItem().toString());
 					setDosageTimeSelect(timeCombobox.getSelectedItem().toString());
-					JPanel gottenDosage=new MedDosagePanel();
-					MedPanel.MedCardPanel.add(gottenDosage,MedPanel.MDOSPANEL);
-					
-					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
-				    mainCards.show(MedPanel.MedCardPanel, MedPanel.MDOSPANEL);
+
+					if(checkDosageValid(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString())==false){
+						JOptionPane.showMessageDialog(null, "Dosage has already been done!");
+					}
+					else{
+						JPanel gottenDosage=new MedDosagePanel();
+						MedPanel.MedCardPanel.add(gottenDosage,MedPanel.MDOSPANEL);
+
+						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+						mainCards.show(MedPanel.MedCardPanel, MedPanel.MDOSPANEL);
+					}
 				}
-				
+
 			}
 		});
 	}
-	public void setDosageSelect(String selectDosageRoom){
-		this.roomselected=selectDosageRoom;
+
+	public void setDosageRoom(String selectDosageRoom){
+		roomselected=selectDosageRoom;
 	}
-	public static String getDosageSelect(){
+	public static String getDosageRoom(){
 		return roomselected;
 	}
+
 	public void setDosageTimeSelect(String selectDosageTime){
-		this.timeselected=selectDosageTime;
+		timeselected=selectDosageTime;
 	}
 	public static String getDosageTimeSelect(){
 		return timeselected;
+	}
+	public Boolean checkDosageValid(String roomNum,String timing){
+		SQLObject so = new SQLObject();
+		ResultSet rs = null;
+		int totalElder=0;
+		int checked=0;
+		try {
+			if(timing.equalsIgnoreCase("morning")){
+				PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT morningtaken FROM et_elderly WHERE room = ?");
+				stmt.setString(1,roomNum);
+				stmt.executeQuery();
+				rs = stmt.getResultSet();
+			}
+			else if(timing.equalsIgnoreCase("afternoon")){
+				PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT afternnontaken FROM et_elderly WHERE room = ?");
+				stmt.setString(1,roomNum);
+				stmt.executeQuery();
+				rs = stmt.getResultSet();
+			}
+			else{
+				PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT noontaken FROM et_elderly WHERE room = ?");
+				stmt.setString(1,roomNum);
+				stmt.executeQuery();
+				rs = stmt.getResultSet();
+			}
+			while(rs.next()){
+				int checking=rs.getInt("morningtaken");
+				if(checking==1){
+					checked++;
+				}
+				totalElder++;
+
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		if(checked==totalElder){
+			return false;
+		}
+		else{
+			return true;
+		}
 	}
 }
