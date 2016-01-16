@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -92,11 +93,6 @@ public class DosageTableHelper  {
 		columnNames.add("Checked");
 
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-
-
-
-
-
 		for(int k=0;k<DosageList.size();k++){
 			Vector<Object> vector = new Vector<Object>();
 			vector.add(DosageList.get(k).getMedDescrip());
@@ -106,7 +102,6 @@ public class DosageTableHelper  {
 
 			data.add(vector);
 		}
-
 
 		DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
 			private static final long serialVersionUID = 4234183862785566645L;
@@ -119,12 +114,51 @@ public class DosageTableHelper  {
 		                return true;
 		            }
 			}
-
-
 		};
 		return dtm;
 	}
 
+// For Management
+	public static DefaultTableModel getElderlyFromQueryManagement(String search) throws SQLException {
+		search = (search.equalsIgnoreCase("")) ? "%" : search;
+		SQLObject so = new SQLObject();
+		return buildTableModelForManagement(so.getResultSet("SELECT id, name, gender, room, morningdosage,afternoondosage,noondosage FROM et_elderly WHERE name LIKE ?", search));
+	}
+	
+	
+	public static DefaultTableModel buildTableModelForManagement(ResultSet rs) throws SQLException {
+	    ResultSetMetaData metaData = rs.getMetaData();
+	    Vector<String> columnNames = new Vector<String>();
+	    int columnCount = metaData.getColumnCount();
+	    columnNames.add("ID");
+	    columnNames.add("NAME");
+	    columnNames.add("GENDER");
+	    columnNames.add("ROOM");
+	    columnNames.add("MORNING");
+	    columnNames.add("AFTERNOON");
+	    columnNames.add("NOON");
+	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+	    while (rs.next()) {
+	        Vector<Object> vector = new Vector<Object>();
+	        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+	            vector.add(rs.getObject(columnIndex));
+	        }
+	        data.add(vector);
+	    }
+	    DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
+			private static final long serialVersionUID = 4234183862785566645L;
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				  if (columnIndex < 4) {
+		                return false;
+		            } else {
+		                return true;
+		            }
+			}
+		};
+	    return dtm;
+	}
 
 	// Debug-able main method
 	public static void main(String[] args) throws SQLException {

@@ -55,7 +55,7 @@ public class MedManageSearchPanel extends JPanel {
 				MedPanel.MedCardPanel.add(gottenManage,MedPanel.MMANAGEPANEL);
 				
 				CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
-			    mainCards.show(MedPanel.MedCardPanel, MedPanel.MCHECKPANEL);
+			    mainCards.show(MedPanel.MedCardPanel, MedPanel.MMANAGEPANEL);
 			}
 		});
 		
