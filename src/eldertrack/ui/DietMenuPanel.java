@@ -266,11 +266,8 @@ public class DietMenuPanel extends JPanel {
 		availMealsTable.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
-		        int row = availMealsTable.getSelectedRow();
-		        if (row >= 0) {
-		        	selectedRow = (Integer) availMealsTable.getValueAt(row, 0);
-		        	presentData(selectedRow.toString());
-		        }
+		        selectedRow = (Integer) availMealsTable.getValueAt(availMealsTable.getSelectedRow(), 0);
+		        presentData(selectedRow.toString());
 		    }
 		});
 		availMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
