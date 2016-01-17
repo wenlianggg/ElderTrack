@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
 import eldertrack.medical.DosageTableHelper;
+import eldertrack.medical.ElderData;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -21,7 +22,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 
@@ -46,10 +48,10 @@ public class MedManagePanel extends JPanel {
 	public MedManagePanel() {
 		setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("Management");
+		JLabel lblNewLabel = new JLabel("Dosage Management");
 		lblNewLabel.setForeground(UIManager.getColor("TextField.selectionBackground"));
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblNewLabel.setBounds(25, 25, 210, 41);
+		lblNewLabel.setBounds(25, 25, 300, 41);
 		add(lblNewLabel);
 
 		eldertable = new JTable();
@@ -60,6 +62,7 @@ public class MedManagePanel extends JPanel {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		eldertable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		eldertable.getColumnModel().getColumn(0).setPreferredWidth(20);
 		eldertable.getColumnModel().getColumn(2).setPreferredWidth(60);
@@ -82,8 +85,52 @@ public class MedManagePanel extends JPanel {
 					while(rs.next()){
 						ElderIDField.setText(Integer.toString(rs.getInt("id")));
 						NameField.setText(rs.getString("name"));
-						
 						GenderField.setText(rs.getString("gender"));
+						java.sql.Date reportDate=rs.getDate("dob");
+						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+						String text = df.format(reportDate);
+						String year=text.substring(0, 4);
+						String month=text.substring(5,7);
+						String day=text.substring(8,10);
+						AgeField.setText(Integer.toString(ElderData.getAge(year, month, day)));
+						
+						if(rs.getBlob("morningdosage")!=null){
+							MorningTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("morning",rs.getString("name")));
+						}
+						else{
+							MorningTable.setModel(new DefaultTableModel(
+									new Object[][] {
+									},
+									new String[] {
+											"Description", "Prescription", "Medication Type","Dosage"
+									}
+									));
+						}
+						if(rs.getBlob("afternoondosage")!=null){
+							AfterNoonTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("afternoon",rs.getString("name")));
+						}
+						else{
+							AfterNoonTable.setModel(new DefaultTableModel(
+									new Object[][] {
+									},
+									new String[] {
+											"Description", "Prescription", "Medication Type","Dosage"
+									}
+									));
+						}
+						if(rs.getBlob("noondosage") !=null){
+							NoonTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("noon",rs.getString("name")));
+						}
+						else{
+							NoonTable.setModel(new DefaultTableModel(
+									new Object[][] {
+									},
+									new String[] {
+											"Description", "Prescription", "Medication Type","Dosage"
+									}
+									));
+						}
+						
 					}
 				}catch(Exception e1){
 					JOptionPane.showMessageDialog(null, e1);
@@ -102,6 +149,7 @@ public class MedManagePanel extends JPanel {
 		ElderIDField = new JTextField();
 		ElderIDField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		ElderIDField.setBounds(615, 93, 100, 20);
+		ElderIDField.setEditable(false);
 		add(ElderIDField);
 		ElderIDField.setColumns(10);
 
@@ -113,6 +161,7 @@ public class MedManagePanel extends JPanel {
 		NameField = new JTextField();
 		NameField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		NameField.setBounds(615, 129, 100, 20);
+		NameField.setEditable(false);
 		add(NameField);
 		NameField.setColumns(10);
 
@@ -121,22 +170,24 @@ public class MedManagePanel extends JPanel {
 		lblGender.setBounds(525, 162, 80, 25);
 		add(lblGender);
 
-		AgeField = new JTextField();
-		AgeField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		AgeField.setBounds(615, 165, 100, 20);
-		add(AgeField);
-		AgeField.setColumns(10);
+		GenderField = new JTextField();
+		GenderField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		GenderField.setBounds(615, 165, 100, 20);
+		GenderField.setEditable(false);
+		add(GenderField);
+		GenderField.setColumns(10);
 
 		JLabel lblAge = new JLabel("AGE:");
 		lblAge.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		lblAge.setBounds(525, 198, 80, 25);
 		add(lblAge);
 
-		GenderField = new JTextField();
-		GenderField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		GenderField.setBounds(615, 201, 100, 20);
-		add(GenderField);
-		GenderField.setColumns(10);
+		AgeField = new JTextField();
+		AgeField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		AgeField.setBounds(615, 201, 100, 20);
+		AgeField.setEditable(false);
+		add(AgeField);
+		AgeField.setColumns(10);
 
 		JLabel lblSummary = new JLabel("SUMMARY:");
 		lblSummary.setFont(new Font("Segoe UI", Font.PLAIN, 18));
@@ -168,6 +219,7 @@ public class MedManagePanel extends JPanel {
 		add(lblNoon);
 
 		MorningTable = new JTable();
+		DefaultTableModel morningDosage;
 		MorningTable.setModel(new DefaultTableModel(
 				new Object[][] {
 				},

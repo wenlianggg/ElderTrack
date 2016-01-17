@@ -140,8 +140,17 @@ public class DosageTableHelper  {
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	    while (rs.next()) {
 	        Vector<Object> vector = new Vector<Object>();
-	        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+	        for (int columnIndex = 1; columnIndex <= 4; columnIndex++) {
 	            vector.add(rs.getObject(columnIndex));
+	        }
+	        if(rs.getObject(5)!=null){
+	        	vector.add("Added");
+	        }
+	        if(rs.getObject(6)!=null){
+	        	vector.add("Added");
+	        }
+	        if(rs.getObject(7)!=null){
+	        	vector.add("Added");
 	        }
 	        data.add(vector);
 	    }
@@ -159,7 +168,94 @@ public class DosageTableHelper  {
 		};
 	    return dtm;
 	}
+	public static DefaultTableModel getElderlyFromQueryManagementDos(String timing,String position) throws SQLException {
+		SQLObject so = new SQLObject();
+		ResultSet rs = null;
 
+		if(timing.equalsIgnoreCase("Morning")){
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT morningdosage FROM et_elderly WHERE name = ?");
+			stmt.setString(1,position);
+			stmt.executeQuery();
+			System.out.println(stmt);
+			rs = stmt.getResultSet();
+		}
+		else if(timing.equalsIgnoreCase("Afternoon")){
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT afternoondosage FROM et_elderly WHERE name = ?");
+			stmt.setString(1,position);
+			stmt.executeQuery();
+			System.out.println(stmt);
+			rs = stmt.getResultSet();
+		}
+		else if(timing.equalsIgnoreCase("Noon")){
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT noondosage FROM et_elderly WHERE name = ?");
+			stmt.setString(1,position);
+			stmt.executeQuery();
+			System.out.println(stmt);
+			rs = stmt.getResultSet();
+		}
+		return (DefaultTableModel) buildTableModelManagementDos(rs);
+	}
+
+
+
+	@SuppressWarnings("unchecked")
+	public static DefaultTableModel buildTableModelManagementDos(ResultSet rs) throws SQLException {
+		ArrayList<DosageObject> DosageList=null;
+
+
+		System.out.println(rs);
+		try {
+			while(rs.next()){
+				ByteArrayInputStream in = new ByteArrayInputStream(rs.getBytes(1));
+				ObjectInputStream is = new ObjectInputStream(in);
+				Object retrieveDosBlob =(Object) is.readObject();
+				if(retrieveDosBlob instanceof  ArrayList<?>){
+					DosageList=((ArrayList<DosageObject>) retrieveDosBlob);
+				}
+			}
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		// storing array list in an array list for future uses
+
+		Vector<String> columnNames = new Vector<String>();
+
+		columnNames.add("Description");
+		columnNames.add("Prescription");
+		columnNames.add("Medication Type");
+		columnNames.add("Dosage");
+		columnNames.add("Selected");
+
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+		for(int k=0;k<DosageList.size();k++){
+			Vector<Object> vector = new Vector<Object>();
+			vector.add(DosageList.get(k).getMedDescrip());
+			vector.add(DosageList.get(k).getMedPrescrip());
+			vector.add(DosageList.get(k).getMedType());
+			vector.add(DosageList.get(k).getMedDosage());
+
+			data.add(vector);
+		}
+
+		DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
+			private static final long serialVersionUID = 4234183862785566645L;
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				  if (columnIndex < 4) {
+		                return false;
+		            } else {
+		                return true;
+		            }
+			}
+		};
+		return dtm;
+	}
 	// Debug-able main method
 	public static void main(String[] args) throws SQLException {
 		ArrayList<String> nameList= new ArrayList<String>();
