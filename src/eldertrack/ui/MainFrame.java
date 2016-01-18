@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
     final static String MENUPANEL = "Main Menu Panel";
     private JPanel MasterPane;
     private LoginPanel LoginPanel;
-    private DietPanel DietPanel;
+    private DietSection DietSection;
     private MedPanel MedPanel;
     private ReportMainPanel ReportPanel;
     private MgmtPanel MgmtPanel;
@@ -94,9 +94,9 @@ public class MainFrame extends JFrame {
 		// Initialize Diet Panel
 		jpbar.setString("Initializing Diet Management...");
 		jpbar.update(jpbar.getGraphics());
-		DietPanel = new DietPanel();
-		DietPanel.setBorder(lBorder);
-		CardsPanel.add(DietPanel, DIETPANEL);
+		DietSection = new DietSection();
+		DietSection.setBorder(lBorder);
+		CardsPanel.add(DietSection, DIETPANEL);
 		jpbar.setValue(50);
 
 		
@@ -162,7 +162,7 @@ public class MainFrame extends JFrame {
 	void deconstructPanels() {
 		System.out.println("--------------------- DECONSTRUCTING ALL PANELS NOW! ---------------------");
 		comboBox.setVisible(false);
-		CardsPanel.remove(DietPanel);
+		CardsPanel.remove(DietSection);
 		CardsPanel.remove(MedPanel);
 		CardsPanel.remove(ReportPanel);
 		if(isManagementShown())
@@ -170,7 +170,7 @@ public class MainFrame extends JFrame {
 		CardsPanel.remove(MainMenu);
 		MasterPane.remove(comboBox);
 		comboBox = null;
-		DietPanel = null;
+		DietSection = null;
 		MedPanel = null;
 		ReportPanel = null;
 		MgmtPanel = null;
@@ -220,8 +220,8 @@ public class MainFrame extends JFrame {
 			return false;
 	}
 	
-	DietPanel getDietPanel() {
-		return this.DietPanel;
+	DietSection getDietPanel() {
+		return this.DietSection;
 	}
 
 }

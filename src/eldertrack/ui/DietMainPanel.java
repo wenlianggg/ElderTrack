@@ -5,6 +5,7 @@ import java.awt.SystemColor;
 import java.util.HashMap;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -25,7 +26,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
-public class DietMainPanel extends JPanel {
+public class DietMainPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	JLabel lblSelectElderly;
@@ -195,9 +196,14 @@ public class DietMainPanel extends JPanel {
 		btnAddMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				DietAddPanel dp = MainFrame.getInstance().getDietPanel().getDietAddPanel();
-				dp.presentPersonData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());		
-				parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DADDPANEL);
+				// Present person data on DietAddPanel
+				if (eldersTable.getSelectedRow() != -1) {
+					dp.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+					parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+					parentCards.show(DietSection.CardsPanel, DietSection.DADDPANEL);
+				} else
+					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
+
 			}
 		});
 		
@@ -206,8 +212,8 @@ public class DietMainPanel extends JPanel {
 		add(btnModifyMeals);
 		btnModifyMeals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMODPANEL);
+				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMODPANEL);
 			}
 		});
 		
@@ -216,8 +222,8 @@ public class DietMainPanel extends JPanel {
 		add(btnMenuManagement);
 		btnMenuManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-				parentCards.show(DietPanel.CardsPanel, DietPanel.DMENUPANEL);
+				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+				parentCards.show(DietSection.CardsPanel, DietSection.DMENUPANEL);
 			}
 		});
 		
@@ -236,9 +242,9 @@ public class DietMainPanel extends JPanel {
 		add(btnMainMenu);
 	}
 	
-	private void presentData(String id) {
+	public void presentData(String personid) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
-		Elderly el = eldermap.get(Integer.parseInt(id));
+		Elderly el = eldermap.get(Integer.parseInt(personid));
 		
 		lblInfoName.setText(el.getName());
 		lblElderid.setText("ElderID: " + el.getId());
@@ -257,5 +263,11 @@ public class DietMainPanel extends JPanel {
 		lblVitaminE.setText("Vitamin E (mg):  --- (x% of RDA)");
 		lblPreviousMeal.setText("Previous Meal: ______________________");
 
+	}
+
+	@Override
+	public void printDebug() {
+		// TODO Auto-generated method stub
+		
 	}
 }
