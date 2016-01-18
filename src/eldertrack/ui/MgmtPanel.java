@@ -431,6 +431,8 @@ public class MgmtPanel extends JPanel {
 									JOptionPane.showMessageDialog(null, "There are duplicate bed numbers! Please check your entries!");
 								}else if(Integer.parseInt(bed) > 10){
 									JOptionPane.showMessageDialog(null, "There cannot be more than 10 beds in a room!");
+								}else if(dupeNric == true){
+									JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
 								}
 								else{
 									PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, bed=?, address=? WHERE id=?");
