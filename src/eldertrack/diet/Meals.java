@@ -9,21 +9,31 @@ public class Meals implements java.io.Serializable {
 	private ArrayList<String> mealname;
 	private ArrayList<Nutrition> nutrition;
 	private ArrayList<MealProperties> mealprop;
+	
+	// Constructor that creates an empty Meals entry
 	public Meals() {
 		mealname = new ArrayList<String>();
 		nutrition = new ArrayList<Nutrition>();
 		mealprop = new ArrayList<MealProperties>();
 	}
 	
+	// Constructor that takes in one meal
 	public Meals(Date datetime, String mealname, Nutrition nutrition, MealProperties mealprop) {
 		this();
 		addMeal(datetime, mealname, nutrition, mealprop);
 	}
 	
+	// Method to add a meal
 	public Meals addMeal(Date datetime, String mealname, Nutrition nutrition, MealProperties mealprop) {
-		this.mealname.add(mealname);
-		this.nutrition.add(nutrition);
-		this.mealprop.add(mealprop);
+		if (datetime != null && mealname != null && nutrition != null && mealprop != null && !mealname.equals("")) {
+			this.mealname.add(mealname);
+			this.nutrition.add(nutrition);
+			this.mealprop.add(mealprop);
+		} else if (mealname.isEmpty()) {
+			throw new IllegalArgumentException("Meal Name cannot be empty!");
+		} else {
+			throw new IllegalArgumentException("Illegal arguments when trying to add meals");
+		}
 		return this;
 	}
 	
@@ -57,7 +67,7 @@ public class Meals implements java.io.Serializable {
 		return totaln;
 	}
 	
-	// Getters and Mutator
+	
 	public String getMealName(int i) {
 		return mealname.get(i);
 	}
@@ -70,24 +80,11 @@ public class Meals implements java.io.Serializable {
 		return mealprop.get(i);
 	}
 	
-	
 	public ArrayList<String> getMealName() {
 		return this.mealname;
 	}
 	
 	public ArrayList<Nutrition> getNutrition() {
-		return this.nutrition;
-	}
-	
-	public ArrayList<MealProperties> setMealProperties() {
-		return this.mealprop;
-	}
-	
-	public ArrayList<String> setMealName() {
-		return this.mealname;
-	}
-	
-	public ArrayList<Nutrition> setNutrition() {
 		return this.nutrition;
 	}
 	
