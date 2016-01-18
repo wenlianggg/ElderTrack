@@ -49,6 +49,7 @@ public class MedDosagePanel extends JPanel {
 
 	private int counter;
 	private int numofElder;
+	
 	public MedDosagePanel() {
 
 
@@ -132,7 +133,7 @@ public class MedDosagePanel extends JPanel {
 		SQLObject so = new SQLObject();
 		ArrayList<ElderData> DosageList=new ArrayList<ElderData>();
 		ElderData data=new ElderData();
-		ResultSet rs,rs1;
+		ResultSet rs;
 		String dosageTime=MedDosageSearchPanel.getDosageTimeSelect();
 		String roomNum=MedDosageSearchPanel.getDosageRoom();
 		counter=0;
@@ -142,77 +143,80 @@ public class MedDosagePanel extends JPanel {
 			stmt.setString(1, roomNum);
 			stmt.executeQuery();
 			rs = stmt.getResultSet();
-			
+
 			while(rs.next()){
 				if(dosageTime.equalsIgnoreCase("morning")){
-					PreparedStatement stmt2  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE morningtaken = 0");
-					
-					stmt2.executeQuery();
-					rs1 = stmt2.getResultSet();
-					while(rs1.next()){
-					// calculate the age
-						
-						java.sql.Date reportDate=rs.getDate("dob");
-						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-						String text = df.format(reportDate);
-						String year=text.substring(0, 4);
-						String month=text.substring(5,7);
-						String day=text.substring(8,10);
+					if(rs.getBlob("morningdosage") !=null){
+						if(rs.getInt("morningtaken")==0){
+							// calculate the age
+							data=new ElderData();
+							java.sql.Date reportDate=rs.getDate("dob");
+							DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+							String text = df.format(reportDate);
+							String year=text.substring(0, 4);
+							String month=text.substring(5,7);
+							String day=text.substring(8,10);
 
-						// setting the information
-						data.setElderBed(rs.getInt("bed"));
-						data.setElderName(rs.getString("name"));
-						data.setElderAge(ElderData.getAge(year,month,day));
-						data.setElderGender(rs.getString("gender"));
-						DosageList.add(data);	
-						numofElder++;
+							// setting the information
+							data.setElderBed(rs.getInt("bed"));
+							data.setElderName(rs.getString("name"));
+							data.setElderAge(ElderData.getAge(year,month,day));
+							data.setElderGender(rs.getString("gender"));
+							DosageList.add(data);	
+							numofElder++;
+						}
 					}
-					
-			
 				}
-				else if (dosageTime.equalsIgnoreCase("afternoon")){
-					if(rs.getInt("afternoontaken")==0){
-						// calculate the age
-						java.sql.Date reportDate=rs.getDate("dob");
-						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-						String text = df.format(reportDate);
-						String year=text.substring(0, 4);
-						String month=text.substring(5,7);
-						String day=text.substring(8,10);
 
-						// setting the information
-						data.setElderBed(rs.getInt("bed"));
-						data.setElderName(rs.getString("name"));
-						data.setElderAge(ElderData.getAge(year,month,day));
-						data.setElderGender(rs.getString("gender"));
-						DosageList.add(data);	
-						numofElder++;
+				else if (dosageTime.equalsIgnoreCase("afternoon")){
+					if(rs.getBlob("afternoondosage") !=null){
+						if(rs.getInt("afternoontaken")==0){
+							// calculate the age
+							data=new ElderData();
+							java.sql.Date reportDate=rs.getDate("dob");
+							DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+							String text = df.format(reportDate);
+							String year=text.substring(0, 4);
+							String month=text.substring(5,7);
+							String day=text.substring(8,10);
+
+							// setting the information
+							data.setElderBed(rs.getInt("bed"));
+							data.setElderName(rs.getString("name"));
+							data.setElderAge(ElderData.getAge(year,month,day));
+							data.setElderGender(rs.getString("gender"));
+							DosageList.add(data);	
+							numofElder++;
+
+						}
 					}
 				}
 				else if (dosageTime.equalsIgnoreCase("noon")){
-					if(rs.getInt("noontaken")==0){
-						// calculate the age
-						java.sql.Date reportDate=rs.getDate("dob");
-						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-						String text = df.format(reportDate);
-						String year=text.substring(0, 4);
-						String month=text.substring(5,7);
-						String day=text.substring(8,10);
+					if(rs.getBlob("noondosage") !=null){
+						if(rs.getInt("noontaken")==0){
+							// calculate the age
+							data=new ElderData();
+							java.sql.Date reportDate=rs.getDate("dob");
+							DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+							String text = df.format(reportDate);
+							String year=text.substring(0, 4);
+							String month=text.substring(5,7);
+							String day=text.substring(8,10);
 
-						// setting the information
-						data.setElderBed(rs.getInt("bed"));
-						data.setElderName(rs.getString("name"));
-						data.setElderAge(ElderData.getAge(year,month,day));
-						data.setElderGender(rs.getString("gender"));
-						DosageList.add(data);	
-						numofElder++;
+							// setting the information
+							data.setElderBed(rs.getInt("bed"));
+							data.setElderName(rs.getString("name"));
+							data.setElderAge(ElderData.getAge(year,month,day));
+							data.setElderGender(rs.getString("gender"));
+							DosageList.add(data);	
+							numofElder++;
+						}
 					}
 				}
-			
-		
 			}
-			
-			
+
+
+
 		} catch (SQLException e1) {
 
 			e1.printStackTrace();
@@ -290,7 +294,7 @@ public class MedDosagePanel extends JPanel {
 
 					}
 					if(feed==toDoTable.getRowCount()){
-						
+
 						DisplayInformation(DosageList, counter);
 						try {
 
@@ -315,7 +319,7 @@ public class MedDosagePanel extends JPanel {
 			}
 
 		});
-	
+
 	}
 
 	public void DisplayInformation(ArrayList<ElderData> DosageList, int counter){

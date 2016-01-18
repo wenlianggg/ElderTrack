@@ -17,21 +17,23 @@ public class ElderData{
 	private int elderAge;
 	private String elderGender;
 
-
-
+	
 	private int elderNum;
 	private int elderNumMale;
 	private int elderNumFemale;
-
+	private int elderNumDosageNeeded;
+	private int elderNumDosageNotNeeded;
 
 	public ElderData(){
 
 	}
 
-	public ElderData(int elderNum, int elderNumMale, int elderNumFemale) {
+	public ElderData(int elderNum, int elderNumMale, int elderNumFemale,int elderNumDosageNeeded,int elderNumDosageNotNeeded) {
 		this.elderNum = elderNum;
 		this.elderNumMale = elderNumMale;
 		this.elderNumFemale = elderNumFemale;
+		this.elderNumDosageNeeded=elderNumDosageNeeded;
+		this.elderNumDosageNotNeeded=elderNumDosageNotNeeded;
 	}
 
 	public ElderData(int elderBed,String elderName,int elderID, int elderAge, String elderGender) {
@@ -102,6 +104,22 @@ public class ElderData{
 
 	public void setElderNumFemale(int elderNumFemale) {
 		this.elderNumFemale += elderNumFemale;
+	}
+
+	public int getElderNumDosageNeeded() {
+		return elderNumDosageNeeded;
+	}
+
+	public void setElderNumDosageNeeded(int elderNumDosageNeeded) {
+		this.elderNumDosageNeeded += elderNumDosageNeeded;
+	}
+
+	public int getElderNumDosageNotNeeded() {
+		return elderNumDosageNotNeeded;
+	}
+
+	public void setElderNumDosageNotNeeded(int elderNumDosageNotNeeded) {
+		this.elderNumDosageNotNeeded += elderNumDosageNotNeeded;
 	}
 
 	public void print(){

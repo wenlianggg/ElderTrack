@@ -73,124 +73,40 @@ public class MedDosageSearchPanel extends JPanel {
 		roomcombobox.setBounds(277, 124, 125, 31);
 		roomcombobox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {" ","101","102","103","104","105","201","202","203" }));
 		add(roomcombobox);
-		// proccessing of summary for elderly
-
-
-		ResultSet rs;
-		// Room 101
-
-
-		try {
-			SQLObject so = new SQLObject();
-			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
-			rs = statement.executeQuery();
-			while(rs.next()){
-				String roomNum=rs.getString("room");
-				String roomGender=rs.getString("gender");
-				if(roomNum.equalsIgnoreCase("101")){
-					room101.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room101.setElderNumMale(1);
-					}
-					else{
-						room101.setElderNumFemale(1);
-					}
-				}
-				else if(roomNum.equalsIgnoreCase("102")){
-					room102.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room102.setElderNumMale(1);
-					}
-					else{
-						room102.setElderNumFemale(1);
-					}
-				}
-				else if(roomNum.equalsIgnoreCase("103")){
-					room103.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room103.setElderNumMale(1);
-					}
-					else{
-						room103.setElderNumFemale(1);
-					}
-				}
-				else if(roomNum.equalsIgnoreCase("104")){
-					room104.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room104.setElderNumMale(1);
-					}
-					else{
-						room104.setElderNumFemale(1);
-					}
-				}
-				else if(roomNum.equalsIgnoreCase("105")){
-					room105.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room105.setElderNumMale(1);
-					}
-					else{
-						room105.setElderNumFemale(1);
-					}
-				}
-				else if(roomNum.equalsIgnoreCase("201")){
-					room201.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room201.setElderNumMale(1);
-					}
-					else{
-						room201.setElderNumFemale(1);
-					}
-				}
-				else if(roomNum.equalsIgnoreCase("202")){
-					room202.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room202.setElderNumMale(1);
-					}
-					else{
-						room202.setElderNumFemale(1);
-					}
-				}
-				else if(roomNum.equalsIgnoreCase("203")){
-					room203.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room203.setElderNumMale(1);
-					}
-					else{
-						room203.setElderNumFemale(1);
-					}
-				}
-			}
-
-		} catch (SQLException e1) {
-
-			e1.printStackTrace();
-		}
 
 		roomcombobox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if(roomcombobox.getSelectedItem().toString().equals("101")){
-					txtpnOverview.setText("Room Number: 101 \r\nTotal number of elderly: "+room101.getElderNum() +"\r\nTotal Male elderly: " +room101.getElderNumMale() +"\r\nTotal Female elderly:" +room101.getElderNumFemale());
+					txtpnOverview.setText("Room Number: 101 \r\nTotal number of elderly: "+room101.getElderNum() +"\r\nTotal Male elderly: " +room101.getElderNumMale() 
+					+"\r\nTotal Female elderly:" +room101.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room101.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room101.getElderNumDosageNotNeeded());
 				}
 				else if (roomcombobox.getSelectedItem().toString().equals("102")){
-					txtpnOverview.setText("Room Number: 102 \r\nTotal number of elderly: "+room102.getElderNum() +"\r\nTotal Male elderly: " +room102.getElderNumMale() +"\r\nTotal Female elderly:" +room102.getElderNumFemale());
+					txtpnOverview.setText("Room Number: 102 \r\nTotal number of elderly: "+room102.getElderNum() +"\r\nTotal Male elderly: " +room102.getElderNumMale()
+					+"\r\nTotal Female elderly:" +room102.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room102.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room102.getElderNumDosageNotNeeded());
 				}
 				else if (roomcombobox.getSelectedItem().toString().equals("103")){
-					txtpnOverview.setText("Room Number: 103 \r\nTotal number of elderly: "+room103.getElderNum() +"\r\nTotal Male elderly: " +room103.getElderNumMale() +"\r\nTotal Female elderly:" +room103.getElderNumFemale());
+					txtpnOverview.setText("Room Number: 103 \r\nTotal number of elderly: "+room103.getElderNum() +"\r\nTotal Male elderly: " +room103.getElderNumMale() 
+					+"\r\nTotal Female elderly:" +room103.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room103.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room103.getElderNumDosageNotNeeded());
 				}
 				else if (roomcombobox.getSelectedItem().toString().equals("104")){
-					txtpnOverview.setText("Room Number: 104 \r\nTotal number of elderly: "+room104.getElderNum() +"\r\nTotal Male elderly: " +room104.getElderNumMale() +"\r\nTotal Female elderly:" +room104.getElderNumFemale());
+					txtpnOverview.setText("Room Number: 104 \r\nTotal number of elderly: "+room104.getElderNum() +"\r\nTotal Male elderly: " +room104.getElderNumMale() 
+					+"\r\nTotal Female elderly:" +room104.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room104.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room104.getElderNumDosageNotNeeded());
 				}
 				else if (roomcombobox.getSelectedItem().toString().equals("105")){
-					txtpnOverview.setText("Room Number: 105 \r\nTotal number of elderly: "+room105.getElderNum() +"\r\nTotal Male elderly: " +room105.getElderNumMale() +"\r\nTotal Female elderly:" +room105.getElderNumFemale());
+					txtpnOverview.setText("Room Number: 105 \r\nTotal number of elderly: "+room105.getElderNum() +"\r\nTotal Male elderly: " +room105.getElderNumMale()
+					+"\r\nTotal Female elderly:" +room105.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room105.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room105.getElderNumDosageNotNeeded());
 				}
 				else if (roomcombobox.getSelectedItem().toString().equals("201")){
-					txtpnOverview.setText("Room Number: 201 \r\nTotal number of elderly: "+room201.getElderNum() +"\r\nTotal Male elderly: " +room201.getElderNumMale() +"\r\nTotal Female elderly:" +room201.getElderNumFemale());
+					txtpnOverview.setText("Room Number: 201 \r\nTotal number of elderly: "+room201.getElderNum() +"\r\nTotal Male elderly: " +room201.getElderNumMale() 
+					+"\r\nTotal Female elderly:" +room201.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room201.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room201.getElderNumDosageNotNeeded());
 				}
 				else if (roomcombobox.getSelectedItem().toString().equals("202")){
-					txtpnOverview.setText("Room Number: 202 \r\nTotal number of elderly: "+room202.getElderNum() +"\r\nTotal Male elderly: " +room202.getElderNumMale() +"\r\nTotal Female elderly:" +room202.getElderNumFemale());
+					txtpnOverview.setText("Room Number: 202 \r\nTotal number of elderly: "+room202.getElderNum() +"\r\nTotal Male elderly: " +room202.getElderNumMale() 
+					+"\r\nTotal Female elderly:" +room202.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room202.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room202.getElderNumDosageNotNeeded());
 				}
 				else if (roomcombobox.getSelectedItem().toString().equals("203")){
-					txtpnOverview.setText("Room Number: 203 \r\nTotal number of elderly: "+room203.getElderNum() +"\r\nTotal Male elderly: " +room203.getElderNumMale() +"\r\nTotal Female elderly:" +room203.getElderNumFemale());
+					txtpnOverview.setText("Room Number: 203 \r\nTotal number of elderly: "+room203.getElderNum() +"\r\nTotal Male elderly: " +room203.getElderNumMale() 
+					+"\r\nTotal Female elderly:" +room203.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room203.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room203.getElderNumDosageNotNeeded());
 				}
 
 				else{
@@ -232,6 +148,289 @@ public class MedDosageSearchPanel extends JPanel {
 		btnGetDosage.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		add(btnGetDosage);
 
+		// processing of summary for elderly
+		ResultSet rs;
+
+
+		try {
+			SQLObject so = new SQLObject();
+			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
+			rs = statement.executeQuery();
+			while(rs.next()){
+				String roomNum=rs.getString("room");
+				String roomGender=rs.getString("gender");
+
+				if(roomNum.equalsIgnoreCase("101")){
+					room101.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room101.setElderNumMale(1);
+					}
+					else{
+						room101.setElderNumFemale(1);
+					}
+					if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("morning")){
+						if(rs.getBlob("morningdosage")!= null){
+							room101.setElderNumDosageNeeded(1);
+						}
+						else{
+							room101.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("afternoon")){
+						if(rs.getBlob("afternoondosage")!= null){
+							room101.setElderNumDosageNeeded(1);
+						}
+						else{
+							room101.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else{
+						if(rs.getBlob("noondosage")!= null){
+							room101.setElderNumDosageNeeded(1);
+						}
+						else{
+							room101.setElderNumDosageNotNeeded(1);
+						}
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("102")){
+					room102.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room102.setElderNumMale(1);
+					}
+					else{
+						room102.setElderNumFemale(1);
+					}
+					if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("morning")){
+						if(rs.getBlob("morningdosage")!= null){
+							room102.setElderNumDosageNeeded(1);
+						}
+						else{
+							room102.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("afternoon")){
+						if(rs.getBlob("afternoondosage")!= null){
+							room102.setElderNumDosageNeeded(1);
+						}
+						else{
+							room102.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else{
+						if(rs.getBlob("noondosage")!= null){
+							room102.setElderNumDosageNeeded(1);
+						}
+						else{
+							room102.setElderNumDosageNotNeeded(1);
+						}
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("103")){
+					room103.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room103.setElderNumMale(1);
+					}
+					else{
+						room103.setElderNumFemale(1);
+					}
+					if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("morning")){
+						if(rs.getBlob("morningdosage")!= null){
+							room103.setElderNumDosageNeeded(1);
+						}
+						else{
+							room103.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("afternoon")){
+						if(rs.getBlob("afternoondosage")!= null){
+							room103.setElderNumDosageNeeded(1);
+						}
+						else{
+							room103.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else{
+						if(rs.getBlob("noondosage")!= null){
+							room103.setElderNumDosageNeeded(1);
+						}
+						else{
+							room101.setElderNumDosageNotNeeded(1);
+						}
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("104")){
+					room104.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room104.setElderNumMale(1);
+					}
+					else{
+						room104.setElderNumFemale(1);
+					}
+					if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("morning")){
+						if(rs.getBlob("morningdosage")!= null){
+							room104.setElderNumDosageNeeded(1);
+						}
+						else{
+							room104.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("afternoon")){
+						if(rs.getBlob("afternoondosage")!= null){
+							room104.setElderNumDosageNeeded(1);
+						}
+						else{
+							room104.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else{
+						if(rs.getBlob("noondosage")!= null){
+							room104.setElderNumDosageNeeded(1);
+						}
+						else{
+							room104.setElderNumDosageNotNeeded(1);
+						}
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("105")){
+					room105.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room105.setElderNumMale(1);
+					}
+					else{
+						room105.setElderNumFemale(1);
+					}
+					if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("morning")){
+						if(rs.getBlob("morningdosage")!= null){
+							room105.setElderNumDosageNeeded(1);
+						}
+						else{
+							room105.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("afternoon")){
+						if(rs.getBlob("afternoondosage")!= null){
+							room105.setElderNumDosageNeeded(1);
+						}
+						else{
+							room105.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else{
+						if(rs.getBlob("noondosage")!= null){
+							room105.setElderNumDosageNeeded(1);
+						}
+						else{
+							room105.setElderNumDosageNotNeeded(1);
+						}
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("201")){
+					room201.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room201.setElderNumMale(1);
+					}
+					else{
+						room201.setElderNumFemale(1);
+					}
+					if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("morning")){
+						if(rs.getBlob("morningdosage")!= null){
+							room201.setElderNumDosageNeeded(1);
+						}
+						else{
+							room201.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("afternoon")){
+						if(rs.getBlob("afternoondosage")!= null){
+							room201.setElderNumDosageNeeded(1);
+						}
+						else{
+							room201.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else{
+						if(rs.getBlob("noondosage")!= null){
+							room201.setElderNumDosageNeeded(1);
+						}
+						else{
+							room101.setElderNumDosageNotNeeded(1);
+						}
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("202")){
+					room202.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room202.setElderNumMale(1);
+					}
+					else{
+						room202.setElderNumFemale(1);
+					}
+					if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("morning")){
+						if(rs.getBlob("morningdosage")!= null){
+							room202.setElderNumDosageNeeded(1);
+						}
+						else{
+							room202.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("afternoon")){
+						if(rs.getBlob("afternoondosage")!= null){
+							room202.setElderNumDosageNeeded(1);
+						}
+						else{
+							room202.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else{
+						if(rs.getBlob("noondosage")!= null){
+							room202.setElderNumDosageNeeded(1);
+						}
+						else{
+							room202.setElderNumDosageNotNeeded(1);
+						}
+					}
+				}
+				else if(roomNum.equalsIgnoreCase("203")){
+					room203.setElderNum(1);
+					if(roomGender.equalsIgnoreCase("m")){
+						room203.setElderNumMale(1);
+					}
+					else{
+						room203.setElderNumFemale(1);
+					}
+					if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("morning")){
+						if(rs.getBlob("morningdosage")!= null){
+							room203.setElderNumDosageNeeded(1);
+						}
+						else{
+							room203.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else if(timeCombobox.getSelectedItem().toString().equalsIgnoreCase("afternoon")){
+						if(rs.getBlob("afternoondosage")!= null){
+							room203.setElderNumDosageNeeded(1);
+						}
+						else{
+							room203.setElderNumDosageNotNeeded(1);
+						}
+					}
+					else{
+						if(rs.getBlob("noondosage")!= null){
+							room203.setElderNumDosageNeeded(1);
+						}
+						else{
+							room203.setElderNumDosageNotNeeded(1);
+						}
+					}
+				}
+			}
+
+		} catch (SQLException e1) {
+
+			e1.printStackTrace();
+		}
+
 		// testing for choosing room options
 
 
@@ -241,9 +440,47 @@ public class MedDosageSearchPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				if(roomcombobox.getSelectedItem().toString().equals(" ")){
-
 					JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
-
+				}
+				else if(roomcombobox.getSelectedItem().toString().equals("101")){
+					if(room101.getElderNumDosageNeeded() ==0){
+						JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+					}
+				}
+				else if(roomcombobox.getSelectedItem().toString().equals("102")){
+					if(room102.getElderNumDosageNeeded() ==0){
+						JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+					}
+				}
+				else if(roomcombobox.getSelectedItem().toString().equals("103")){
+					if(room103.getElderNumDosageNeeded() ==0){
+						JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+					}
+				}
+				else if(roomcombobox.getSelectedItem().toString().equals("104")){
+					if(room104.getElderNumDosageNeeded() ==0){
+						JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+					}
+				}
+				else if(roomcombobox.getSelectedItem().toString().equals("105")){
+					if(room105.getElderNumDosageNeeded() ==0){
+						JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+					}
+				}
+				else if(roomcombobox.getSelectedItem().toString().equals("201")){
+					if(room201.getElderNumDosageNeeded() ==0){
+						JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+					}
+				}
+				else if(roomcombobox.getSelectedItem().toString().equals("202")){
+					if(room202.getElderNumDosageNeeded() ==0){
+						JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+					}
+				}
+				else if(roomcombobox.getSelectedItem().toString().equals("203")){
+					if(room203.getElderNumDosageNeeded() ==0){
+						JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+					}
 				}
 				else{
 					setDosageRoom(roomcombobox.getSelectedItem().toString());
@@ -284,31 +521,32 @@ public class MedDosageSearchPanel extends JPanel {
 		int totalElder=0;
 		int checked=0;
 		try {
-			if(timing.equalsIgnoreCase("morning")){
-				PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT morningtaken FROM et_elderly WHERE room = ?");
-				stmt.setString(1,roomNum);
-				stmt.executeQuery();
-				rs = stmt.getResultSet();
-			}
-			else if(timing.equalsIgnoreCase("afternoon")){
-				PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT afternnontaken FROM et_elderly WHERE room = ?");
-				stmt.setString(1,roomNum);
-				stmt.executeQuery();
-				rs = stmt.getResultSet();
-			}
-			else{
-				PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT noontaken FROM et_elderly WHERE room = ?");
-				stmt.setString(1,roomNum);
-				stmt.executeQuery();
-				rs = stmt.getResultSet();
-			}
-			while(rs.next()){
-				int checking=rs.getInt("morningtaken");
-				if(checking==1){
-					checked++;
-				}
-				totalElder++;
 
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
+			stmt.setString(1,roomNum);
+			stmt.executeQuery();
+			rs = stmt.getResultSet();
+
+			while(rs.next()){
+				if(timing.equalsIgnoreCase("morning")){
+					if(rs.getInt("morningtaken")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
+				else if(timing.equalsIgnoreCase("afternoon")){
+					if(rs.getInt("afternoontaken")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
+
+				else{
+					if(rs.getInt("noontaken")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
 			}
 		} catch (SQLException e) {
 
