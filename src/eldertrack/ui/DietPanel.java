@@ -10,23 +10,35 @@ public class DietPanel extends JPanel {
     final static String DMODPANEL = "Diet Modify Panel";
     final static String DMENUPANEL = "Diet Menu Panel";
 	static JPanel CardsPanel;
+	private JPanel dietMainPanel;
+	private JPanel dietAddPanel;
+	private JPanel dietModifyPanel;
+	private JPanel dietMenuPanel;
 	
 	// Constructor
 	DietPanel() {
-		JPanel DietMainPanel = new DietMainPanel();
-		JPanel DietAddPanel = new DietAddPanel();
-		JPanel DietModifyPanel = new DietModifyPanel();
-		JPanel DietMenuPanel = new DietMenuPanel();
+		dietMainPanel = new DietMainPanel();
+		dietAddPanel = new DietAddPanel();
+		dietModifyPanel = new DietModifyPanel();
+		dietMenuPanel = new DietMenuPanel();
 		
 		CardsPanel = new JPanel(new CardLayout());
-		CardsPanel.add(DietMainPanel, DMAINPANEL);
-		CardsPanel.add(DietAddPanel, DADDPANEL);
-		CardsPanel.add(DietModifyPanel, DMODPANEL);
-		CardsPanel.add(DietMenuPanel, DMENUPANEL);
+		CardsPanel.add(dietMainPanel, DMAINPANEL);
+		CardsPanel.add(dietAddPanel, DADDPANEL);
+		CardsPanel.add(dietModifyPanel, DMODPANEL);
+		CardsPanel.add(dietMenuPanel, DMENUPANEL);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, DMAINPANEL);
 		
 		setLayout(null);
 		CardsPanel.setBounds(0, 0, 994, 671);
 		add(CardsPanel);
+	}
+	
+	DietAddPanel getDietAddPanel() {
+		return (DietAddPanel) this.dietAddPanel;
+	}
+	
+	DietModifyPanel getDietModifyPanel() {
+		return (DietModifyPanel) this.dietModifyPanel;
 	}
 }

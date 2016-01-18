@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import eldertrack.diet.*;
+import eldertrack.misc.TableHelper;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
@@ -40,13 +42,8 @@ public class ReportMainPanel extends JPanel {
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 130, 283, 529);
 		add(tableScrollPane);
-		
-		try {
-			DefaultTableModel allEldersData = TableHelper.getElderlyFromQuery("");
-			table = new JTable(allEldersData);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
+		table = new JTable(allEldersData);
 		table.getColumnModel().getColumn(0).setPreferredWidth(36);
 		tableScrollPane.setViewportView(table);
 		
@@ -70,11 +67,7 @@ public class ReportMainPanel extends JPanel {
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					table.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				};
+				table.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
 			}
 		});
 		btnSearch.setBounds(228, 99, 65, 23);
