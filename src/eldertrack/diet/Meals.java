@@ -1,6 +1,11 @@
 package eldertrack.diet;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Vector;
+
+import javax.swing.table.DefaultTableModel;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,16 +42,6 @@ public class Meals implements java.io.Serializable {
 		return this;
 	}
 	
-	Meals addTestMeal() {
-		mealname.add("Test Meal");
-		mealname.add("Test Meal 2");
-		nutrition.add(new Nutrition());
-		nutrition.add(new Nutrition());
-		mealprop.add(new MealProperties());
-		mealprop.add(new MealProperties());
-		return this;
-	}
-	
 	public Nutrition getNutritionToday() {
 		ArrayList<Nutrition> selected = new ArrayList<Nutrition>();
 		Calendar c = Calendar.getInstance();
@@ -67,6 +62,29 @@ public class Meals implements java.io.Serializable {
 		return totaln;
 	}
 	
+	public DefaultTableModel getTableModel() {
+		
+		Vector<Vector<Object>> mealvector = new Vector<Vector<Object>>();
+		Vector<String> columns = new Vector<String>();
+		Vector<String> createdvector = new Vector<String>();
+		Vector<String> idvector = new Vector<String>();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM - HH:mm");
+		// Simple ID Counting
+		for (int i = 0; i < this.mealprop.size(); i++)
+			idvector.add(Integer.toString(i));
+		// Store created date into Vector<String>
+		for (MealProperties mp : this.mealprop)
+			createdvector.add(sdf.format(mp.getCreated()));
+		columns.add("ID");
+		columns.add("Time");
+		columns.add("Meal");
+		mealvector.add(new Vector<>(idvector));
+		mealvector.add(new Vector<>(createdvector));
+		mealvector.add(new Vector<>(this.mealname));
+		mealvector = transpose(mealvector);
+		DefaultTableModel dtm = new DefaultTableModel(mealvector, columns);
+		return dtm;
+	}
 	
 	public String getMealName(int i) {
 		return mealname.get(i);
@@ -90,5 +108,26 @@ public class Meals implements java.io.Serializable {
 	
 	public ArrayList<MealProperties> getMealProperties() {
 		return this.mealprop;
+	}
+
+	Meals addTestMeal() {
+		mealname.add("Test Meal");
+		nutrition.add(new Nutrition());
+		mealprop.add(new MealProperties());
+		return this;
+	}
+
+	// Vector Transposition
+	private static <T> Vector<Vector<T>> transpose(Vector<Vector<T>> table) {
+		Vector<Vector<T>> ret = new Vector<Vector<T>>();
+	    final int N = table.get(0).size();
+	    for (int i = 0; i < N; i++) {
+	    	Vector<T> col = new Vector<T>();
+	        for (Vector<T> row : table) {
+	            col.add(row.get(i));
+	        }
+	        ret.add(col);
+	    }
+	    return ret;
 	}
 }

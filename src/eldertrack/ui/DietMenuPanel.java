@@ -35,7 +35,7 @@ import javax.swing.JRadioButton;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
-public class DietMenuPanel extends JPanel {
+public class DietMenuPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	private JTable availMealsTable;
@@ -88,8 +88,8 @@ public class DietMenuPanel extends JPanel {
 		JButton btnBackToMain = new JButton("Back (Elderly View)");
 		btnBackToMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		        CardLayout parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMAINPANEL);
+		        CardLayout parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
 			}
 		});
 		
@@ -327,10 +327,10 @@ public class DietMenuPanel extends JPanel {
 		availMealsTable.getColumnModel().getColumn(3).setMaxWidth(70);
 	}
 	
-	private void presentData(String id) {
+	public void presentData(String mealid) {
 		try {
 			SQLObject so = TableHelper.getSQLInstance();
-			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", id);
+			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", mealid);
 			rs.next();
 			String name = rs.getString("name");
 			byte[] ba = rs.getBytes("nutrition");
@@ -439,7 +439,6 @@ public class DietMenuPanel extends JPanel {
 			setColumnWidths();
 			JOptionPane.showMessageDialog(null, "Meal Added!");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
@@ -468,4 +467,10 @@ public class DietMenuPanel extends JPanel {
         }
         return null;
     }
+
+	@Override
+	public void printDebug() {
+		// TODO Auto-generated method stub
+		
+	}
 }

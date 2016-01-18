@@ -16,7 +16,7 @@ public class MealProperties implements java.io.Serializable {
 	MealProperties() {
 		lasteditedby = "--";
 		lastedited = new Date();
-		createdby = "Random Person";
+		createdby = MainFrame.getInstance().getSessionInstance().getFullName();
 		created = new Date();
 	}
 	
