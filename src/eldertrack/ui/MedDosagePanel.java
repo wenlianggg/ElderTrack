@@ -49,7 +49,7 @@ public class MedDosagePanel extends JPanel {
 
 	private int counter;
 	private int numofElder;
-	
+
 	public MedDosagePanel() {
 
 
@@ -158,6 +158,7 @@ public class MedDosagePanel extends JPanel {
 							String day=text.substring(8,10);
 
 							// setting the information
+							data.setElderID(rs.getInt("id"));
 							data.setElderBed(rs.getInt("bed"));
 							data.setElderName(rs.getString("name"));
 							data.setElderAge(ElderData.getAge(year,month,day));
@@ -181,6 +182,7 @@ public class MedDosagePanel extends JPanel {
 							String day=text.substring(8,10);
 
 							// setting the information
+							data.setElderID(rs.getInt("id"));
 							data.setElderBed(rs.getInt("bed"));
 							data.setElderName(rs.getString("name"));
 							data.setElderAge(ElderData.getAge(year,month,day));
@@ -204,6 +206,7 @@ public class MedDosagePanel extends JPanel {
 							String day=text.substring(8,10);
 
 							// setting the information
+							data.setElderID(rs.getInt("id"));
 							data.setElderBed(rs.getInt("bed"));
 							data.setElderName(rs.getString("name"));
 							data.setElderAge(ElderData.getAge(year,month,day));
@@ -294,10 +297,15 @@ public class MedDosagePanel extends JPanel {
 
 					}
 					if(feed==toDoTable.getRowCount()){
-
+						
+						UpdateDosageTaken(DosageList.get(counter-1).getElderID(),dosageTime);
 						DisplayInformation(DosageList, counter);
 						try {
 
+
+
+
+							// make new table
 							toDoTable.setModel(DosageTableHelper.getElderlyFromQueryDos(dosageTime,DosageList.get(counter).getElderName()));
 							String[] values = new String[] { "Not Feed", "Feed" };
 							TableColumn col = toDoTable.getColumnModel().getColumn(4);
@@ -328,7 +336,29 @@ public class MedDosagePanel extends JPanel {
 		AgeField.setText(Integer.toString(DosageList.get(counter).getElderAge()));
 		GenderField.setText(DosageList.get(counter).getElderGender());
 	}
+	public void UpdateDosageTaken(int id,String timing){
+		SQLObject so = new SQLObject();
+		try {
+			if(timing.equalsIgnoreCase("morning")){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningtaken=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
+
+			}
+			else if(timing.equalsIgnoreCase("afternoon")){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternoon=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
+
 @SuppressWarnings("rawtypes")
 class MyComboBoxRenderer extends JComboBox implements TableCellRenderer {
 	private static final long serialVersionUID = -3468519501551728022L;
