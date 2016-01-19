@@ -439,12 +439,10 @@ public class MedDosageSearchPanel extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 
-				checkDosageNeeded();
-				if(roomcombobox.getSelectedItem().toString().equals(" ")){
-					JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
-				}
+				
+				
 
-				else{
+				if(checkDosageNeeded()==true){
 					setDosageRoom(roomcombobox.getSelectedItem().toString());
 					setDosageTimeSelect(timeCombobox.getSelectedItem().toString());
 
@@ -477,50 +475,67 @@ public class MedDosageSearchPanel extends JPanel {
 	public static String getDosageTimeSelect(){
 		return timeselected;
 	}
-	public void checkDosageNeeded(){
+	public Boolean checkDosageNeeded(){
+		int check=1;
+	
 		if(roomcombobox.getSelectedItem().toString().equals("101")){
 			if(room101.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+				check=0;
 			}
 		}
 		else if(roomcombobox.getSelectedItem().toString().equals("102")){
 			if(room102.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+				check=0;
 			}
 		}
 		else if(roomcombobox.getSelectedItem().toString().equals("103")){
 			if(room103.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+				check=0;
 			}
 		}
 		else if(roomcombobox.getSelectedItem().toString().equals("104")){
 			if(room104.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+				check=0;
 			}
 		}
 		else if(roomcombobox.getSelectedItem().toString().equals("105")){
 			if(room105.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+				check=0;
 			}
 		}
 		else if(roomcombobox.getSelectedItem().toString().equals("201")){
 			if(room201.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+				check=0;
 			}
 		}
 		else if(roomcombobox.getSelectedItem().toString().equals("202")){
 			if(room202.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+				check=0;
 			}
 		}
 		else if(roomcombobox.getSelectedItem().toString().equals("203")){
 			if(room203.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+				check=0;
 			}
 		}
-		else if(roomcombobox.getSelectedItem().toString().equals(" ")){
+		else{
 			JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
+			check=0;
 		}
+		
+		if(check==0){
+			return false;
+		}
+		else
+			return true;
 		
 
 	}
