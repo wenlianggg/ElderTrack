@@ -94,12 +94,13 @@ public class CheckUpObject  implements Serializable {
 
 	}
 
-	public static  void  StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup) throws SQLException{
+	public static  void  StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime) throws SQLException{
 		SQLObject so = new SQLObject();
-		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date)"+"values(?,?,?)");
+		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date,checktime)"+"values(?,?,?,?)");
 		statement.setInt(1, elderID);
 		statement.setString(2,name);
 		statement.setString(3, elderDate);
+		statement.setString(4, checktime);
 		statement.executeUpdate();
 
 		PreparedStatement statementBlob = so.getPreparedStatementWithKey("UPDATE et_elderly_checkup SET checkup = ? WHERE id = ?");
@@ -110,7 +111,7 @@ public class CheckUpObject  implements Serializable {
 	
 	public static void StoreComments(int id,String comments) throws SQLException{
 		SQLObject so = new SQLObject();
-		PreparedStatement statement = so.getPreparedStatementWithKey("update et_elderly set elderlynotes=? where id=?");
+		PreparedStatement statement = so.getPreparedStatementWithKey("update et_elderly set checkupsummary=? where id=?");
 		statement.setString(1, comments);
 		statement.setInt(2, id);
 		statement.executeUpdate();

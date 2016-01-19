@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import eldertrack.db.SQLObject;
 
-public class DosageSQL {
+public class MedicationSQL {
 
 	static final SQLObject so = new SQLObject();
 

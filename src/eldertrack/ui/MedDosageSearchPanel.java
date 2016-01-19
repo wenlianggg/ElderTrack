@@ -106,7 +106,7 @@ public class MedDosageSearchPanel extends JPanel {
 		add(lblOverview);
 
 		txtpnOverview = new JTextPane();
-		txtpnOverview.setText("Room Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
+		txtpnOverview.setText("Dosage Time:\r\nRoom Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
 		txtpnOverview.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtpnOverview.setEditable(false);
 		txtpnOverview.setBounds(551, 155, 339, 226);
@@ -119,8 +119,6 @@ public class MedDosageSearchPanel extends JPanel {
 
 		// processing of summary for elderly
 		ResultSet rs;
-
-
 		try {
 			SQLObject so = new SQLObject();
 			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
@@ -407,10 +405,6 @@ public class MedDosageSearchPanel extends JPanel {
 
 
 			public void actionPerformed(ActionEvent e) {
-
-				
-				
-
 				if(checkDosageNeeded()==true){
 					setDosageRoom(roomcombobox.getSelectedItem().toString());
 					setDosageTimeSelect(timeCombobox.getSelectedItem().toString());

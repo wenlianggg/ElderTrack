@@ -294,17 +294,12 @@ public class MedDosagePanel extends JPanel {
 						if(o=="Feed"){
 							feed++;
 						}
-
 					}
 					if(feed==toDoTable.getRowCount()){
 						
 						UpdateDosageTaken(DosageList.get(counter-1).getElderID(),dosageTime);
 						DisplayInformation(DosageList, counter);
 						try {
-
-
-
-
 							// make new table
 							toDoTable.setModel(DosageTableHelper.getElderlyFromQueryDos(dosageTime,DosageList.get(counter).getElderName()));
 							String[] values = new String[] { "Not Feed", "Feed" };
@@ -347,7 +342,13 @@ public class MedDosagePanel extends JPanel {
 
 			}
 			else if(timing.equalsIgnoreCase("afternoon")){
-				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternoon=?  WHERE id = ?");
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternoontaken=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
+			}
+			else if(timing.equalsIgnoreCase("noon")){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET noontaken=?  WHERE id = ?");
 				ps.setInt(1, 1);
 				ps.setInt(2, id);
 				ps.executeUpdate();

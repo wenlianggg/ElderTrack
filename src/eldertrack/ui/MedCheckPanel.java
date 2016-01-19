@@ -105,14 +105,14 @@ public class MedCheckPanel extends JPanel {
 
 		JLabel lblSummary = new JLabel("Summary:");
 		lblSummary.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		lblSummary.setBounds(391, 95, 113, 30);
+		lblSummary.setBounds(422, 94, 113, 30);
 		lblSummary.setForeground(new Color(0, 128, 128));
 		add(lblSummary);
 
 		txtSummary = new JTextPane();
 		txtSummary.setEditable(false);
 		JScrollPane scrollSummary = new JScrollPane(txtSummary);
-		scrollSummary.setBounds(391, 138, 424, 68);
+		scrollSummary.setBounds(422, 137, 424, 68);
 		add(scrollSummary);
 
 		//Checking 
@@ -180,11 +180,11 @@ public class MedCheckPanel extends JPanel {
 
 		JLabel lblAddition= new JLabel("Additional Notes: ");
 		lblAddition.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblAddition.setBounds(393, 309, 151, 30);
+		lblAddition.setBounds(424, 308, 151, 30);
 		add(lblAddition);
 
 		JTextPane textAddition = new JTextPane();
-		textAddition.setBounds(393, 350, 422, 149);
+		textAddition.setBounds(424, 349, 422, 149);
 		add(textAddition);
 
 		//Date
@@ -195,7 +195,7 @@ public class MedCheckPanel extends JPanel {
 
 		//DataBase
 		SQLObject so = new SQLObject();
-		ArrayList<ElderData> DosageList=new ArrayList<ElderData>();
+		ArrayList<ElderData> CheckList=new ArrayList<ElderData>();
 		ArrayList<String> commentsList=new ArrayList<String>();
 		ResultSet rs;
 		counter=0;
@@ -216,13 +216,13 @@ public class MedCheckPanel extends JPanel {
 				String year=text.substring(0, 4);
 				String month=text.substring(5,7);
 				String day=text.substring(8,10);
-
+				data.setElderID(rs.getInt("id"));
 				data.setElderBed(rs.getInt("bed"));
 				data.setElderID(rs.getInt("id"));
 				data.setElderName(rs.getString("name"));
 				data.setElderAge(ElderData.getAge(year,month,day));
 				data.setElderGender(rs.getString("gender"));
-				DosageList.add(data);
+				CheckList.add(data);
 			}
 		} catch (SQLException e1) {
 
@@ -231,15 +231,15 @@ public class MedCheckPanel extends JPanel {
 
 
 		try {
-			rs = so.getResultSet("SELECT elderlynotes FROM et_elderly");
+			rs = so.getResultSet("SELECT checkupsummary FROM et_elderly");
 			while(rs.next()){
-				commentsList.add(rs.getString("elderlynotes"));
+				commentsList.add(rs.getString("checkupsummary"));
 			}
 		} catch (SQLException e1) {
 
 			e1.printStackTrace();
 		}
-		DisplayInformation(DosageList,commentsList, counter);
+		DisplayInformation(CheckList,commentsList, counter);
 
 		JButton btnSaveQuit = new JButton("Save And Quit");
 		btnSaveQuit.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -256,6 +256,33 @@ public class MedCheckPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please Check Again");
 				}
 				else{
+					try {
+						CheckUpObject checkElder=new CheckUpObject();
+						checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
+						checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+						checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+						checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+						if(comboEye.getSelectedItem().toString().equals("Yes")){
+							checkElder.setElderEye(true);
+						}
+						else{
+							checkElder.setElderEye(false);
+						}
+						if(comboEar.getSelectedItem().toString().equals("Yes")){
+							checkElder.setElderEar(true);
+						}
+						else{
+							checkElder.setElderEar(false);
+						}
+
+
+						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
+						UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
+						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
+					} catch (SQLException e1) {
+
+						e1.printStackTrace();
+					}
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 				}
@@ -303,25 +330,17 @@ public class MedCheckPanel extends JPanel {
 						}
 
 
-
-
-						CheckUpObject.StoreCheckUp(NameField.getText(),DosageList.get(counter).getElderID(),reportDate,checkElder);
-
+						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
+						UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
+						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
 					} catch (SQLException e1) {
 
 						e1.printStackTrace();
 					}
-					try{
-						String comments=textAddition.getText();
-						CheckUpObject.StoreComments(DosageList.get(counter).getElderID(),comments);
-					}
-					catch (SQLException e1) {
-
-						e1.printStackTrace();
-					}
+		
 
 					counter++;
-					DisplayInformation(DosageList,commentsList,counter);
+					DisplayInformation(CheckList,commentsList,counter);
 					JOptionPane.showMessageDialog(null, "Check up is successful");
 					TempField.setText(null);
 					BloodField.setText(null);
@@ -338,8 +357,36 @@ public class MedCheckPanel extends JPanel {
 
 	}
 
-	public void DisplayInformation(ArrayList<ElderData> DosageList,ArrayList<String> commentsList, int counter){
+	public void UpdateCheckUpTaken(int id,String timing) {
+		SQLObject so = new SQLObject();
+		try {
+			if(timing.equalsIgnoreCase("morning")){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningcheck=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
 
+			}
+			else if(timing.equalsIgnoreCase("afternoon")){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternooncheck=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
+			}
+			else if(timing.equalsIgnoreCase("noon") ){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET nooncheck=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void DisplayInformation(ArrayList<ElderData> DosageList,ArrayList<String> commentsList, int counter){
 		BedField.setText(Integer.toString(DosageList.get(counter).getElderBed()));
 		NameField.setText(DosageList.get(counter).getElderName());
 		AgeField.setText(Integer.toString(DosageList.get(counter).getElderAge()));
