@@ -76,42 +76,7 @@ public class MedDosageSearchPanel extends JPanel {
 
 		roomcombobox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				if(roomcombobox.getSelectedItem().toString().equals("101")){
-					txtpnOverview.setText("Room Number: 101 \r\nTotal number of elderly: "+room101.getElderNum() +"\r\nTotal Male elderly: " +room101.getElderNumMale() 
-					+"\r\nTotal Female elderly:" +room101.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room101.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room101.getElderNumDosageNotNeeded());
-				}
-				else if (roomcombobox.getSelectedItem().toString().equals("102")){
-					txtpnOverview.setText("Room Number: 102 \r\nTotal number of elderly: "+room102.getElderNum() +"\r\nTotal Male elderly: " +room102.getElderNumMale()
-					+"\r\nTotal Female elderly:" +room102.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room102.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room102.getElderNumDosageNotNeeded());
-				}
-				else if (roomcombobox.getSelectedItem().toString().equals("103")){
-					txtpnOverview.setText("Room Number: 103 \r\nTotal number of elderly: "+room103.getElderNum() +"\r\nTotal Male elderly: " +room103.getElderNumMale() 
-					+"\r\nTotal Female elderly:" +room103.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room103.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room103.getElderNumDosageNotNeeded());
-				}
-				else if (roomcombobox.getSelectedItem().toString().equals("104")){
-					txtpnOverview.setText("Room Number: 104 \r\nTotal number of elderly: "+room104.getElderNum() +"\r\nTotal Male elderly: " +room104.getElderNumMale() 
-					+"\r\nTotal Female elderly:" +room104.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room104.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room104.getElderNumDosageNotNeeded());
-				}
-				else if (roomcombobox.getSelectedItem().toString().equals("105")){
-					txtpnOverview.setText("Room Number: 105 \r\nTotal number of elderly: "+room105.getElderNum() +"\r\nTotal Male elderly: " +room105.getElderNumMale()
-					+"\r\nTotal Female elderly:" +room105.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room105.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room105.getElderNumDosageNotNeeded());
-				}
-				else if (roomcombobox.getSelectedItem().toString().equals("201")){
-					txtpnOverview.setText("Room Number: 201 \r\nTotal number of elderly: "+room201.getElderNum() +"\r\nTotal Male elderly: " +room201.getElderNumMale() 
-					+"\r\nTotal Female elderly:" +room201.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room201.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room201.getElderNumDosageNotNeeded());
-				}
-				else if (roomcombobox.getSelectedItem().toString().equals("202")){
-					txtpnOverview.setText("Room Number: 202 \r\nTotal number of elderly: "+room202.getElderNum() +"\r\nTotal Male elderly: " +room202.getElderNumMale() 
-					+"\r\nTotal Female elderly:" +room202.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room202.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room202.getElderNumDosageNotNeeded());
-				}
-				else if (roomcombobox.getSelectedItem().toString().equals("203")){
-					txtpnOverview.setText("Room Number: 203 \r\nTotal number of elderly: "+room203.getElderNum() +"\r\nTotal Male elderly: " +room203.getElderNumMale() 
-					+"\r\nTotal Female elderly:" +room203.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room203.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room203.getElderNumDosageNotNeeded());
-				}
-
-				else{
-					txtpnOverview.setText("Room Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
-				}
+				updatesummary(roomcombobox.getSelectedItem().toString());
 			}
 		});
 
@@ -127,7 +92,11 @@ public class MedDosageSearchPanel extends JPanel {
 		timeCombobox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
 		timeCombobox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {"Morning","Afternoon", "Noon" }));
 		add(timeCombobox);
-
+		timeCombobox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				updatesummary(roomcombobox.getSelectedItem().toString());
+			}
+		});
 
 
 		JLabel lblOverview = new JLabel("Overview:");
@@ -474,6 +443,44 @@ public class MedDosageSearchPanel extends JPanel {
 	}
 	public static String getDosageTimeSelect(){
 		return timeselected;
+	}
+	public void updatesummary(String roomChoice){
+		if(roomChoice.equalsIgnoreCase("101")){
+			txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: 101 \r\nTotal number of elderly: "+room101.getElderNum() +"\r\nTotal Male elderly: " +room101.getElderNumMale() 
+			+"\r\nTotal Female elderly:" +room101.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room101.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room101.getElderNumDosageNotNeeded());
+		}
+		else if (roomChoice.equalsIgnoreCase("102")){
+			txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: 102 \r\nTotal number of elderly: "+room102.getElderNum() +"\r\nTotal Male elderly: " +room102.getElderNumMale()
+			+"\r\nTotal Female elderly:" +room102.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room102.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room102.getElderNumDosageNotNeeded());
+		}
+		else if (roomChoice.equalsIgnoreCase("103")){
+			txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: 103 \r\nTotal number of elderly: "+room103.getElderNum() +"\r\nTotal Male elderly: " +room103.getElderNumMale() 
+			+"\r\nTotal Female elderly:" +room103.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room103.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room103.getElderNumDosageNotNeeded());
+		}
+		else if (roomChoice.equalsIgnoreCase("104")){
+			txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: 104 \r\nTotal number of elderly: "+room104.getElderNum() +"\r\nTotal Male elderly: " +room104.getElderNumMale() 
+			+"\r\nTotal Female elderly:" +room104.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room104.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room104.getElderNumDosageNotNeeded());
+		}
+		else if (roomChoice.equalsIgnoreCase("105")){
+			txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: 105 \r\nTotal number of elderly: "+room105.getElderNum() +"\r\nTotal Male elderly: " +room105.getElderNumMale()
+			+"\r\nTotal Female elderly:" +room105.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room105.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room105.getElderNumDosageNotNeeded());
+		}
+		else if (roomChoice.equalsIgnoreCase("201")){
+			txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: 201 \r\nTotal number of elderly: "+room201.getElderNum() +"\r\nTotal Male elderly: " +room201.getElderNumMale() 
+			+"\r\nTotal Female elderly:" +room201.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room201.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room201.getElderNumDosageNotNeeded());
+		}
+		else if (roomChoice.equalsIgnoreCase("202")){
+			txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: 202 \r\nTotal number of elderly: "+room202.getElderNum() +"\r\nTotal Male elderly: " +room202.getElderNumMale() 
+			+"\r\nTotal Female elderly:" +room202.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room202.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room202.getElderNumDosageNotNeeded());
+		}
+		else if (roomChoice.equalsIgnoreCase("203")){
+			txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: 203 \r\nTotal number of elderly: "+room203.getElderNum() +"\r\nTotal Male elderly: " +room203.getElderNumMale() 
+			+"\r\nTotal Female elderly:" +room203.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+room203.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+room203.getElderNumDosageNotNeeded());
+		}
+
+		else{
+			txtpnOverview.setText("Dosage Time:\r\nRoom Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
+		}
 	}
 	public Boolean checkDosageNeeded(){
 		int check=1;
