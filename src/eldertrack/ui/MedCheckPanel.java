@@ -197,10 +197,13 @@ public class MedCheckPanel extends JPanel {
 		SQLObject so = new SQLObject();
 		ArrayList<ElderData> CheckList=new ArrayList<ElderData>();
 		ArrayList<String> commentsList=new ArrayList<String>();
+		ElderData data=new ElderData();
+		String output=MedCheckSearchPanel.getCheckSelect();
+		String checkupTime=MedCheckSearchPanel.getCheckTimeSelect();
 		ResultSet rs;
 		counter=0;
 		try {
-			String output=MedCheckSearchPanel.getCheckSelect();
+
 
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
 			stmt.setString(1, output);
@@ -208,21 +211,62 @@ public class MedCheckPanel extends JPanel {
 			rs = stmt.getResultSet();
 
 			while(rs.next()){
-				ElderData data=new ElderData();
-				// calculate age
-				java.sql.Date birthDate=rs.getDate("dob");
-				DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-				String text = df.format(birthDate);
-				String year=text.substring(0, 4);
-				String month=text.substring(5,7);
-				String day=text.substring(8,10);
-				data.setElderID(rs.getInt("id"));
-				data.setElderBed(rs.getInt("bed"));
-				data.setElderID(rs.getInt("id"));
-				data.setElderName(rs.getString("name"));
-				data.setElderAge(ElderData.getAge(year,month,day));
-				data.setElderGender(rs.getString("gender"));
-				CheckList.add(data);
+
+				if(checkupTime.equalsIgnoreCase("morning")){
+					if(rs.getInt("morningcheck")==0){
+						data=new ElderData();
+						java.sql.Date birthDate=rs.getDate("dob");
+						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+						String text = df.format(birthDate);
+						String year=text.substring(0, 4);
+						String month=text.substring(5,7);
+						String day=text.substring(8,10);
+						data.setElderID(rs.getInt("id"));
+						data.setElderBed(rs.getInt("bed"));
+						data.setElderID(rs.getInt("id"));
+						data.setElderName(rs.getString("name"));
+						data.setElderAge(ElderData.getAge(year,month,day));
+						data.setElderGender(rs.getString("gender"));
+						CheckList.add(data);
+					}
+				}
+				else if(checkupTime.equalsIgnoreCase("afternoon")){
+					if(rs.getInt("afternooncheck")==0){
+						data=new ElderData();
+						java.sql.Date birthDate=rs.getDate("dob");
+						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+						String text = df.format(birthDate);
+						String year=text.substring(0, 4);
+						String month=text.substring(5,7);
+						String day=text.substring(8,10);
+						data.setElderID(rs.getInt("id"));
+						data.setElderBed(rs.getInt("bed"));
+						data.setElderID(rs.getInt("id"));
+						data.setElderName(rs.getString("name"));
+						data.setElderAge(ElderData.getAge(year,month,day));
+						data.setElderGender(rs.getString("gender"));
+						CheckList.add(data);
+					}
+				}
+				else if(checkupTime.equalsIgnoreCase("noon")){
+					if(rs.getInt("nooncheck")==0){
+						data=new ElderData();
+						java.sql.Date birthDate=rs.getDate("dob");
+						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+						String text = df.format(birthDate);
+						String year=text.substring(0, 4);
+						String month=text.substring(5,7);
+						String day=text.substring(8,10);
+						data.setElderID(rs.getInt("id"));
+						data.setElderBed(rs.getInt("bed"));
+						data.setElderID(rs.getInt("id"));
+						data.setElderName(rs.getString("name"));
+						data.setElderAge(ElderData.getAge(year,month,day));
+						data.setElderGender(rs.getString("gender"));
+						CheckList.add(data);
+					}
+				}
+
 			}
 		} catch (SQLException e1) {
 
@@ -279,6 +323,7 @@ public class MedCheckPanel extends JPanel {
 						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 						UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
 						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
+						JOptionPane.showMessageDialog(null, "Check up is successful");
 					} catch (SQLException e1) {
 
 						e1.printStackTrace();
@@ -337,7 +382,7 @@ public class MedCheckPanel extends JPanel {
 
 						e1.printStackTrace();
 					}
-		
+
 
 					counter++;
 					DisplayInformation(CheckList,commentsList,counter);
@@ -380,10 +425,10 @@ public class MedCheckPanel extends JPanel {
 				ps.executeUpdate();
 			}
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void DisplayInformation(ArrayList<ElderData> DosageList,ArrayList<String> commentsList, int counter){
