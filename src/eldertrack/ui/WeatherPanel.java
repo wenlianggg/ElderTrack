@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import eldertrack.weather.Weather;
-import eldertrack.weather.WeatherTools;
 
 public class WeatherPanel extends JPanel {
 	private static final long serialVersionUID = -30875959185202451L;
@@ -27,12 +26,12 @@ public class WeatherPanel extends JPanel {
 		lblWeatherText.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		lblWeatherText.setBounds(10, 0, 194, 25);
 		
-		lblWeatherLine1 = new JLabel("No Information Obtained");
+		lblWeatherLine1 = new JLabel("");
 		lblWeatherLine1.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblWeatherLine1.setForeground(Color.WHITE);
 		lblWeatherLine1.setBounds(20, 25, 177, 14);
 		
-		lblWeatherLine2 = new JLabel("Web API Did Not Respond Timely");
+		lblWeatherLine2 = new JLabel("Concurrently loading data...");
 		lblWeatherLine2.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblWeatherLine2.setForeground(Color.WHITE);
 		lblWeatherLine2.setBounds(20, 40, 177, 14);
@@ -52,15 +51,6 @@ public class WeatherPanel extends JPanel {
 		lblWeatherLine5.setForeground(new Color(192, 192, 192));
 		lblWeatherLine5.setBounds(20, 85, 177, 14);
 		
-		Weather weather = WeatherTools.getWeather();
-		if (weather!=null) {
-			lblWeatherLine1.setText("Condition: " + weather.getSummary());
-			lblWeatherLine2.setText(weather.getTemperature() + "°C, " + "Wind Speed: " + weather.getWindSpeed() + "m/s");
-			lblWeatherLine3.setText("Chance of Rain: " + weather.getPrecip() + "%");
-			lblWeatherLine4.setText("Air Pressure: " + weather.getAirPressure() + "hPa");
-			lblWeatherLine5.setText("Correct as at " + weather.getTimeString());
-		}
-		
 		add(lblWeatherText);
 		add(lblWeatherLine1);
 		add(lblWeatherLine2);
@@ -68,5 +58,15 @@ public class WeatherPanel extends JPanel {
 		add(lblWeatherLine4);
 		add(lblWeatherLine5);
 
+	}
+	
+	public void showWeatherInfo(Weather weather) {
+		if (weather!=null) {
+			lblWeatherLine1.setText("Condition: " + weather.getSummary());
+			lblWeatherLine2.setText(weather.getTemperature() + "°C, " + "Wind Speed: " + weather.getWindSpeed() + "m/s");
+			lblWeatherLine3.setText("Chance of Rain: " + weather.getPrecip() + "%");
+			lblWeatherLine4.setText("Air Pressure: " + weather.getAirPressure() + "hPa");
+			lblWeatherLine5.setText("Correct as at " + weather.getTimeString());
+		}
 	}
 }

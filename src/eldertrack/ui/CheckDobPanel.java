@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import eldertrack.login.SessionTools;
 import eldertrack.login.StaffSession;
 import java.awt.GridLayout;
 import java.awt.Component;
@@ -86,7 +85,7 @@ public class CheckDobPanel extends JPanel {
 					public void actionPerformed(ActionEvent arg0) {
 						// Check if login fields are null, if not, process login.
 						if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
-							session = SessionTools.createSession(loginField.getText(), passwordField.getPassword());
+							session = StaffSession.createSession(loginField.getText(), passwordField.getPassword());
 							if (session == null) {
 								loginMessage = "Login failed, Please Try Again";
 								loginField.setText("");

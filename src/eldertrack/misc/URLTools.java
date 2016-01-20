@@ -15,7 +15,6 @@ public class URLTools {
 	        char[] chars = new char[1024];
 	        while ((read = reader.read(chars)) != -1)
 	            buffer.append(chars, 0, read);
-	        System.out.println("Obtained Data From URL!");
 	        return buffer.toString();
 	    } finally {
 	        if (reader != null)

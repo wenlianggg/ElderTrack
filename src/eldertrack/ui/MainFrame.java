@@ -16,6 +16,7 @@ import javax.swing.border.EtchedBorder;
 
 import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
+import eldertrack.weather.Weather;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -33,11 +34,13 @@ public class MainFrame extends JFrame {
     private ReportMainPanel ReportPanel;
     private MgmtPanel MgmtPanel;
     private MainMenuPanel MainMenu;
+	private WeatherPanel weatherPanel;
     static JPanel CardsPanel;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
 	private static StaffSession session;
 	private static MainFrame frame;
+	
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
@@ -51,7 +54,6 @@ public class MainFrame extends JFrame {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
 					frame = new MainFrame();
 					frame.setVisible(true); // Set the main frame as visible
-					frame.showWeatherPanel();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -74,6 +76,13 @@ public class MainFrame extends JFrame {
 		MasterPane.setLayout(null);
 		setContentPane(MasterPane);
 		
+		weatherPanel = new WeatherPanel();
+
+		weatherPanel.setLocation(790, 671);
+		MasterPane.add(weatherPanel);
+		Thread thrd = new Thread(weatherTask);
+		thrd.start();
+		
 		LoginPanel = new LoginPanel();
 		LoginPanel.setBorder(lBorder);
 		
@@ -90,7 +99,7 @@ public class MainFrame extends JFrame {
 		JProgressBar jpbar = LoginPanel.progressBar;
 		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
 		jpbar.setValue(25);
-
+				
 		// Initialize Diet Panel
 		jpbar.setString("Initializing Diet Management...");
 		jpbar.update(jpbar.getGraphics());
@@ -181,11 +190,13 @@ public class MainFrame extends JFrame {
 		System.out.println("Panels deconstructed!");
 	}
 	
-	private void showWeatherPanel() {
-		JPanel WeatherPanel = new WeatherPanel();
-		WeatherPanel.setLocation(790, 671);
-		getInstance().MasterPane.add(WeatherPanel);
-	}
+	
+	Runnable weatherTask = () -> {
+		System.out.println("Obtaining data from URL on " + Thread.currentThread().getName());
+		Weather weatherinfo = Weather.getWeather();
+		weatherPanel.showWeatherInfo(weatherinfo);
+	};
+	
 	
 	// Singleton Class Design
 	public static MainFrame getInstance() {
