@@ -33,6 +33,7 @@ public class MedCheckPanel extends JPanel {
 	private JTextField GenderField;
 	private JTextPane txtSummary;
 	private int counter;
+	private int numofElder;
 	static final SQLObject so = new SQLObject();
 	private static final long serialVersionUID = -1155434751690765910L;
 
@@ -119,72 +120,72 @@ public class MedCheckPanel extends JPanel {
 
 		JLabel lblTemperature = new JLabel("Temperature: ");
 		lblTemperature.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblTemperature.setBounds(120, 309, 130, 30);
+		lblTemperature.setBounds(120, 284, 130, 30);
 		add(lblTemperature);
 
 		JTextField TempField = new JTextField();
-		TempField.setBounds(260, 317, 90, 25);
+		TempField.setBounds(260, 292, 90, 25);
 		TempField.setColumns(10);
 		add(TempField);
 
 		JLabel lblBlood= new JLabel("Blood Pressure: ");
-		lblBlood.setBounds(120, 350, 142, 30);
+		lblBlood.setBounds(120, 325, 142, 30);
 		add(lblBlood);
 		lblBlood.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 
 		JTextField BloodField= new JTextField();
 		BloodField.setColumns(10);
-		BloodField.setBounds(260, 356, 90, 25);
+		BloodField.setBounds(260, 331, 90, 25);
 		add(BloodField);
 
 		JLabel lblHeartRate = new JLabel("Heart Rate: ");
 		lblHeartRate.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblHeartRate.setBounds(120, 391, 130, 30);
+		lblHeartRate.setBounds(120, 366, 130, 30);
 		add(lblHeartRate);
 
 		JTextField HeartField = new JTextField();
-		HeartField.setBounds(260, 398, 90, 25);
+		HeartField.setBounds(260, 373, 90, 25);
 		HeartField.setColumns(10);
 		add(HeartField);
 
 		JLabel lblSugarLv= new JLabel("Sugar Level: ");
-		lblSugarLv.setBounds(120, 431, 112, 30);
+		lblSugarLv.setBounds(120, 406, 112, 30);
 		lblSugarLv.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		add(lblSugarLv);
 
 		JTextField SugarField=new JTextField();
-		SugarField.setBounds(260, 437, 90, 25);
+		SugarField.setBounds(260, 412, 90, 25);
 		SugarField.setColumns(10);
 		add(SugarField);
 
 		JLabel lblEye= new JLabel("Eye Infection:");
 		lblEye.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblEye.setBounds(120, 472, 130, 30);
+		lblEye.setBounds(120, 447, 130, 30);
 		add(lblEye);
 
 		JComboBox<String> comboEye = new JComboBox<String>();
-		comboEye.setBounds(260, 482, 90, 20);
+		comboEye.setBounds(260, 457, 90, 20);
 		comboEye.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { " ","Yes", "No" }));
 		add(comboEye);
 
 		JLabel lblEar= new JLabel("Ear Infection:");
 		lblEar.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblEar.setBounds(120, 513, 130, 30);
+		lblEar.setBounds(120, 488, 130, 30);
 		add(lblEar);
 
 		JComboBox<String> comboEar = new JComboBox<String>();
-		comboEar.setBounds(260, 523, 90, 20);
+		comboEar.setBounds(260, 498, 90, 20);
 		comboEar.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { " ","Yes", "No" }));
 		add(comboEar);
 
 
 		JLabel lblAddition= new JLabel("Additional Notes: ");
 		lblAddition.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblAddition.setBounds(424, 308, 151, 30);
+		lblAddition.setBounds(424, 283, 151, 30);
 		add(lblAddition);
 
 		JTextPane textAddition = new JTextPane();
-		textAddition.setBounds(424, 349, 422, 149);
+		textAddition.setBounds(424, 324, 422, 149);
 		add(textAddition);
 
 		//Date
@@ -202,6 +203,7 @@ public class MedCheckPanel extends JPanel {
 		String checkupTime=MedCheckSearchPanel.getCheckTimeSelect();
 		ResultSet rs;
 		counter=0;
+		numofElder=0;
 		try {
 
 
@@ -228,6 +230,7 @@ public class MedCheckPanel extends JPanel {
 						data.setElderAge(ElderData.getAge(year,month,day));
 						data.setElderGender(rs.getString("gender"));
 						CheckList.add(data);
+						numofElder++;
 					}
 				}
 				else if(checkupTime.equalsIgnoreCase("afternoon")){
@@ -246,6 +249,7 @@ public class MedCheckPanel extends JPanel {
 						data.setElderAge(ElderData.getAge(year,month,day));
 						data.setElderGender(rs.getString("gender"));
 						CheckList.add(data);
+						numofElder++;
 					}
 				}
 				else if(checkupTime.equalsIgnoreCase("noon")){
@@ -264,6 +268,7 @@ public class MedCheckPanel extends JPanel {
 						data.setElderAge(ElderData.getAge(year,month,day));
 						data.setElderGender(rs.getString("gender"));
 						CheckList.add(data);
+						numofElder++;
 					}
 				}
 
@@ -287,7 +292,7 @@ public class MedCheckPanel extends JPanel {
 
 		JButton btnSaveQuit = new JButton("Save And Quit");
 		btnSaveQuit.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		btnSaveQuit.setBounds(391, 512, 150, 35);
+		btnSaveQuit.setBounds(422, 519, 150, 35);
 		add(btnSaveQuit);
 
 		btnSaveQuit.addActionListener(new ActionListener() {
@@ -300,52 +305,62 @@ public class MedCheckPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please Check Again");
 				}
 				else{
-					try {
-						CheckUpObject checkElder=new CheckUpObject();
-						checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-						checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
-						checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-						checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
-						if(comboEye.getSelectedItem().toString().equals("Yes")){
-							checkElder.setElderEye(true);
-						}
-						else{
-							checkElder.setElderEye(false);
-						}
-						if(comboEar.getSelectedItem().toString().equals("Yes")){
-							checkElder.setElderEar(true);
-						}
-						else{
-							checkElder.setElderEar(false);
-						}
+					if(counter+1==CheckList.size()){
+						try {
+							CheckUpObject checkElder=new CheckUpObject();
+							checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
+							checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+							checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+							checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+							if(comboEye.getSelectedItem().toString().equals("Yes")){
+								checkElder.setElderEye(true);
+							}
+							else{
+								checkElder.setElderEye(false);
+							}
+							if(comboEar.getSelectedItem().toString().equals("Yes")){
+								checkElder.setElderEar(true);
+							}
+							else{
+								checkElder.setElderEar(false);
+							}
 
 
-						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
-						UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
-						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
-						JOptionPane.showMessageDialog(null, "Check up is successful");
-					} catch (SQLException e1) {
+							CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
+							UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
+							CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
+							JOptionPane.showMessageDialog(null, "Check up is successful");
+						} catch (SQLException e1) {
 
-						e1.printStackTrace();
+							e1.printStackTrace();
+						}
 					}
+
+					JOptionPane.showMessageDialog(null, "Check Up has been completed");	
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
-				}
 
+				}
 
 			}
 		});
 
 		JButton btnNextElder = new JButton("Next Elderly");
 		btnNextElder.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		btnNextElder.setBounds(665, 512, 150, 35);
+		btnNextElder.setBounds(696, 519, 150, 35);
 		add(btnNextElder);
+
+		JLabel lblElderLeft = new JLabel("Number of Elderly left:"+numofElder);
+		lblElderLeft.setBounds(675, 228, 171, 14);
+		add(lblElderLeft);
+
+
 
 
 		btnNextElder.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
+				numofElder--;
 				if(TempField.getText().equals("") ||  BloodField.getText().equals("") || 
 						HeartField.getText().equals("") || SugarField.getText().equals("")|| 
 						comboEye.getSelectedItem().toString().equals(" ") || comboEar.getSelectedItem().toString().equals(" ")
@@ -354,48 +369,53 @@ public class MedCheckPanel extends JPanel {
 				}
 				else{
 
+					if(counter+1==CheckList.size()){
+						try {
+							CheckUpObject checkElder=new CheckUpObject();
+							checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
+							checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+							checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+							checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+							if(comboEye.getSelectedItem().toString().equals("Yes")){
+								checkElder.setElderEye(true);
+							}
+							else{
+								checkElder.setElderEye(false);
+							}
+							if(comboEar.getSelectedItem().toString().equals("Yes")){
+								checkElder.setElderEar(true);
+							}
+							else{
+								checkElder.setElderEar(false);
+							}
 
-					try {
-						CheckUpObject checkElder=new CheckUpObject();
-						checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-						checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
-						checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-						checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
-						if(comboEye.getSelectedItem().toString().equals("Yes")){
-							checkElder.setElderEye(true);
-						}
-						else{
-							checkElder.setElderEye(false);
-						}
-						if(comboEar.getSelectedItem().toString().equals("Yes")){
-							checkElder.setElderEar(true);
-						}
-						else{
-							checkElder.setElderEar(false);
-						}
 
+							CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
+							UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
+							CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
+						} catch (SQLException e1) {
 
-						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
-						UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
-						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
-					} catch (SQLException e1) {
-
-						e1.printStackTrace();
+							e1.printStackTrace();
+						}
+						counter++;
+						DisplayInformation(CheckList,commentsList,counter);
+						lblElderLeft.setText("Number of Elderly left:"+numofElder);
+						JOptionPane.showMessageDialog(null, "Check up is successful");
+						TempField.setText(null);
+						BloodField.setText(null);
+						HeartField.setText(null);
+						SugarField.setText(null);
+						comboEye.setSelectedItem(null);
+						comboEar.setSelectedItem(null);
 					}
 
+					else{
+						JOptionPane.showMessageDialog(null, "Check Up has been completed");	
+						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+						mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
+					}
 
-					counter++;
-					DisplayInformation(CheckList,commentsList,counter);
-					JOptionPane.showMessageDialog(null, "Check up is successful");
-					TempField.setText(null);
-					BloodField.setText(null);
-					HeartField.setText(null);
-					SugarField.setText(null);
-					comboEye.setSelectedItem(null);
-					comboEar.setSelectedItem(null);
 				}
-
-
 			}
 		});
 
