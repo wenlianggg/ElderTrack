@@ -60,6 +60,23 @@ public class Elderly {
 		this.m = m;
 	}
 	
+	public void addMeal(String mealid) {
+		Integer mid = Integer.parseInt(mealid);
+		MealProperties mp = new MealProperties();
+		try {
+		PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_menu WHERE itemid = ?");
+		ps.setInt(1, mid);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		m.getMealProperties().add(mp);
+		m.getMealName().add(rs.getString("name"));
+		m.getNutrition().add(SerializerSQL.retrieveNutrition(mid, so));
+		SerializerSQL.storeMeals(this.id, m, so);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static HashMap<Integer,Elderly> getElderlyMap() {
 		if (Elderly.eldermap == null) {
 			PreparedStatement ps;

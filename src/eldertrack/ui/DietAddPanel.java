@@ -30,10 +30,11 @@ import eldertrack.diet.Nutrition;
 import eldertrack.misc.TableHelper;
 import javax.swing.JCheckBox;
 
-public class DietAddPanel extends JPanel {
+public class DietAddPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	JLabel lblSelectElderly;
+	private String currentElderly;
 	private JTable mealSearchTable;
 	private JTextField searchField;
 	private JButton btnSearch;
@@ -98,6 +99,7 @@ public class DietAddPanel extends JPanel {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mealSearchTable.setModel(TableHelper.getMeals("%" + searchField.getText() + "%"));
+				setMenuColumnWidths();
 			}
 		});
 		btnSearch.setBounds(228, 190, 65, 23);
@@ -144,20 +146,25 @@ public class DietAddPanel extends JPanel {
 		JButton btnModifyMeals = new JButton("Back (Elderly View)");
 		btnModifyMeals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMAINPANEL);
+				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
 			}
 		});
 		btnModifyMeals.setBounds(682, 611, 303, 48);
 		add(btnModifyMeals);
 		
 		JButton btnAddMeal = new JButton("Add Meal Entry");
+		btnAddMeal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addMealEntry(mealSearchTable.getValueAt(mealSearchTable.getSelectedRow(), 0).toString());
+			}
+		});
 
 		btnAddMeal.setBounds(682, 553, 303, 47);
 		add(btnAddMeal);
 		
 		JPanel nutriInfoPanel = new JPanel();
-		nutriInfoPanel.setBorder(null);
+		nutriInfoPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		nutriInfoPanel.setBounds(306, 156, 364, 503);
 		add(nutriInfoPanel);
 		nutriInfoPanel.setLayout(null);
@@ -220,19 +227,7 @@ public class DietAddPanel extends JPanel {
 		add(scrollPane);
 		
 		prevMealsTable = new JTable();
-		prevMealsTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-			},
-			new String[] {
-				"ID", "Time of Day", "Meal"
-			}
-		));
-		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(50);
-		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(102);
-		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(208);
+
 		scrollPane.setViewportView(prevMealsTable);
 
 		JButton btnMainMenu = new JButton("Back to Main Menu");
@@ -258,16 +253,32 @@ public class DietAddPanel extends JPanel {
 		mealSearchTable.getColumnModel().getColumn(3).setMaxWidth(70);
 	}
 	
+	private void setPrevMealsColumnWidth() {
+		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(250);
+	}
 	
-	void presentPersonData(String pid) {
+	public void presentData(String personid) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
-		Elderly el = eldermap.get(Integer.parseInt(pid));
+		Elderly el = eldermap.get(Integer.parseInt(personid));
+		prevMealsTable.setModel(el.getMeals().getTableModel());
+		setPrevMealsColumnWidth();
+		this.currentElderly = personid;
 		
 		lblInfoName.setText(el.getName());
 		lblElderid.setText("ElderID: " + el.getId());
 		lblAge.setText("Age: " + el.getAge());
 		lblRoomNumber.setText("Room Number: " + el.getRoomnum());
 		lblNric.setText("NRIC: " + el.getNric());
+	}
+	
+	private void addMealEntry(String mid) {
+		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
+		Elderly el = eldermap.get(Integer.parseInt(currentElderly));
+		el.addMeal(mid);
+		presentData(this.currentElderly);
+		setPrevMealsColumnWidth();
 	}
 	
 	private void presentMealData(String mid) {
@@ -313,5 +324,11 @@ public class DietAddPanel extends JPanel {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+	}
+
+	@Override
+	public void printDebug() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,10 +1,11 @@
 package eldertrack.ui;
 
-import javax.swing.JPanel;
 import java.awt.CardLayout;
 
-public class DietPanel extends JPanel {
-	private static final long serialVersionUID = 4318548492960279050L;
+import javax.swing.JPanel;
+
+public class DietSection extends JPanel {
+	private static final long serialVersionUID = 1L;
     final static String DMAINPANEL = "Diet Main Panel";
 	final static String DADDPANEL = "Diet Add Panel";
     final static String DMODPANEL = "Diet Modify Panel";
@@ -16,7 +17,7 @@ public class DietPanel extends JPanel {
 	private JPanel dietMenuPanel;
 	
 	// Constructor
-	DietPanel() {
+	DietSection() {
 		dietMainPanel = new DietMainPanel();
 		dietAddPanel = new DietAddPanel();
 		dietModifyPanel = new DietModifyPanel();
@@ -41,4 +42,5 @@ public class DietPanel extends JPanel {
 	DietModifyPanel getDietModifyPanel() {
 		return (DietModifyPanel) this.dietModifyPanel;
 	}
+
 }
