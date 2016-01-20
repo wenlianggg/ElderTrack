@@ -22,7 +22,10 @@ import java.awt.event.ItemListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+//bugs
+//the summary tab is abit buggy will fix on ltr date
+//checking is not fully tested but should be working fine, need more test to be sure
+//have not done the time reset yet, will do on ltr date
 public class MedCheckSearchPanel extends JPanel {
 
 

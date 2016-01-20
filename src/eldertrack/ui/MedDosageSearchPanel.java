@@ -24,7 +24,10 @@ import eldertrack.db.SQLObject;
 import eldertrack.medical.ElderData;
 
 import javax.swing.JTextPane;
-
+// bugs
+// the summary tab is abit buggy will fix on ltr date
+// checking is not fully tested but should be working fine, need more test to be sure
+// have not done the time reset yet, will do on ltr date
 
 
 
