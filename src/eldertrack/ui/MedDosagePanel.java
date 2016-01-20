@@ -286,6 +286,8 @@ public class MedDosagePanel extends JPanel {
 				int feed=0;
 				counter++;
 				numofElder--;
+				
+				if(counter<DosageList.size()){
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
@@ -312,15 +314,20 @@ public class MedDosagePanel extends JPanel {
 						}
 
 						JOptionPane.showMessageDialog(null, "Record Has Been Saved");
-
+						lblElderLeft.setText("Number of Elderly Left: "+numofElder);
 					}
 					else{
 						JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
 
 					}
 				}
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Dosage has been completed");
+					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
+				}
 			}
-
 		});
 
 	}
