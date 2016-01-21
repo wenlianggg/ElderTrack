@@ -30,9 +30,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
-import eldertrack.management.*;
 import eldertrack.misc.NRICUtils;
+import eldertrack.misc.TableHelper;
+
 import javax.swing.JPasswordField;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class MgmtPanel extends JPanel {
 	private static SQLObject so = new SQLObject();
@@ -165,10 +168,6 @@ public class MgmtPanel extends JPanel {
 		label_10.setBounds(152, 210, 23, 25);
 		staffManagementPanel.add(label_10);
 		
-		JLabel staffAccessLevelValue = new JLabel("");
-		staffAccessLevelValue.setBounds(180, 210, 116, 22);
-		staffManagementPanel.add(staffAccessLevelValue);
-		
 		JLabel staffUsername = new JLabel("USERNAME");
 		staffUsername.setFont(new Font("Calibri", Font.PLAIN, 24));
 		staffUsername.setBounds(19, 270, 123, 25);
@@ -203,6 +202,11 @@ public class MgmtPanel extends JPanel {
 		uneditableUsernameValue.setBounds(180, 270, 116, 22);
 		uneditableUsernameValue.setVisible(true);
 		staffManagementPanel.add(uneditableUsernameValue);
+		
+		JComboBox<String> editableAccessLevel = new JComboBox<String>();
+		editableAccessLevel.setModel(new DefaultComboBoxModel<String>(new String[] {"No Access", "Staff", "Sr Staff", "Admin", "Manager"}));
+		editableAccessLevel.setBounds(180, 210, 116, 22);
+		staffManagementPanel.add(editableAccessLevel);
 		
 		JPanel elderlyManagementPanel = new JPanel();
 		elderlyManagementPanel.setBounds(625, 79, 340, 327);
@@ -370,25 +374,17 @@ public class MgmtPanel extends JPanel {
 		
 		
 		DefaultTableModel allEldersData;
-		try {
-			allEldersData = ElderlyTableHelper.getElderlyFromQuery("");
-			elderlyTable = new JTable(allEldersData);
-			setColumnWidths();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		allEldersData = TableHelper.getElderlyDetailed("");
+		elderlyTable = new JTable(allEldersData);
+		setColumnWidths();
 		
 		JScrollPane scrollPane2 = new JScrollPane();
 		tabbedPane.addTab("Staff", null, scrollPane2, null);
 		
 		DefaultTableModel allStaffData;
-		try {
-			allStaffData = StaffTableHelper.getStaffFromQuery("");
-			staffTable = new JTable(allStaffData);
-			setColumnWidths();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		allStaffData = TableHelper.getStaff("");
+		staffTable = new JTable(allStaffData);
+		setColumnWidths();
 		
 		scrollPane2.setViewportView(staffTable);
 		
@@ -549,7 +545,6 @@ public class MgmtPanel extends JPanel {
 						staffIdValue.setText("");
 						staffAgeValue.setText("");
 						staffNricValue.setText("");
-						staffAccessLevelValue.setText("");
 						uneditableUsernameValue.setText("");
 						editableUsernameValue.setText("");
 						staffSetPasswordValue.setText("");
@@ -635,7 +630,7 @@ public class MgmtPanel extends JPanel {
 						JOptionPane.showMessageDialog(null, "Person has successfully been added to database!");
 						}
 						try{
-							elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
+							elderlyTable.setModel(TableHelper.getElderlyDetailed(""));
 							setColumnWidths();
 						}catch(Exception e4){
 							e4.printStackTrace();
@@ -689,7 +684,6 @@ public class MgmtPanel extends JPanel {
 						staffIdValue.setText("");
 						staffAgeValue.setText("");
 						staffNricValue.setText("");
-						staffAccessLevelValue.setText("");
 						uneditableUsernameValue.setText("");
 						editableUsernameValue.setText("");
 						staffSetPasswordValue.setText("");
@@ -735,6 +729,7 @@ public class MgmtPanel extends JPanel {
 							String staffUsername = editableUsernameValue.getText();
 							char[] pwCharArr = staffSetPasswordValue.getPassword();
 							String password = DigestUtils.sha512Hex(new String(pwCharArr));
+							int accessLevel = editableAccessLevel.getSelectedIndex();
 							
 							PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_staff");
 							ResultSet rs = ps.executeQuery();
@@ -746,16 +741,23 @@ public class MgmtPanel extends JPanel {
 								JOptionPane.showMessageDialog(null,"There are duplicate NRICS! Please check your entries!");
 							}else if(validNric == false){
 								JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
+							}else if(password.equals("")){
+								JOptionPane.showMessageDialog(null, "The password field is empty!");
 							}else{
-								PreparedStatement ps1 = so.getPreparedStatement("INSERT INTO et_staff (username, firstname, lastname, nric, dob) VALUES (?, ?, ?, ?, ?)");
+								PreparedStatement ps1 = so.getPreparedStatement("INSERT INTO et_staff (username, password, firstname, lastname, nric, dob, accesslevel) VALUES (?, ?, ?, ?, ?, ?, ?)");
 								ps1.setString(1, staffUsername);
-								ps1.setString(2, staffFirstName);
-								ps1.setString(3, staffLastName);
-								ps1.setString(4, staffNric);
-								ps1.setDate(5, java.sql.Date.valueOf(staffDob));
+								ps1.setString(2, password);
+								ps1.setString(3, staffFirstName);
+								ps1.setString(4, staffLastName);
+								ps1.setString(5, staffNric);
+								ps1.setDate(6, java.sql.Date.valueOf(staffDob));
+								ps1.setInt(7, accessLevel);
 								ps1.executeUpdate();
 								JOptionPane.showMessageDialog(null,"New staff has been successfully added!");
 							}
+							
+							staffTable.setModel(TableHelper.getStaff(""));
+							setColumnWidths();
 							
 						}catch(SQLException e){
 							e.printStackTrace();
@@ -768,6 +770,7 @@ public class MgmtPanel extends JPanel {
 							uneditableUsernameValue.setVisible(true);
 							editableUsernameValue.setVisible(false);
 							cancelAddStaff.setVisible(false);
+							editableAccessLevel.setSelectedIndex(0);
 							
 							staffAgeValue.setText("");
 							staffFirstNameValue.setText("");
@@ -776,7 +779,6 @@ public class MgmtPanel extends JPanel {
 							staffIdValue.setText("");
 							staffAgeValue.setText("");
 							staffNricValue.setText("");
-							staffAccessLevelValue.setText("");
 							uneditableUsernameValue.setText("");
 							editableUsernameValue.setText("");
 							staffSetPasswordValue.setText("");
@@ -799,6 +801,9 @@ public class MgmtPanel extends JPanel {
 									String birthString = staffDobValue.getText();
 									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 									LocalDate dob = LocalDate.parse(birthString, formatter);
+									char[] pwCharArr = staffSetPasswordValue.getPassword();
+									String password = DigestUtils.sha512Hex(new String(pwCharArr));
+									int accessLevel = editableAccessLevel.getSelectedIndex();
 									
 									PreparedStatement ps = so.getPreparedStatement("SELECT nric FROM et_staff WHERE staffid NOT IN(?)");
 									ps.setString(1, staffId);
@@ -811,6 +816,17 @@ public class MgmtPanel extends JPanel {
 										JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
 									}else if (validNric == false){
 										JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
+									}else if(password.equals("")){
+										PreparedStatement ps1 = so.getPreparedStatement("UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=?, password=?, accesslevel=? WHERE staffid=?");
+										ps1.setString(1, firstName);
+										ps1.setString(2, lastName);
+										ps1.setDate(3, java.sql.Date.valueOf(dob));
+										ps1.setString(4, nric);
+										ps1.setString(5, password);
+										ps1.setInt(6, accessLevel);
+										ps1.setString(7, staffId);
+										ps1.executeUpdate();
+										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
 									}else{
 										PreparedStatement ps1 = so.getPreparedStatement("UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=? WHERE staffid=?");
 										ps1.setString(1, firstName);
@@ -820,16 +836,10 @@ public class MgmtPanel extends JPanel {
 										ps1.setString(5, staffId);
 										ps1.executeUpdate();
 										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
-										
-										try{
-											staffTable.setModel(StaffTableHelper.getStaffFromQuery(""));
-											setColumnWidths();
-										}catch(SQLException e){
-											e.printStackTrace();
-										}
 									}
-									
-								}catch(SQLException e){
+											staffTable.setModel(TableHelper.getStaff(""));
+											setColumnWidths();
+									}catch(SQLException e){
 									e.printStackTrace();
 								}
 							
@@ -894,7 +904,7 @@ public class MgmtPanel extends JPanel {
 								}	
 																	
 								try{
-									elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
+									elderlyTable.setModel(TableHelper.getElderlyDetailed(""));
 									setColumnWidths();
 								}catch(Exception e4){
 									e4.printStackTrace();
@@ -921,7 +931,7 @@ public class MgmtPanel extends JPanel {
 								JOptionPane.showMessageDialog(null, "Removal sucessfully completed!");
 								
 								try{
-									elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
+									elderlyTable.setModel(TableHelper.getElderlyDetailed(""));
 									setColumnWidths();
 								}catch(Exception e4){
 									e4.printStackTrace();
@@ -938,24 +948,15 @@ public class MgmtPanel extends JPanel {
 			
 			elderlySearchBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
-						elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery("%" + elderlySearchField.getText() + "%"));
+						elderlyTable.setModel(TableHelper.getElderlyDetailed("%" + elderlySearchField.getText() + "%"));
 						setColumnWidths();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					};
 				}
 			});
 			
 			staffSearchBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
-						staffTable.setModel(StaffTableHelper.getStaffFromQuery("%" + staffSearchField.getText() + "%"));
-						setColumnWidths();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					};
-				}
+						staffTable.setModel(TableHelper.getStaff("%" + staffSearchField.getText() + "%"));
+						setColumnWidths();				}
 			});
 			
 			tabbedPane.addChangeListener(new ChangeListener() {
@@ -1033,8 +1034,8 @@ public class MgmtPanel extends JPanel {
 							String add5 = rs1.getString("nric");
 							staffNricValue.setText(add5);
 							
-							String add6 = rs1.getString("accesslevel");
-							staffAccessLevelValue.setText(add6);
+							int accessLevel = rs1.getInt("accesslevel");
+							editableAccessLevel.setSelectedIndex(accessLevel);
 							
 							String add7 = rs1.getString("username");
 							uneditableUsernameValue.setText(add7);
@@ -1082,7 +1083,6 @@ public class MgmtPanel extends JPanel {
 					staffIdValue.setText("");
 					staffAgeValue.setText("");
 					staffNricValue.setText("");
-					staffAccessLevelValue.setText("");
 					uneditableUsernameValue.setText("");
 					editableUsernameValue.setText("");
 					staffSetPasswordValue.setText("");
@@ -1101,6 +1101,9 @@ public class MgmtPanel extends JPanel {
 						ps.setInt(1, staffid);
 						ps.executeUpdate();
 						JOptionPane.showMessageDialog(null, "Staff member has been sucessfully removed!");
+						
+						staffTable.setModel(TableHelper.getStaff(""));
+						setColumnWidths();
 					}catch(SQLException e){
 						e.printStackTrace();
 					}
