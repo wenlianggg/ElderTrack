@@ -121,11 +121,10 @@ public class MainFrame extends JFrame {
 		// Initialize Management Panel
 		jpbar.setString("Initializing Management...");
 		jpbar.update(jpbar.getGraphics());
-		if(session.getAccessLevel() == AccessLevel.MANAGER || session.getAccessLevel() == AccessLevel.SRSTAFF) {
+		if(isManagementShown()) {
 			MgmtPanel = new MgmtPanel();
 			MgmtPanel.setBorder(lBorder);
 			CardsPanel.add(MgmtPanel, MGMTPANEL);
-	
 		}
 		jpbar.setValue(85);
 
