@@ -594,6 +594,10 @@ public class MgmtPanel extends JPanel {
 						String contact = elderlyContactValue.getText();
 						int bed = Integer.parseInt(bedString);
 						
+						if(name.equals("") || birthString.equals("") || nric.equals("") || gender.equals("") || room.equals("") || address.equals("") || Integer.toString(bed).equals("") || contact.equals("")){
+							JOptionPane.showMessageDialog(null, "One or more of the text fields are empty! Please check your entries!");
+						}else{
+						
 						PreparedStatement ps1 = so.getPreparedStatement("SELECT bed, nric FROM et_elderly WHERE room=?");
 						ps1.setString(1, room);
 						ResultSet check = ps1.executeQuery();
@@ -634,8 +638,8 @@ public class MgmtPanel extends JPanel {
 							setColumnWidths();
 						}catch(Exception e4){
 							e4.printStackTrace();
-						}
-						
+								}		
+							}
 						}catch(Exception e3){
 							JOptionPane.showMessageDialog(null, e3);
 						}
@@ -658,9 +662,12 @@ public class MgmtPanel extends JPanel {
 						elderlyBedValue.setText("");
 						elderlyContactValue.setText("");
 						
+						}
 					}
 				}
-			});
+				
+			);
+						
 			staffSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				}
@@ -866,6 +873,9 @@ public class MgmtPanel extends JPanel {
 								String bed = elderlyBedValue.getText();
 								String contact = elderlyContactValue.getText();
 								
+								if(name.equals("") || birthString.equals("") || nric.equals("") || gender.equals("") || room.equals("") || address.equals("") || bed.equals("") || contact.equals("")){
+									JOptionPane.showMessageDialog(null, "One or more of the fields are empty! Please check your entries!");
+								}else{
 								PreparedStatement ps1 = so.getPreparedStatement("SELECT bed, nric FROM et_elderly WHERE room=? AND id NOT IN (?)");
 								ps1.setString(1, room);
 								ps1.setString(2, id);
@@ -887,8 +897,7 @@ public class MgmtPanel extends JPanel {
 									JOptionPane.showMessageDialog(null, "The NRIC entered is not valid! Please check your entry!");
 								}else if(validPhoneNo == false){
 									JOptionPane.showMessageDialog(null, "Please check your entries again!");
-								}
-								else{
+								}else{
 									PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, bed=?, contact=?, address=? WHERE id=?");
 									ps.setString(1, name);
 									ps.setDate(2, java.sql.Date.valueOf(localDOB));
@@ -910,13 +919,17 @@ public class MgmtPanel extends JPanel {
 									e4.printStackTrace();
 								}
 								
-							}catch(Exception e1){
+							}
+								}catch(Exception e1){
 								JOptionPane.showMessageDialog(null,e1);	
 							}
+								}
+								
+					
 						}
 							
 				}
-			});
+			);
 			
 				elderlyRemove.addMouseListener(new MouseAdapter() {
 					@Override
