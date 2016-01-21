@@ -2,10 +2,10 @@ package eldertrack.ui;
 
 import java.awt.Font;
 import java.awt.SystemColor;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import eldertrack.diet.*;
+import eldertrack.misc.TableHelper;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,14 +26,13 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
-public class DietMainPanel extends JPanel {
+public class DietMainPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	JLabel lblSelectElderly;
 	private JTable eldersTable;
 	private JTextField searchField;
 	private JButton btnSearch;
-	CardLayout parentCards;
 	private JLabel lblSearch;
 	private JPanel infoPanel;
 	private JLabel lblElderid;
@@ -57,32 +58,25 @@ public class DietMainPanel extends JPanel {
 	private JButton btnViewInMgmt;
 	private JButton btnMainMenu;
 	private JScrollPane tableScrollPane;
+	CardLayout parentCards;
 	
 	// Constructor
 	DietMainPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
-
+		
 		tableScrollPane = new JScrollPane(eldersTable);
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 130, 283, 529);
 		add(tableScrollPane);
-		
-		try {
-			DefaultTableModel allEldersData = TableHelper.getElderlyFromQuery("");
-			eldersTable = new JTable(allEldersData);
-			eldersTable.addMouseListener(new MouseAdapter() {
-			    @Override
-			    public void mouseClicked(MouseEvent evt) {
-			        int row = eldersTable.getSelectedRow();
-			        if (row >= 0) {
-			        	presentData((String)eldersTable.getValueAt(row, 0));
-			        }
-			    }
-			});
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
+		eldersTable = new JTable(allEldersData);
+		eldersTable.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		    	presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+		    }
+		});
 		eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 		tableScrollPane.setViewportView(eldersTable);
 		
@@ -106,12 +100,8 @@ public class DietMainPanel extends JPanel {
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					eldersTable.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
-					eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				};
+				eldersTable.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
+				eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 			}
 		});
 		btnSearch.setBounds(228, 99, 65, 23);
@@ -201,18 +191,19 @@ public class DietMainPanel extends JPanel {
 		add(lblReviewInfo);
 		
 		btnAddMeal = new JButton("Add Meal");
-		btnAddMeal.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JPanel dietAddPanel = new DietAddPanel();
-				dietAddPanel.setVisible(true);
-			}
-		});
 		btnAddMeal.setBounds(309, 576, 215, 82);
 		add(btnAddMeal);
 		btnAddMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DADDPANEL);
+				DietAddPanel dp = MainFrame.getInstance().getDietPanel().getDietAddPanel();
+				// Present person data on DietAddPanel
+				if (eldersTable.getSelectedRow() != -1) {
+					dp.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+					parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+					parentCards.show(DietSection.CardsPanel, DietSection.DADDPANEL);
+				} else
+					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
+
 			}
 		});
 		
@@ -221,8 +212,8 @@ public class DietMainPanel extends JPanel {
 		add(btnModifyMeals);
 		btnModifyMeals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMODPANEL);
+				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMODPANEL);
 			}
 		});
 		
@@ -231,8 +222,8 @@ public class DietMainPanel extends JPanel {
 		add(btnMenuManagement);
 		btnMenuManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMENUPANEL);
+				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+				parentCards.show(DietSection.CardsPanel, DietSection.DMENUPANEL);
 			}
 		});
 		
@@ -251,9 +242,9 @@ public class DietMainPanel extends JPanel {
 		add(btnMainMenu);
 	}
 	
-	private void presentData(String id) {
+	public void presentData(String personid) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
-		Elderly el = eldermap.get(Integer.parseInt(id));
+		Elderly el = eldermap.get(Integer.parseInt(personid));
 		
 		lblInfoName.setText(el.getName());
 		lblElderid.setText("ElderID: " + el.getId());
@@ -272,5 +263,11 @@ public class DietMainPanel extends JPanel {
 		lblVitaminE.setText("Vitamin E (mg):  --- (x% of RDA)");
 		lblPreviousMeal.setText("Previous Meal: ______________________");
 
+	}
+
+	@Override
+	public void printDebug() {
+		// TODO Auto-generated method stub
+		
 	}
 }

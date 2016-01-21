@@ -28,13 +28,14 @@ import javax.swing.border.LineBorder;
 import eldertrack.db.SQLObject;
 import eldertrack.diet.Nutrition;
 import eldertrack.diet.SerializerSQL;
-import eldertrack.diet.TableHelper;
+import eldertrack.misc.TableHelper;
+
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
-public class DietMenuPanel extends JPanel {
+public class DietMenuPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	private JTable availMealsTable;
@@ -87,8 +88,8 @@ public class DietMenuPanel extends JPanel {
 		JButton btnBackToMain = new JButton("Back (Elderly View)");
 		btnBackToMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		        CardLayout parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMAINPANEL);
+		        CardLayout parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
 			}
 		});
 		
@@ -260,22 +261,15 @@ public class DietMenuPanel extends JPanel {
 		scrollPane.setBounds(10, 156, 364, 503);
 		add(scrollPane);
 		
-		try {
-			availMealsTable = new JTable(TableHelper.getMeals(""));
-			setColumnWidths();
-			availMealsTable.addMouseListener(new MouseAdapter() {
-			    @Override
-			    public void mouseClicked(MouseEvent evt) {
-			        int row = availMealsTable.getSelectedRow();
-			        if (row >= 0) {
-			        	selectedRow = (Integer) availMealsTable.getValueAt(row, 0);
-			        	presentData(selectedRow.toString());
-			        }
-			    }
-			});
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		availMealsTable = new JTable(TableHelper.getMeals(""));
+		setColumnWidths();
+		availMealsTable.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		        selectedRow = (Integer) availMealsTable.getValueAt(availMealsTable.getSelectedRow(), 0);
+		        presentData(selectedRow.toString());
+		    }
+		});
 		availMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 
@@ -296,18 +290,19 @@ public class DietMenuPanel extends JPanel {
 		add(btnMenuSearch);
 		btnMenuSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
-					setColumnWidths();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				};
+				availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
+				setColumnWidths();
 			}
 		});
 		
-		JButton btnNewButton = new JButton("New Menu Entry");
-		btnNewButton.setBounds(782, 118, 203, 109);
-		add(btnNewButton);
+		JButton btnCreateNewMeal = new JButton("Create Menu Entry");
+		btnCreateNewMeal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				addEntry();
+			}
+		});
+		btnCreateNewMeal.setBounds(782, 118, 203, 109);
+		add(btnCreateNewMeal);
 		
 		JButton btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.addActionListener(new ActionListener() {
@@ -332,10 +327,10 @@ public class DietMenuPanel extends JPanel {
 		availMealsTable.getColumnModel().getColumn(3).setMaxWidth(70);
 	}
 	
-	private void presentData(String id) {
+	public void presentData(String mealid) {
 		try {
 			SQLObject so = TableHelper.getSQLInstance();
-			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", id);
+			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", mealid);
 			rs.next();
 			String name = rs.getString("name");
 			byte[] ba = rs.getBytes("nutrition");
@@ -390,24 +385,15 @@ public class DietMenuPanel extends JPanel {
 	
 	private void updateMenu() {
 		try {
-			int cal = Integer.parseInt(fieldCalories.getText()),
-				prot = Integer.parseInt(fieldProtein.getText()),
-				fat = Integer.parseInt(fieldFat.getText()),
-				carbs = Integer.parseInt(fieldCarbohydrates.getText()),
-				iron = Integer.parseInt(fieldIron.getText()),
-				vita = Integer.parseInt(fieldVitA.getText()),
-				vitc = Integer.parseInt(fieldVitC.getText()),
-				vitd = Integer.parseInt(fieldVitD.getText()),
-				vite = Integer.parseInt(fieldVitE.getText());
-				Nutrition n = new Nutrition(cal, prot, fat, carbs, iron, vita, vitc, vitd, vite);
 				if (selectedRow != -1) {
-					SerializerSQL.storeNutrition(selectedRow, n, TableHelper.getSQLInstance());
+					SerializerSQL.storeNutrition(selectedRow, getNutritionFromFields(), TableHelper.getSQLInstance());
 					PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET category=?, name=?, halal=? WHERE itemid=?");
-					ps.setString(1, this.getSelectedRedio());
+					ps.setString(1, getSelectedRadio());
 					ps.setString(2, fieldMealName.getText());
 					ps.setBoolean(3, chckbxHalal.isSelected());
 					ps.setInt(4, selectedRow);
 					ps.executeUpdate();
+					System.out.println("Meal Successfully Updated!");
 				}
 				availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 				setColumnWidths();
@@ -426,12 +412,53 @@ public class DietMenuPanel extends JPanel {
 		ps.executeUpdate();
 		availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 		setColumnWidths();
+		JOptionPane.showMessageDialog(null, "Meal Removed!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private String getSelectedRedio() {
+	private void addEntry() {
+		try {
+			PreparedStatement ps1 = TableHelper.getSQLInstance().getPreparedStatement
+				("SELECT * FROM et_menu WHERE name LIKE ?");
+			ps1.setString(1, fieldMealName.getText());
+			ResultSet rs1 = ps1.executeQuery();
+			if(rs1.next()) {
+				JOptionPane.showMessageDialog(null, "Meal Exists!");
+				return;
+			}
+			PreparedStatement ps2 = TableHelper.getSQLInstance().getPreparedStatementWithKey
+				("INSERT INTO et_menu (category, name, halal, nutrition) VALUES (?, ?, ?, ?)");
+			ps2.setString(1, getSelectedRadio());
+			ps2.setString(2, fieldMealName.getText());
+			ps2.setBoolean(3, chckbxHalal.isSelected());
+			ps2.setObject(4, getNutritionFromFields());
+			ps2.executeUpdate();
+			availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
+			setColumnWidths();
+			JOptionPane.showMessageDialog(null, "Meal Added!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
+		}
+	}
+	
+	private Nutrition getNutritionFromFields() {
+		int cal = Integer.parseInt(fieldCalories.getText()),
+				prot = Integer.parseInt(fieldProtein.getText()),
+				fat = Integer.parseInt(fieldFat.getText()),
+				carbs = Integer.parseInt(fieldCarbohydrates.getText()),
+				iron = Integer.parseInt(fieldIron.getText()),
+				vita = Integer.parseInt(fieldVitA.getText()),
+				vitc = Integer.parseInt(fieldVitC.getText()),
+				vitd = Integer.parseInt(fieldVitD.getText()),
+				vite = Integer.parseInt(fieldVitE.getText());
+		return new Nutrition(cal, prot, fat, carbs, iron, vita, vitc, vitd, vite);
+	}
+	
+	private String getSelectedRadio() {
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
             if (button.isSelected()) {
@@ -440,4 +467,10 @@ public class DietMenuPanel extends JPanel {
         }
         return null;
     }
+
+	@Override
+	public void printDebug() {
+		// TODO Auto-generated method stub
+		
+	}
 }

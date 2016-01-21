@@ -16,6 +16,7 @@ import javax.swing.border.EtchedBorder;
 
 import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
+import eldertrack.weather.Weather;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -28,16 +29,18 @@ public class MainFrame extends JFrame {
     final static String MENUPANEL = "Main Menu Panel";
     private JPanel MasterPane;
     private LoginPanel LoginPanel;
-    private DietPanel DietPanel;
+    private DietSection DietSection;
     private MedPanel MedPanel;
     private ReportMainPanel ReportPanel;
     private MgmtPanel MgmtPanel;
     private MainMenuPanel MainMenu;
+	private WeatherPanel weatherPanel;
     static JPanel CardsPanel;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
 	private static StaffSession session;
 	private static MainFrame frame;
+	
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
@@ -51,7 +54,6 @@ public class MainFrame extends JFrame {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
 					frame = new MainFrame();
 					frame.setVisible(true); // Set the main frame as visible
-					frame.showWeatherPanel();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -74,6 +76,13 @@ public class MainFrame extends JFrame {
 		MasterPane.setLayout(null);
 		setContentPane(MasterPane);
 		
+		weatherPanel = new WeatherPanel();
+
+		weatherPanel.setLocation(790, 671);
+		MasterPane.add(weatherPanel);
+		Thread thrd = new Thread(weatherTask);
+		thrd.start();
+		
 		LoginPanel = new LoginPanel();
 		LoginPanel.setBorder(lBorder);
 		
@@ -87,85 +96,16 @@ public class MainFrame extends JFrame {
 	}
 	
 	void constructPanels() {
-		constructTask.run();
-	}
-	
-	void deconstructPanels() {
-		deconstructTask.run();
-	}
-	
-	private void showWeatherPanel() {
-		JPanel WeatherPanel = new WeatherPanel();
-		WeatherPanel.setLocation(790, 671);
-		getInstance().MasterPane.add(WeatherPanel);
-	}
-	
-	// Singleton Class Design
-	public static MainFrame getInstance() {
-		return frame;
-	}
-	
-	// For getting logged in user information
-	public StaffSession getSessionInstance() {
-		return MainFrame.session;
-	}
-	
-	StaffSession setSessionInstance(StaffSession session) {
-		MainFrame.session = session;
-		return MainFrame.session;
-	}
-	
-	// Triggers on logout
-	boolean endCurrentSession() {
-			CardLayout cards = (CardLayout) MainFrame.CardsPanel.getLayout();
-			cards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
-			deconstructPanels();
-			MainFrame.session = null;
-			System.out.println("Successfully logged out!");
-			return true;
-	}
-	
-	boolean isManagementShown() {
-		AccessLevel al = MainFrame.getInstance().getSessionInstance().getAccessLevel();
-		if (al == AccessLevel.MANAGER || al == AccessLevel.ADMIN)
-			return true;
-		else
-			return false;
-	}
-	
-	private Runnable deconstructTask = () -> {
-		System.out.println("--------------------- DECONSTRUCTING ALL PANELS NOW! ---------------------");
-		comboBox.setVisible(false);
-		CardsPanel.remove(DietPanel);
-		CardsPanel.remove(MedPanel);
-		CardsPanel.remove(ReportPanel);
-		if(isManagementShown())
-			CardsPanel.remove(MgmtPanel);
-		CardsPanel.remove(MainMenu);
-		MasterPane.remove(comboBox);
-		comboBox = null;
-		DietPanel = null;
-		MedPanel = null;
-		ReportPanel = null;
-		MgmtPanel = null;
-		MainMenu = null;
-		LoginPanel.progressBar.setValue(0);
-		LoginPanel.progressBar.setString("Login to begin loading!");
-		LoginPanel.progressBar.update(LoginPanel.progressBar.getGraphics());
-		System.out.println("Panels deconstructed!");
-	};
-	
-	private Runnable constructTask = () -> {
 		JProgressBar jpbar = LoginPanel.progressBar;
 		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
 		jpbar.setValue(25);
-
+				
 		// Initialize Diet Panel
 		jpbar.setString("Initializing Diet Management...");
 		jpbar.update(jpbar.getGraphics());
-		DietPanel = new DietPanel();
-		DietPanel.setBorder(lBorder);
-		CardsPanel.add(DietPanel, DIETPANEL);
+		DietSection = new DietSection();
+		DietSection.setBorder(lBorder);
+		CardsPanel.add(DietSection, DIETPANEL);
 		jpbar.setValue(50);
 
 		
@@ -226,5 +166,73 @@ public class MainFrame extends JFrame {
 		MainMenu.fillDetails();
 		jpbar.setValue(100);
 		jpbar.update(jpbar.getGraphics());
+	}
+	
+	void deconstructPanels() {
+		System.out.println("--------------------- DECONSTRUCTING ALL PANELS NOW! ---------------------");
+		comboBox.setVisible(false);
+		CardsPanel.remove(DietSection);
+		CardsPanel.remove(MedPanel);
+		CardsPanel.remove(ReportPanel);
+		if(isManagementShown())
+			CardsPanel.remove(MgmtPanel);
+		CardsPanel.remove(MainMenu);
+		MasterPane.remove(comboBox);
+		comboBox = null;
+		DietSection = null;
+		MedPanel = null;
+		ReportPanel = null;
+		MgmtPanel = null;
+		MainMenu = null;
+		LoginPanel.progressBar.setValue(0);
+		LoginPanel.progressBar.setString("Login to begin loading!");
+		LoginPanel.progressBar.update(LoginPanel.progressBar.getGraphics());
+		System.out.println("Panels deconstructed!");
+	}
+	
+	
+	Runnable weatherTask = () -> {
+		System.out.println("Obtaining data from URL on " + Thread.currentThread().getName());
+		Weather weatherinfo = Weather.getWeather();
+		weatherPanel.showWeatherInfo(weatherinfo);
 	};
+	
+	
+	// Singleton Class Design
+	public static MainFrame getInstance() {
+		return frame;
+	}
+	
+	// For getting logged in user information
+	public StaffSession getSessionInstance() {
+		return MainFrame.session;
+	}
+	
+	StaffSession setSessionInstance(StaffSession session) {
+		MainFrame.session = session;
+		return MainFrame.session;
+	}
+	
+	// Triggers on logout
+	boolean endCurrentSession() {
+			CardLayout cards = (CardLayout) MainFrame.CardsPanel.getLayout();
+			cards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
+			deconstructPanels();
+			MainFrame.session = null;
+			System.out.println("Successfully logged out!");
+			return true;
+	}
+	
+	boolean isManagementShown() {
+		AccessLevel al = MainFrame.getInstance().getSessionInstance().getAccessLevel();
+		if (al == AccessLevel.MANAGER || al == AccessLevel.ADMIN)
+			return true;
+		else
+			return false;
+	}
+	
+	DietSection getDietPanel() {
+		return this.DietSection;
+	}
+
 }

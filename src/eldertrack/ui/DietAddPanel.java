@@ -6,7 +6,14 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,68 +24,57 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import eldertrack.diet.TableHelper;
+import eldertrack.db.SQLObject;
+import eldertrack.diet.Elderly;
+import eldertrack.diet.Nutrition;
+import eldertrack.misc.TableHelper;
+import javax.swing.JCheckBox;
 
-public class DietAddPanel extends JPanel {
+public class DietAddPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	JLabel lblSelectElderly;
+	private String currentElderly;
 	private JTable mealSearchTable;
 	private JTextField searchField;
 	private JButton btnSearch;
 	private JTable prevMealsTable;
+	private JLabel lblElderid;
+	private JLabel lblAge;
+	private JLabel lblRoomNumber;
+	private JLabel lblNric;
+	private JLabel lblCalories;
+	private JLabel lblCarbohydrates;
+	private JLabel lblProtein;
+	private JLabel lblIron;
+	private JLabel lblVitA;
+	private JLabel lblVitC;
+	private JLabel lblVitE;
+	private JLabel lblVitD;
+	private JLabel lblFat;
+	private JLabel lblMealName;
+	private JLabel lblInfoName;
+	CardLayout parentCards;
+	private JCheckBox chckbxHalal;
 	
 	// Constructor
 	DietAddPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
-
+		
 		JScrollPane tableScrollPane = new JScrollPane(mealSearchTable);
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 220, 283, 439);
 		add(tableScrollPane);
 		
-		try {
-			DefaultTableModel allEldersData = TableHelper.getElderlyFromQuery("");
-			mealSearchTable = new JTable(allEldersData);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		mealSearchTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-			},
-			new String[] {
-				"ID", "Menu Item"
-			}
-		));
-		mealSearchTable.getColumnModel().getColumn(0).setPreferredWidth(36);
-		mealSearchTable.getColumnModel().getColumn(1).setPreferredWidth(165);
+		mealSearchTable = new JTable(TableHelper.getMeals(""));
+		setMenuColumnWidths();
+		mealSearchTable.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		        presentMealData(mealSearchTable.getValueAt(mealSearchTable.getSelectedRow(), 0).toString());
+		    }
+		});
 		tableScrollPane.setViewportView(mealSearchTable);
 		
 		lblDietLabel = new JLabel("ElderTrack Diet Management");
@@ -102,11 +98,8 @@ public class DietAddPanel extends JPanel {
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					mealSearchTable.setModel(TableHelper.getElderlyFromQuery("%" + searchField.getText() + "%"));
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				};
+				mealSearchTable.setModel(TableHelper.getMeals("%" + searchField.getText() + "%"));
+				setMenuColumnWidths();
 			}
 		});
 		btnSearch.setBounds(228, 190, 65, 23);
@@ -122,25 +115,25 @@ public class DietAddPanel extends JPanel {
 		add(personInfoPanel);
 		personInfoPanel.setLayout(null);
 		
-		JLabel lblElderid = new JLabel("ElderID: 0000");
+		lblElderid = new JLabel("ElderID: 0000");
 		lblElderid.setBounds(8, 44, 175, 14);
 		personInfoPanel.add(lblElderid);
 		
-		JLabel lblInfoName = new JLabel("Adding Meal Entry For:");
+		lblInfoName = new JLabel("Adding Meal Entry For:");
 		lblInfoName.setForeground(new Color(0, 128, 128));
 		lblInfoName.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblInfoName.setBounds(10, 7, 645, 37);
 		personInfoPanel.add(lblInfoName);
 		
-		JLabel lblAge = new JLabel("Age: --");
+		lblAge = new JLabel("Age: --");
 		lblAge.setBounds(8, 61, 175, 14);
 		personInfoPanel.add(lblAge);
 		
-		JLabel lblRoomNumber = new JLabel("Room Number: --");
+		lblRoomNumber = new JLabel("Room Number: --");
 		lblRoomNumber.setBounds(195, 61, 209, 14);
 		personInfoPanel.add(lblRoomNumber);
 		
-		JLabel lblNric = new JLabel("NRIC: SXXXXXXXA");
+		lblNric = new JLabel("NRIC: SXXXXXXXA");
 		lblNric.setBounds(195, 44, 209, 14);
 		personInfoPanel.add(lblNric);
 		
@@ -153,20 +146,25 @@ public class DietAddPanel extends JPanel {
 		JButton btnModifyMeals = new JButton("Back (Elderly View)");
 		btnModifyMeals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		        CardLayout parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMAINPANEL);
+				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
 			}
 		});
 		btnModifyMeals.setBounds(682, 611, 303, 48);
 		add(btnModifyMeals);
 		
 		JButton btnAddMeal = new JButton("Add Meal Entry");
+		btnAddMeal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addMealEntry(mealSearchTable.getValueAt(mealSearchTable.getSelectedRow(), 0).toString());
+			}
+		});
 
 		btnAddMeal.setBounds(682, 553, 303, 47);
 		add(btnAddMeal);
 		
 		JPanel nutriInfoPanel = new JPanel();
-		nutriInfoPanel.setBorder(null);
+		nutriInfoPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		nutriInfoPanel.setBounds(306, 156, 364, 503);
 		add(nutriInfoPanel);
 		nutriInfoPanel.setLayout(null);
@@ -177,66 +175,59 @@ public class DietAddPanel extends JPanel {
 		lblStatisticsForToday.setForeground(new Color(0, 128, 128));
 		lblStatisticsForToday.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		
-		JLabel lblCalories = new JLabel("RDA Calories (kcal):  --- (x% of RDA)");
+		lblCalories = new JLabel("RDA Calories (kcal):  --- ");
 		lblCalories.setBounds(12, 80, 209, 14);
 		nutriInfoPanel.add(lblCalories);
 		
-		JLabel lblCarbohydrates = new JLabel("Carbohydrates (g): --- (x% of RDA)");
+		lblCarbohydrates = new JLabel("Carbohydrates (g): --- ");
 		lblCarbohydrates.setBounds(12, 100, 209, 14);
 		nutriInfoPanel.add(lblCarbohydrates);
 		
-		JLabel lblProtein = new JLabel("Protein(g) :  --- (x% of RDA)");
+		lblProtein = new JLabel("Protein(g) :  --- ");
 		lblProtein.setBounds(12, 120, 209, 14);
 		nutriInfoPanel.add(lblProtein);
 		
-		JLabel lblIron = new JLabel("Iron(mg):  --- (x% of RDA)");
-		lblIron.setBounds(13, 140, 208, 14);
+		lblIron = new JLabel("Iron(mg):  --- ");
+		lblIron.setBounds(14, 159, 208, 14);
 		nutriInfoPanel.add(lblIron);
 		
-		JLabel lblVitaminA = new JLabel("Vitamin A (mg):  --- (x% of RDA)");
-		lblVitaminA.setBounds(12, 160, 209, 14);
-		nutriInfoPanel.add(lblVitaminA);
+		lblVitA = new JLabel("Vitamin A (%):  --- ");
+		lblVitA.setBounds(13, 179, 209, 14);
+		nutriInfoPanel.add(lblVitA);
 		
-		JLabel lblVitaminC = new JLabel("Vitamin C (mg):  --- (x% of RDA)");
-		lblVitaminC.setBounds(12, 180, 209, 14);
-		nutriInfoPanel.add(lblVitaminC);
+		lblVitC = new JLabel("Vitamin C (%):  --- ");
+		lblVitC.setBounds(13, 199, 209, 14);
+		nutriInfoPanel.add(lblVitC);
 		
-		JLabel lblVitaminE = new JLabel("Vitamin E (mg):  --- (x% of RDA)");
-		lblVitaminE.setBounds(12, 200, 209, 14);
-		nutriInfoPanel.add(lblVitaminE);
+		lblVitE = new JLabel("Vitamin E (%):  --- ");
+		lblVitE.setBounds(13, 219, 209, 14);
+		nutriInfoPanel.add(lblVitE);
 		
-		JLabel lblVitaminD = new JLabel("Vitamin D (mg):  --- (x% of RDA)");
-		lblVitaminD.setBounds(12, 220, 209, 14);
-		nutriInfoPanel.add(lblVitaminD);
+		lblVitD = new JLabel("Vitamin D (%):  --- ");
+		lblVitD.setBounds(13, 239, 209, 14);
+		nutriInfoPanel.add(lblVitD);
 		
-		JLabel lblFatg = new JLabel("Fat (g): --- (x% of RDA)");
-		lblFatg.setBounds(11, 239, 209, 14);
-		nutriInfoPanel.add(lblFatg);
+		lblFat = new JLabel("Fat (g): --- ");
+		lblFat.setBounds(13, 140, 209, 14);
+		nutriInfoPanel.add(lblFat);
 		
-		JLabel lblMealName = new JLabel("Meal Name");
+		lblMealName = new JLabel("Meal Name");
 		lblMealName.setForeground(Color.BLACK);
 		lblMealName.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblMealName.setBounds(11, 40, 344, 29);
 		nutriInfoPanel.add(lblMealName);
+		
+		chckbxHalal = new JCheckBox("Halal");
+		chckbxHalal.setBounds(11, 255, 164, 23);
+		chckbxHalal.setEnabled(false);
+		nutriInfoPanel.add(chckbxHalal);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(682, 83, 303, 459);
 		add(scrollPane);
 		
 		prevMealsTable = new JTable();
-		prevMealsTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-			},
-			new String[] {
-				"ID", "Time of Day", "Meal"
-			}
-		));
-		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(50);
-		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(102);
-		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(208);
+
 		scrollPane.setViewportView(prevMealsTable);
 
 		JButton btnMainMenu = new JButton("Back to Main Menu");
@@ -248,5 +239,96 @@ public class DietAddPanel extends JPanel {
 		});
 		btnMainMenu.setBounds(820, 15, 139, 40);
 		add(btnMainMenu);
+	}
+	
+	private void setMenuColumnWidths() {
+		mealSearchTable.getTableHeader().setResizingAllowed(false);
+		mealSearchTable.getTableHeader().setReorderingAllowed(false);
+		mealSearchTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+		mealSearchTable.getColumnModel().getColumn(0).setMaxWidth(35);
+		mealSearchTable.getColumnModel().getColumn(1).setPreferredWidth(70);
+		mealSearchTable.getColumnModel().getColumn(1).setMaxWidth(80);
+		mealSearchTable.getColumnModel().getColumn(2).setPreferredWidth(130);
+		mealSearchTable.getColumnModel().getColumn(3).setPreferredWidth(55);
+		mealSearchTable.getColumnModel().getColumn(3).setMaxWidth(70);
+	}
+	
+	private void setPrevMealsColumnWidth() {
+		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(250);
+	}
+	
+	public void presentData(String personid) {
+		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
+		Elderly el = eldermap.get(Integer.parseInt(personid));
+		prevMealsTable.setModel(el.getMeals().getTableModel());
+		setPrevMealsColumnWidth();
+		this.currentElderly = personid;
+		
+		lblInfoName.setText(el.getName());
+		lblElderid.setText("ElderID: " + el.getId());
+		lblAge.setText("Age: " + el.getAge());
+		lblRoomNumber.setText("Room Number: " + el.getRoomnum());
+		lblNric.setText("NRIC: " + el.getNric());
+	}
+	
+	private void addMealEntry(String mid) {
+		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
+		Elderly el = eldermap.get(Integer.parseInt(currentElderly));
+		el.addMeal(mid);
+		presentData(this.currentElderly);
+		setPrevMealsColumnWidth();
+	}
+	
+	private void presentMealData(String mid) {
+			try {
+				SQLObject so = TableHelper.getSQLInstance();
+				ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", mid);
+				rs.next();
+				String name = rs.getString("name");
+				byte[] ba = rs.getBytes("nutrition");
+				boolean isHalal = rs.getBoolean("halal");
+				Nutrition n = null;
+				if (ba != null) {
+					ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(ba));
+					n = (Nutrition) is.readObject();
+				}
+				lblMealName.setText(name);
+				chckbxHalal.setSelected(isHalal);
+				if (n != null) {
+					lblVitA.setText("Vitamin A (%): " + Integer.toString(n.getVita()));
+					lblVitC.setText("Vitamin C (%): " + Integer.toString(n.getVitc()));
+					lblVitD.setText("Vitamin D (%): " + Integer.toString(n.getVitd()));
+					lblVitE.setText("Vitamin E (%): " + Integer.toString(n.getVite()));
+					lblFat.setText("Fat (g): " + Integer.toString(n.getFat()));
+					lblIron.setText("Iron (mg): " + Integer.toString(n.getIron()));
+					lblCarbohydrates.setText("Carbohydrates (g): " + Integer.toString(n.getCarbs()));
+					lblCalories.setText("Calories (kcal): " + Integer.toString(n.getCalories()));
+					lblProtein.setText("Protein (g): " + Integer.toString(n.getProtein()));
+				} else {
+					lblVitA.setText("Vitamin A (%): ");
+					lblVitC.setText("Vitamin C (%): ");
+					lblVitD.setText("Vitamin D (%): ");
+					lblVitE.setText("Vitamin E (%): ");
+					lblFat.setText("Fat (g): ");
+					lblIron.setText("Iron (g): ");
+					lblCarbohydrates.setText("Carbohydrates (g):");
+					lblCalories.setText("Calories (kcal): ");
+					lblProtein.setText("Protein (g): ");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
+
+	@Override
+	public void printDebug() {
+		// TODO Auto-generated method stub
+		
 	}
 }

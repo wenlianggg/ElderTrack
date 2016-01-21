@@ -62,8 +62,8 @@ public class ReportModifyPanel extends JPanel {
 		JButton btnBackToMain = new JButton("Back (Elderly View)");
 		btnBackToMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		        CardLayout parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMAINPANEL);
+		        CardLayout parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
 			}
 		});
 		

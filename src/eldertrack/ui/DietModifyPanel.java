@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class DietModifyPanel extends JPanel {
+public class DietModifyPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	private JTable prevMealsTable;
@@ -79,8 +79,8 @@ public class DietModifyPanel extends JPanel {
 		JButton btnBackToMain = new JButton("Back (Elderly View)");
 		btnBackToMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		        CardLayout parentCards = (CardLayout) DietPanel.CardsPanel.getLayout();
-		        parentCards.show(DietPanel.CardsPanel, DietPanel.DMAINPANEL);
+		        CardLayout parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
 			}
 		});
 		
@@ -270,5 +270,15 @@ public class DietModifyPanel extends JPanel {
 		});
 		btnMainMenu.setBounds(820, 15, 139, 40);
 		add(btnMainMenu);
+	}
+
+	public void presentData(String id) {
+		//TODO: This
+	}
+
+	@Override
+	public void printDebug() {
+		// TODO Auto-generated method stub
+		
 	}
 }

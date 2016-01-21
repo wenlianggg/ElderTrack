@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import eldertrack.login.SessionTools;
 import eldertrack.login.StaffSession;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -133,7 +132,7 @@ public class LoginPanel extends JPanel {
 	// Check if login fields are null, if not, process login.
 	private void checkLogin() {
 		if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
-			session = MainFrame.getInstance().setSessionInstance(SessionTools.createSession(loginField.getText(), passwordField.getPassword()));
+			session = MainFrame.getInstance().setSessionInstance(StaffSession.createSession(loginField.getText(), passwordField.getPassword()));
 			passwordField.setText("");
 			if (session == null)
 				JOptionPane.showMessageDialog(null, "Login failed, try again!");

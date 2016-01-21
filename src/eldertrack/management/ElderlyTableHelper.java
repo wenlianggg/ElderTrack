@@ -13,10 +13,11 @@ import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
 
+
 public class ElderlyTableHelper {
+	public static SQLObject so = new SQLObject();
 	public static DefaultTableModel getElderlyFromQuery(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
-		SQLObject so = new SQLObject();
 		return buildTableModel(so.getResultSet("SELECT id, name, dob, nric, gender, room, address FROM et_elderly WHERE name LIKE ?", search));
 	}
 	

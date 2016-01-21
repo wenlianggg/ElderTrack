@@ -11,8 +11,6 @@ import eldertrack.db.SQLObject;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-
-
 public class StaffSession{
 	private int staffid = 0;
 	private String username = "";
@@ -39,7 +37,6 @@ public class StaffSession{
 			}
 			this.exists = true;
 			// Compare and verify strings
-			System.out.println("User Input: " + DigestUtils.sha512Hex(new String(password)) + " vs " + rs.getString("password"));
 			if (rs.getString("password").equals(DigestUtils.sha512Hex(new String(password)))) {
 				this.staffid = rs.getInt("staffid");
 				switch(rs.getInt("accesslevel")) {
@@ -81,6 +78,21 @@ public class StaffSession{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static StaffSession createSession(String username, char[] passarray) {
+		StaffSession session = null;
+		try {
+			session = new StaffSession(username, passarray);
+		} catch (NoSuchUserException e) {
+			System.out.println("No such user found!");
+			return null;
+		} catch (WrongPasswordException e) {
+			System.out.println("Wrong password entered!");
+			return null;
+		}
+		System.out.println("No errors logging in, successful!");
+		return session;
 	}
 	
 	public boolean isAuthenticated() {
