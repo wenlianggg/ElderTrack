@@ -584,25 +584,22 @@ public class MgmtPanel extends JPanel {
 						try{
 						String name = elderlyNameValue.getText();
 						String birthString = elderlyDobValue.getText();
-						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-						LocalDate dob = LocalDate.parse(birthString, formatter);
 						String nric = elderlyNricValue.getText();
 						String gender = elderlyGenderValue.getText();
 						String room = elderlyRoomValue.getText();
-						String  address = elderlyAddressValue.getText();
+						String address = elderlyAddressValue.getText();
 						String bedString = elderlyBedValue.getText();
 						String contact = elderlyContactValue.getText();
-						int bed = Integer.parseInt(bedString);
 						
-						if(name.equals("") || birthString.equals("") || nric.equals("") || gender.equals("") || room.equals("") || address.equals("") || Integer.toString(bed).equals("") || contact.equals("")){
-							JOptionPane.showMessageDialog(null, "One or more of the text fields are empty! Please check your entries!");
+						if(name.equals("") || birthString.equals("") || nric.equals("") || gender.equals("") || room.equals("") || address.equals("") || bedString.equals("") || contact.equals("")){
+							JOptionPane.showMessageDialog(null, "One or more of the fields are empty! Please check your entries!");
 						}else{
-						
 						PreparedStatement ps1 = so.getPreparedStatement("SELECT bed, nric FROM et_elderly WHERE room=?");
 						ps1.setString(1, room);
 						ResultSet check = ps1.executeQuery();
 						
 						//Check for duplicate beds and exceeding bed limit
+						int bed = Integer.parseInt(bedString);
 						boolean dupeBed = checkDuplicateBeds(bed, check);
 						boolean dupeNric = checkDuplicateNrics(nric, check);
 						boolean validNric = NRICUtils.validate(nric);
@@ -621,6 +618,8 @@ public class MgmtPanel extends JPanel {
 						}
 						else{
 						PreparedStatement ps = so.getPreparedStatement("INSERT INTO et_elderly (name, dob, nric, gender, room, address, bed, contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+						LocalDate dob = LocalDate.parse(birthString, formatter);
 						ps.setString(1, name);
 						ps.setDate(2, java.sql.Date.valueOf(dob));
 						ps.setString(3,nric);
@@ -638,9 +637,10 @@ public class MgmtPanel extends JPanel {
 							setColumnWidths();
 						}catch(Exception e4){
 							e4.printStackTrace();
-								}		
-							}
-						}catch(Exception e3){
+						}
+						
+						}
+					}catch(Exception e3){
 							JOptionPane.showMessageDialog(null, e3);
 						}
 						
@@ -662,12 +662,9 @@ public class MgmtPanel extends JPanel {
 						elderlyBedValue.setText("");
 						elderlyContactValue.setText("");
 						
-						}
 					}
 				}
-				
-			);
-						
+			});
 			staffSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				}
@@ -769,7 +766,7 @@ public class MgmtPanel extends JPanel {
 						}catch(SQLException e){
 							e.printStackTrace();
 						}
-						
+
 						if(confirmAddStaff.isVisible() == true){
 							confirmAddStaff.setVisible(false);
 							addStaff.setVisible(true);
@@ -806,8 +803,6 @@ public class MgmtPanel extends JPanel {
 									String lastName = staffLastNameValue.getText();
 									String nric = staffNricValue.getText();
 									String birthString = staffDobValue.getText();
-									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-									LocalDate dob = LocalDate.parse(birthString, formatter);
 									char[] pwCharArr = staffSetPasswordValue.getPassword();
 									String password = DigestUtils.sha512Hex(new String(pwCharArr));
 									int accessLevel = editableAccessLevel.getSelectedIndex();
@@ -825,6 +820,8 @@ public class MgmtPanel extends JPanel {
 										JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
 									}else if(password.equals("")){
 										PreparedStatement ps1 = so.getPreparedStatement("UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=?, password=?, accesslevel=? WHERE staffid=?");
+										DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+										LocalDate dob = LocalDate.parse(birthString, formatter);
 										ps1.setString(1, firstName);
 										ps1.setString(2, lastName);
 										ps1.setDate(3, java.sql.Date.valueOf(dob));
@@ -836,6 +833,8 @@ public class MgmtPanel extends JPanel {
 										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
 									}else{
 										PreparedStatement ps1 = so.getPreparedStatement("UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=? WHERE staffid=?");
+										DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+										LocalDate dob = LocalDate.parse(birthString, formatter);
 										ps1.setString(1, firstName);
 										ps1.setString(2, lastName);
 										ps1.setDate(3, java.sql.Date.valueOf(dob));
@@ -864,8 +863,6 @@ public class MgmtPanel extends JPanel {
 								String id = elderlyIdValue.getText();
 								String name = elderlyNameValue.getText();
 								String birthString = elderlyDobValue.getText();
-								DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-								LocalDate localDOB = LocalDate.parse(birthString, formatter);
 								String nric = elderlyNricValue.getText();
 								String gender = elderlyGenderValue.getText();
 								String room = elderlyRoomValue.getText();
@@ -899,6 +896,8 @@ public class MgmtPanel extends JPanel {
 									JOptionPane.showMessageDialog(null, "Please check your entries again!");
 								}else{
 									PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, bed=?, contact=?, address=? WHERE id=?");
+									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+									LocalDate localDOB = LocalDate.parse(birthString, formatter);
 									ps.setString(1, name);
 									ps.setDate(2, java.sql.Date.valueOf(localDOB));
 									ps.setString(3, nric);
