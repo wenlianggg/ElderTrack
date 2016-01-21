@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import eldertrack.login.StaffSession;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
@@ -42,6 +43,7 @@ public class MainMenuPanel extends JPanel {
 		add(lblTitle);
 		
 		btnMedTrack = new JButton("Medication Tracking");
+		btnMedTrack.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnMedTrack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 		        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
@@ -52,6 +54,7 @@ public class MainMenuPanel extends JPanel {
 		add(btnMedTrack);
 		
 		btnDietManagement = new JButton("Diet Management");
+		btnDietManagement.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnDietManagement.setBounds(10, 230, 242, 120);
 		btnDietManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -62,6 +65,7 @@ public class MainMenuPanel extends JPanel {
 		add(btnDietManagement);
 		
 		btnReportGeneration = new JButton("Report Generation");
+		btnReportGeneration.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnReportGeneration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 		        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
@@ -71,15 +75,18 @@ public class MainMenuPanel extends JPanel {
 		btnReportGeneration.setBounds(10, 361, 242, 120);
 		add(btnReportGeneration);
 		
-		btnStaffManagement = new JButton("Staff/Elderly Management");
-		btnStaffManagement.setBounds(10, 492, 242, 120);
-		btnStaffManagement.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-		        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
-		        parentCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
-			}
-		});
-		add(btnStaffManagement);
+		if(MainFrame.getInstance().isManagementShown()) {
+			btnStaffManagement = new JButton("People Management");
+			btnStaffManagement.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnStaffManagement.setBounds(10, 492, 242, 120);
+			btnStaffManagement.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+			        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+			        parentCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
+				}
+			});
+			add(btnStaffManagement);
+		}
 		
 		detailsPanel = new JPanel();
 		detailsPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
@@ -108,6 +115,7 @@ public class MainMenuPanel extends JPanel {
 		detailsPanel.add(lblLoginNric);
 		
 		btnLogout = new JButton("Sign Out");
+		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnLogout.setBounds(585, 12, 128, 36);
 		detailsPanel.add(btnLogout);
 		btnLogout.addActionListener(new ActionListener() {
@@ -152,4 +160,5 @@ public class MainMenuPanel extends JPanel {
 		txtarea_stickynotes.setText("");
 	}
 	
+
 }

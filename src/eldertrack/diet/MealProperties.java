@@ -7,16 +7,16 @@ import eldertrack.ui.MainFrame;
 
 public class MealProperties implements java.io.Serializable {
 	private static final long serialVersionUID = 2001L;
-	String mealdescription;
-	String lasteditedby;
-	Date lastedited;
-	String createdby;
-	Date created;
+	private String mealdescription;
+	private String lasteditedby;
+	private Date lastedited;
+	private String createdby;
+	private Date created;
 	
 	MealProperties() {
 		lasteditedby = "--";
 		lastedited = new Date();
-		createdby = "Random Person";
+		createdby = MainFrame.getInstance().getSessionInstance().getFullName();
 		created = new Date();
 	}
 	
@@ -34,4 +34,26 @@ public class MealProperties implements java.io.Serializable {
 		lasteditedby = MainFrame.getInstance().getSessionInstance().getFullName();
 		lastedited = new Date();
 	}
+
+	public String getMealdescription() {
+		return mealdescription;
+	}
+
+	public String getLasteditedby() {
+		return lasteditedby;
+	}
+
+	public Date getLastedited() {
+		return lastedited;
+	}
+
+	public String getCreatedby() {
+		return createdby;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+	
+	
 }

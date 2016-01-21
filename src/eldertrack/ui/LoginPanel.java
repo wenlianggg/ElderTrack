@@ -14,12 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import eldertrack.login.SessionTools;
 import eldertrack.login.StaffSession;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JProgressBar;
 
 public class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1260440593277672145L;
@@ -32,6 +32,7 @@ public class LoginPanel extends JPanel {
 	JButton loginButton;
 	JButton forgetPassButton;
 	String loginMessage = "Outcome Undefined";
+	JProgressBar progressBar;
 	
 	LoginPanel() {
 		setLayout(null);
@@ -118,22 +119,30 @@ public class LoginPanel extends JPanel {
 		});
 		btnBypassLogin.setBounds(647, 471, 103, 35);
 		add(btnBypassLogin);
+		
+		progressBar = new JProgressBar(0, 100);
+		progressBar.setToolTipText("Login Progress");
+		progressBar.setString("Login to begin loading!");
+		progressBar.setBounds(250, 471, 387, 35);
+		progressBar.setStringPainted(true);
+		add(progressBar);
+
 	}
 	
 	// Check if login fields are null, if not, process login.
 	private void checkLogin() {
 		if (!loginField.getText().equals("") && !(passwordField.getPassword().length == 0)) {
-			session = MainFrame.getInstance().setSessionInstance(SessionTools.createSession(loginField.getText(), passwordField.getPassword()));
+			session = MainFrame.getInstance().setSessionInstance(StaffSession.createSession(loginField.getText(), passwordField.getPassword()));
 			passwordField.setText("");
-			if (session == null) {
-				loginMessage = "Login failed, try again!";
-			} else if (session.isAuthenticated()) {
+			if (session == null)
+				JOptionPane.showMessageDialog(null, "Login failed, try again!");
+			else if (session.isAuthenticated()) {
+				progressBar.setValue(25);
+				progressBar.update(progressBar.getGraphics());
 				MainFrame.getInstance().constructPanels();
-				loginMessage = "Login successful!";
 				CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
 				mainCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
 			}
-			JOptionPane.showMessageDialog(null, loginMessage);
 		} else {
 			JOptionPane.showMessageDialog(null, "Fields cannot be empty!");
 		}

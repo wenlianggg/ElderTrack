@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import java.awt.CardLayout;
 import javax.swing.JComboBox;
@@ -13,7 +14,9 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
+import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
+import eldertrack.weather.Weather;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -26,16 +29,18 @@ public class MainFrame extends JFrame {
     final static String MENUPANEL = "Main Menu Panel";
     private JPanel MasterPane;
     private LoginPanel LoginPanel;
-    private DietPanel DietPanel;
+    private DietSection DietSection;
     private MedPanel MedPanel;
     private ReportMainPanel ReportPanel;
     private MgmtPanel MgmtPanel;
     private MainMenuPanel MainMenu;
+	private WeatherPanel weatherPanel;
     static JPanel CardsPanel;
-	private static StaffSession session;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
+	private static StaffSession session;
 	private static MainFrame frame;
+	
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
 	
 	/**
@@ -49,7 +54,6 @@ public class MainFrame extends JFrame {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
 					frame = new MainFrame();
 					frame.setVisible(true); // Set the main frame as visible
-					frame.showWeatherPanel();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -72,6 +76,13 @@ public class MainFrame extends JFrame {
 		MasterPane.setLayout(null);
 		setContentPane(MasterPane);
 		
+		weatherPanel = new WeatherPanel();
+
+		weatherPanel.setLocation(790, 671);
+		MasterPane.add(weatherPanel);
+		Thread thrd = new Thread(weatherTask);
+		thrd.start();
+		
 		LoginPanel = new LoginPanel();
 		LoginPanel.setBorder(lBorder);
 		
@@ -82,29 +93,60 @@ public class MainFrame extends JFrame {
 		CardsPanel.setLocation(0, 0);
 		CardsPanel.setSize(994, 671);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
-		
-
-
-
 	}
 	
 	void constructPanels() {
+		JProgressBar jpbar = LoginPanel.progressBar;
 		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
-		DietPanel = new DietPanel();
-		DietPanel.setBorder(lBorder);
+		jpbar.setValue(25);
+				
+		// Initialize Diet Panel
+		jpbar.setString("Initializing Diet Management...");
+		jpbar.update(jpbar.getGraphics());
+		DietSection = new DietSection();
+		DietSection.setBorder(lBorder);
+		CardsPanel.add(DietSection, DIETPANEL);
+		jpbar.setValue(50);
+
+		
+		// Initialize Med Panel
+		jpbar.setString("Initializing Medication...");
+		jpbar.update(jpbar.getGraphics());
 		MedPanel = new MedPanel();
 		MedPanel.setBorder(lBorder);
-		MgmtPanel = new MgmtPanel();
-		MgmtPanel.setBorder(lBorder);
+		CardsPanel.add(MedPanel, MEDICATIONPANEL);
+		jpbar.setValue(65);
+
+		
+		// Initialize Management Panel
+		jpbar.setString("Initializing Management...");
+		jpbar.update(jpbar.getGraphics());
+		if(session.getAccessLevel() == AccessLevel.MANAGER || session.getAccessLevel() == AccessLevel.SRSTAFF) {
+			MgmtPanel = new MgmtPanel();
+			MgmtPanel.setBorder(lBorder);
+			CardsPanel.add(MgmtPanel, MGMTPANEL);
+	
+		}
+		jpbar.setValue(85);
+
+		// Initialize Report Panel
+		jpbar.setString("Initializing Report Generation...");
+		jpbar.update(jpbar.getGraphics());
 		ReportPanel = new ReportMainPanel();
 		ReportPanel.setBorder(lBorder);
+		CardsPanel.add(ReportPanel, REPORTPANEL);
+
+		// Initialize Main Menu Panel
+		jpbar.setString("Initializing Main Menu...");
+		LoginPanel.progressBar.setValue(90);
+		jpbar.update(jpbar.getGraphics());
 		MainMenu = new MainMenuPanel();
 		MainMenu.setBorder(lBorder);
-		CardsPanel.add(DietPanel, DIETPANEL);
-		CardsPanel.add(MedPanel, MEDICATIONPANEL);
-		CardsPanel.add(ReportPanel, REPORTPANEL);
-		CardsPanel.add(MgmtPanel, MGMTPANEL);
-		CardsPanel.add(MainMenu, MENUPANEL);		
+		CardsPanel.add(MainMenu, MENUPANEL);
+		jpbar.setValue(95);
+		jpbar.update(jpbar.getGraphics());
+		
+		// Add menus to combo box
 		comboBox = new JComboBox<>();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent evt) {
@@ -117,33 +159,44 @@ public class MainFrame extends JFrame {
 		comboBox.setLocation(10, 682);
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MENUPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, REPORTPANEL}));
 		comboBox.setSelectedIndex(0);
+		jpbar.setValue(98);
+		jpbar.update(jpbar.getGraphics());
+	
 		MasterPane.add(comboBox);
 		MainMenu.fillDetails();
+		jpbar.setValue(100);
+		jpbar.update(jpbar.getGraphics());
 	}
 	
 	void deconstructPanels() {
 		System.out.println("--------------------- DECONSTRUCTING ALL PANELS NOW! ---------------------");
 		comboBox.setVisible(false);
-		CardsPanel.remove(DietPanel);
+		CardsPanel.remove(DietSection);
 		CardsPanel.remove(MedPanel);
 		CardsPanel.remove(ReportPanel);
-		CardsPanel.remove(MgmtPanel);
+		if(isManagementShown())
+			CardsPanel.remove(MgmtPanel);
 		CardsPanel.remove(MainMenu);
 		MasterPane.remove(comboBox);
 		comboBox = null;
-		DietPanel = null;
+		DietSection = null;
 		MedPanel = null;
 		ReportPanel = null;
 		MgmtPanel = null;
 		MainMenu = null;
+		LoginPanel.progressBar.setValue(0);
+		LoginPanel.progressBar.setString("Login to begin loading!");
+		LoginPanel.progressBar.update(LoginPanel.progressBar.getGraphics());
 		System.out.println("Panels deconstructed!");
 	}
 	
-	private void showWeatherPanel() {
-		JPanel WeatherPanel = new WeatherPanel();
-		WeatherPanel.setLocation(790, 671);
-		getInstance().MasterPane.add(WeatherPanel);
-	}
+	
+	Runnable weatherTask = () -> {
+		System.out.println("Obtaining data from URL on " + Thread.currentThread().getName());
+		Weather weatherinfo = Weather.getWeather();
+		weatherPanel.showWeatherInfo(weatherinfo);
+	};
+	
 	
 	// Singleton Class Design
 	public static MainFrame getInstance() {
@@ -162,15 +215,24 @@ public class MainFrame extends JFrame {
 	
 	// Triggers on logout
 	boolean endCurrentSession() {
-		MainFrame.session = null;
-		if (MainFrame.session == null) {
 			CardLayout cards = (CardLayout) MainFrame.CardsPanel.getLayout();
 			cards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
 			deconstructPanels();
+			MainFrame.session = null;
 			System.out.println("Successfully logged out!");
 			return true;
-		} else {
-			return false;
-		}
 	}
+	
+	boolean isManagementShown() {
+		AccessLevel al = MainFrame.getInstance().getSessionInstance().getAccessLevel();
+		if (al == AccessLevel.MANAGER || al == AccessLevel.ADMIN)
+			return true;
+		else
+			return false;
+	}
+	
+	DietSection getDietPanel() {
+		return this.DietSection;
+	}
+
 }

@@ -15,7 +15,7 @@ import javax.swing.JTabbedPane;
 public class MedMainPanel extends JPanel {
 
 	private static final long serialVersionUID = -2955963900083964862L;
-	static JTabbedPane TabbedPanel=new JTabbedPane();
+	JTabbedPane TabbedPanel=new JTabbedPane();
 	JLabel lblMedPanelLbl;
 	
 	
@@ -37,6 +37,7 @@ public class MedMainPanel extends JPanel {
 		
 		TabbedPanel.add("Dosage",new MedDosageSearchPanel());
 		TabbedPanel.add("Check-Up",new MedCheckSearchPanel());
+		TabbedPanel.add("Manage",new MedManageSearchPanel());
 		add(TabbedPanel);
 		JButton btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.addActionListener(new ActionListener() {
