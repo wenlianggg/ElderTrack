@@ -41,7 +41,7 @@ public class MedManagePanel extends JPanel {
 	private JTable MorningTable;
 	private JTable AfterNoonTable;
 	private JTable NoonTable;
-	private JTextField textField;
+	private JTextField SearchField;
 	/**
 	 * Create the panel.
 	 */
@@ -93,7 +93,7 @@ public class MedManagePanel extends JPanel {
 						String month=text.substring(5,7);
 						String day=text.substring(8,10);
 						AgeField.setText(Integer.toString(ElderData.getAge(year, month, day)));
-						
+						summaryPane.setText(rs.getString("dosagesummary"));
 						if(rs.getBlob("morningdosage")!=null){
 							MorningTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("morning",rs.getString("name")));
 						}
@@ -219,7 +219,6 @@ public class MedManagePanel extends JPanel {
 		add(lblNoon);
 
 		MorningTable = new JTable();
-		DefaultTableModel morningDosage;
 		MorningTable.setModel(new DefaultTableModel(
 				new Object[][] {
 				},
@@ -261,6 +260,8 @@ public class MedManagePanel extends JPanel {
 		JButton btnRemoveMorning = new JButton("REMOVE");
 		btnRemoveMorning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				
 			}
 		});
 		btnRemoveMorning.setBounds(880, 272, 89, 20);
@@ -287,11 +288,33 @@ public class MedManagePanel extends JPanel {
 		lblSearch.setBounds(25, 90, 80, 25);
 		add(lblSearch);
 
-		textField = new JTextField();
-		textField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		textField.setBounds(105, 90, 100, 25);
-		add(textField);
-		textField.setColumns(10);
+		SearchField = new JTextField();
+		SearchField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		SearchField.setBounds(105, 90, 100, 25);
+		add(SearchField);
+		SearchField.setColumns(10);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.setBounds(213, 92, 89, 23);
+		add(btnSearch);
+		
+		JButton btnSaveChange = new JButton("SAVE CHANGES");
+		btnSaveChange.setBounds(861, 607, 107, 23);
+		add(btnSaveChange);
+		
+		JButton btnAdd = new JButton("ADD");
+		btnAdd.setBounds(781, 272, 89, 20);
+		add(btnAdd);
+		
+		JButton btnAdd_1 = new JButton("ADD");
+		btnAdd_1.setBounds(781, 382, 89, 20);
+		add(btnAdd_1);
+		
+		JButton btnNewButton = new JButton("ADD");
+		btnNewButton.setBounds(781, 489, 89, 20);
+		add(btnNewButton);
+		
+		
 
 
 
