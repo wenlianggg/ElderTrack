@@ -232,6 +232,7 @@ public class MedCheckPanel extends JPanel {
 						CheckList.add(data);
 						numofElder++;
 					}
+					
 				}
 				else if(checkupTime.equalsIgnoreCase("afternoon")){
 					if(rs.getInt("afternooncheck")==0){
@@ -288,6 +289,8 @@ public class MedCheckPanel extends JPanel {
 
 			e1.printStackTrace();
 		}
+		
+		
 		DisplayInformation(CheckList,commentsList, counter);
 
 		JButton btnSaveQuit = new JButton("Save And Quit");
@@ -369,7 +372,9 @@ public class MedCheckPanel extends JPanel {
 				}
 				else{
 
-					if(counter+1==CheckList.size()){
+					System.out.println(counter);
+					System.out.println(CheckList.size());
+					if(counter+1!=CheckList.size()){
 						try {
 							CheckUpObject checkElder=new CheckUpObject();
 							checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
@@ -388,8 +393,6 @@ public class MedCheckPanel extends JPanel {
 							else{
 								checkElder.setElderEar(false);
 							}
-
-
 							CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 							UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
 							CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
@@ -408,14 +411,47 @@ public class MedCheckPanel extends JPanel {
 						comboEye.setSelectedItem(null);
 						comboEar.setSelectedItem(null);
 					}
-
 					else{
+						try {
+							CheckUpObject checkElder=new CheckUpObject();
+							checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
+							checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+							checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+							checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+							if(comboEye.getSelectedItem().toString().equals("Yes")){
+								checkElder.setElderEye(true);
+							}
+							else{
+								checkElder.setElderEye(false);
+							}
+							if(comboEar.getSelectedItem().toString().equals("Yes")){
+								checkElder.setElderEar(true);
+							}
+							else{
+								checkElder.setElderEar(false);
+							}
+							CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
+							UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
+							CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
+						} catch (SQLException e1) {
+
+							e1.printStackTrace();
+						}
+						
+						JOptionPane.showMessageDialog(null, "Check up is successful");
+						TempField.setText(null);
+						BloodField.setText(null);
+						HeartField.setText(null);
+						SugarField.setText(null);
+						comboEye.setSelectedItem(null);
+						comboEar.setSelectedItem(null);
 						JOptionPane.showMessageDialog(null, "Check Up has been completed");	
 						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 						mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 					}
-
 				}
+
+
 			}
 		});
 

@@ -145,9 +145,10 @@ public class MedDosagePanel extends JPanel {
 			rs = stmt.getResultSet();
 
 			while(rs.next()){
-				if(dosageTime.equalsIgnoreCase("morning")){
+				if(dosageTime.equalsIgnoreCase("Morning")){
 					if(rs.getBlob("morningdosage") !=null){
 						if(rs.getInt("morningtaken")==0){
+							System.out.println("Test3");
 							// calculate the age
 							data=new ElderData();
 							java.sql.Date reportDate=rs.getDate("dob");
@@ -163,7 +164,7 @@ public class MedDosagePanel extends JPanel {
 							data.setElderName(rs.getString("name"));
 							data.setElderAge(ElderData.getAge(year,month,day));
 							data.setElderGender(rs.getString("gender"));
-							DosageList.add(data);	
+							DosageList.add(data);
 							numofElder++;
 						}
 					}
@@ -227,6 +228,7 @@ public class MedDosagePanel extends JPanel {
 		for(int k=0;k<DosageList.size();k++){
 			DosageList.get(k).print();
 		}
+		
 		DisplayInformation(DosageList, counter);
 
 
@@ -319,10 +321,12 @@ public class MedDosagePanel extends JPanel {
 					else{
 						JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
 
+						}
 					}
 				}
-				}
 				else{
+					
+					UpdateDosageTaken(DosageList.get(counter-1).getElderID(),dosageTime);
 					JOptionPane.showMessageDialog(null, "Dosage has been completed");
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);

@@ -481,7 +481,7 @@ public class MedDosageSearchPanel extends JPanel {
 	}
 	public Boolean checkDosageNeeded(){
 		int check=1;
-	
+
 		if(roomcombobox.getSelectedItem().toString().equals("101")){
 			if(room101.getElderNumDosageNeeded() ==0){
 				JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
@@ -534,13 +534,13 @@ public class MedDosageSearchPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
 			check=0;
 		}
-		
+
 		if(check==0){
 			return false;
 		}
 		else
 			return true;
-		
+
 
 	}
 	public Boolean checkDosageValid(String roomNum,String timing){
