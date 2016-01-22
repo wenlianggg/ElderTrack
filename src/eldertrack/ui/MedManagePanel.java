@@ -42,6 +42,13 @@ public class MedManagePanel extends JPanel {
 	private JTable AfterNoonTable;
 	private JTable NoonTable;
 	private JTextField SearchField;
+
+	private DefaultTableModel Morningmodel;
+	private DefaultTableModel Afternoonmodel;
+	private DefaultTableModel Noonmodel;
+	private boolean morningchange;
+	private boolean afternoonchange;
+	private boolean noonchange;
 	/**
 	 * Create the panel.
 	 */
@@ -62,7 +69,7 @@ public class MedManagePanel extends JPanel {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		eldertable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		eldertable.getColumnModel().getColumn(0).setPreferredWidth(20);
 		eldertable.getColumnModel().getColumn(2).setPreferredWidth(60);
@@ -79,9 +86,9 @@ public class MedManagePanel extends JPanel {
 					int row = eldertable.getSelectedRow();
 					String table_clicked = (eldertable.getModel().getValueAt(row, 0).toString());
 					String sql = "SELECT * FROM et_elderly WHERE id=?";
-					
+
 					ResultSet rs = so.getResultSet(sql, table_clicked);
-					
+
 					while(rs.next()){
 						ElderIDField.setText(Integer.toString(rs.getInt("id")));
 						NameField.setText(rs.getString("name"));
@@ -95,7 +102,8 @@ public class MedManagePanel extends JPanel {
 						AgeField.setText(Integer.toString(ElderData.getAge(year, month, day)));
 						summaryPane.setText(rs.getString("dosagesummary"));
 						if(rs.getBlob("morningdosage")!=null){
-							MorningTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("morning",rs.getString("name")));
+							Morningmodel=DosageTableHelper.getElderlyFromQueryManagementDos("morning",rs.getString("name"));
+							MorningTable.setModel(Morningmodel);
 						}
 						else{
 							MorningTable.setModel(new DefaultTableModel(
@@ -107,7 +115,8 @@ public class MedManagePanel extends JPanel {
 									));
 						}
 						if(rs.getBlob("afternoondosage")!=null){
-							AfterNoonTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("afternoon",rs.getString("name")));
+							Afternoonmodel=DosageTableHelper.getElderlyFromQueryManagementDos("afternoon",rs.getString("name"));
+							AfterNoonTable.setModel(Afternoonmodel);
 						}
 						else{
 							AfterNoonTable.setModel(new DefaultTableModel(
@@ -119,7 +128,8 @@ public class MedManagePanel extends JPanel {
 									));
 						}
 						if(rs.getBlob("noondosage") !=null){
-							NoonTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("noon",rs.getString("name")));
+							Noonmodel=DosageTableHelper.getElderlyFromQueryManagementDos("noon",rs.getString("name"));
+							NoonTable.setModel(Noonmodel);
 						}
 						else{
 							NoonTable.setModel(new DefaultTableModel(
@@ -130,12 +140,12 @@ public class MedManagePanel extends JPanel {
 									}
 									));
 						}
-						
+
 					}
 				}catch(Exception e1){
 					JOptionPane.showMessageDialog(null, e1);
 				}
-			
+
 			}
 		});
 
@@ -218,70 +228,127 @@ public class MedManagePanel extends JPanel {
 		lblNoon.setBounds(525, 486, 80, 20);
 		add(lblNoon);
 
-		MorningTable = new JTable();
-		MorningTable.setModel(new DefaultTableModel(
+		// Morning
+		Morningmodel=new DefaultTableModel(
 				new Object[][] {
 				},
 				new String[] {
 						"Description", "Prescription", "Medication Type","Dosage"
 				}
-				));
+				);
+		MorningTable = new JTable(Morningmodel);
+
 
 		JScrollPane MorningPane = new JScrollPane(MorningTable);
 		MorningPane.setBounds(525, 291, 444, 86);
 		add(MorningPane);
 
-		AfterNoonTable = new JTable();
-		AfterNoonTable.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"Description", "Prescription", "Medication Type","Dosage"
-				}
-				));
-
-		JScrollPane AfterNoonPane = new JScrollPane(AfterNoonTable);
-		AfterNoonPane.setBounds(525, 400, 444, 86);
-		add(AfterNoonPane);
-
-		NoonTable = new JTable();
-		NoonTable.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"Description", "Prescription", "Medication Type","Dosage"
-				}
-				));
-
-		JScrollPane NoonPane = new JScrollPane(NoonTable);
-		NoonPane.setBounds(525, 508, 444, 86);
-		add(NoonPane);
+		JButton btnMorningAdd = new JButton("ADD");
+		btnMorningAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Morningmodel.addRow(new Object [][] {{null, null,null}});
+				Morningmodel.setValueAt(null,MorningTable.getRowCount()-1,0);
+				morningchange=true;
+			}
+		});
+		btnMorningAdd.setBounds(781, 272, 89, 20);
+		add(btnMorningAdd);
 
 		JButton btnRemoveMorning = new JButton("REMOVE");
 		btnRemoveMorning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				if(MorningTable.getSelectedRow()<0){
+					JOptionPane.showMessageDialog(null,"Select morning dosage to remove");
+				}
+				else{
+					Morningmodel.removeRow(MorningTable.getSelectedRow());
+				}
+				morningchange=true;
 			}
 		});
 		btnRemoveMorning.setBounds(880, 272, 89, 20);
 		add(btnRemoveMorning);
 
+		// Afternoon
+		Afternoonmodel=new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"Description", "Prescription", "Medication Type","Dosage"
+				}
+				);
+		AfterNoonTable = new JTable(Afternoonmodel);
+		JScrollPane AfterNoonPane = new JScrollPane(AfterNoonTable);
+		AfterNoonPane.setBounds(525, 400, 444, 86);
+		add(AfterNoonPane);
+
+		JButton btnAfternoonAdd = new JButton("ADD");
+		btnAfternoonAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Afternoonmodel.addRow(new Object [][] {{null, null,null}});
+				Afternoonmodel.setValueAt(null,AfterNoonTable.getRowCount()-1,0);
+				afternoonchange=true;
+			}
+		});
+		btnAfternoonAdd.setBounds(781, 382, 89, 20);
+		add(btnAfternoonAdd);
+
 		JButton btnRemoveAfternoon = new JButton("REMOVE");
 		btnRemoveAfternoon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(AfterNoonTable.getSelectedRow()<0){
+					JOptionPane.showMessageDialog(null,"Select afternoon dosage to remove");
+				}
+				else{
+					Afternoonmodel.removeRow(AfterNoonTable.getSelectedRow());
+				}
+				afternoonchange=true;
 			}
 		});
 		btnRemoveAfternoon.setBounds(880, 382, 89, 20);
 		add(btnRemoveAfternoon);
 
+		// Noon
+		Noonmodel=new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"Description", "Prescription", "Medication Type","Dosage"
+				}
+				);
+		NoonTable = new JTable(Noonmodel);
+		JScrollPane NoonPane = new JScrollPane(NoonTable);
+		NoonPane.setBounds(525, 508, 444, 86);
+		add(NoonPane);
+
+		JButton btnNoonAdd = new JButton("ADD");
+		btnNoonAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Noonmodel.addRow(new Object [][] {{null, null,null}});
+				Noonmodel.setValueAt(null,NoonTable.getRowCount()-1,0);
+				noonchange=true;
+			}
+		});
+		btnNoonAdd.setBounds(781, 489, 89, 20);
+		add(btnNoonAdd);
+
 		JButton btnRemoveNoon = new JButton("REMOVE");
 		btnRemoveNoon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(NoonTable.getSelectedRow()<0){
+					JOptionPane.showMessageDialog(null,"Select noon dosage to remove");
+				}
+				else{
+					Noonmodel.removeRow(NoonTable.getSelectedRow());
+				}
+				noonchange=true;
 			}
 		});
 		btnRemoveNoon.setBounds(880, 489, 89, 20);
 		add(btnRemoveNoon);
+
+
+
 
 		JLabel lblSearch = new JLabel("SEARCH:");
 		lblSearch.setFont(new Font("Segoe UI", Font.PLAIN, 18));
@@ -293,32 +360,28 @@ public class MedManagePanel extends JPanel {
 		SearchField.setBounds(105, 90, 100, 25);
 		add(SearchField);
 		SearchField.setColumns(10);
-		
+
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(213, 92, 89, 23);
 		add(btnSearch);
-		
+
 		JButton btnSaveChange = new JButton("SAVE CHANGES");
-		btnSaveChange.setBounds(861, 607, 107, 23);
+		btnSaveChange.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(morningchange==true || afternoonchange==true || noonchange==true){
+					
+				}
+				else{
+					JOptionPane.showMessageDialog(null,"There were no changes");
+				}
+				
+				
+			}
+		});
+		btnRemoveNoon.setBounds(880, 489, 89, 20);
+		add(btnRemoveNoon);
+		btnSaveChange.setBounds(840, 607, 128, 23);
 		add(btnSaveChange);
-		
-		JButton btnAdd = new JButton("ADD");
-		btnAdd.setBounds(781, 272, 89, 20);
-		add(btnAdd);
-		
-		JButton btnAdd_1 = new JButton("ADD");
-		btnAdd_1.setBounds(781, 382, 89, 20);
-		add(btnAdd_1);
-		
-		JButton btnNewButton = new JButton("ADD");
-		btnNewButton.setBounds(781, 489, 89, 20);
-		add(btnNewButton);
-		
-		
-
-
-
-
 
 	}
 	public static void main(String[] args) {

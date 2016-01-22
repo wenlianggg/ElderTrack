@@ -193,7 +193,7 @@ public class DosageTableHelper  {
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		return (DefaultTableModel) buildTableModelManagementDos(rs);
+		return buildTableModelManagementDos(rs);
 	}
 
 
@@ -201,9 +201,6 @@ public class DosageTableHelper  {
 	@SuppressWarnings("unchecked")
 	public static DefaultTableModel buildTableModelManagementDos(ResultSet rs) throws SQLException {
 		ArrayList<DosageObject> DosageList=null;
-
-
-		System.out.println(rs);
 		try {
 			while(rs.next()){
 				ByteArrayInputStream in = new ByteArrayInputStream(rs.getBytes(1));
@@ -229,7 +226,6 @@ public class DosageTableHelper  {
 		columnNames.add("Prescription");
 		columnNames.add("Medication Type");
 		columnNames.add("Dosage");
-		columnNames.add("Selected");
 
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		for(int k=0;k<DosageList.size();k++){
@@ -245,14 +241,6 @@ public class DosageTableHelper  {
 		DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
 			private static final long serialVersionUID = 4234183862785566645L;
 
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				  if (columnIndex < 4) {
-		                return false;
-		            } else {
-		                return true;
-		            }
-			}
 		};
 		return dtm;
 	}
