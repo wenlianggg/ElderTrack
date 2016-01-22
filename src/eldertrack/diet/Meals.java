@@ -116,6 +116,35 @@ public class Meals implements java.io.Serializable {
 		mealprop.add(new MealProperties());
 		return this;
 	}
+	
+	boolean isValid() {
+		if ( (this.mealname.size() == this.mealprop.size()) && (this.nutrition.size() == this.mealprop.size()) ) {
+			return true;
+		} else {
+			return fix();
+		}
+	}
+	
+	boolean fix() {
+		if (this.mealname == null || this.mealprop == null || this.nutrition == null) {
+			throw new NullPointerException();
+		} else {
+			int smallestsize = this.mealname.size();
+			if (smallestsize < this.mealprop.size())
+				smallestsize = this.mealprop.size();
+			if (smallestsize < this.nutrition.size())
+				smallestsize = this.nutrition.size();
+			do {
+				if(this.mealprop.size() > smallestsize)
+					this.mealprop.remove(this.mealprop.size()-1);
+				if(this.mealname.size() > smallestsize)
+					this.mealname.remove(this.mealname.size()-1);
+				if(this.nutrition.size() > smallestsize)
+					this.nutrition.remove(this.nutrition.size()-1);
+			} while ( (this.mealname.size() != this.mealprop.size()) || (this.nutrition.size() != this.mealprop.size()) );
+			return true;
+		}
+	}
 
 	// Vector Transposition
 	private static <T> Vector<Vector<T>> transpose(Vector<Vector<T>> table) {
