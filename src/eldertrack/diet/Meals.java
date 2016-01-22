@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Meals implements java.io.Serializable {
-	private static final long serialVersionUID = 1001L;
+	private static final long serialVersionUID = 1002;
 	private ArrayList<String> mealname;
 	private ArrayList<Nutrition> nutrition;
 	private ArrayList<MealProperties> mealprop;
@@ -92,6 +92,10 @@ public class Meals implements java.io.Serializable {
 	
 	public Nutrition getNutrition(int i) {
 		return nutrition.get(i);
+	}
+	
+	public void setNutrition(int i, Nutrition n) {
+		nutrition.set(i, n);
 	}
 	
 	public MealProperties getMealProperties(int i) {
