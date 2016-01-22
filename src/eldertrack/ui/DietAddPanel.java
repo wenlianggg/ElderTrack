@@ -228,16 +228,6 @@ public class DietAddPanel extends JPanel implements Presentable {
 		prevMealsTable = new JTable();
 
 		scrollPane.setViewportView(prevMealsTable);
-
-		JButton btnMainMenu = new JButton("Back to Main Menu");
-		btnMainMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
-				parentCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
-			}
-		});
-		btnMainMenu.setBounds(820, 15, 139, 40);
-		add(btnMainMenu);
 	}
 	
 	private void setMenuColumnWidths() {

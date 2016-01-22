@@ -195,10 +195,10 @@ public class DietMainPanel extends JPanel implements Presentable {
 		add(btnAddMeal);
 		btnAddMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DietAddPanel dp = MainFrame.getInstance().getDietPanel().getDietAddPanel();
+				DietAddPanel dap = MainFrame.getInstance().getDietPanel().getDietAddPanel();
 				// Present person data on DietAddPanel
 				if (eldersTable.getSelectedRow() != -1) {
-					dp.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+					dap.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
 					parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 					parentCards.show(DietSection.CardsPanel, DietSection.DADDPANEL);
 				} else
@@ -212,10 +212,17 @@ public class DietMainPanel extends JPanel implements Presentable {
 		add(btnModifyMeals);
 		btnModifyMeals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
-		        parentCards.show(DietSection.CardsPanel, DietSection.DMODPANEL);
-			}
-		});
+					DietModifyPanel dmp = MainFrame.getInstance().getDietPanel().getDietModifyPanel();
+					// Present person data on DietAddPanel
+					if (eldersTable.getSelectedRow() != -1) {
+						dmp.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+						parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+						parentCards.show(DietSection.CardsPanel, DietSection.DMODPANEL);
+					} else
+						JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
+
+				}
+			});
 		
 		btnMenuManagement = new JButton("Edit Menu");
 		btnMenuManagement.setBounds(759, 576, 216, 54);
