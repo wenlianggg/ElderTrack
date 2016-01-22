@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 
 import eldertrack.diet.*;
@@ -71,6 +72,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 		add(tableScrollPane);
 		DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
 		eldersTable = new JTable(allEldersData);
+		eldersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		eldersTable.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
@@ -190,7 +192,9 @@ public class DietMainPanel extends JPanel implements Presentable {
 		lblReviewInfo.setBounds(310, 59, 665, 31);
 		add(lblReviewInfo);
 		
-		btnAddMeal = new JButton("Add Meal");
+		btnAddMeal = new JButton("Record Meal");
+		btnAddMeal.setForeground(new Color(0, 0, 128));
+		btnAddMeal.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnAddMeal.setBounds(309, 576, 215, 82);
 		add(btnAddMeal);
 		btnAddMeal.addActionListener(new ActionListener() {
@@ -207,7 +211,9 @@ public class DietMainPanel extends JPanel implements Presentable {
 			}
 		});
 		
-		btnModifyMeals = new JButton("Update Existing Meals");
+		btnModifyMeals = new JButton("Update Existing");
+		btnModifyMeals.setForeground(new Color(210, 105, 30));
+		btnModifyMeals.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnModifyMeals.setBounds(534, 576, 215, 83);
 		add(btnModifyMeals);
 		btnModifyMeals.addActionListener(new ActionListener() {
@@ -225,6 +231,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 			});
 		
 		btnMenuManagement = new JButton("Edit Menu");
+		btnMenuManagement.setForeground(new Color(205, 92, 92));
+		btnMenuManagement.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnMenuManagement.setBounds(759, 576, 216, 54);
 		add(btnMenuManagement);
 		btnMenuManagement.addActionListener(new ActionListener() {
@@ -234,7 +242,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 			}
 		});
 		
-		btnViewInMgmt = new JButton("View Elderly in Management Panel");
+		btnViewInMgmt = new JButton("View Elderly in Management");
+		btnViewInMgmt.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnViewInMgmt.setBounds(759, 631, 216, 28);
 		add(btnViewInMgmt);
 		
