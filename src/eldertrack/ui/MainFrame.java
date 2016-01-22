@@ -18,7 +18,6 @@ import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
 import eldertrack.weather.Weather;
 import java.awt.Color;
-import java.awt.SystemColor;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
