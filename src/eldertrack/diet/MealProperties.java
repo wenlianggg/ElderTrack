@@ -6,17 +6,16 @@ import java.util.Date;
 import eldertrack.ui.MainFrame;
 
 public class MealProperties implements java.io.Serializable {
-	private static final long serialVersionUID = 2001L;
+	private static final long serialVersionUID = 2003;
 	private String mealdescription;
-	private String lasteditedby;
-	private Date lastedited;
-	private String createdby;
+	private int editedbyid;
+	private Date edited;
+	private int createdbyid;
 	private Date created;
 	
 	MealProperties() {
-		lasteditedby = "--";
-		lastedited = new Date();
-		createdby = MainFrame.getInstance().getSessionInstance().getFullName();
+		edited = new Date();
+		createdbyid = MainFrame.getInstance().getSessionInstance().getStaffid();
 		created = new Date();
 	}
 	
@@ -24,35 +23,35 @@ public class MealProperties implements java.io.Serializable {
 		SimpleDateFormat datef = new SimpleDateFormat("dd MMMM yyyy, HH:mm:ss, zzzz");
 		System.out.println();
 		System.out.println("Meal description: " + mealdescription);
-		System.out.println("Last Edited By: " + lasteditedby);
-		System.out.println("Last Edited: " + datef.format(lastedited));
-		System.out.println("Created By: " + createdby);
+		System.out.println("Last Edited By: " + editedbyid);
+		System.out.println("Last Edited: " + datef.format(edited));
+		System.out.println("Created By: " + createdbyid);
 		System.out.println("Created: " + datef.format(created));
 	}
 	
 	void modify() {
-		lasteditedby = MainFrame.getInstance().getSessionInstance().getFullName();
-		lastedited = new Date();
+		editedbyid = MainFrame.getInstance().getSessionInstance().getStaffid();
+		edited = new Date();
 	}
 
 	public String getMealdescription() {
-		return mealdescription;
+		return this.mealdescription;
 	}
 
-	public String getLasteditedby() {
-		return lasteditedby;
+	public Integer getEditor() {
+		return this.editedbyid;
 	}
 
-	public Date getLastedited() {
-		return lastedited;
+	public Date getEdited() {
+		return this.edited;
 	}
 
-	public String getCreatedby() {
-		return createdby;
+	public Integer getCreator() {
+		return this.createdbyid;
 	}
 
 	public Date getCreated() {
-		return created;
+		return this.created;
 	}
 	
 	

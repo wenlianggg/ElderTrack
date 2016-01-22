@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 
 import eldertrack.db.SQLObject;
@@ -53,7 +54,7 @@ public class DietAddPanel extends JPanel implements Presentable {
 	private JLabel lblFat;
 	private JLabel lblMealName;
 	private JLabel lblInfoName;
-	CardLayout parentCards;
+	private CardLayout parentCards;
 	private JCheckBox chckbxHalal;
 	
 	// Constructor
@@ -142,17 +143,21 @@ public class DietAddPanel extends JPanel implements Presentable {
 		lblReviewInfo.setBounds(681, 54, 665, 31);
 		add(lblReviewInfo);
 		
-		JButton btnModifyMeals = new JButton("Back (Elderly View)");
-		btnModifyMeals.addActionListener(new ActionListener() {
+		JButton btnBackToDiet = new JButton("Back (Elderly View)");
+		btnBackToDiet.setForeground(new Color(30, 144, 255));
+		btnBackToDiet.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnBackToDiet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
 			}
 		});
-		btnModifyMeals.setBounds(682, 611, 303, 48);
-		add(btnModifyMeals);
+		btnBackToDiet.setBounds(682, 611, 303, 48);
+		add(btnBackToDiet);
 		
 		JButton btnAddMeal = new JButton("Add Meal Entry");
+		btnAddMeal.setForeground(new Color(30, 144, 255));
+		btnAddMeal.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnAddMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addMealEntry(mealSearchTable.getValueAt(mealSearchTable.getSelectedRow(), 0).toString());
@@ -228,19 +233,10 @@ public class DietAddPanel extends JPanel implements Presentable {
 		prevMealsTable = new JTable();
 
 		scrollPane.setViewportView(prevMealsTable);
-
-		JButton btnMainMenu = new JButton("Back to Main Menu");
-		btnMainMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
-				parentCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
-			}
-		});
-		btnMainMenu.setBounds(820, 15, 139, 40);
-		add(btnMainMenu);
 	}
 	
 	private void setMenuColumnWidths() {
+		mealSearchTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mealSearchTable.getTableHeader().setResizingAllowed(false);
 		mealSearchTable.getTableHeader().setReorderingAllowed(false);
 		mealSearchTable.getColumnModel().getColumn(0).setPreferredWidth(25);
@@ -253,6 +249,7 @@ public class DietAddPanel extends JPanel implements Presentable {
 	}
 	
 	private void setPrevMealsColumnWidth() {
+		prevMealsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(40);
 		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(150);
 		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(250);
