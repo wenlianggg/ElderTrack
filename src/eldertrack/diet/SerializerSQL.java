@@ -40,11 +40,15 @@ public class SerializerSQL {
 	    Meals m;
 	    try {
 		    ps = so.getPreparedStatementWithKey(SQL_READ_DIET);
-			ps.setInt(1, 1);
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			rs.next();
-		    is = new ObjectInputStream(new ByteArrayInputStream(rs.getBytes(1)));
-			m = (Meals) is.readObject();
+			if (rs.getBytes(1) != null) {
+				is = new ObjectInputStream(new ByteArrayInputStream(rs.getBytes(1)));
+				m = (Meals) is.readObject();
+			} else {
+				return new Meals();
+			}
 	    } catch (SQLException e) {
 	    	e.printStackTrace();
 	    	return null;
@@ -81,8 +85,11 @@ public class SerializerSQL {
 			ps.setInt(1, 1);
 			ResultSet rs = ps.executeQuery();
 			rs.next();
-		    is = new ObjectInputStream(new ByteArrayInputStream(rs.getBytes(1)));
-			n = (Nutrition) is.readObject();
+			if (rs.getBytes(1) != null) {
+			    is = new ObjectInputStream(new ByteArrayInputStream(rs.getBytes(1)));
+				n = (Nutrition) is.readObject();
+			} else
+				return new Nutrition();
 	  } catch (SQLException e) {
 	  	e.printStackTrace();
 	  	return null;

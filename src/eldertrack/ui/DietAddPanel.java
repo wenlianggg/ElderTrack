@@ -22,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
 import eldertrack.diet.Elderly;
