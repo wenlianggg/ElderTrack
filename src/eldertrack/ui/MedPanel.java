@@ -15,7 +15,7 @@ public class MedPanel extends JPanel {
 	static final String MCHECKSEARCHPANEL="Medical Check Up Search Panel";
 	static final String MCHECKPANEL="Medical Check Up Panel";
 	static final String MMANAGESEARCHPANEL="Medical Management Search Panel";
-	
+	static final String MMANAGEPANEL="Medical Management Panel";
 	
 	static JPanel MedCardPanel;
 	CardLayout mainCards;

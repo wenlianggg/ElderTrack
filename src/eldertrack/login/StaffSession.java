@@ -33,7 +33,8 @@ public class StaffSession{
 			rs = so.getResultSet("SELECT * FROM et_staff WHERE username = ?", username.toLowerCase());
 			// If ResultSet is null, it means that no such user is found
 			if (rs == null || rs.next() == false) {
-				throw new NoSuchUserException();
+				NoSuchUserException up = new NoSuchUserException();
+				throw up; // hehe
 			}
 			this.exists = true;
 			// Compare and verify strings
@@ -73,7 +74,8 @@ public class StaffSession{
 				ps.setInt(2, this.staffid);
 				ps.executeUpdate();
 			} else {
-				throw new WrongPasswordException();
+				WrongPasswordException away = new WrongPasswordException();
+				throw away; //hehe
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

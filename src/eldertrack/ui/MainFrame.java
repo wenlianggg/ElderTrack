@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
     static JPanel CardsPanel;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
-	private static StaffSession session;
+	private StaffSession session;
 	private static MainFrame frame;
 	
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
@@ -121,11 +121,10 @@ public class MainFrame extends JFrame {
 		// Initialize Management Panel
 		jpbar.setString("Initializing Management...");
 		jpbar.update(jpbar.getGraphics());
-		if(session.getAccessLevel() == AccessLevel.MANAGER || session.getAccessLevel() == AccessLevel.SRSTAFF) {
+		if(isManagementShown()) {
 			MgmtPanel = new MgmtPanel();
 			MgmtPanel.setBorder(lBorder);
 			CardsPanel.add(MgmtPanel, MGMTPANEL);
-	
 		}
 		jpbar.setValue(85);
 
@@ -205,12 +204,12 @@ public class MainFrame extends JFrame {
 	
 	// For getting logged in user information
 	public StaffSession getSessionInstance() {
-		return MainFrame.session;
+		return session;
 	}
 	
 	StaffSession setSessionInstance(StaffSession session) {
-		MainFrame.session = session;
-		return MainFrame.session;
+		this.session = session;
+		return getInstance().getSessionInstance();
 	}
 	
 	// Triggers on logout
@@ -218,7 +217,7 @@ public class MainFrame extends JFrame {
 			CardLayout cards = (CardLayout) MainFrame.CardsPanel.getLayout();
 			cards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
 			deconstructPanels();
-			MainFrame.session = null;
+			this.session = null;
 			System.out.println("Successfully logged out!");
 			return true;
 	}
