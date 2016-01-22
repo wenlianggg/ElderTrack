@@ -6,11 +6,9 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -19,14 +17,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
-
-import eldertrack.db.SQLObject;
-import eldertrack.diet.Elderly;
-import eldertrack.diet.Nutrition;
-import eldertrack.misc.TableHelper;
 import javax.swing.JCheckBox;
+
+
+import eldertrack.diet.Elderly;
+import eldertrack.diet.MealProperties;
+import eldertrack.diet.Meals;
+import eldertrack.diet.Nutrition;
+import eldertrack.diet.SerializerSQL;
+import eldertrack.misc.TableHelper;
 
 public class DietModifyPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
@@ -41,7 +42,6 @@ public class DietModifyPanel extends JPanel implements Presentable {
 	private JTextField fieldProtein;
 	private JTextField fieldCarbohydrates;
 	private JTextField fieldCalories;
-	private String currentElderly;
 	private JCheckBox chckbxHalal;
 	private JLabel lblElderid;
 	private JLabel lblInfoName;
@@ -49,6 +49,14 @@ public class DietModifyPanel extends JPanel implements Presentable {
 	private JLabel lblRoomNumber;
 	private JLabel lblNric;
 	private JLabel lblMealName;
+	private CardLayout parentCards;
+	private Integer currentElderly;
+	private HashMap<Integer, Elderly> eldermap;
+	private JLabel lblAddedOn;
+	private JLabel lblAddedBy;
+	private JLabel lblLastModified;
+	private JLabel lblModifiedBy;
+	private SimpleDateFormat sdf;
 	
 	// Constructor
 	DietModifyPanel() {
@@ -96,16 +104,25 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		lblReviewInfo.setBounds(10, 156, 168, 31);
 		add(lblReviewInfo);
 		
-		JButton btnRemoveEntry = new JButton("Remove Meal Entry");
-		btnRemoveEntry.setBounds(782, 156, 203, 109);
+		JButton btnRemoveEntry = new JButton("Remove Entry");
+		btnRemoveEntry.setForeground(new Color(255, 0, 0));
+		btnRemoveEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnRemoveEntry.setBounds(782, 274, 203, 109);
 		add(btnRemoveEntry);
 		
-		JButton btnModifyEntry = new JButton("Modify Meal Entry");
-		btnModifyEntry.setBounds(782, 276, 203, 109);
+		JButton btnModifyEntry = new JButton("Save Changes");
+		btnModifyEntry.setForeground(new Color(60, 179, 113));
+		btnModifyEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnModifyEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				saveData();
+			}
+		});
+		btnModifyEntry.setBounds(782, 156, 203, 109);
 		add(btnModifyEntry);
 		
 		JPanel nutriInfoPanel = new JPanel();
-		nutriInfoPanel.setBorder(null);
+		nutriInfoPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		nutriInfoPanel.setBounds(384, 156, 388, 503);
 		add(nutriInfoPanel);
 		nutriInfoPanel.setLayout(null);
@@ -208,20 +225,27 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		lblRda.setBounds(11, 339, 306, 29);
 		nutriInfoPanel.add(lblRda);
 		
-		JLabel lblAddedOnDdmmyy = new JLabel("Added On: dd/mm/yy hh:mmAM");
-		lblAddedOnDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblAddedOnDdmmyy.setBounds(11, 412, 306, 20);
-		nutriInfoPanel.add(lblAddedOnDdmmyy);
+		sdf = new SimpleDateFormat("HH:mm dd MMM yyyy ");
 		
-		JLabel lblAddedByDdmmyy = new JLabel("Added By: PERSON NAME");
-		lblAddedByDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblAddedByDdmmyy.setBounds(11, 431, 257, 20);
-		nutriInfoPanel.add(lblAddedByDdmmyy);
+		lblAddedOn = new JLabel("Added On: dd/mm/yy hh:mmAM");
+		lblAddedOn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAddedOn.setBounds(11, 400, 306, 20);
+		nutriInfoPanel.add(lblAddedOn);
 		
-		JLabel lblLastModifiedDdmmyy = new JLabel("Last Modified: dd/mm/yy hh:mmAM by PERSON NAME");
-		lblLastModifiedDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblLastModifiedDdmmyy.setBounds(11, 451, 318, 20);
-		nutriInfoPanel.add(lblLastModifiedDdmmyy);
+		lblAddedBy = new JLabel("Added By: PERSON NAME");
+		lblAddedBy.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAddedBy.setBounds(11, 420, 257, 20);
+		nutriInfoPanel.add(lblAddedBy);
+		
+		lblLastModified = new JLabel("Last Modified: dd/mm/yy hh:mmAM");
+		lblLastModified.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblLastModified.setBounds(11, 440, 318, 20);
+		nutriInfoPanel.add(lblLastModified);
+		
+		lblModifiedBy = new JLabel("Modified By: PERSON NAME");
+		lblModifiedBy.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblModifiedBy.setBounds(11, 460, 207, 20);
+		nutriInfoPanel.add(lblModifiedBy);
 		
 		chckbxHalal = new JCheckBox("Halal Meal");
 		chckbxHalal.setBounds(6, 309, 97, 23);
@@ -231,23 +255,41 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		scrollPane.setBounds(10, 198, 364, 461);
 		add(scrollPane);
 		
+		JButton btnBackToDiet = new JButton("Back (Elderly View)");
+		btnBackToDiet.setForeground(new Color(30, 144, 255));
+		btnBackToDiet.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnBackToDiet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
+			}
+		});
+		btnBackToDiet.setBounds(782, 611, 203, 48);
+		add(btnBackToDiet);
+		
 		prevMealsTable = new JTable();
 		prevMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		scrollPane.setViewportView(prevMealsTable);
+		prevMealsTable.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evt) {
+				presentMealData(prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0).toString());
+			}
+		});
 	}
 
 	private void setPrevMealsColumnWidth() {
+		prevMealsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(40);
 		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(150);
 		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(250);
 	}
 	
 	public void presentData(String personid) {
-		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
-		Elderly el = eldermap.get(Integer.parseInt(personid));
+		this.currentElderly = Integer.parseInt(personid);
+		eldermap = Elderly.getElderlyMap();
+		Elderly el = eldermap.get(this.currentElderly);
 		prevMealsTable.setModel(el.getMeals().getTableModel());
 		setPrevMealsColumnWidth();
-		this.currentElderly = personid;
 		
 		lblInfoName.setText(el.getName());
 		lblElderid.setText("ElderID: " + el.getId());
@@ -256,49 +298,59 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		lblNric.setText("NRIC: " + el.getNric());
 	}
 	
+	private void saveData() {
+		System.out.println("Saving modified meal...");
+		int currentMealSelected = Integer.parseInt(prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0).toString());
+		Nutrition n = new Nutrition();
+		// Build a new nutrition object with given inputs
+		n.setVita(Integer.parseInt(fieldVitA.getText())).
+		setVitc(Integer.parseInt(fieldVitC.getText())).
+		setVitd(Integer.parseInt(fieldVitD.getText())).
+		setVite(Integer.parseInt(fieldVitE.getText())).
+		setFat(Integer.parseInt(fieldFat.getText())).
+		setIron(Integer.parseInt(fieldIron.getText())).
+		setCarbs(Integer.parseInt(fieldCarbohydrates.getText())).
+		setCalories(Integer.parseInt(fieldCalories.getText())).
+		setProtein(Integer.parseInt(fieldProtein.getText()));
+		eldermap.get(this.currentElderly).getMeals().setNutrition(currentMealSelected, n);
+		Meals m = eldermap.get(this.currentElderly).getMeals();
+		SerializerSQL.storeMeals(this.currentElderly, m, TableHelper.getSQLInstance());
+		System.out.println("Saved meal into database!");
+	}
+	
 	private void presentMealData(String mid) {
-			try {
-				SQLObject so = TableHelper.getSQLInstance();
-				ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", mid);
-				rs.next();
-				String name = rs.getString("name");
-				byte[] ba = rs.getBytes("nutrition");
-				boolean isHalal = rs.getBoolean("halal");
-				Nutrition n = null;
-				if (ba != null) {
-					ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(ba));
-					n = (Nutrition) is.readObject();
-				}
-				lblMealName.setText(name);
-				chckbxHalal.setSelected(isHalal);
-				if (n != null) {
-					fieldVitA.setText(Integer.toString(n.getVita()));
-					fieldVitC.setText(Integer.toString(n.getVitc()));
-					fieldVitD.setText(Integer.toString(n.getVitd()));
-					fieldVitE.setText(Integer.toString(n.getVite()));
-					fieldFat.setText(Integer.toString(n.getFat()));
-					fieldIron.setText(Integer.toString(n.getIron()));
-					fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
-					fieldCalories.setText(Integer.toString(n.getCalories()));
-					fieldProtein.setText(Integer.toString(n.getProtein()));
-				} else {
-//					fieldVitA.setText(Integer.toString(n.getVita()));
-//					fieldVitC.setText(Integer.toString(n.getVitc()));
-//					fieldVitD.setText(Integer.toString(n.getVitd()));
-//					fieldVitE.setText(Integer.toString(n.getVite()));
-//					fieldFat.setText(Integer.toString(n.getFat()));
-//					fieldIron.setText(Integer.toString(n.getIron()));
-//					fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
-//					fieldCalories.setText(Integer.toString(n.getCalories()));
-//					fieldProtein.setText(Integer.toString(n.getProtein()));
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		int id = Integer.parseInt(mid);
+		Meals m = eldermap.get(this.currentElderly).getMeals();
+		Nutrition n = m.getNutrition(id);
+		MealProperties mp = m.getMealProperties(id);
+		lblMealName.setText(m.getMealName(id));
+		chckbxHalal.setSelected(true);
+		if (n != null) {
+			fieldVitA.setText(Integer.toString(n.getVita()));
+			fieldVitC.setText(Integer.toString(n.getVitc()));
+			fieldVitD.setText(Integer.toString(n.getVitd()));
+			fieldVitE.setText(Integer.toString(n.getVite()));
+			fieldFat.setText(Integer.toString(n.getFat()));
+			fieldIron.setText(Integer.toString(n.getIron()));
+			fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
+			fieldCalories.setText(Integer.toString(n.getCalories()));
+			fieldProtein.setText(Integer.toString(n.getProtein()));
+			lblAddedOn.setText("Added on: " + sdf.format(mp.getCreated()));
+			lblAddedBy.setText("Added by: Staff ID - " + mp.getCreator().toString());
+			lblLastModified.setText("Last Modified: " + sdf.format(mp.getEdited()));
+			lblModifiedBy.setText("Modified By: Staff ID - " + mp.getEditor().toString());
+		} else {
+			System.out.println("Nutrition is null.");
+			fieldVitA.setText("");
+			fieldVitC.setText("");
+			fieldVitD.setText("");
+			fieldVitE.setText("");
+			fieldFat.setText("");
+			fieldIron.setText("");
+			fieldCarbohydrates.setText("");
+			fieldCalories.setText("");
+			fieldProtein.setText("");
+		}
 	}
 
 	@Override
