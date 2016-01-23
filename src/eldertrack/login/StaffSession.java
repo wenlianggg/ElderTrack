@@ -1,6 +1,10 @@
 package eldertrack.login;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,7 +44,7 @@ public class StaffSession{
 			}
 			this.exists = true;
 			// Compare and verify strings
-			String hashed = DigestUtils.sha512Hex(ArrayUtils.addAll(new String(password).getBytes(), Base64.decodeBase64(rs.getString("salt"))));
+			String hashed = DigestUtils.sha512Hex(ArrayUtils.addAll(toBytes(password), Base64.decodeBase64(rs.getString("salt"))));
 			if (rs.getString("password").equals(hashed)) {
 				this.staffid = rs.getInt("staffid");
 				switch(rs.getInt("accesslevel")) {
@@ -83,6 +87,16 @@ public class StaffSession{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private byte[] toBytes(char[] chars) {
+	    CharBuffer charBuffer = CharBuffer.wrap(chars);
+	    ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+	    byte[] bytes = Arrays.copyOfRange(byteBuffer.array(),
+	            byteBuffer.position(), byteBuffer.limit());
+	    Arrays.fill(charBuffer.array(), '\u0000'); // clear sensitive data
+	    Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
+	    return bytes;
 	}
 	
 	public static StaffSession createSession(String username, char[] passarray) {
