@@ -42,7 +42,7 @@ public class MedCheckSearchPanel extends JPanel {
 	private ElderData room201=new ElderData();
 	private ElderData room202=new ElderData();
 	private ElderData room203=new ElderData();
-
+	private static SQLObject so = new SQLObject();
 	public static String selected;
 	public static String timeselected;
 	public MedCheckSearchPanel() {
@@ -128,7 +128,7 @@ public class MedCheckSearchPanel extends JPanel {
 		});
 		ResultSet rs;
 		try {
-			SQLObject so = new SQLObject();
+			
 			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
 			rs = statement.executeQuery();
 			while(rs.next()){
@@ -445,7 +445,6 @@ public class MedCheckSearchPanel extends JPanel {
 		}
 	}
 	public Boolean checkupValid(String roomNum,String timing){
-		SQLObject so = new SQLObject();
 		ResultSet rs = null;
 		int totalElder=0;
 		int checked=0;

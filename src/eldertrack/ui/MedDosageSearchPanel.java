@@ -37,7 +37,7 @@ public class MedDosageSearchPanel extends JPanel {
 	private JTextPane txtpnOverview;
 	public static String roomselected;
 	public static String timeselected;
-
+	private static 	SQLObject so = new SQLObject();
 
 	private ElderData room101=new ElderData();
 	private ElderData room102=new ElderData();
@@ -121,7 +121,6 @@ public class MedDosageSearchPanel extends JPanel {
 		// processing of summary for elderly
 		ResultSet rs;
 		try {
-			SQLObject so = new SQLObject();
 			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
 			rs = statement.executeQuery();
 			while(rs.next()){
@@ -542,7 +541,6 @@ public class MedDosageSearchPanel extends JPanel {
 
 	}
 	public Boolean checkDosageValid(String roomNum,String timing){
-		SQLObject so = new SQLObject();
 		ResultSet rs = null;
 		int totalElder=0;
 		int checked=0;

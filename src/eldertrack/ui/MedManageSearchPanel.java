@@ -22,6 +22,7 @@ import eldertrack.medical.ElderData;
 public class MedManageSearchPanel extends JPanel {
 
 	private static final long serialVersionUID = 4090792694881415463L;
+	private static 	SQLObject so = new SQLObject();
 	private ElderData room101=new ElderData();
 	private ElderData room102=new ElderData();
 	private ElderData room103=new ElderData();
@@ -36,7 +37,6 @@ public class MedManageSearchPanel extends JPanel {
 		setLayout(null);
 		ResultSet rs;
 		try {
-			SQLObject so = new SQLObject();
 			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
 			rs = statement.executeQuery();
 			while(rs.next()){
