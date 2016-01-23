@@ -11,6 +11,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 import eldertrack.db.SQLObject;
 
 public class CheckUpObject  implements Serializable {
@@ -94,6 +96,7 @@ public class CheckUpObject  implements Serializable {
 
 	}
 
+	
 	public static  void  StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime) throws SQLException{
 		SQLObject so = new SQLObject();
 		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date,checktime)"+"values(?,?,?,?)");

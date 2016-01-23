@@ -2,9 +2,11 @@ package eldertrack.medical;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -60,6 +62,59 @@ private String MedDosage;
 		System.out.println("Dos: "+getMedDosage());
 	}
 	
+	
+	public static Boolean checkDosageNeeded(ElderData summaryData){
+		if(summaryData.getElderNumDosageNeeded()==0){
+			JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	public static Boolean checkDosageValid(String roomNum,String timing,SQLObject so){
+		ResultSet rs = null;
+		int totalElder=0;
+		int checked=0;
+		try {
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
+			stmt.setString(1,roomNum);
+			stmt.executeQuery();
+			rs = stmt.getResultSet();
+
+			while(rs.next()){
+				if(timing.equalsIgnoreCase("morning")){
+					if(rs.getInt("morningtaken")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
+				else if(timing.equalsIgnoreCase("afternoon")){
+					if(rs.getInt("afternoontaken")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
+
+				else{
+					if(rs.getInt("noontaken")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		if(checked==totalElder){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 	public static void UpdateDosageTaken(int id,String timing){
 		SQLObject so = new SQLObject();
 		try {

@@ -196,12 +196,9 @@ public class MedDosagePanel extends JPanel {
 		add(btnSaveAndQuit);
 		btnSaveAndQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to Save and Quit","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
-
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 				}

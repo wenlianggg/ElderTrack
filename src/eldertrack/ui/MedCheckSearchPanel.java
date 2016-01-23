@@ -7,6 +7,7 @@ import javax.swing.UIManager;
 import eldertrack.db.SQLObject;
 import eldertrack.medical.ElderData;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -22,6 +23,8 @@ import java.awt.event.ItemListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 //bugs
 //the summary tab is abit buggy will fix on ltr date
 //checking is not fully tested but should be working fine, need more test to be sure
@@ -62,12 +65,29 @@ public class MedCheckSearchPanel extends JPanel {
 		lblRoomNumber.setForeground(new Color(0, 128, 128));
 		add(lblRoomNumber);
 
+		//processing for room numbers
+
+		List<String> roomNumberList=new ArrayList<String>();
+		try {
+			ResultSet rs;
+			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT distinct room FROM et_elderly ");
+			rs = statement2.executeQuery();
+			roomNumberList.add(" ");
+			while(rs.next()){
+				roomNumberList.add(Integer.toString(rs.getInt("room")));
+			}
+
+		} catch (SQLException e2) {
+
+			e2.printStackTrace();
+		}
 		roomComboBox = new JComboBox<String>();
 		roomComboBox.setBackground(UIManager.getColor("TextField.highlight"));
 		roomComboBox.setBounds(277, 124, 125, 31);
 		roomComboBox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
-		roomComboBox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {" ","101","102","103","104","105","201","202","203" }));
+		roomComboBox.setModel(new DefaultComboBoxModel(roomNumberList.toArray()));
 		add(roomComboBox);
+		
 		roomComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				updatesummary(roomComboBox.getSelectedItem().toString());
@@ -128,7 +148,7 @@ public class MedCheckSearchPanel extends JPanel {
 		});
 		ResultSet rs;
 		try {
-			
+
 			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
 			rs = statement.executeQuery();
 			while(rs.next()){

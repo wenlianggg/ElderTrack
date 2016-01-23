@@ -1,5 +1,6 @@
 package eldertrack.medical;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -21,6 +22,7 @@ public class ElderData{
 	
 	// check up stuff
 	private int elderNum;
+	private int elderRoomNumber;
 	private int elderNumMale;
 	private int elderNumFemale;
 	private int elderNumDosageNeeded;
@@ -97,6 +99,15 @@ public class ElderData{
 		return elderNum;
 	}
 
+	
+	public int getElderRoomNumber() {
+		return elderRoomNumber;
+	}
+
+	public void setElderRoomNumber(int elderRoomNumber) {
+		this.elderRoomNumber = elderRoomNumber;
+	}
+
 	public void setElderNum(int elderNum) {
 		this.elderNum += elderNum;
 	}
@@ -140,7 +151,60 @@ public class ElderData{
 		System.out.println("Gender: "+getElderGender());
 
 	}
-
+	
+	public static ElderData updatesummary(String roomNum,String time, SQLObject so ){
+		ResultSet rs;
+		ElderData summaryData = new ElderData();
+		summaryData.setElderRoomNumber(Integer.parseInt(roomNum));
+		try {
+			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room=? ");
+			statement.setInt(1, Integer.parseInt(roomNum));
+			rs = statement.executeQuery();
+			while(rs.next()){
+				String gender=rs.getString("gender");
+				summaryData.setElderNum(1);
+				if(gender.equalsIgnoreCase("m")){
+					summaryData.setElderNumMale(1);
+				}
+				else{
+					summaryData.setElderNumFemale(1);
+				}
+				if(time.equalsIgnoreCase("morning")){
+					if(rs.getBlob("morningdosage")!= null){
+						summaryData.setElderNumDosageNeeded(1);
+					}
+					else{
+						summaryData.setElderNumDosageNotNeeded(1);
+					}
+				}
+				else if(time.equalsIgnoreCase("afternoon")){
+					if(rs.getBlob("afternoondosage")!= null){
+						summaryData.setElderNumDosageNeeded(1);
+					}
+					else{
+						summaryData.setElderNumDosageNotNeeded(1);
+					}
+				}
+				else{
+					if(rs.getBlob("noondosage")!= null){
+						summaryData.setElderNumDosageNeeded(1);
+					}
+					else{
+						summaryData.setElderNumDosageNotNeeded(1);
+					}
+				}
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		return summaryData;
+		
+		
+	}
+	
 	public static ElderData getElderInformation(ResultSet rs){
 		ElderData dataInfo=new ElderData();
 		try{
@@ -167,7 +231,6 @@ public class ElderData{
 
 	public static int getAge(String year, String month, String day)
 	{
-
 		Calendar calDOB = Calendar.getInstance();
 		calDOB.set( Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day) );
 
