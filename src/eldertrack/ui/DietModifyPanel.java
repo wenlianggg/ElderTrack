@@ -6,6 +6,10 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,8 +17,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JCheckBox;
+
+
+import eldertrack.diet.Elderly;
+import eldertrack.diet.MealProperties;
+import eldertrack.diet.Meals;
+import eldertrack.diet.Nutrition;
+import eldertrack.diet.SerializerSQL;
+import eldertrack.misc.TableHelper;
 
 public class DietModifyPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
@@ -29,6 +42,21 @@ public class DietModifyPanel extends JPanel implements Presentable {
 	private JTextField fieldProtein;
 	private JTextField fieldCarbohydrates;
 	private JTextField fieldCalories;
+	private JCheckBox chckbxHalal;
+	private JLabel lblElderid;
+	private JLabel lblInfoName;
+	private JLabel lblAge;
+	private JLabel lblRoomNumber;
+	private JLabel lblNric;
+	private JLabel lblMealName;
+	private CardLayout parentCards;
+	private Integer currentElderly;
+	private HashMap<Integer, Elderly> eldermap;
+	private JLabel lblAddedOn;
+	private JLabel lblAddedBy;
+	private JLabel lblLastModified;
+	private JLabel lblModifiedBy;
+	private SimpleDateFormat sdf;
 	
 	// Constructor
 	DietModifyPanel() {
@@ -48,25 +76,25 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		add(personInfoPanel);
 		personInfoPanel.setLayout(null);
 		
-		JLabel lblElderid = new JLabel("ElderID: 0000");
+		lblElderid = new JLabel("ElderID: 0000");
 		lblElderid.setBounds(8, 44, 175, 14);
 		personInfoPanel.add(lblElderid);
 		
-		JLabel lblInfoName = new JLabel("Modifying Meal Entry For:");
+		lblInfoName = new JLabel("Modifying Meal Entry For:");
 		lblInfoName.setForeground(new Color(0, 128, 128));
 		lblInfoName.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblInfoName.setBounds(10, 7, 645, 37);
 		personInfoPanel.add(lblInfoName);
 		
-		JLabel lblAge = new JLabel("Age: --");
+		lblAge = new JLabel("Age: --");
 		lblAge.setBounds(8, 61, 175, 14);
 		personInfoPanel.add(lblAge);
 		
-		JLabel lblRoomNumber = new JLabel("Room Number: --");
+		lblRoomNumber = new JLabel("Room Number: --");
 		lblRoomNumber.setBounds(195, 61, 209, 14);
 		personInfoPanel.add(lblRoomNumber);
 		
-		JLabel lblNric = new JLabel("NRIC: SXXXXXXXA");
+		lblNric = new JLabel("NRIC: SXXXXXXXA");
 		lblNric.setBounds(195, 44, 209, 14);
 		personInfoPanel.add(lblNric);
 		
@@ -76,26 +104,25 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		lblReviewInfo.setBounds(10, 156, 168, 31);
 		add(lblReviewInfo);
 		
-		JButton btnBackToMain = new JButton("Back (Elderly View)");
-		btnBackToMain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-		        CardLayout parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
-		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
-			}
-		});
-		
-		JButton btnRemoveEntry = new JButton("Remove Meal Entry");
-		btnRemoveEntry.setBounds(782, 156, 203, 109);
+		JButton btnRemoveEntry = new JButton("Remove Entry");
+		btnRemoveEntry.setForeground(new Color(255, 0, 0));
+		btnRemoveEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnRemoveEntry.setBounds(782, 274, 203, 109);
 		add(btnRemoveEntry);
 		
-		JButton btnModifyEntry = new JButton("Modify Meal Entry");
-		btnModifyEntry.setBounds(782, 276, 203, 109);
+		JButton btnModifyEntry = new JButton("Save Changes");
+		btnModifyEntry.setForeground(new Color(60, 179, 113));
+		btnModifyEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnModifyEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				saveData();
+			}
+		});
+		btnModifyEntry.setBounds(782, 156, 203, 109);
 		add(btnModifyEntry);
-		btnBackToMain.setBounds(782, 611, 203, 48);
-		add(btnBackToMain);
 		
 		JPanel nutriInfoPanel = new JPanel();
-		nutriInfoPanel.setBorder(null);
+		nutriInfoPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		nutriInfoPanel.setBounds(384, 156, 388, 503);
 		add(nutriInfoPanel);
 		nutriInfoPanel.setLayout(null);
@@ -142,7 +169,7 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		lblFatg.setBounds(11, 285, 100, 14);
 		nutriInfoPanel.add(lblFatg);
 		
-		JLabel lblMealName = new JLabel("Meal Name");
+		lblMealName = new JLabel("Meal Name");
 		lblMealName.setForeground(Color.BLACK);
 		lblMealName.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblMealName.setBounds(11, 40, 344, 29);
@@ -198,82 +225,132 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		lblRda.setBounds(11, 339, 306, 29);
 		nutriInfoPanel.add(lblRda);
 		
-		JLabel lblAddedOnDdmmyy = new JLabel("Added On: dd/mm/yy hh:mmAM");
-		lblAddedOnDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblAddedOnDdmmyy.setBounds(11, 412, 306, 20);
-		nutriInfoPanel.add(lblAddedOnDdmmyy);
+		sdf = new SimpleDateFormat("HH:mm dd MMM yyyy ");
 		
-		JLabel lblAddedByDdmmyy = new JLabel("Added By: PERSON NAME");
-		lblAddedByDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblAddedByDdmmyy.setBounds(11, 431, 257, 20);
-		nutriInfoPanel.add(lblAddedByDdmmyy);
+		lblAddedOn = new JLabel("Added On: dd/mm/yy hh:mmAM");
+		lblAddedOn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAddedOn.setBounds(11, 400, 306, 20);
+		nutriInfoPanel.add(lblAddedOn);
 		
-		JLabel lblLastModifiedDdmmyy = new JLabel("Last Modified: dd/mm/yy hh:mmAM by PERSON NAME");
-		lblLastModifiedDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblLastModifiedDdmmyy.setBounds(11, 451, 318, 20);
-		nutriInfoPanel.add(lblLastModifiedDdmmyy);
+		lblAddedBy = new JLabel("Added By: PERSON NAME");
+		lblAddedBy.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAddedBy.setBounds(11, 420, 257, 20);
+		nutriInfoPanel.add(lblAddedBy);
+		
+		lblLastModified = new JLabel("Last Modified: dd/mm/yy hh:mmAM");
+		lblLastModified.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblLastModified.setBounds(11, 440, 318, 20);
+		nutriInfoPanel.add(lblLastModified);
+		
+		lblModifiedBy = new JLabel("Modified By: PERSON NAME");
+		lblModifiedBy.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblModifiedBy.setBounds(11, 460, 207, 20);
+		nutriInfoPanel.add(lblModifiedBy);
+		
+		chckbxHalal = new JCheckBox("Halal Meal");
+		chckbxHalal.setBounds(6, 309, 97, 23);
+		nutriInfoPanel.add(chckbxHalal);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 198, 364, 461);
 		add(scrollPane);
 		
-		prevMealsTable = new JTable();
-		prevMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		prevMealsTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-			},
-			new String[] {
-				"ID", "Time of Day", "Meal"
-			}
-		));
-		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(50);
-		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(102);
-		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(208);
-		scrollPane.setViewportView(prevMealsTable);
-		
-		JButton btnMainMenu = new JButton("Back to Main Menu");
-		btnMainMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
-				parentCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
+		JButton btnBackToDiet = new JButton("Back (Elderly View)");
+		btnBackToDiet.setForeground(new Color(30, 144, 255));
+		btnBackToDiet.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnBackToDiet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
 			}
 		});
-		btnMainMenu.setBounds(820, 15, 139, 40);
-		add(btnMainMenu);
+		btnBackToDiet.setBounds(782, 611, 203, 48);
+		add(btnBackToDiet);
+		
+		prevMealsTable = new JTable();
+		prevMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		scrollPane.setViewportView(prevMealsTable);
+		prevMealsTable.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evt) {
+				presentMealData(prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0).toString());
+			}
+		});
 	}
 
-	public void presentData(String id) {
-		//TODO: This
+	private void setPrevMealsColumnWidth() {
+		prevMealsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(250);
+	}
+	
+	public void presentData(String personid) {
+		this.currentElderly = Integer.parseInt(personid);
+		eldermap = Elderly.getElderlyMap();
+		Elderly el = eldermap.get(this.currentElderly);
+		prevMealsTable.setModel(el.getMeals().getTableModel());
+		setPrevMealsColumnWidth();
+		
+		lblInfoName.setText(el.getName());
+		lblElderid.setText("ElderID: " + el.getId());
+		lblAge.setText("Age: " + el.getAge());
+		lblRoomNumber.setText("Room Number: " + el.getRoomnum());
+		lblNric.setText("NRIC: " + el.getNric());
+	}
+	
+	private void saveData() {
+		System.out.println("Saving modified meal...");
+		int currentMealSelected = Integer.parseInt(prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0).toString());
+		Nutrition n = new Nutrition();
+		// Build a new nutrition object with given inputs
+		n.setVita(Integer.parseInt(fieldVitA.getText())).
+		setVitc(Integer.parseInt(fieldVitC.getText())).
+		setVitd(Integer.parseInt(fieldVitD.getText())).
+		setVite(Integer.parseInt(fieldVitE.getText())).
+		setFat(Integer.parseInt(fieldFat.getText())).
+		setIron(Integer.parseInt(fieldIron.getText())).
+		setCarbs(Integer.parseInt(fieldCarbohydrates.getText())).
+		setCalories(Integer.parseInt(fieldCalories.getText())).
+		setProtein(Integer.parseInt(fieldProtein.getText()));
+		eldermap.get(this.currentElderly).getMeals().setNutrition(currentMealSelected, n);
+		Meals m = eldermap.get(this.currentElderly).getMeals();
+		SerializerSQL.storeMeals(this.currentElderly, m, TableHelper.getSQLInstance());
+		System.out.println("Saved meal into database!");
+	}
+	
+	private void presentMealData(String mid) {
+		int id = Integer.parseInt(mid);
+		Meals m = eldermap.get(this.currentElderly).getMeals();
+		Nutrition n = m.getNutrition(id);
+		MealProperties mp = m.getMealProperties(id);
+		lblMealName.setText(m.getMealName(id));
+		chckbxHalal.setSelected(true);
+		if (n != null) {
+			fieldVitA.setText(Integer.toString(n.getVita()));
+			fieldVitC.setText(Integer.toString(n.getVitc()));
+			fieldVitD.setText(Integer.toString(n.getVitd()));
+			fieldVitE.setText(Integer.toString(n.getVite()));
+			fieldFat.setText(Integer.toString(n.getFat()));
+			fieldIron.setText(Integer.toString(n.getIron()));
+			fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
+			fieldCalories.setText(Integer.toString(n.getCalories()));
+			fieldProtein.setText(Integer.toString(n.getProtein()));
+			lblAddedOn.setText("Added on: " + sdf.format(mp.getCreated()));
+			lblAddedBy.setText("Added by: Staff ID - " + mp.getCreator().toString());
+			lblLastModified.setText("Last Modified: " + sdf.format(mp.getEdited()));
+			lblModifiedBy.setText("Modified By: Staff ID - " + mp.getEditor().toString());
+		} else {
+			System.out.println("Nutrition is null.");
+			fieldVitA.setText("");
+			fieldVitC.setText("");
+			fieldVitD.setText("");
+			fieldVitE.setText("");
+			fieldFat.setText("");
+			fieldIron.setText("");
+			fieldCarbohydrates.setText("");
+			fieldCalories.setText("");
+			fieldProtein.setText("");
+		}
 	}
 
 	@Override

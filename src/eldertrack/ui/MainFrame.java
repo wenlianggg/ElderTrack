@@ -17,6 +17,7 @@ import javax.swing.border.EtchedBorder;
 import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
 import eldertrack.weather.Weather;
+import java.awt.Color;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +39,7 @@ public class MainFrame extends JFrame {
     static JPanel CardsPanel;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
-	private static StaffSession session;
+	private StaffSession session;
 	private static MainFrame frame;
 	
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
@@ -68,7 +69,7 @@ public class MainFrame extends JFrame {
 	private MainFrame() {
 		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 1000, 810);
+		setSize(1000, 810);
 		setResizable(false);
 		
 		MasterPane = new JPanel();
@@ -93,6 +94,16 @@ public class MainFrame extends JFrame {
 		CardsPanel.setLocation(0, 0);
 		CardsPanel.setSize(994, 671);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
+		
+		String s = "Hello ElderTrack Implementers! This is a sample scrolling announcement text, support for querying will be added soon!";
+		MarqueePanel marqueePanel = new MarqueePanel(s, 160);
+		marqueePanel.setForeground(new Color(255, 255, 255));
+		marqueePanel.setBackground(new Color(0, 153, 255));
+		marqueePanel.setBounds(0, 752, 790, 29);
+		marqueePanel.start();
+		MasterPane.add(marqueePanel);
+
+		
 	}
 	
 	void constructPanels() {
@@ -121,11 +132,10 @@ public class MainFrame extends JFrame {
 		// Initialize Management Panel
 		jpbar.setString("Initializing Management...");
 		jpbar.update(jpbar.getGraphics());
-		if(session.getAccessLevel() == AccessLevel.MANAGER || session.getAccessLevel() == AccessLevel.SRSTAFF) {
+		if(isManagementShown()) {
 			MgmtPanel = new MgmtPanel();
 			MgmtPanel.setBorder(lBorder);
 			CardsPanel.add(MgmtPanel, MGMTPANEL);
-	
 		}
 		jpbar.setValue(85);
 
@@ -205,12 +215,12 @@ public class MainFrame extends JFrame {
 	
 	// For getting logged in user information
 	public StaffSession getSessionInstance() {
-		return MainFrame.session;
+		return session;
 	}
 	
 	StaffSession setSessionInstance(StaffSession session) {
-		MainFrame.session = session;
-		return MainFrame.session;
+		this.session = session;
+		return getInstance().getSessionInstance();
 	}
 	
 	// Triggers on logout
@@ -218,7 +228,7 @@ public class MainFrame extends JFrame {
 			CardLayout cards = (CardLayout) MainFrame.CardsPanel.getLayout();
 			cards.show(MainFrame.CardsPanel, MainFrame.LOGINPANEL);
 			deconstructPanels();
-			MainFrame.session = null;
+			this.session = null;
 			System.out.println("Successfully logged out!");
 			return true;
 	}
@@ -234,5 +244,4 @@ public class MainFrame extends JFrame {
 	DietSection getDietPanel() {
 		return this.DietSection;
 	}
-
 }
