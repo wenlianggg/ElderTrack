@@ -29,8 +29,6 @@ import javax.swing.JTextPane;
 // checking is not fully tested but should be working fine, need more test to be sure
 // have not done the time reset yet, will do on ltr date
 
-
-
 public class MedDosageSearchPanel extends JPanel {
 
 	private static final long serialVersionUID = -2593071831861718177L;

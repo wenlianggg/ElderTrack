@@ -88,6 +88,7 @@ public class DosageTableHelper  {
 			vector.add(DosageList.get(k).getMedPrescrip());
 			vector.add(DosageList.get(k).getMedType());
 			vector.add(DosageList.get(k).getMedDosage());
+			vector.add("Not Feed");
 			data.add(vector);
 		}
 

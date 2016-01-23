@@ -11,13 +11,15 @@ import java.util.Calendar;
 import eldertrack.db.SQLObject;
 
 public class ElderData{
+	// common stuff
 	private int elderBed;
 	private String elderName;
 	private int elderID;
 	private int elderAge;
 	private String elderGender;
-
+	private String elderDosageSummary;
 	
+	// check up stuff
 	private int elderNum;
 	private int elderNumMale;
 	private int elderNumFemale;
@@ -82,6 +84,15 @@ public class ElderData{
 		this.elderGender = elderGender;
 	}
 
+	
+	public String getElderDosageSummary() {
+		return elderDosageSummary;
+	}
+
+	public void setElderDosageSummary(String elderDosageSummary) {
+		this.elderDosageSummary = elderDosageSummary;
+	}
+
 	public int getElderNum() {
 		return elderNum;
 	}
@@ -129,6 +140,31 @@ public class ElderData{
 		System.out.println("Gender: "+getElderGender());
 
 	}
+
+	public static ElderData getElderInformation(ResultSet rs){
+		ElderData dataInfo=new ElderData();
+		try{
+			java.sql.Date reportDate=rs.getDate("dob");
+			DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+			String text = df.format(reportDate);
+			String year=text.substring(0, 4);
+			String month=text.substring(5,7);
+			String day=text.substring(8,10);
+
+			// setting the information
+			dataInfo.setElderID(rs.getInt("id"));
+			dataInfo.setElderBed(rs.getInt("bed"));
+			dataInfo.setElderName(rs.getString("name"));
+			dataInfo.setElderAge(ElderData.getAge(year,month,day));
+			dataInfo.setElderGender(rs.getString("gender"));
+		}catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		return dataInfo;
+
+	}
+
 	public static int getAge(String year, String month, String day)
 	{
 
@@ -141,13 +177,14 @@ public class ElderData{
 		int ageYr = (calNow.get(Calendar.YEAR) - calDOB.get(Calendar.YEAR));
 
 		int ageMo = (calNow.get(Calendar.MONTH) - calDOB.get(Calendar.MONTH));
-		if (ageMo < 0)
-		{
-
+		if (ageMo < 0){
 			ageYr--;
 		}
 		return ageYr;
 	}
+
+
+
 	//debuger
 	public static void main(String[] args) throws SQLException {
 		SQLObject so = new SQLObject();
@@ -168,7 +205,7 @@ public class ElderData{
 				data.setElderName(rs.getString("name"));
 				data.setElderAge(getAge(year,month,day));
 				data.setElderGender(rs.getString("gender"));
-
+				data.setElderDosageSummary(rs.getString("dosagesummary"));
 				DosageList.add(data);
 
 			}
