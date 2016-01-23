@@ -9,7 +9,9 @@ import java.text.SimpleDateFormat;
 
 import eldertrack.db.SQLObject;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class StaffSession{
 	private int staffid = 0;
@@ -38,7 +40,8 @@ public class StaffSession{
 			}
 			this.exists = true;
 			// Compare and verify strings
-			if (rs.getString("password").equals(DigestUtils.sha512Hex(new String(password)))) {
+			String hashed = DigestUtils.sha512Hex(ArrayUtils.addAll(new String(password).getBytes(), Base64.decodeBase64(rs.getString("salt"))));
+			if (rs.getString("password").equals(hashed)) {
 				this.staffid = rs.getInt("staffid");
 				switch(rs.getInt("accesslevel")) {
 					case 1:
