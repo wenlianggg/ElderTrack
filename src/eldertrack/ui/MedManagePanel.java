@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
+import eldertrack.medical.DosageObject;
 import eldertrack.medical.DosageTableHelper;
 import eldertrack.medical.ElderData;
 
@@ -24,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 
@@ -46,6 +48,8 @@ public class MedManagePanel extends JPanel {
 	private DefaultTableModel Morningmodel;
 	private DefaultTableModel Afternoonmodel;
 	private DefaultTableModel Noonmodel;
+	private DefaultTableModel allEldersData;
+
 	private boolean morningchange;
 	private boolean afternoonchange;
 	private boolean noonchange;
@@ -62,7 +66,6 @@ public class MedManagePanel extends JPanel {
 		add(lblNewLabel);
 
 		eldertable = new JTable();
-		DefaultTableModel allEldersData;
 		try {
 			allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
 			eldertable = new JTable(allEldersData);
@@ -106,39 +109,24 @@ public class MedManagePanel extends JPanel {
 							MorningTable.setModel(Morningmodel);
 						}
 						else{
-							MorningTable.setModel(new DefaultTableModel(
-									new Object[][] {
-									},
-									new String[] {
-											"Description", "Prescription", "Medication Type","Dosage"
-									}
-									));
+							Morningmodel=DosageObject.buildDefaultManageModel();
+							MorningTable.setModel(Morningmodel);;
 						}
 						if(rs.getBlob("afternoondosage")!=null){
 							Afternoonmodel=DosageTableHelper.getElderlyFromQueryManagementDos("afternoon",rs.getString("name"));
 							AfterNoonTable.setModel(Afternoonmodel);
 						}
 						else{
-							AfterNoonTable.setModel(new DefaultTableModel(
-									new Object[][] {
-									},
-									new String[] {
-											"Description", "Prescription", "Medication Type","Dosage"
-									}
-									));
+							Afternoonmodel=DosageObject.buildDefaultManageModel();
+							AfterNoonTable.setModel(Afternoonmodel);;
 						}
 						if(rs.getBlob("noondosage") !=null){
 							Noonmodel=DosageTableHelper.getElderlyFromQueryManagementDos("noon",rs.getString("name"));
 							NoonTable.setModel(Noonmodel);
 						}
 						else{
-							NoonTable.setModel(new DefaultTableModel(
-									new Object[][] {
-									},
-									new String[] {
-											"Description", "Prescription", "Medication Type","Dosage"
-									}
-									));
+							Noonmodel=DosageObject.buildDefaultManageModel();
+							NoonTable.setModel(Noonmodel);;
 						}
 
 					}
@@ -229,13 +217,7 @@ public class MedManagePanel extends JPanel {
 		add(lblNoon);
 
 		// Morning
-		Morningmodel=new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"Description", "Prescription", "Medication Type","Dosage"
-				}
-				);
+		Morningmodel=DosageObject.buildDefaultManageModel();
 		MorningTable = new JTable(Morningmodel);
 
 
@@ -270,13 +252,7 @@ public class MedManagePanel extends JPanel {
 		add(btnRemoveMorning);
 
 		// Afternoon
-		Afternoonmodel=new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"Description", "Prescription", "Medication Type","Dosage"
-				}
-				);
+		Afternoonmodel=DosageObject.buildDefaultManageModel();
 		AfterNoonTable = new JTable(Afternoonmodel);
 		JScrollPane AfterNoonPane = new JScrollPane(AfterNoonTable);
 		AfterNoonPane.setBounds(525, 400, 444, 86);
@@ -309,13 +285,7 @@ public class MedManagePanel extends JPanel {
 		add(btnRemoveAfternoon);
 
 		// Noon
-		Noonmodel=new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"Description", "Prescription", "Medication Type","Dosage"
-				}
-				);
+		Noonmodel=DosageObject.buildDefaultManageModel();
 		NoonTable = new JTable(Noonmodel);
 		JScrollPane NoonPane = new JScrollPane(NoonTable);
 		NoonPane.setBounds(525, 508, 444, 86);
@@ -369,13 +339,45 @@ public class MedManagePanel extends JPanel {
 		btnSaveChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(morningchange==true || afternoonchange==true || noonchange==true){
-					
+
+					if(MorningTable.getRowCount()!=0){
+						ArrayList<DosageObject> morningUpdateList=DosageObject.updateProcessTable(MorningTable);
+						DosageObject.setTableManage("morning",Integer.parseInt(ElderIDField.getText()),morningUpdateList,0);
+					}
+					else{
+						DosageObject.setTableManage("morning",Integer.parseInt(ElderIDField.getText()),null,1);
+
+					}
+
+					if(AfterNoonTable.getRowCount()!=0){
+						ArrayList<DosageObject> afternoonUpdateList=DosageObject.updateProcessTable(AfterNoonTable);
+						DosageObject.setTableManage("afternoon",Integer.parseInt(ElderIDField.getText()),afternoonUpdateList,0);
+					}
+					else{
+						DosageObject.setTableManage("afternoon",Integer.parseInt(ElderIDField.getText()),null,1);
+					}
+
+					if(NoonTable.getRowCount()!=0){
+						ArrayList<DosageObject> noonUpdateList=DosageObject.updateProcessTable(NoonTable);
+						DosageObject.setTableManage("noon",Integer.parseInt(ElderIDField.getText()),noonUpdateList,0);
+					}
+					else{
+						DosageObject.setTableManage("noon",Integer.parseInt(ElderIDField.getText()),null,1);
+					}
+
+					try {
+						allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
+						eldertable.setModel(allEldersData);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+
 				}
 				else{
 					JOptionPane.showMessageDialog(null,"There were no changes");
-				}
-				
-				
+				}				
 			}
 		});
 		btnRemoveNoon.setBounds(880, 489, 89, 20);

@@ -1,34 +1,23 @@
 package eldertrack.medical;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import eldertrack.db.SQLObject;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 public class DosageTableHelper  {
-	private static JTable toDoTable;
-	private static JScrollPane jpane;
-	private static int counter=1;
 	public static DefaultTableModel getElderlyFromQueryDos(String timing,String position) throws SQLException {
 		SQLObject so = new SQLObject();
 		ResultSet rs = null;
@@ -54,13 +43,13 @@ public class DosageTableHelper  {
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		return (DefaultTableModel) buildTableModel(rs);
+		return (DefaultTableModel) buildTableModelForDos(rs);
 	}
 
 
 
 	@SuppressWarnings("unchecked")
-	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
+	public static DefaultTableModel buildTableModelForDos(ResultSet rs) throws SQLException {
 		ArrayList<DosageObject> DosageList=null;
 
 
@@ -99,7 +88,6 @@ public class DosageTableHelper  {
 			vector.add(DosageList.get(k).getMedPrescrip());
 			vector.add(DosageList.get(k).getMedType());
 			vector.add(DosageList.get(k).getMedDosage());
-
 			data.add(vector);
 		}
 
@@ -124,12 +112,10 @@ public class DosageTableHelper  {
 		SQLObject so = new SQLObject();
 		return buildTableModelForManagement(so.getResultSet("SELECT id, name, gender, room, morningdosage,afternoondosage,noondosage FROM et_elderly WHERE name LIKE ?", search));
 	}
-	
-	
+
 	public static DefaultTableModel buildTableModelForManagement(ResultSet rs) throws SQLException {
-	    ResultSetMetaData metaData = rs.getMetaData();
 	    Vector<String> columnNames = new Vector<String>();
-	    int columnCount = metaData.getColumnCount();
+
 	    columnNames.add("ID");
 	    columnNames.add("NAME");
 	    columnNames.add("GENDER");
@@ -159,7 +145,7 @@ public class DosageTableHelper  {
 
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				  if (columnIndex < 4) {
+				  if (columnIndex < 7) {
 		                return false;
 		            } else {
 		                return true;
@@ -168,6 +154,7 @@ public class DosageTableHelper  {
 		};
 	    return dtm;
 	}
+	
 	public static DefaultTableModel getElderlyFromQueryManagementDos(String timing,String position) throws SQLException {
 		SQLObject so = new SQLObject();
 		ResultSet rs = null;
@@ -244,76 +231,11 @@ public class DosageTableHelper  {
 		};
 		return dtm;
 	}
-	// Debug-able main method
-	public static void main(String[] args) throws SQLException {
-		ArrayList<String> nameList= new ArrayList<String>();
-		nameList.add("Lee Ching Chong");
-		nameList.add("Lim Kuay Siak");
-		nameList.add("Lee Ching Chong");
-
-		toDoTable =new JTable(getElderlyFromQueryDos("morning",nameList.get(0)));
-		
-
-		String[] values = new String[] { "Not Feed", "Feed" };
-		TableColumn col = toDoTable.getColumnModel().getColumn(4);
-		col.setCellEditor(new MyComboBoxEditor(values));
-		col.setCellRenderer(new MyComboBoxRenderer(values));
-
-		jpane = new JScrollPane(toDoTable);
-		JPanel panel = new JPanel();
-		JFrame frame = new JFrame();
-		frame.setBounds(0, 0, 700, 543);
-		panel.add(jpane);
-		frame.getContentPane().add(new JScrollPane(panel));
-
-		JButton btnNext = new JButton("Next");
-		panel.add(btnNext);
-		frame.setVisible(true);
-		btnNext.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				int notfeed=0;
-				int feed=0;
-				int dialogButton = JOptionPane.YES_NO_OPTION;
-				int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
-				if(dialogResult == JOptionPane.YES_OPTION){
-				for(int k=0;k<toDoTable.getRowCount();k++){
-					Object o=toDoTable.getValueAt(k, 4);
-					if(o=="Not Feed" || o==null){
-						notfeed++;
-					}
-					else{
-						feed++;
-					}
-				}
-				
-				
-				if(feed==toDoTable.getRowCount()){
-				
-				try {
-					toDoTable.setModel(DosageTableHelper.getElderlyFromQueryDos("morning",nameList.get(counter)));
-					String[] values = new String[] { "Not Feed", "Feed" };
-					TableColumn col = toDoTable.getColumnModel().getColumn(4);
-					col.setCellEditor(new MyComboBoxEditor(values));
-					col.setCellRenderer(new MyComboBoxRenderer(values));
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				}
-				else{
-					JOptionPane.showMessageDialog(null, "Please check if you have filled in the required fields");
-				}
-
-				counter++;
-
-			}
-			}
-		});
-
-	}
-
-
+	
+	
+	
+	
+	
 
 }
 @SuppressWarnings("rawtypes")
