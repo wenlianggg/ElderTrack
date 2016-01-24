@@ -89,8 +89,13 @@ public class MedDosageSearchPanel extends JPanel {
 		roomcombobox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				summaryDetails=ElderData.updatesummary(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so);
+				if(summaryDetails!=null){
 				txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryDetails.getElderNumMale() 
 				+"\r\nTotal Female elderly:" +summaryDetails.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+summaryDetails.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+summaryDetails.getElderNumDosageNotNeeded());
+				}
+				else{
+					txtpnOverview.setText("Dosage Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly: \r\nTotal number of elderly that needs dosage: \r\nTotal number of elderly that don't need dosage: ");
+				}
 			}
 		});
 
@@ -121,7 +126,7 @@ public class MedDosageSearchPanel extends JPanel {
 		add(lblOverview);
 
 		txtpnOverview = new JTextPane();
-		txtpnOverview.setText("Dosage Time:\r\nRoom Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
+		txtpnOverview.setText("Dosage Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly: \r\nTotal number of elderly that needs dosage: \r\nTotal number of elderly that don't need dosage: ");
 		txtpnOverview.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtpnOverview.setEditable(false);
 		txtpnOverview.setBounds(551, 155, 339, 226);
@@ -136,8 +141,6 @@ public class MedDosageSearchPanel extends JPanel {
 		// testing for choosing room options
 
 		btnGetDosage.addActionListener(new ActionListener() {
-
-
 			public void actionPerformed(ActionEvent e) {
 				if(DosageObject.checkDosageNeeded(summaryDetails)==true){
 					

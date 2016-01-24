@@ -154,6 +154,7 @@ public class ElderData{
 	
 	public static ElderData updatesummary(String roomNum,String time, SQLObject so ){
 		ResultSet rs;
+		if(!roomNum.equalsIgnoreCase(" ")){
 		ElderData summaryData = new ElderData();
 		summaryData.setElderRoomNumber(Integer.parseInt(roomNum));
 		try {
@@ -193,15 +194,16 @@ public class ElderData{
 						summaryData.setElderNumDosageNotNeeded(1);
 					}
 				}
-			}
-			
-			
+			}		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 		return summaryData;
-		
+		}
+		else{
+			return null;
+		}
 		
 	}
 	

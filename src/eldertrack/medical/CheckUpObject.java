@@ -7,11 +7,9 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.swing.JOptionPane;
+//import java.text.DateFormat;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
 
 import eldertrack.db.SQLObject;
 
@@ -96,6 +94,77 @@ public class CheckUpObject  implements Serializable {
 
 	}
 
+	public static Boolean checkupValid(String roomNum,String timing,SQLObject so){
+		ResultSet rs = null;
+		int totalElder=0;
+		int checked=0;
+		try {
+
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
+			stmt.setString(1,roomNum);
+			stmt.executeQuery();
+			rs = stmt.getResultSet();
+
+			while(rs.next()){
+				if(timing.equalsIgnoreCase("morning")){
+					if(rs.getInt("morningcheck")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
+				else if(timing.equalsIgnoreCase("afternoon")){
+					if(rs.getInt("afternooncheck")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
+
+				else{
+					if(rs.getInt("nooncheck")!=0){
+						checked++;
+					}
+					totalElder++;
+				}
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		if(checked==totalElder){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	public static void UpdateCheckUpTaken(int id,String timing,SQLObject so) {
+		try {
+			if(timing.equalsIgnoreCase("morning")){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningcheck=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
+
+			}
+			else if(timing.equalsIgnoreCase("afternoon")){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternooncheck=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
+			}
+			else if(timing.equalsIgnoreCase("noon") ){
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET nooncheck=?  WHERE id = ?");
+				ps.setInt(1, 1);
+				ps.setInt(2, id);
+				ps.executeUpdate();
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+
+	}
 	
 	public static  void  StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime) throws SQLException{
 		SQLObject so = new SQLObject();
@@ -142,11 +211,11 @@ public class CheckUpObject  implements Serializable {
 		checking.view();
 	}
 	
-	
+	// debug mode
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-		Date date = new Date();
-		String reportDate=dateFormat.format(date);
+		//	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		//	Date date = new Date();
+		//	String reportDate=dateFormat.format(date);
 		int id=1;
 		//CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
 		//StoreCheckUp("Ang Siew Fong",reportDate,id, checking);

@@ -82,7 +82,6 @@ private String MedDosage;
 			stmt.setString(1,roomNum);
 			stmt.executeQuery();
 			rs = stmt.getResultSet();
-
 			while(rs.next()){
 				if(timing.equalsIgnoreCase("morning")){
 					if(rs.getInt("morningtaken")!=0){
