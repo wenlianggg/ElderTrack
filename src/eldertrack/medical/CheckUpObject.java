@@ -132,6 +132,14 @@ public class CheckUpObject  implements Serializable {
 		}
 	}
 	
+	public static Boolean CheckUpInputValidation(){
+		
+		
+		
+		
+		
+		return false;
+	}
 	public static Boolean checkupValid(String roomNum,String timing,SQLObject so){
 		ResultSet rs = null;
 		int totalElder=0;
