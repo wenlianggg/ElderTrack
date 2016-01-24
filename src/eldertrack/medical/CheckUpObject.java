@@ -137,7 +137,6 @@ public class CheckUpObject  implements Serializable {
 		int totalElder=0;
 		int checked=0;
 		try {
-
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
 			stmt.setString(1,roomNum);
 			stmt.executeQuery();
@@ -204,9 +203,9 @@ public class CheckUpObject  implements Serializable {
 
 	}
 	
-	public static  void  StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime) throws SQLException{
+	public static void StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime) throws SQLException{
 		SQLObject so = new SQLObject();
-		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date,checktime)"+"values(?,?,?,?)");
+		PreparedStatement statement = so.getPreparedStatementWithKey("INSERT into et_elderly_checkup(id,name,date,checktime)"+"values(?,?,?,?)");
 		statement.setInt(1, elderID);
 		statement.setString(2,name);
 		statement.setString(3, elderDate);
