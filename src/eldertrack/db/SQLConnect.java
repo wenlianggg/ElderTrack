@@ -37,8 +37,10 @@ public class SQLConnect {
       	while (rs.next()) {
 			System.out.println("\tID = " + rs.getInt("staffid") );
 			System.out.println("\tUSERNAME = " + rs.getString("username") );
-			System.out.println("\tPASSWORD = " + rs.getString("password"));
+			System.out.println("\tSALTED HASH = " + rs.getString("password"));
+			System.out.println("\tSALT VALUE = " + rs.getString("salt"));
 			System.out.println("\tPERSON NAME = " + rs.getString("firstname") + " " + rs.getString("lastname"));
+			System.out.println();
       	}
       rs.close();
     } catch ( Exception e ) {

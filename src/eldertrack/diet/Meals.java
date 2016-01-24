@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Meals implements java.io.Serializable {
-	private static final long serialVersionUID = 1001L;
+	private static final long serialVersionUID = 1002;
 	private ArrayList<String> mealname;
 	private ArrayList<Nutrition> nutrition;
 	private ArrayList<MealProperties> mealprop;
@@ -94,6 +94,10 @@ public class Meals implements java.io.Serializable {
 		return nutrition.get(i);
 	}
 	
+	public void setNutrition(int i, Nutrition n) {
+		nutrition.set(i, n);
+	}
+	
 	public MealProperties getMealProperties(int i) {
 		return mealprop.get(i);
 	}
@@ -115,6 +119,35 @@ public class Meals implements java.io.Serializable {
 		nutrition.add(new Nutrition());
 		mealprop.add(new MealProperties());
 		return this;
+	}
+	
+	boolean isValid() {
+		if ( (this.mealname.size() == this.mealprop.size()) && (this.nutrition.size() == this.mealprop.size()) ) {
+			return true;
+		} else {
+			return fix();
+		}
+	}
+	
+	boolean fix() {
+		if (this.mealname == null || this.mealprop == null || this.nutrition == null) {
+			throw new NullPointerException();
+		} else {
+			int smallestsize = this.mealname.size();
+			if (smallestsize < this.mealprop.size())
+				smallestsize = this.mealprop.size();
+			if (smallestsize < this.nutrition.size())
+				smallestsize = this.nutrition.size();
+			do {
+				if(this.mealprop.size() > smallestsize)
+					this.mealprop.remove(this.mealprop.size()-1);
+				if(this.mealname.size() > smallestsize)
+					this.mealname.remove(this.mealname.size()-1);
+				if(this.nutrition.size() > smallestsize)
+					this.nutrition.remove(this.nutrition.size()-1);
+			} while ( (this.mealname.size() != this.mealprop.size()) || (this.nutrition.size() != this.mealprop.size()) );
+			return true;
+		}
 	}
 
 	// Vector Transposition

@@ -1,6 +1,12 @@
 package eldertrack.login;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +15,9 @@ import java.text.SimpleDateFormat;
 
 import eldertrack.db.SQLObject;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class StaffSession{
 	private int staffid = 0;
@@ -22,64 +30,86 @@ public class StaffSession{
 	private boolean exists = false;
 	private boolean passwordcorrect = false;
 	private AccessLevel accesslevel = AccessLevel.NOACCESS;
-	SQLObject so;
+	private File dpfile;
+	SQLObject so = new SQLObject();
 	
 	StaffSession(String username, char[] password) throws WrongPasswordException, NoSuchUserException {
-		// If user does not exist, throw NoSuchUserException
 		ResultSet rs = null;
 		try {
 			so = new SQLObject();
-			// Get ResultSet
 			rs = so.getResultSet("SELECT * FROM et_staff WHERE username = ?", username.toLowerCase());
-			// If ResultSet is null, it means that no such user is found
+			/**
+			 * CHECK IF THE USER EXISTS
+			 */
 			if (rs == null || rs.next() == false) {
 				NoSuchUserException up = new NoSuchUserException();
-				throw up; // hehe
+				throw up;
 			}
 			this.exists = true;
-			// Compare and verify strings
-			if (rs.getString("password").equals(DigestUtils.sha512Hex(new String(password)))) {
-				this.staffid = rs.getInt("staffid");
-				switch(rs.getInt("accesslevel")) {
-					case 1:
-						this.accesslevel = AccessLevel.STAFF;
-						break;
-					case 2:
-						this.accesslevel = AccessLevel.SRSTAFF;
-						break;
-					case 3:
-						this.accesslevel = AccessLevel.ADMIN;
-						break;
-					case 4:
-						this.accesslevel = AccessLevel.MANAGER;
-						break;
-					default:
-						this.accesslevel = AccessLevel.NOACCESS;
-						break;
-				}
-				this.firstname = rs.getString("firstname");
-				this.lastname = rs.getString("lastname");
-				this.nric = rs.getString("nric");
-				this.stickynotes = rs.getString("staffnotes");
-				passwordcorrect = true;
-				Timestamp ts = rs.getTimestamp("lastlogin");
-				if (ts != null)
-					this.lastlogin = new Date(ts.getTime());
-				else
-					this.lastlogin = new Date();
-				Date date = new Date();
-				Timestamp timenow = new Timestamp(date.getTime());
-				PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET lastlogin=? WHERE staffid=?");
-				ps.setTimestamp(1, timenow);
-				ps.setInt(2, this.staffid);
-				ps.executeUpdate();
+			
+			/**
+			 * START VERIFYING IF USER LOGIN IS VALID
+			 */
+			String hashed = DigestUtils.sha512Hex(ArrayUtils.addAll(toBytes(password), Base64.decodeBase64(rs.getString("salt"))));
+			if (rs.getString("password").equals(hashed)) {
+					/**
+					 * EXECUTES ONLY IF THE PASSWORD IS CORRECT
+					 */
+					this.staffid = rs.getInt("staffid");
+					switch(rs.getInt("accesslevel")) {
+						case 1:
+							this.accesslevel = AccessLevel.STAFF;
+							break;
+						case 2:
+							this.accesslevel = AccessLevel.SRSTAFF;
+							break;
+						case 3:
+							this.accesslevel = AccessLevel.ADMIN;
+							break;
+						case 4:
+							this.accesslevel = AccessLevel.MANAGER;
+							break;
+						default:
+							this.accesslevel = AccessLevel.NOACCESS;
+							break;
+					}
+					this.firstname = rs.getString("firstname");
+					this.lastname = rs.getString("lastname");
+					this.nric = rs.getString("nric");
+					this.stickynotes = rs.getString("staffnotes");
+					passwordcorrect = true;
+					Timestamp ts = rs.getTimestamp("lastlogin");
+					if (ts != null)
+						this.lastlogin = new Date(ts.getTime());
+					else
+						this.lastlogin = new Date();
+					Date date = new Date();
+					Timestamp timenow = new Timestamp(date.getTime());
+					PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET lastlogin=? WHERE staffid=?");
+					ps.setTimestamp(1, timenow);
+					ps.setInt(2, this.staffid);
+					ps.executeUpdate();
 			} else {
+				/**
+				 * EXECUTES IF THE PASSWORD IS WRONG
+				 */
 				WrongPasswordException away = new WrongPasswordException();
-				throw away; //hehe
+				throw away;
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private byte[] toBytes(char[] chars) {
+	    CharBuffer charBuffer = CharBuffer.wrap(chars);
+	    ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+	    byte[] bytes = Arrays.copyOfRange(byteBuffer.array(),
+	            byteBuffer.position(), byteBuffer.limit());
+	    Arrays.fill(charBuffer.array(), '\u0000'); // clear sensitive data
+	    Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
+	    return bytes;
 	}
 	
 	public static StaffSession createSession(String username, char[] passarray) {
@@ -134,6 +164,15 @@ public class StaffSession{
 		return this.accesslevel;
 	}
 	
+	public String getLastLoginTimeString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy, HH:mm:ss, zz");
+		return sdf.format(this.lastlogin);
+	}
+	
+	public String getFullName() {
+		return this.firstname + " " + this.lastname;
+	}
+	
 	public void setNotes(String text) {
 		PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET staffnotes=? WHERE staffid=?");
 		try {
@@ -144,14 +183,5 @@ public class StaffSession{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public String getLastLoginTimeString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy, HH:mm:ss, zz");
-		return sdf.format(this.lastlogin);
-	}
-	
-	public String getFullName() {
-		return this.firstname + " " + this.lastname;
 	}
 }

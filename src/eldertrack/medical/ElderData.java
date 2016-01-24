@@ -11,35 +11,44 @@ import java.util.Calendar;
 import eldertrack.db.SQLObject;
 
 public class ElderData{
+	private int elderBed;
 	private String elderName;
-	private String elderID;
+	private int elderID;
 	private int elderAge;
 	private String elderGender;
+
 	
-	public static String roomNum;
+	private int elderNum;
+	private int elderNumMale;
+	private int elderNumFemale;
+	private int elderNumDosageNeeded;
+	private int elderNumDosageNotNeeded;
 
 	public ElderData(){
 
 	}
-	
-	public ElderData(String roomNum){
-		this.roomNum=roomNum;
-		
+
+	public ElderData(int elderNum, int elderNumMale, int elderNumFemale,int elderNumDosageNeeded,int elderNumDosageNotNeeded) {
+		this.elderNum = elderNum;
+		this.elderNumMale = elderNumMale;
+		this.elderNumFemale = elderNumFemale;
+		this.elderNumDosageNeeded=elderNumDosageNeeded;
+		this.elderNumDosageNotNeeded=elderNumDosageNotNeeded;
 	}
-	
-	public static String getRoomNum(){
-		return roomNum;
-	}
-	
-	public  void setRoomNum(String selected){
-		this.roomNum=selected;
-	}
-	
-	public ElderData(String elderName,String elderID, int elderAge, String elderGender) {
+
+	public ElderData(int elderBed,String elderName,int elderID, int elderAge, String elderGender) {
+		this.elderBed=elderBed;
 		this.elderName = elderName;
 		this.elderID=elderID;
 		this.elderAge = elderAge;
 		this.elderGender = elderGender;
+	}
+	public int getElderBed() {
+		return elderBed;
+	}
+
+	public void setElderBed(int elderBed) {
+		this.elderBed = elderBed;
 	}
 
 	public String getElderName() {
@@ -50,11 +59,11 @@ public class ElderData{
 		this.elderName = elderName;
 	}
 
-	public String getElderID() {
+	public int getElderID() {
 		return elderID;
 	}
 
-	public void setElderID(String elderID) {
+	public void setElderID(int elderID) {
 		this.elderID = elderID;
 	}
 	public int getElderAge() {
@@ -73,29 +82,68 @@ public class ElderData{
 		this.elderGender = elderGender;
 	}
 
+	public int getElderNum() {
+		return elderNum;
+	}
+
+	public void setElderNum(int elderNum) {
+		this.elderNum += elderNum;
+	}
+
+	public int getElderNumMale() {
+		return elderNumMale;
+	}
+
+	public void setElderNumMale(int elderNumMale) {
+		this.elderNumMale += elderNumMale;
+	}
+
+	public int getElderNumFemale() {
+		return elderNumFemale;
+	}
+
+	public void setElderNumFemale(int elderNumFemale) {
+		this.elderNumFemale += elderNumFemale;
+	}
+
+	public int getElderNumDosageNeeded() {
+		return elderNumDosageNeeded;
+	}
+
+	public void setElderNumDosageNeeded(int elderNumDosageNeeded) {
+		this.elderNumDosageNeeded += elderNumDosageNeeded;
+	}
+
+	public int getElderNumDosageNotNeeded() {
+		return elderNumDosageNotNeeded;
+	}
+
+	public void setElderNumDosageNotNeeded(int elderNumDosageNotNeeded) {
+		this.elderNumDosageNotNeeded += elderNumDosageNotNeeded;
+	}
 
 	public void print(){
-		System.out.println("ElderID: "+getElderID());
+		System.out.println("ElderBed: "+getElderBed());
 		System.out.println("Name: "+getElderName());
 		System.out.println("Age: "+getElderAge());
 		System.out.println("Gender: "+getElderGender());
 
 	}
-	private static int getAge(String year, String month, String day)
+	public static int getAge(String year, String month, String day)
 	{
-		
+
 		Calendar calDOB = Calendar.getInstance();
 		calDOB.set( Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day) );
-		
+
 		Calendar calNow = Calendar.getInstance();
 		calNow.setTime(new java.util.Date());
-		
+
 		int ageYr = (calNow.get(Calendar.YEAR) - calDOB.get(Calendar.YEAR));
-		
+
 		int ageMo = (calNow.get(Calendar.MONTH) - calDOB.get(Calendar.MONTH));
 		if (ageMo < 0)
 		{
-			
+
 			ageYr--;
 		}
 		return ageYr;
@@ -115,17 +163,14 @@ public class ElderData{
 				String year=text.substring(0, 4);
 				String month=text.substring(5,7);
 				String day=text.substring(8,10);
-				data.setElderID(rs.getString("elderid"));
+				data.setElderBed(rs.getInt("bed"));
+				data.setElderID(rs.getInt("id"));
 				data.setElderName(rs.getString("name"));
 				data.setElderAge(getAge(year,month,day));
 				data.setElderGender(rs.getString("gender"));
 
 				DosageList.add(data);
-				
-				
-				
-				
-				
+
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -137,9 +182,9 @@ public class ElderData{
 		}
 	}
 
-	
 
-	
+
+
 }
 
 

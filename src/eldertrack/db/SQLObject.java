@@ -18,8 +18,7 @@ public class SQLObject {
 	 * 2 - Show query executed in Console
 	 ************************************/
 	private Connection con;
-	private String url = "jdbc:mysql://eldertrackdb.ctfjtggc5l0j.ap-southeast-1.rds.amazonaws.com:3306/eldertrack"
-			+ "?zeroDateTimeBehavior=convertToNull";
+	private String url = "jdbc:mysql://eldertrackdb.ctfjtggc5l0j.ap-southeast-1.rds.amazonaws.com:3306/eldertrack";
 	private String dbuser = "eldertrackadmin";
 	private String dbpw = "eldertrack4321";
 

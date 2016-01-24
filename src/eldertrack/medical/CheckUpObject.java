@@ -15,6 +15,10 @@ import eldertrack.db.SQLObject;
 
 public class CheckUpObject  implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4101958710431937395L;
 	private double elderTemp;
 	private int elderBlood;
 	private int elderHeart;
@@ -90,22 +94,29 @@ public class CheckUpObject  implements Serializable {
 
 	}
 
-	public static  void  StoreCheckUp(String name, String elderDate, int id,CheckUpObject checkup) throws SQLException{
+	public static  void  StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime) throws SQLException{
 		SQLObject so = new SQLObject();
-		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date)"+"values(?,?,?)");
-		statement.setInt(1, id);
+		PreparedStatement statement = so.getPreparedStatementWithKey("insert into et_elderly_checkup(id,name,date,checktime)"+"values(?,?,?,?)");
+		statement.setInt(1, elderID);
 		statement.setString(2,name);
 		statement.setString(3, elderDate);
+		statement.setString(4, checktime);
 		statement.executeUpdate();
 
 		PreparedStatement statementBlob = so.getPreparedStatementWithKey("UPDATE et_elderly_checkup SET checkup = ? WHERE id = ?");
-
 		statementBlob.setObject(1, checkup);
-		statementBlob.setInt(2, id);
+		statementBlob.setInt(2, elderID);
 		statementBlob.executeUpdate();
 	}
-
-
+	
+	public static void StoreComments(int id,String comments) throws SQLException{
+		SQLObject so = new SQLObject();
+		PreparedStatement statement = so.getPreparedStatementWithKey("update et_elderly set checkupsummary=? where id=?");
+		statement.setString(1, comments);
+		statement.setInt(2, id);
+		statement.executeUpdate();
+	}
+	// for report
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
 		SQLObject so = new SQLObject();
 		ResultSet rs = so.getResultSet("SELECT name,date FROM et_elderly_checkup " );
@@ -127,6 +138,8 @@ public class CheckUpObject  implements Serializable {
 		CheckUpObject checking=(CheckUpObject) checkingBlob;
 		checking.view();
 	}
+	
+	
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();

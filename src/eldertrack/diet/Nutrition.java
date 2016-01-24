@@ -1,7 +1,7 @@
 package eldertrack.diet;
 
 public class Nutrition implements java.io.Serializable {
-	private static final long serialVersionUID = 3001L;
+	private static final long serialVersionUID = 3002;
 	private int calRda;
 	private int calories;
 	private int protein;
@@ -12,8 +12,19 @@ public class Nutrition implements java.io.Serializable {
 	private int vitc;
 	private int vitd;
 	private int vite;
-	Nutrition() {
-		// TODO: Remove this comment from this constructor
+	boolean halal;
+	
+	public Nutrition() {
+		this.calories = 0;
+		this.protein = 0;
+		this.fat = 0;
+		this.carbs = 0;
+		this.iron = 0;
+		this.vita = 0;
+		this.vitc = 0;
+		this.vitd = 0;
+		this.vite = 0;
+		halal = false;
 	}
 	
 	public Nutrition(int calories, int protein, int fat, int carbs, int iron, int vita, int vitc, int vitd, int vite) {
@@ -27,7 +38,65 @@ public class Nutrition implements java.io.Serializable {
 		this.vitd = vitd;
 		this.vite = vite;
 	}
+	
+	public boolean isHalal() {
+		return halal;
+	}
 
+	public Nutrition setCalRda(int calRda) {
+		this.calRda = calRda;
+		return this;
+	}
+
+	public Nutrition setCalories(int calories) {
+		this.calories = calories;
+		return this;
+	}
+
+	public Nutrition setProtein(int protein) {
+		this.protein = protein;
+		return this;
+	}
+
+	public Nutrition setFat(int fat) {
+		this.fat = fat;
+		return this;
+	}
+
+	public Nutrition setCarbs(int carbs) {
+		this.carbs = carbs;
+		return this;
+	}
+
+	public Nutrition setIron(int iron) {
+		this.iron = iron;
+		return this;
+	}
+
+	public Nutrition setVita(int vita) {
+		this.vita = vita;
+		return this;
+	}
+
+	public Nutrition setVitc(int vitc) {
+		this.vitc = vitc;
+		return this;
+	}
+
+	public Nutrition setVitd(int vitd) {
+		this.vitd = vitd;
+		return this;
+	}
+
+	public Nutrition setVite(int vite) {
+		this.vite = vite;
+		return this;
+	}
+
+	public Nutrition setHalal(boolean halal) {
+		this.halal = halal;
+		return this;
+	}
 
 	public int getCalRda() {
 		return calRda;

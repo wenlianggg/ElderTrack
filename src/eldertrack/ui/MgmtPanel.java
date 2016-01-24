@@ -49,108 +49,15 @@ public class MgmtPanel extends JPanel {
 	private JTextField setPasswordValue;
 	private JTextField elderlySearchField;
 	private JTextField staffSearchField;
+	private JTextField elderlyBedValue;
+	private JTextField staffNricValue;
 	MgmtPanel() {
 		
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		
-		JPanel staffManagementPanel = new JPanel();
-		staffManagementPanel.setBounds(511, 79, 448, 341);
-		add(staffManagementPanel);
-		staffManagementPanel.setVisible(false);
-		staffManagementPanel.setLayout(null);
-		
-		JLabel staffFirstName = new JLabel("FIRST NAME");
-		staffFirstName.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffFirstName.setBounds(19, 60, 123, 25);
-		staffManagementPanel.add(staffFirstName);
-		
-		JLabel staffLastName = new JLabel("LAST NAME");
-		staffLastName.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffLastName.setBounds(19, 90, 124, 25);
-		staffManagementPanel.add(staffLastName);
-		
-		JLabel staffId = new JLabel("STAFF ID");
-		staffId.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffId.setBounds(19, 30, 123, 25);
-		staffManagementPanel.add(staffId);
-		
-		JLabel staffDob = new JLabel("DOB");
-		staffDob.setBounds(19, 120, 109, 25);
-		staffManagementPanel.add(staffDob);
-		staffDob.setFont(new Font("Calibri", Font.PLAIN, 24));
-		
-		JLabel label_12 = new JLabel(":");
-		label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_12.setBounds(152, 30, 23, 25);
-		staffManagementPanel.add(label_12);
-		
-		JLabel label_13 = new JLabel(":");
-		label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_13.setBounds(152, 60, 23, 25);
-		staffManagementPanel.add(label_13);
-		
-		JLabel label_14 = new JLabel(":");
-		label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_14.setBounds(152, 90, 23, 25);
-		staffManagementPanel.add(label_14);
-		
-		staffIdValue = new JTextField();
-		staffIdValue.setColumns(10);
-		staffIdValue.setBounds(180, 30, 116, 22);
-		staffManagementPanel.add(staffIdValue);
-		
-		staffFirstNameValue = new JTextField();
-		staffFirstNameValue.setColumns(10);
-		staffFirstNameValue.setBounds(180, 60, 116, 22);
-		staffManagementPanel.add(staffFirstNameValue);
-		
-		JLabel label_22 = new JLabel(":");
-		label_22.setBounds(152, 120, 23, 25);
-		staffManagementPanel.add(label_22);
-		label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
-		
-		staffDobValue = new JTextField();
-		staffDobValue.setBounds(180, 120, 116, 22);
-		staffManagementPanel.add(staffDobValue);
-		staffDobValue.setColumns(10);
-		
-		staffLastNameValue = new JTextField();
-		staffLastNameValue.setColumns(10);
-		staffLastNameValue.setBounds(180, 90, 116, 22);
-		staffManagementPanel.add(staffLastNameValue);
-		
-		JLabel staffAge = new JLabel("AGE");
-		staffAge.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffAge.setBounds(19, 150, 109, 25);
-		staffManagementPanel.add(staffAge);
-		
-		JLabel label = new JLabel(":");
-		label.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label.setBounds(152, 150, 23, 25);
-		staffManagementPanel.add(label);
-		
-		JLabel staffAgeValue = new JLabel("");
-		staffAgeValue.setBounds(180, 150, 56, 16);
-		staffManagementPanel.add(staffAgeValue);
-		
-		JLabel setPassword = new JLabel("SET PW");
-		setPassword.setFont(new Font("Calibri", Font.PLAIN, 24));
-		setPassword.setBounds(19, 180, 109, 25);
-		staffManagementPanel.add(setPassword);
-		
-		JLabel label_1 = new JLabel(":");
-		label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_1.setBounds(152, 180, 23, 25);
-		staffManagementPanel.add(label_1);
-		
-		setPasswordValue = new JTextField();
-		setPasswordValue.setColumns(10);
-		setPasswordValue.setBounds(180, 180, 116, 22);
-		staffManagementPanel.add(setPasswordValue);
-		
 		JPanel elderlyManagementPanel = new JPanel();
-		elderlyManagementPanel.setBounds(511, 79, 448, 327);
+		elderlyManagementPanel.setBounds(625, 79, 340, 327);
 		add(elderlyManagementPanel);
 		elderlyManagementPanel.setLayout(null);
 		
@@ -271,13 +178,28 @@ public class MgmtPanel extends JPanel {
 			JLabel elderlyAgeValue = new JLabel("");
 			elderlyAgeValue.setBounds(180, 180, 56, 16);
 			elderlyManagementPanel.add(elderlyAgeValue);
+			
+			JLabel elderlyBed = new JLabel("BED NO");
+			elderlyBed.setFont(new Font("Calibri", Font.PLAIN, 24));
+			elderlyBed.setBounds(19, 270, 121, 25);
+			elderlyManagementPanel.add(elderlyBed);
+			
+			JLabel label_2 = new JLabel(":");
+			label_2.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_2.setBounds(152, 270, 23, 25);
+			elderlyManagementPanel.add(label_2);
+			
+			elderlyBedValue = new JTextField();
+			elderlyBedValue.setColumns(10);
+			elderlyBedValue.setBounds(179, 270, 116, 22);
+			elderlyManagementPanel.add(elderlyBedValue);
 		lblEManagementLbl = new JLabel("ElderTrack Management");
 		lblEManagementLbl.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lblEManagementLbl.setBounds(26, 5, 430, 61);
 		add(lblEManagementLbl);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(29, 79, 470, 445);
+		tabbedPane.setBounds(29, 79, 584, 445);
 		add(tabbedPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -319,64 +241,24 @@ public class MgmtPanel extends JPanel {
 			btnMainMenu.setBounds(820, 15, 139, 40);
 			add(btnMainMenu);
 			
-			JPanel panel_2 = new JPanel();
-			panel_2.setVisible(true);
-			panel_2.setBounds(511, 498, 453, 25);
-			add(panel_2);
-			panel_2.setLayout(null);
-			
-			JButton elderlySave = new JButton("Save Changes");
-			elderlySave.setBounds(0, 0, 132, 25);
-			panel_2.add(elderlySave);
-			
-			JButton elderlyDiscardChanges = new JButton("Discard Changes");
-			elderlyDiscardChanges.setBounds(165, 0, 132, 25);
-			panel_2.add(elderlyDiscardChanges);
-			
-			JButton elderlyRemove = new JButton("Remove Selected");
-			elderlyRemove.setBounds(321, 0, 132, 25);
-			panel_2.add(elderlyRemove);
-			
-			JPanel panel_3 = new JPanel();
-			panel_3.setBounds(511, 498, 453, 25);
-			add(panel_3);
-			panel_3.setVisible(false);
-			panel_3.setLayout(null);
-			
-			JButton staffSave = new JButton("Save Changes");
-			staffSave.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
-			staffSave.setBounds(0, 0, 132, 25);
-			panel_3.add(staffSave);
-			
-			JButton staffDiscardChanges = new JButton("Discard Changes");
-			staffDiscardChanges.setBounds(165, 0, 132, 25);
-			panel_3.add(staffDiscardChanges);
-			
-			JButton staffRemove = new JButton("Remove Selected");
-			staffRemove.setBounds(321, 0, 132, 25);
-			panel_3.add(staffRemove);
-			
 			JButton addElderly = new JButton("Add New Elderly");
-			addElderly.setBounds(511, 458, 132, 25);
+			addElderly.setBounds(800, 432, 132, 25);
 			add(addElderly);
 			
-			JButton clearFields = new JButton("Clear All Fields");
-			clearFields.setBounds(832, 458, 132, 25);
-			add(clearFields);
+			JButton discardChanges = new JButton("Discard Changes");
+			discardChanges.setBounds(800, 465, 132, 25);
+			add(discardChanges);
 			
 			JButton addStaff = new JButton("Add New Staff");
-			addStaff.setBounds(511, 458, 132, 25);
+			addStaff.setBounds(800, 432, 132, 25);
 			add(addStaff);
 			
 			JButton elderlySearchBtn = new JButton("Search");
-			elderlySearchBtn.setBounds(156, 535, 73, 25);
+			elderlySearchBtn.setBounds(156, 534, 73, 25);
 			add(elderlySearchBtn);
 			
 			elderlySearchField = new JTextField();
-			elderlySearchField.setBounds(30, 536, 120, 22);
+			elderlySearchField.setBounds(30, 535, 120, 22);
 			add(elderlySearchField);
 			elderlySearchField.setColumns(10);
 			
@@ -388,6 +270,226 @@ public class MgmtPanel extends JPanel {
 			staffSearchField.setColumns(10);
 			staffSearchField.setBounds(30, 536, 120, 22);
 			add(staffSearchField);
+			
+			JPanel staffManagementPanel = new JPanel();
+			staffManagementPanel.setBounds(625, 79, 350, 340);
+			add(staffManagementPanel);
+			staffManagementPanel.setVisible(false);
+			staffManagementPanel.setLayout(null);
+			
+			JLabel staffFirstName = new JLabel("FIRST NAME");
+			staffFirstName.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffFirstName.setBounds(19, 60, 123, 25);
+			staffManagementPanel.add(staffFirstName);
+			
+			JLabel staffLastName = new JLabel("LAST NAME");
+			staffLastName.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffLastName.setBounds(19, 90, 124, 25);
+			staffManagementPanel.add(staffLastName);
+			
+			JLabel staffId = new JLabel("STAFF ID");
+			staffId.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffId.setBounds(19, 30, 123, 25);
+			staffManagementPanel.add(staffId);
+			
+			JLabel staffDob = new JLabel("DOB");
+			staffDob.setBounds(19, 120, 109, 25);
+			staffManagementPanel.add(staffDob);
+			staffDob.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel label_12 = new JLabel(":");
+			label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_12.setBounds(152, 30, 23, 25);
+			staffManagementPanel.add(label_12);
+			
+			JLabel label_13 = new JLabel(":");
+			label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_13.setBounds(152, 60, 23, 25);
+			staffManagementPanel.add(label_13);
+			
+			JLabel label_14 = new JLabel(":");
+			label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_14.setBounds(152, 90, 23, 25);
+			staffManagementPanel.add(label_14);
+			
+			staffIdValue = new JTextField();
+			staffIdValue.setColumns(10);
+			staffIdValue.setBounds(180, 30, 116, 22);
+			staffManagementPanel.add(staffIdValue);
+			
+			staffFirstNameValue = new JTextField();
+			staffFirstNameValue.setColumns(10);
+			staffFirstNameValue.setBounds(180, 60, 116, 22);
+			staffManagementPanel.add(staffFirstNameValue);
+			
+			JLabel label_22 = new JLabel(":");
+			label_22.setBounds(152, 120, 23, 25);
+			staffManagementPanel.add(label_22);
+			label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			staffDobValue = new JTextField();
+			staffDobValue.setBounds(180, 120, 116, 22);
+			staffManagementPanel.add(staffDobValue);
+			staffDobValue.setColumns(10);
+			
+			staffLastNameValue = new JTextField();
+			staffLastNameValue.setColumns(10);
+			staffLastNameValue.setBounds(180, 90, 116, 22);
+			staffManagementPanel.add(staffLastNameValue);
+			
+			JLabel staffAge = new JLabel("AGE");
+			staffAge.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffAge.setBounds(19, 150, 109, 25);
+			staffManagementPanel.add(staffAge);
+			
+			JLabel label = new JLabel(":");
+			label.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label.setBounds(152, 150, 23, 25);
+			staffManagementPanel.add(label);
+			
+			JLabel staffAgeValue = new JLabel("");
+			staffAgeValue.setBounds(180, 150, 56, 16);
+			staffManagementPanel.add(staffAgeValue);
+			
+			JLabel setPassword = new JLabel("SET PW");
+			setPassword.setFont(new Font("Calibri", Font.PLAIN, 24));
+			setPassword.setBounds(19, 210, 109, 25);
+			staffManagementPanel.add(setPassword);
+			
+			JLabel label_1 = new JLabel(":");
+			label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_1.setBounds(152, 210, 23, 25);
+			staffManagementPanel.add(label_1);
+			
+			setPasswordValue = new JTextField();
+			setPasswordValue.setColumns(10);
+			setPasswordValue.setBounds(180, 210, 116, 22);
+			staffManagementPanel.add(setPasswordValue);
+			
+			JLabel staffNric = new JLabel("NRIC");
+			staffNric.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffNric.setBounds(19, 180, 109, 25);
+			staffManagementPanel.add(staffNric);
+			
+			JLabel label_7 = new JLabel(":");
+			label_7.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_7.setBounds(152, 180, 23, 25);
+			staffManagementPanel.add(label_7);
+			
+			staffNricValue = new JTextField();
+			staffNricValue.setColumns(10);
+			staffNricValue.setBounds(180, 180, 116, 22);
+			staffManagementPanel.add(staffNricValue);
+			
+			JButton elderlyRemove = new JButton("Remove Selected");
+			elderlyRemove.setBounds(476, 534, 132, 25);
+			add(elderlyRemove);
+			
+			JButton elderlySave = new JButton("Save Changes");
+			elderlySave.setBounds(625, 432, 132, 60);
+			add(elderlySave);
+			
+			JButton staffSave = new JButton("Save Changes");
+			staffSave.setBounds(625, 432, 132, 60);
+			add(staffSave);
+			
+			JButton staffRemove = new JButton("Remove Selected");
+			staffRemove.setBounds(476, 534, 132, 25);
+			add(staffRemove);
+			staffSave.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+			
+			elderlySave.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
+						if (dialogResult == JOptionPane.YES_OPTION){
+							try{
+								String id = elderlyIdValue.getText();
+								String name = elderlyNameValue.getText();
+								String birthString = elderlyDobValue.getText();
+								DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+								LocalDate localDOB = LocalDate.parse(birthString, formatter);
+								String nric = elderlyNricValue.getText();
+								String gender = elderlyGenderValue.getText();
+								String room = elderlyRoomValue.getText();
+								String address = elderlyAddressValue.getText();
+								String bed = elderlyBedValue.getText();
+								
+								PreparedStatement ps1 = so.getPreparedStatement("SELECT bed, nric FROM et_elderly WHERE room=? AND id NOT IN (?)");
+								ps1.setString(1, room);
+								ps1.setString(2, id);
+								ResultSet check = ps1.executeQuery();
+								
+								//Check for duplicate beds and exceeding bed limit
+								boolean dupeBed = checkDuplicateBeds(Integer.parseInt(bed), check);
+								boolean dupeNric = checkDuplicateNrics(nric, check);
+								
+								if(dupeBed == true){
+									JOptionPane.showMessageDialog(null, "There are duplicate bed numbers! Please check your entries!");
+								}else if(Integer.parseInt(bed) > 10){
+									JOptionPane.showMessageDialog(null, "There cannot be more than 10 beds in a room!");
+								}else if(dupeNric == true){
+									JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
+								}
+								else{
+									PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, bed=?, address=? WHERE id=?");
+									ps.setString(1, name);
+									ps.setDate(2, java.sql.Date.valueOf(localDOB));
+									ps.setString(3, nric);
+									ps.setString(4, gender);
+									ps.setString(5, room);
+									ps.setInt(6, Integer.parseInt(bed));
+									ps.setString(7, address);
+									ps.setInt(8, Integer.parseInt(id));
+									ps.executeUpdate();
+									JOptionPane.showMessageDialog(null, "Update successfully completed!");	
+								}	
+																	
+								try{
+									elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
+									setColumnWidths();
+								}catch(Exception e4){
+									e4.printStackTrace();
+								}
+								
+							}catch(Exception e1){
+								JOptionPane.showMessageDialog(null,e1);	
+							}
+						}
+							
+				}
+			});
+			
+				elderlyRemove.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the selected person?");
+						if (dialogResult == JOptionPane.YES_OPTION){
+							try{
+								PreparedStatement ps1 = so.getPreparedStatement("DELETE FROM et_elderly WHERE id=?");
+								int id = Integer.parseInt(elderlyIdValue.getText());
+								ps1.setInt(1, id);
+								ps1.executeUpdate();
+								JOptionPane.showMessageDialog(null, "Removal sucessfully completed!");
+								
+								try{
+									elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
+									setColumnWidths();
+								}catch(Exception e4){
+									e4.printStackTrace();
+								}
+								
+								
+								
+							}catch(Exception e2){
+								JOptionPane.showMessageDialog(null,e2);	
+							}
+						}
+					}
+				});
 			
 			elderlySearchBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -410,105 +512,47 @@ public class MgmtPanel extends JPanel {
 					};
 				}
 			});
-		
-			elderlyRemove.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the selected person?");
-					if (dialogResult == JOptionPane.YES_OPTION){
-						try{
-							PreparedStatement ps1 = so.getPreparedStatement("DELETE FROM et_elderly WHERE id=?");
-							int id = Integer.parseInt(elderlyIdValue.getText());
-							ps1.setInt(1, id);
-							ps1.executeUpdate();
-							JOptionPane.showMessageDialog(null, "Removal sucessfully completed!");
-							
-							try{
-								elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
-								setColumnWidths();
-							}catch(Exception e4){
-								e4.printStackTrace();
-							}
-							
-							
-							
-						}catch(Exception e2){
-							JOptionPane.showMessageDialog(null,e2);	
-						}
-					}
-				}
-			});
-			
-			elderlyDiscardChanges.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				JOptionPane.showConfirmDialog(null, "Are you sure you want to discard changes?");
-				}
-			}
-			);
-			
-			elderlySave.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
-						if (dialogResult == JOptionPane.YES_OPTION){
-							try{
-								String id = elderlyIdValue.getText();
-								String name = elderlyNameValue.getText();
-								String birthString = elderlyDobValue.getText();
-								DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-								LocalDate localDOB = LocalDate.parse(birthString, formatter);
-								String nric = elderlyNricValue.getText();
-								String gender = elderlyGenderValue.getText();
-								String room = elderlyRoomValue.getText();
-								String address = elderlyAddressValue.getText();
-								
-								PreparedStatement ps = so.getPreparedStatement("UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, address=? WHERE id=?");
-								ps.setString(1, name);
-								ps.setDate(2, java.sql.Date.valueOf(localDOB));
-								ps.setString(3, nric);
-								ps.setString(4, gender);
-								ps.setString(5, room);
-								ps.setString(6, address);
-								ps.setInt(7, Integer.parseInt(id));
-								ps.executeUpdate();
-								JOptionPane.showMessageDialog(null, "Update successfully completed!");
-								
-								try{
-									elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
-									setColumnWidths();
-								}catch(Exception e4){
-									e4.printStackTrace();
-								}
-								
-							}catch(Exception e1){
-								JOptionPane.showMessageDialog(null,e1);	
-							}
-						}
-							
-				}
-			});
 			
 			tabbedPane.addChangeListener(new ChangeListener() {
 			    public void stateChanged(ChangeEvent e) {
 			    if (elderlyManagementPanel.isVisible()) {
+			    	//Panels
 			    	staffManagementPanel.setVisible(true);
 			    	elderlyManagementPanel.setVisible(false);
-			    	panel_3.setVisible(true);
-			    	panel_2.setVisible(false);
+			    	//Add Buttons
 			    	addElderly.setVisible(false);
 			    	addStaff.setVisible(true);
+			    	//Save Buttons
+			    	staffSave.setVisible(true);
+			    	elderlySave.setVisible(false);
+			    	//Search Buttons
 			    	staffSearchBtn.setVisible(true);
 			    	elderlySearchBtn.setVisible(false);
+			    	//Search Fields
+			    	staffSearchField.setVisible(true);
+			    	elderlySearchField.setVisible(false);
+			    	//Remove Buttons
+			    	staffRemove.setVisible(true);
+			    	elderlyRemove.setVisible(false);
 			    } else {
+			    	//Panels
 			    	staffManagementPanel.setVisible(false);
 			    	elderlyManagementPanel.setVisible(true);
-			    	panel_3.setVisible(false);
-			    	panel_2.setVisible(true);
+			    	//Add Buttons
 			    	addElderly.setVisible(true);
 			    	addStaff.setVisible(false);
+			    	//Save Buttons
+			    	staffSave.setVisible(false);
+			    	elderlySave.setVisible(true);
+			    	//Search Buttons
 			    	staffSearchBtn.setVisible(false);
 			    	elderlySearchBtn.setVisible(true);
+			    	//Search Fields
+			    	staffSearchField.setVisible(false);
+			    	elderlySearchField.setVisible(true);
+			    	//Remove Buttons
+			    	staffRemove.setVisible(false);
+			    	elderlyRemove.setVisible(true);
 			    }
 			    }
 			});
@@ -543,6 +587,9 @@ public class MgmtPanel extends JPanel {
 							
 							String add8 = rs.getString("address");
 							elderlyAddressValue.setText(add8);
+							
+							int add9 = rs.getInt("bed");
+							elderlyBedValue.setText(Integer.toString(add9));
 							
 							//Calculation of age from date of birth
 							Calendar birthdate = Calendar.getInstance();
@@ -585,6 +632,9 @@ public class MgmtPanel extends JPanel {
 							String add4 = rs1.getString("dob");
 							staffDobValue.setText(add4);
 							
+							String add5 = rs1.getString("nric");
+							staffNricValue.setText(add5);
+							
 							Calendar birthdate = Calendar.getInstance();
 							birthdate.setTime(rs1.getDate("dob"));
 							Calendar today = Calendar.getInstance();
@@ -611,7 +661,6 @@ public class MgmtPanel extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to add?");
 					if (dialogResult == JOptionPane.YES_OPTION){
 						try{
-						PreparedStatement ps = so.getPreparedStatement("INSERT INTO et_elderly (name, dob, nric, gender, room, address) VALUES (?, ?, ?, ?, ?, ?)");
 						String name = elderlyNameValue.getText();
 						String birthString = elderlyDobValue.getText();
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
@@ -620,17 +669,32 @@ public class MgmtPanel extends JPanel {
 						String gender = elderlyGenderValue.getText();
 						String room = elderlyRoomValue.getText();
 						String  address = elderlyAddressValue.getText();
+						String bedString = elderlyBedValue.getText();
+						int bed = Integer.parseInt(bedString);
 						
+						PreparedStatement ps1 = so.getPreparedStatement("SELECT bed FROM et_elderly WHERE room=?");
+						ps1.setString(1, room);
+						ResultSet check = ps1.executeQuery();
+						
+						//Check for duplicate beds and exceeding bed limit
+						boolean dupe = checkDuplicateBeds(bed, check);
+						if(dupe == true){
+							JOptionPane.showMessageDialog(null,"There are duplicate beds! Please check your entries!");
+						}else if(bed > 10){
+							JOptionPane.showMessageDialog(null,"There cannot be more than 10 beds!");
+						}else{
+						PreparedStatement ps = so.getPreparedStatement("INSERT INTO et_elderly (name, dob, nric, gender, room, address, bed) VALUES (?, ?, ?, ?, ?, ?, ?)");
 						ps.setString(1, name);
 						ps.setDate(2, java.sql.Date.valueOf(dob));
 						ps.setString(3,nric);
 						ps.setString(4, gender);
 						ps.setString(5, room);
 						ps.setString(6, address);
+						ps.setInt(7, bed);
 						ps.executeUpdate();
 						
 						JOptionPane.showMessageDialog(null, "Person has successfully been added to database!");
-						
+						}
 						try{
 							elderlyTable.setModel(ElderlyTableHelper.getElderlyFromQuery(""));
 							setColumnWidths();
@@ -646,7 +710,7 @@ public class MgmtPanel extends JPanel {
 				}
 			});
 			
-			clearFields.addMouseListener(new MouseAdapter() {
+			discardChanges.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					//Clear Elderly Fields
@@ -658,6 +722,7 @@ public class MgmtPanel extends JPanel {
 					elderlyRoomValue.setText("");
 					elderlyGenderValue.setText("");
 					elderlyDobValue.setText("");
+					elderlyBedValue.setText("");
 					
 					//Clear Staff Fields
 					staffAgeValue.setText("");
@@ -674,11 +739,56 @@ public class MgmtPanel extends JPanel {
 		elderlyTable.getTableHeader().setReorderingAllowed(false);
 		elderlyTable.getColumnModel().getColumn(0).setPreferredWidth(25);
 		elderlyTable.getColumnModel().getColumn(0).setMaxWidth(35);
-		elderlyTable.getColumnModel().getColumn(1).setPreferredWidth(135);
-		elderlyTable.getColumnModel().getColumn(1).setMaxWidth(145);
-		elderlyTable.getColumnModel().getColumn(2).setPreferredWidth(115);
-		elderlyTable.getColumnModel().getColumn(2).setMaxWidth(125);
-		elderlyTable.getColumnModel().getColumn(3).setPreferredWidth(55);
-		elderlyTable.getColumnModel().getColumn(3).setMaxWidth(70);
+		elderlyTable.getColumnModel().getColumn(1).setPreferredWidth(115);
+		elderlyTable.getColumnModel().getColumn(1).setMaxWidth(130);
+		elderlyTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+		elderlyTable.getColumnModel().getColumn(2).setMaxWidth(90);
+		elderlyTable.getColumnModel().getColumn(3).setPreferredWidth(80);
+		elderlyTable.getColumnModel().getColumn(3).setMaxWidth(90);
+		elderlyTable.getColumnModel().getColumn(4).setPreferredWidth(20);
+		elderlyTable.getColumnModel().getColumn(4).setMaxWidth(30);
+		elderlyTable.getColumnModel().getColumn(5).setPreferredWidth(30);
+		elderlyTable.getColumnModel().getColumn(5).setMaxWidth(35);
+		elderlyTable.getColumnModel().getColumn(6).setPreferredWidth(25);
+		elderlyTable.getColumnModel().getColumn(6).setMaxWidth(35);
 	}
-}
+	
+	private boolean checkDuplicateBeds(int bed, ResultSet rs){
+		boolean result = false;
+		ResultSet check = rs;
+		
+		
+		try {
+			while(check.next()){
+				if(check.getInt("bed") == bed){
+					result = true;
+					break;
+				}else
+					result = false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private boolean checkDuplicateNrics(String nric, ResultSet rs){
+		boolean result = false;
+		ResultSet check = rs;
+		
+		try{
+			while(check.next()){
+				if(check.getString("nric") == nric){
+					result = true;
+					break;
+				}else
+					result = false;
+				}
+			}catch (SQLException e){
+				e.printStackTrace();
+			}
+		
+		return result;
+		
+		}
+	}
