@@ -10,8 +10,13 @@ import java.sql.SQLException;
 //import java.text.DateFormat;
 //import java.text.SimpleDateFormat;
 //import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import eldertrack.db.SQLObject;
+import eldertrack.login.StaffSession;
+import eldertrack.ui.MainFrame;
 
 public class CheckUpObject  implements Serializable {
 
@@ -93,7 +98,40 @@ public class CheckUpObject  implements Serializable {
 		System.out.println(getElderDate());
 
 	}
-
+	
+	public static void ResetCheckUp(SQLObject so){
+		ResultSet rs;
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		Date lastlogin = null;
+		Date currectdate = new Date();
+		StaffSession session = MainFrame.getInstance().getSessionInstance();
+		try {
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT lastlogin FROM et_staff where staffid=?");
+			stmt.setInt(1, session.getStaffid());
+			stmt.executeQuery();
+			rs = stmt.getResultSet();
+			rs.next();
+			lastlogin=rs.getTimestamp("lastlogin");	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String lastDate=dateFormat.format(lastlogin);
+		String checkNowDate=dateFormat.format(currectdate);
+		if(!lastDate.equals(checkNowDate)){
+			try {
+				PreparedStatement stmt  = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningcheck = ?, afternooncheck = ?, nooncheck = ?");
+				stmt.setInt(1, 0);
+				stmt.setInt(2, 0);
+				stmt.setInt(3, 0);
+				stmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static Boolean checkupValid(String roomNum,String timing,SQLObject so){
 		ResultSet rs = null;
 		int totalElder=0;

@@ -4,13 +4,18 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
+import eldertrack.login.StaffSession;
+import eldertrack.ui.MainFrame;
 
 public class DosageObject implements Serializable{
 
@@ -61,6 +66,40 @@ private String MedDosage;
 		System.out.println("Type: "+getMedType());
 		System.out.println("Dos: "+getMedDosage());
 	}
+	
+	public static void ResetDosage(SQLObject so){
+		ResultSet rs;
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		Date lastlogin = null;
+		Date currectdate = new Date();
+		StaffSession session = MainFrame.getInstance().getSessionInstance();
+		try {
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT lastlogin FROM et_staff where staffid=?");
+			stmt.setInt(1, session.getStaffid());
+			stmt.executeQuery();
+			rs = stmt.getResultSet();
+			rs.next();
+			lastlogin=rs.getTimestamp("lastlogin");	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String lastDate=dateFormat.format(lastlogin);
+		String checkNowDate=dateFormat.format(currectdate);
+		if(!lastDate.equals(checkNowDate)){
+			try {
+				PreparedStatement stmt  = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningtaken = ?, afternoontaken = ?, noontaken = ?");
+				stmt.setInt(1, 0);
+				stmt.setInt(2, 0);
+				stmt.setInt(3, 0);
+				stmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	public static JTable managementTableModel(JTable MainTable ){
 		MainTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

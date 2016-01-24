@@ -48,8 +48,9 @@ public class MedDosageSearchPanel extends JPanel {
 
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
-
-
+		
+		DosageObject.ResetDosage(so);
+		
 		JLabel lblDosageTrackingSystem = new JLabel("Dosage Tracking System");
 		lblDosageTrackingSystem.setForeground(UIManager.getColor("EditorPane.selectionBackground"));
 		lblDosageTrackingSystem.setFont(new Font("Segoe UI", Font.PLAIN, 30));

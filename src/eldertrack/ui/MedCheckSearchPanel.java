@@ -44,7 +44,9 @@ public class MedCheckSearchPanel extends JPanel {
 	public MedCheckSearchPanel() {
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
-
+		
+		CheckUpObject.ResetCheckUp(so);
+		
 		JLabel lblCheckUpSystem = new JLabel("Check Up System");
 		lblCheckUpSystem.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		lblCheckUpSystem.setBounds(25, 25, 232, 41);
