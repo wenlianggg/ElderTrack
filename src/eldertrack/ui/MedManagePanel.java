@@ -1,5 +1,6 @@
 package eldertrack.ui;
 
+import java.awt.CardLayout;
 import java.awt.Font;
 
 import javax.swing.JFrame;
@@ -117,7 +118,6 @@ public class MedManagePanel extends JPanel {
 							Noonmodel=DosageObject.buildDefaultManageModel();
 							NoonTable.setModel(Noonmodel);
 						}
-						
 					}
 				}catch(Exception e1){
 					JOptionPane.showMessageDialog(null, e1);
@@ -332,16 +332,28 @@ public class MedManagePanel extends JPanel {
 		SearchField.setColumns(10);
 		
 		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					allEldersData = DosageTableHelper.getElderlyFromQueryManagement("%" + SearchField.getText() + "%");
+					eldertable.setModel(allEldersData);
+					DosageObject.managementTableModel(eldertable);
+					
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				};
+			}
+		});
+		
 		btnSearch.setBounds(213, 92, 89, 23);
 		add(btnSearch);
-		
+
 		JButton btnSaveChange = new JButton("SAVE CHANGES");
 		btnSaveChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				ElderData.UpdateDosageSummary(so, summaryPane.getText(), Integer.parseInt(ElderIDField.getText()));
-				
-				
+
 				if(Morningmodel.getRowCount()!=0){
 					DosageObject.updateProcessTable(MorningTable);
 					DosageObject.setTableManage("morning", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(MorningTable), 0);
@@ -375,8 +387,15 @@ public class MedManagePanel extends JPanel {
 		btnSaveChange.setBounds(828, 607, 140, 23);
 		add(btnSaveChange);
 		
-		
-
+		JButton btnExit = new JButton("Exit Management");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+				mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
+			}
+		});
+		btnExit.setBounds(525, 607, 140, 23);
+		add(btnExit);
 	}
 	public static void main(String[] args) {
 		JFrame frame= new JFrame();
