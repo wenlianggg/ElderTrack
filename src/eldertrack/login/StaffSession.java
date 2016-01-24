@@ -2,6 +2,8 @@ package eldertrack.login;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -28,62 +30,73 @@ public class StaffSession{
 	private boolean exists = false;
 	private boolean passwordcorrect = false;
 	private AccessLevel accesslevel = AccessLevel.NOACCESS;
-	SQLObject so;
+	private File dpfile;
+	SQLObject so = new SQLObject();
 	
 	StaffSession(String username, char[] password) throws WrongPasswordException, NoSuchUserException {
-		// If user does not exist, throw NoSuchUserException
 		ResultSet rs = null;
 		try {
 			so = new SQLObject();
-			// Get ResultSet
 			rs = so.getResultSet("SELECT * FROM et_staff WHERE username = ?", username.toLowerCase());
-			// If ResultSet is null, it means that no such user is found
+			/**
+			 * CHECK IF THE USER EXISTS
+			 */
 			if (rs == null || rs.next() == false) {
 				NoSuchUserException up = new NoSuchUserException();
-				throw up; // hehe
+				throw up;
 			}
 			this.exists = true;
-			// Compare and verify strings
+			
+			/**
+			 * START VERIFYING IF USER LOGIN IS VALID
+			 */
 			String hashed = DigestUtils.sha512Hex(ArrayUtils.addAll(toBytes(password), Base64.decodeBase64(rs.getString("salt"))));
 			if (rs.getString("password").equals(hashed)) {
-				this.staffid = rs.getInt("staffid");
-				switch(rs.getInt("accesslevel")) {
-					case 1:
-						this.accesslevel = AccessLevel.STAFF;
-						break;
-					case 2:
-						this.accesslevel = AccessLevel.SRSTAFF;
-						break;
-					case 3:
-						this.accesslevel = AccessLevel.ADMIN;
-						break;
-					case 4:
-						this.accesslevel = AccessLevel.MANAGER;
-						break;
-					default:
-						this.accesslevel = AccessLevel.NOACCESS;
-						break;
-				}
-				this.firstname = rs.getString("firstname");
-				this.lastname = rs.getString("lastname");
-				this.nric = rs.getString("nric");
-				this.stickynotes = rs.getString("staffnotes");
-				passwordcorrect = true;
-				Timestamp ts = rs.getTimestamp("lastlogin");
-				if (ts != null)
-					this.lastlogin = new Date(ts.getTime());
-				else
-					this.lastlogin = new Date();
-				Date date = new Date();
-				Timestamp timenow = new Timestamp(date.getTime());
-				PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET lastlogin=? WHERE staffid=?");
-				ps.setTimestamp(1, timenow);
-				ps.setInt(2, this.staffid);
-				ps.executeUpdate();
+					/**
+					 * EXECUTES ONLY IF THE PASSWORD IS CORRECT
+					 */
+					this.staffid = rs.getInt("staffid");
+					switch(rs.getInt("accesslevel")) {
+						case 1:
+							this.accesslevel = AccessLevel.STAFF;
+							break;
+						case 2:
+							this.accesslevel = AccessLevel.SRSTAFF;
+							break;
+						case 3:
+							this.accesslevel = AccessLevel.ADMIN;
+							break;
+						case 4:
+							this.accesslevel = AccessLevel.MANAGER;
+							break;
+						default:
+							this.accesslevel = AccessLevel.NOACCESS;
+							break;
+					}
+					this.firstname = rs.getString("firstname");
+					this.lastname = rs.getString("lastname");
+					this.nric = rs.getString("nric");
+					this.stickynotes = rs.getString("staffnotes");
+					passwordcorrect = true;
+					Timestamp ts = rs.getTimestamp("lastlogin");
+					if (ts != null)
+						this.lastlogin = new Date(ts.getTime());
+					else
+						this.lastlogin = new Date();
+					Date date = new Date();
+					Timestamp timenow = new Timestamp(date.getTime());
+					PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET lastlogin=? WHERE staffid=?");
+					ps.setTimestamp(1, timenow);
+					ps.setInt(2, this.staffid);
+					ps.executeUpdate();
 			} else {
+				/**
+				 * EXECUTES IF THE PASSWORD IS WRONG
+				 */
 				WrongPasswordException away = new WrongPasswordException();
-				throw away; //hehe
+				throw away;
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -151,6 +164,15 @@ public class StaffSession{
 		return this.accesslevel;
 	}
 	
+	public String getLastLoginTimeString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy, HH:mm:ss, zz");
+		return sdf.format(this.lastlogin);
+	}
+	
+	public String getFullName() {
+		return this.firstname + " " + this.lastname;
+	}
+	
 	public void setNotes(String text) {
 		PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET staffnotes=? WHERE staffid=?");
 		try {
@@ -161,14 +183,5 @@ public class StaffSession{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public String getLastLoginTimeString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy, HH:mm:ss, zz");
-		return sdf.format(this.lastlogin);
-	}
-	
-	public String getFullName() {
-		return this.firstname + " " + this.lastname;
 	}
 }
