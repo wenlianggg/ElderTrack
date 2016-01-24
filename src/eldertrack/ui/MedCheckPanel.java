@@ -7,10 +7,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.RoundingMode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,12 +23,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
+import javax.swing.text.NumberFormatter;
+
 import eldertrack.db.SQLObject;
 import eldertrack.medical.*;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 
 public class MedCheckPanel extends JPanel {
+
+	static final SQLObject so = new SQLObject();
+	private static final long serialVersionUID = -1155434751690765910L;
+
 	private JTextField BedField;
 	private JTextField NameField;
 	private JTextField AgeField;
@@ -34,8 +43,6 @@ public class MedCheckPanel extends JPanel {
 	private JTextPane txtSummary;
 	private int counter;
 	private int numofElder;
-	static final SQLObject so = new SQLObject();
-	private static final long serialVersionUID = -1155434751690765910L;
 
 
 	public MedCheckPanel(){
@@ -75,9 +82,6 @@ public class MedCheckPanel extends JPanel {
 		add(NameField);
 		NameField.setColumns(10);
 
-
-
-
 		JLabel lblAge = new JLabel("Age: ");
 		lblAge.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		lblAge.setForeground(new Color(0, 128, 128));
@@ -111,52 +115,92 @@ public class MedCheckPanel extends JPanel {
 		add(lblSummary);
 
 		txtSummary = new JTextPane();
+		txtSummary.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		txtSummary.setEditable(false);
 		JScrollPane scrollSummary = new JScrollPane(txtSummary);
-		scrollSummary.setBounds(422, 137, 424, 68);
+		scrollSummary.setBounds(422, 137, 424, 77);
 		add(scrollSummary);
 
 		//Checking 
+
+		NumberFormat intformat = NumberFormat.getInstance();
+		NumberFormatter formatter = new NumberFormatter(intformat);
+		formatter.setValueClass(Integer.class);
+		formatter.setMinimum(0);
+		formatter.setMaximum(Integer.MAX_VALUE);
+		formatter.setCommitsOnValidEdit(true);
+
+		NumberFormat doubleformat = NumberFormat.getNumberInstance();
+		doubleformat.setGroupingUsed(false);
+		doubleformat.setGroupingUsed(true);// or add the group chars to the filter
+		doubleformat.setMaximumIntegerDigits(10);
+		doubleformat.setMaximumFractionDigits(2);
+		doubleformat.setMinimumFractionDigits(1);
+		doubleformat.setRoundingMode(RoundingMode.HALF_UP);
 
 		JLabel lblTemperature = new JLabel("Temperature: ");
 		lblTemperature.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		lblTemperature.setBounds(120, 284, 130, 30);
 		add(lblTemperature);
 
-		JTextField TempField = new JTextField();
-		TempField.setBounds(260, 292, 90, 25);
+		JFormattedTextField TempField = new JFormattedTextField(doubleformat);
+		TempField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		TempField.setBounds(260, 292, 70, 25);
 		TempField.setColumns(10);
 		add(TempField);
+
+		JLabel lblTempUnit = new JLabel("\u00b0C");
+		lblTempUnit.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		lblTempUnit.setBounds(331, 284, 46, 30);
+		add(lblTempUnit);
 
 		JLabel lblBlood= new JLabel("Blood Pressure: ");
 		lblBlood.setBounds(120, 325, 142, 30);
 		add(lblBlood);
 		lblBlood.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 
-		JTextField BloodField= new JTextField();
+		JFormattedTextField  BloodField= new JFormattedTextField (doubleformat);
+		BloodField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		BloodField.setColumns(10);
-		BloodField.setBounds(260, 331, 90, 25);
+		BloodField.setBounds(260, 331, 70, 25);
 		add(BloodField);
+
+		JLabel lblBloodUnit = new JLabel("mmHg");
+		lblBloodUnit.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		lblBloodUnit.setBounds(331, 325, 60, 30);
+		add(lblBloodUnit);
 
 		JLabel lblHeartRate = new JLabel("Heart Rate: ");
 		lblHeartRate.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		lblHeartRate.setBounds(120, 366, 130, 30);
 		add(lblHeartRate);
 
-		JTextField HeartField = new JTextField();
-		HeartField.setBounds(260, 373, 90, 25);
+		JFormattedTextField HeartField = new JFormattedTextField(formatter);
+		HeartField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		HeartField.setBounds(260, 373, 70, 25);
 		HeartField.setColumns(10);
 		add(HeartField);
+
+		JLabel lblHeartUnit = new JLabel("bpm");
+		lblHeartUnit.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		lblHeartUnit.setBounds(331, 366, 60, 30);
+		add(lblHeartUnit);
 
 		JLabel lblSugarLv= new JLabel("Sugar Level: ");
 		lblSugarLv.setBounds(120, 406, 112, 30);
 		lblSugarLv.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		add(lblSugarLv);
 
-		JTextField SugarField=new JTextField();
-		SugarField.setBounds(260, 412, 90, 25);
+		JFormattedTextField SugarField=new JFormattedTextField(doubleformat);
+		SugarField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		SugarField.setBounds(260, 412, 70, 25);
 		SugarField.setColumns(10);
 		add(SugarField);
+
+		JLabel lblSugarUnit = new JLabel("mmol/L");
+		lblSugarUnit.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		lblSugarUnit.setBounds(331, 406, 70, 30);
+		add(lblSugarUnit);
 
 		JLabel lblEye= new JLabel("Eye Infection:");
 		lblEye.setFont(new Font("Segoe UI", Font.PLAIN, 18));
@@ -164,7 +208,8 @@ public class MedCheckPanel extends JPanel {
 		add(lblEye);
 
 		JComboBox<String> comboEye = new JComboBox<String>();
-		comboEye.setBounds(260, 457, 90, 20);
+		comboEye.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		comboEye.setBounds(260, 457, 121, 20);
 		comboEye.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { " ","Yes", "No" }));
 		add(comboEye);
 
@@ -174,7 +219,8 @@ public class MedCheckPanel extends JPanel {
 		add(lblEar);
 
 		JComboBox<String> comboEar = new JComboBox<String>();
-		comboEar.setBounds(260, 498, 90, 20);
+		comboEar.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		comboEar.setBounds(260, 498, 121, 20);
 		comboEar.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { " ","Yes", "No" }));
 		add(comboEar);
 
@@ -185,7 +231,8 @@ public class MedCheckPanel extends JPanel {
 		add(lblAddition);
 
 		JTextPane textAddition = new JTextPane();
-		textAddition.setBounds(424, 324, 422, 149);
+		textAddition.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		textAddition.setBounds(424, 324, 422, 184);
 		add(textAddition);
 
 		//Date
@@ -216,57 +263,22 @@ public class MedCheckPanel extends JPanel {
 
 				if(checkupTime.equalsIgnoreCase("morning")){
 					if(rs.getInt("morningcheck")==0){
-						data=new ElderData();
-						java.sql.Date birthDate=rs.getDate("dob");
-						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-						String text = df.format(birthDate);
-						String year=text.substring(0, 4);
-						String month=text.substring(5,7);
-						String day=text.substring(8,10);
-						data.setElderID(rs.getInt("id"));
-						data.setElderBed(rs.getInt("bed"));
-						data.setElderID(rs.getInt("id"));
-						data.setElderName(rs.getString("name"));
-						data.setElderAge(ElderData.getAge(year,month,day));
-						data.setElderGender(rs.getString("gender"));
+						data=ElderData.getElderInformation(rs);
 						CheckList.add(data);
 						numofElder++;
 					}
+
 				}
 				else if(checkupTime.equalsIgnoreCase("afternoon")){
 					if(rs.getInt("afternooncheck")==0){
-						data=new ElderData();
-						java.sql.Date birthDate=rs.getDate("dob");
-						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-						String text = df.format(birthDate);
-						String year=text.substring(0, 4);
-						String month=text.substring(5,7);
-						String day=text.substring(8,10);
-						data.setElderID(rs.getInt("id"));
-						data.setElderBed(rs.getInt("bed"));
-						data.setElderID(rs.getInt("id"));
-						data.setElderName(rs.getString("name"));
-						data.setElderAge(ElderData.getAge(year,month,day));
-						data.setElderGender(rs.getString("gender"));
+						data=ElderData.getElderInformation(rs);
 						CheckList.add(data);
 						numofElder++;
 					}
 				}
 				else if(checkupTime.equalsIgnoreCase("noon")){
 					if(rs.getInt("nooncheck")==0){
-						data=new ElderData();
-						java.sql.Date birthDate=rs.getDate("dob");
-						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-						String text = df.format(birthDate);
-						String year=text.substring(0, 4);
-						String month=text.substring(5,7);
-						String day=text.substring(8,10);
-						data.setElderID(rs.getInt("id"));
-						data.setElderBed(rs.getInt("bed"));
-						data.setElderID(rs.getInt("id"));
-						data.setElderName(rs.getString("name"));
-						data.setElderAge(ElderData.getAge(year,month,day));
-						data.setElderGender(rs.getString("gender"));
+						data=ElderData.getElderInformation(rs);
 						CheckList.add(data);
 						numofElder++;
 					}
@@ -288,6 +300,8 @@ public class MedCheckPanel extends JPanel {
 
 			e1.printStackTrace();
 		}
+
+
 		DisplayInformation(CheckList,commentsList, counter);
 
 		JButton btnSaveQuit = new JButton("Save And Quit");
@@ -296,8 +310,7 @@ public class MedCheckPanel extends JPanel {
 		add(btnSaveQuit);
 
 		btnSaveQuit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
+			public void actionPerformed(ActionEvent e) {	
 				if(TempField.getText().equals("") ||  BloodField.getText().equals("") || 
 						HeartField.getText().equals("") || SugarField.getText().equals("")|| 
 						comboEye.getSelectedItem().toString().equals(" ") || comboEar.getSelectedItem().toString().equals(" ")
@@ -305,38 +318,36 @@ public class MedCheckPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please Check Again");
 				}
 				else{
-					if(counter+1==CheckList.size()){
-						try {
-							CheckUpObject checkElder=new CheckUpObject();
-							checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-							checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
-							checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-							checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
-							if(comboEye.getSelectedItem().toString().equals("Yes")){
-								checkElder.setElderEye(true);
-							}
-							else{
-								checkElder.setElderEye(false);
-							}
-							if(comboEar.getSelectedItem().toString().equals("Yes")){
-								checkElder.setElderEar(true);
-							}
-							else{
-								checkElder.setElderEar(false);
-							}
-
-
-							CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
-							UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
-							CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
-							JOptionPane.showMessageDialog(null, "Check up is successful");
-						} catch (SQLException e1) {
-
-							e1.printStackTrace();
+					try {
+						CheckUpObject checkElder=new CheckUpObject();	
+						checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
+						checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+						checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+						checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+						if(comboEye.getSelectedItem().toString().equals("Yes")){
+							checkElder.setElderEye(true);
 						}
+						else{
+							checkElder.setElderEye(false);
+						}
+						if(comboEar.getSelectedItem().toString().equals("Yes")){
+							checkElder.setElderEar(true);
+						}
+						else{
+							checkElder.setElderEar(false);
+						}
+
+						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
+						CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
+						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
+						JOptionPane.showMessageDialog(null, "Check up is successful");
+					} catch (SQLException e1) {
+
+						e1.printStackTrace();
 					}
 
-					JOptionPane.showMessageDialog(null, "Check Up has been completed");	
+
+
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 
@@ -350,11 +361,10 @@ public class MedCheckPanel extends JPanel {
 		btnNextElder.setBounds(696, 519, 150, 35);
 		add(btnNextElder);
 
-		JLabel lblElderLeft = new JLabel("Number of Elderly left:"+numofElder);
-		lblElderLeft.setBounds(675, 228, 171, 14);
+		JLabel lblElderLeft = new JLabel("Number of Elderly left:   "+numofElder);
+		lblElderLeft.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblElderLeft.setBounds(663, 222, 181, 20);
 		add(lblElderLeft);
-
-
 
 
 		btnNextElder.addActionListener(new ActionListener() {
@@ -368,14 +378,13 @@ public class MedCheckPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please Check Again");
 				}
 				else{
-
-					if(counter+1==CheckList.size()){
+					if(counter+1!=CheckList.size()){
 						try {
 							CheckUpObject checkElder=new CheckUpObject();
 							checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-							checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+							checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
 							checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-							checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+							checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
 							if(comboEye.getSelectedItem().toString().equals("Yes")){
 								checkElder.setElderEye(true);
 							}
@@ -388,10 +397,8 @@ public class MedCheckPanel extends JPanel {
 							else{
 								checkElder.setElderEar(false);
 							}
-
-
 							CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
-							UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect());
+							CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 							CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
 						} catch (SQLException e1) {
 
@@ -408,46 +415,50 @@ public class MedCheckPanel extends JPanel {
 						comboEye.setSelectedItem(null);
 						comboEar.setSelectedItem(null);
 					}
-
 					else{
+						try {
+							CheckUpObject checkElder=new CheckUpObject();
+							checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
+							checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+							checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+							checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+							if(comboEye.getSelectedItem().toString().equals("Yes")){
+								checkElder.setElderEye(true);
+							}
+							else{
+								checkElder.setElderEye(false);
+							}
+							if(comboEar.getSelectedItem().toString().equals("Yes")){
+								checkElder.setElderEar(true);
+							}
+							else{
+								checkElder.setElderEar(false);
+							}
+							CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
+							CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
+							CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
+						} catch (SQLException e1) {
+
+							e1.printStackTrace();
+						}
+
+						JOptionPane.showMessageDialog(null, "Check up is successful");
+						TempField.setText(null);
+						BloodField.setText(null);
+						HeartField.setText(null);
+						SugarField.setText(null);
+						comboEye.setSelectedItem(null);
+						comboEar.setSelectedItem(null);
 						JOptionPane.showMessageDialog(null, "Check Up has been completed");	
 						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 						mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 					}
-
 				}
+
+
 			}
 		});
 
-
-	}
-
-	public void UpdateCheckUpTaken(int id,String timing) {
-		SQLObject so = new SQLObject();
-		try {
-			if(timing.equalsIgnoreCase("morning")){
-				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningcheck=?  WHERE id = ?");
-				ps.setInt(1, 1);
-				ps.setInt(2, id);
-				ps.executeUpdate();
-
-			}
-			else if(timing.equalsIgnoreCase("afternoon")){
-				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternooncheck=?  WHERE id = ?");
-				ps.setInt(1, 1);
-				ps.setInt(2, id);
-				ps.executeUpdate();
-			}
-			else if(timing.equalsIgnoreCase("noon") ){
-				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET nooncheck=?  WHERE id = ?");
-				ps.setInt(1, 1);
-				ps.setInt(2, id);
-				ps.executeUpdate();
-			}
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
 
 	}
 
@@ -459,4 +470,3 @@ public class MedCheckPanel extends JPanel {
 		txtSummary.setText(commentsList.get(counter));
 	}
 }
-
