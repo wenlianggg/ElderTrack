@@ -25,8 +25,8 @@ public class MedicationSQL {
 		DosingList.add(dos4);
 		DosingList.add(dos5);
 
-		PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningdosage = ? WHERE id = ?");
-		statement.setObject(1, DosingList);
+		PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningtaken = ? WHERE id = ?");
+		statement.setObject(1, 0);
 		statement.setInt(2, id);
 		statement.executeUpdate();
 	}
@@ -53,13 +53,10 @@ public class MedicationSQL {
 		}
 	}
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-		for(int i=1;i<11;i++){
+		for(int i=1;i<10;i++){
 			serializeDos(i);
-		}
-	
-			
+		}	
 			deserializeDos(1);
-		
-
+	
 	}
 }
