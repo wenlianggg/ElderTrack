@@ -142,9 +142,9 @@ public class MainFrame extends JFrame {
 		// Initialize Report Panel
 		jpbar.setString("Initializing Report Generation...");
 		jpbar.update(jpbar.getGraphics());
-		//ReportPanel = new ReportMainPanel();
-		//ReportPanel.setBorder(lBorder);
-		//CardsPanel.add(ReportPanel, REPORTPANEL);
+		ReportPanel = new ReportMainPanel();
+		ReportPanel.setBorder(lBorder);
+		CardsPanel.add(ReportPanel, REPORTPANEL);
 
 		// Initialize Main Menu Panel
 		jpbar.setString("Initializing Main Menu...");
@@ -183,7 +183,7 @@ public class MainFrame extends JFrame {
 		comboBox.setVisible(false);
 		CardsPanel.remove(DietSection);
 		CardsPanel.remove(MedPanel);
-		//CardsPanel.remove(ReportPanel);
+		CardsPanel.remove(ReportPanel);
 		if(isManagementShown())
 			CardsPanel.remove(MgmtPanel);
 		CardsPanel.remove(MainMenu);
@@ -191,7 +191,7 @@ public class MainFrame extends JFrame {
 		comboBox = null;
 		DietSection = null;
 		MedPanel = null;
-		//ReportPanel = null;
+		ReportPanel = null;
 		MgmtPanel = null;
 		MainMenu = null;
 		LoginPanel.progressBar.setValue(0);
