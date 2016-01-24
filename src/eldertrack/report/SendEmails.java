@@ -1,6 +1,7 @@
 package eldertrack.report;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
@@ -22,35 +23,40 @@ public class SendEmails {
 	
 	Date dNow = new Date( );
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
+    MedicalData elderList = new MedicalData();
+    
+    ArrayList<String> emailList = new ArrayList<String>();
+    
     {
 		try{
-	    	  InternetAddress[] distributionList = InternetAddress.parse("massOne@gmail.com,massTwo@gmail.com,massThree@gmail.com",false);
-		      String from = "elderhome@gmail.com";
-		      Properties properties = System.getProperties();
-		      properties.setProperty("mail.smtp.host", "localhost");
-		      properties.put("mail.smtp.port", "25");
+			String to = emailList;
+			String from = "elderhome@gmail.com";
+			Properties properties = System.getProperties();
+			properties.setProperty("mail.smtp.host", "localhost");
+			properties.put("mail.smtp.port", "25");
 
-		      Session session = Session.getDefaultInstance(properties);
+			Session session = Session.getDefaultInstance(properties);
 
-	         MimeMessage message = new MimeMessage(session);
+			MimeMessage message = new MimeMessage(session);
 
 	         
-	         message.setFrom(new InternetAddress(from));
-	         message.setRecipients(Message.RecipientType.TO, distributionList);
-	         message.setSubject(ft.format(dNow) +" Report: ELDER NAME");
+			message.setFrom(new InternetAddress(from));
+			message.addRecipient(Message.RecipientType.TO,
+	                                        new InternetAddress(to));
+			message.setSubject(ft.format(dNow) +" Report: ELDER NAME");
 
-	         BodyPart messageBodyPart = new MimeBodyPart();
-	         Multipart multipart = new MimeMultipart();
+			BodyPart messageBodyPart = new MimeBodyPart();
+			Multipart multipart = new MimeMultipart();
 
-	         messageBodyPart.setText
-	         	("Dear Family of NAME,"
-	         			+ "\n"
-	         			+ "\nPlease find attached NAME's report for " +ft.format(dNow) +"."
-	         			+ "\n"
-	         			+ "\nThank you."
-	         			+ "\n"
-	         			+ "\nRegards,"
-	         			+ "\nElder Home Name");
+			messageBodyPart.setText
+			("Dear Family of NAME,"
+					+ "\n"
+					+ "\nPlease find attached NAME's report for " +ft.format(dNow) +"."
+					+ "\n"
+					+ "\nThank you."
+					+ "\n"
+					+ "\nRegards,"
+					+ "\nElder Home Name");
 	         multipart.addBodyPart(messageBodyPart);
    
 	         messageBodyPart = new MimeBodyPart();

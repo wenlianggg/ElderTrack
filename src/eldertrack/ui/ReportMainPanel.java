@@ -1,71 +1,47 @@
 package eldertrack.ui;
 
-
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Properties;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.itextpdf.text.Chapter;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Section;
-import com.itextpdf.text.pdf.CMYKColor;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-
-import javax.swing.JTextField;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.swing.JButton;
-
 import eldertrack.db.SQLObject;
-import eldertrack.diet.*;
-import eldertrack.management.ElderlyTableHelper;
+import eldertrack.medical.CheckUpObject;
 import eldertrack.misc.TableHelper;
 import eldertrack.report.CreatePdf;
+import eldertrack.report.MedicalData;
 import eldertrack.report.SendEmails;
-
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.awt.event.ActionEvent;
-import javax.swing.JSeparator;
-
-import java.awt.CardLayout;
-import java.awt.Color;
-import javax.swing.border.LineBorder;
-import javax.swing.JTextArea;
 
 public class ReportMainPanel extends JPanel {
 	private static SQLObject so = new SQLObject();
@@ -86,37 +62,18 @@ public class ReportMainPanel extends JPanel {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 
-	/*	JScrollPane tableScrollPane = new JScrollPane(elderDataTable);
+		JScrollPane tableScrollPane = new JScrollPane(elderDataTable);
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 130, 283, 529);
 		add(tableScrollPane);
 
 		DefaultTableModel allEldersData;
-		try {
-			allEldersData = ElderlyTableHelper.getElderlyFromQuery("");
-			elderDataTable = new JTable(allEldersData);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		elderDataTable.getColumnModel().getColumn(0).setPreferredWidth(36);
-		tableScrollPane.setViewportView(elderDataTable);*/
-		
-		
-		
-		JScrollPane tableScrollPane = new JScrollPane(elderDataTable);
-		tableScrollPane.setViewportBorder(null);
-		tableScrollPane.setBounds(10, 130, 283, 529);
-		add(tableScrollPane);
-		DefaultTableModel allEldersData = TableHelper.getElderlyBasic("");
+		allEldersData = TableHelper.getElderlyBasic("");
 		elderDataTable = new JTable(allEldersData);
-		elderDataTable.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent evt) {
-		    	presentData(elderDataTable.getValueAt(elderDataTable.getSelectedRow(), 0).toString());
-		    }
-		});
 		elderDataTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 		tableScrollPane.setViewportView(elderDataTable);
+		
+		MedicalData elderList = new MedicalData();
 		
 		lblReportLabel = new JLabel("ElderTrack Report Generation");
 		lblReportLabel.setForeground(SystemColor.textHighlight);
@@ -161,49 +118,49 @@ public class ReportMainPanel extends JPanel {
 		add(lblOverview);
 		
 		//
-		JLabel lblElderName = new JLabel("Elderly Name: ");
-		lblElderName.setForeground(new Color(0, 128, 128));
-		lblElderName.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		lblElderName.setBounds(10, 11, 156, 37);
-		panel.add(lblElderName);
+		JLabel lblName = new JLabel("Elderly Name: ");
+		lblName.setForeground(new Color(0, 128, 128));
+		lblName.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		lblName.setBounds(10, 11, 156, 37);
+		panel.add(lblName);
 		
-		JLabel name = new JLabel("");
-		name.setForeground(new Color(0, 128, 128));
-		name.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		name.setBounds(163, 11, 219, 37);
-		panel.add(name);
+		JLabel lblInfoName = new JLabel("");
+		lblInfoName.setForeground(new Color(0, 128, 128));
+		lblInfoName.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		lblInfoName.setBounds(163, 11, 219, 37);
+		panel.add(lblInfoName);
 		//
-		JLabel lblElderId = new JLabel("ElderID: ");
-		lblElderId.setBounds(10, 55, 55, 14);
-		panel.add(lblElderId);
+		JLabel lblId = new JLabel("ElderID: ");
+		lblId.setBounds(10, 55, 55, 14);
+		panel.add(lblId);
 		
-		JLabel id = new JLabel("");
-		id.setBounds(59, 54, 257, 16);
-		panel.add(id);
+		JLabel lblElderid = new JLabel("");
+		lblElderid.setBounds(59, 54, 257, 16);
+		panel.add(lblElderid);
 		//
-		JLabel lblElderAge = new JLabel("Age: ");
-		lblElderAge.setBounds(10, 95, 31, 14);
+		JLabel lblAge = new JLabel("Age: ");
+		lblAge.setBounds(10, 95, 31, 14);
+		panel.add(lblAge);
+		
+		JLabel lblElderAge = new JLabel("");
+		lblElderAge.setBounds(42, 94, 257, 16);
 		panel.add(lblElderAge);
-		
-		JLabel age = new JLabel("");
-		age.setBounds(42, 94, 257, 16);
-		panel.add(age);
 		//
 		JLabel lblRmNum = new JLabel("Room Number: ");
 		lblRmNum.setBounds(10, 75, 96, 14);
 		panel.add(lblRmNum);
 		
-		JLabel rmNum = new JLabel("");
-		rmNum.setBounds(102, 75, 257, 16);
-		panel.add(rmNum);
+		JLabel lblRoomNumber = new JLabel("");
+		lblRoomNumber.setBounds(102, 75, 257, 16);
+		panel.add(lblRoomNumber);
 		//
 		JLabel lblNric = new JLabel("NRIC: ");
 		lblNric.setBounds(10, 115, 37, 14);
 		panel.add(lblNric);
 		
-		JLabel nric = new JLabel("");
-		nric.setBounds(52, 114, 257, 16);
-		panel.add(nric);
+		JLabel lblNRIC = new JLabel("");
+		lblNRIC.setBounds(52, 114, 257, 16);
+		panel.add(lblNRIC);
 		//
 		JSeparator separator = new JSeparator();
 		separator.setBounds(3, 139, 659, 3);
@@ -218,7 +175,7 @@ public class ReportMainPanel extends JPanel {
 		JLabel lblMedicalHistoryaverage = new JLabel("Medical History (Average of past month)");
 		lblMedicalHistoryaverage.setForeground(new Color(0, 128, 128));
 		lblMedicalHistoryaverage.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblMedicalHistoryaverage.setBounds(10, 171, 358, 29);
+		lblMedicalHistoryaverage.setBounds(10, 171, 285, 29);
 		panel.add(lblMedicalHistoryaverage);
 		
 		JLabel lblTemperature = new JLabel("Temperature:");
@@ -238,16 +195,16 @@ public class ReportMainPanel extends JPanel {
 		panel.add(lblSugarLevel);
 		
 		JLabel lblEyeInfect = new JLabel("Eye Infection: ");
-		lblEyeInfect.setBounds(10, 283, 96, 14);
+		lblEyeInfect.setBounds(10, 347, 96, 14);
 		panel.add(lblEyeInfect);
 		
 		JLabel lblEarInfect = new JLabel("Ear Infection: ");
-		lblEarInfect.setBounds(10, 303, 96, 14);
+		lblEarInfect.setBounds(10, 367, 96, 14);
 		panel.add(lblEarInfect);
 		
 		JTextArea txtrTemp = new JTextArea();
+		txtrTemp.setText("");
 		txtrTemp.setEditable(false);
-		txtrTemp.setText("-");
 		txtrTemp.setWrapStyleWord(true);
 		txtrTemp.setLineWrap(true);
 		txtrTemp.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -256,9 +213,9 @@ public class ReportMainPanel extends JPanel {
 		panel.add(txtrTemp);
 		
 		JTextArea txtrBP = new JTextArea();
+		txtrBP.setText("");
 		txtrBP.setEditable(false);
 		txtrBP.setWrapStyleWord(true);
-		txtrBP.setText("-");
 		txtrBP.setLineWrap(true);
 		txtrBP.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtrBP.setBackground(SystemColor.menu);
@@ -266,9 +223,9 @@ public class ReportMainPanel extends JPanel {
 		panel.add(txtrBP);
 		
 		JTextArea txtrHeartRate = new JTextArea();
+		txtrHeartRate.setText("");
 		txtrHeartRate.setEditable(false);
 		txtrHeartRate.setWrapStyleWord(true);
-		txtrHeartRate.setText("-");
 		txtrHeartRate.setLineWrap(true);
 		txtrHeartRate.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtrHeartRate.setBackground(SystemColor.menu);
@@ -276,8 +233,8 @@ public class ReportMainPanel extends JPanel {
 		panel.add(txtrHeartRate);		
 		
 		JTextArea txtrSugarLevel = new JTextArea();
+		txtrSugarLevel.setText("");
 		txtrSugarLevel.setWrapStyleWord(true);
-		txtrSugarLevel.setText("-");
 		txtrSugarLevel.setLineWrap(true);
 		txtrSugarLevel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtrSugarLevel.setEditable(false);
@@ -286,23 +243,23 @@ public class ReportMainPanel extends JPanel {
 		panel.add(txtrSugarLevel);
 		
 		JTextArea txtrEye = new JTextArea();
+		txtrEye.setText("");
 		txtrEye.setWrapStyleWord(true);
-		txtrEye.setText("-");
 		txtrEye.setLineWrap(true);
 		txtrEye.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtrEye.setEditable(false);
 		txtrEye.setBackground(SystemColor.menu);
-		txtrEye.setBounds(121, 279, 178, 18);
+		txtrEye.setBounds(121, 343, 178, 18);
 		panel.add(txtrEye);
 		
 		JTextArea txtrEar = new JTextArea();
+		txtrEar.setText("");
 		txtrEar.setWrapStyleWord(true);
-		txtrEar.setText("-");
 		txtrEar.setLineWrap(true);
 		txtrEar.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtrEar.setEditable(false);
 		txtrEar.setBackground(SystemColor.menu);
-		txtrEar.setBounds(121, 299, 178, 18);
+		txtrEar.setBounds(121, 363, 178, 18);
 		panel.add(txtrEar);
 		
 		JLabel lblComments = new JLabel("Comments (if any):");
@@ -312,9 +269,9 @@ public class ReportMainPanel extends JPanel {
 		panel.add(lblComments);
 		
 		JTextArea txtrComment1 = new JTextArea();
+		txtrComment1.setText("");
 		txtrComment1.setEditable(false);
 		txtrComment1.setWrapStyleWord(true);
-		txtrComment1.setText("-");
 		txtrComment1.setLineWrap(true);
 		txtrComment1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtrComment1.setBackground(SystemColor.menu);
@@ -322,9 +279,9 @@ public class ReportMainPanel extends JPanel {
 		panel.add(txtrComment1);
 		
 		JTextArea txtComment2 = new JTextArea();
+		txtComment2.setText("");
 		txtComment2.setEditable(false);
 		txtComment2.setWrapStyleWord(true);
-		txtComment2.setText("-");
 		txtComment2.setLineWrap(true);
 		txtComment2.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtComment2.setBackground(SystemColor.menu);
@@ -337,13 +294,13 @@ public class ReportMainPanel extends JPanel {
 		txtrComment3.setBackground(SystemColor.menu);
 		txtrComment3.setWrapStyleWord(true);
 		txtrComment3.setLineWrap(true);
-		txtrComment3.setText("-");
+		txtrComment3.setText("");
 		txtrComment3.setBounds(343, 242, 257, 18);
 		panel.add(txtrComment3);
 		
 		JTextArea txtrComment4 = new JTextArea();
 		txtrComment4.setWrapStyleWord(true);
-		txtrComment4.setText("-");
+		txtrComment4.setText("");
 		txtrComment4.setLineWrap(true);
 		txtrComment4.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtrComment4.setEditable(false);
@@ -358,7 +315,7 @@ public class ReportMainPanel extends JPanel {
 		panel.add(lblAdditionalComments);
 		
 		JTextArea txtrAddComment = new JTextArea();
-		txtrAddComment.setText("NIL");
+		txtrAddComment.setText("");
 		txtrAddComment.setBackground(SystemColor.text);
 		txtrAddComment.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtrAddComment.setLineWrap(true);
@@ -375,13 +332,19 @@ public class ReportMainPanel extends JPanel {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Save changes?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
 					
-                	String addComments = txtrAddComment.getText();
 // -------------------->
 					ArrayList<String> comments = new ArrayList<String>();
-					int index = Integer.parseInt(id.getText());
-					comments.add(index, addComments);
+					for (int i=0; i<elderList.size(); i++){
+						comments.add("");
+					}
+					
+					int index = Integer.parseInt(lblElderid.getText());
+					// delete indexed null entry
+					comments.add(index-1, txtrAddComment.getText());
 
                 	JOptionPane.showMessageDialog(null, "Changes saved.");
+                	txtrAddComment.setText("");
+                	
                 }
 			}
 		});
@@ -394,6 +357,7 @@ public class ReportMainPanel extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Discard changes?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
+                	txtrAddComment.setText("");
                 	JOptionPane.showMessageDialog(null, "Changes discarded.");
                 }
 			}
@@ -412,10 +376,13 @@ public class ReportMainPanel extends JPanel {
                 		JOptionPane.showMessageDialog(null, "Reports have already been sent.");
                 	}
                 	else {
+                		
                 		@SuppressWarnings("unused")
-						CreatePdf pdfs = new CreatePdf();
+                		CreatePdf pdfs = new CreatePdf();
                 		@SuppressWarnings("unused")
-						SendEmails emails = new SendEmails();                	
+                		SendEmails emails = new SendEmails();   
+                    	
+                		             	
                     	JOptionPane.showMessageDialog(null, "Reports sent.");
                 	}
                 }
@@ -448,33 +415,31 @@ public class ReportMainPanel extends JPanel {
 				
 				while(rs.next()){
 					String add1 = rs.getString("id");
-					id.setText(add1);
+					lblElderid.setText(add1);
 					
 					String add2 = rs.getString("name");
-					name.setText(add2);
-					
-					String add3 = rs.getString("age");
-					age.setText(add3);
+					lblInfoName.setText(add2);
+							
+					Date dob = rs.getDate("dob");
+					LocalDate doblocaldate = LocalDateTime.ofInstant
+						(Instant.ofEpochMilli(dob.getTime()), ZoneId.systemDefault()).toLocalDate();
+					Integer age = (int) doblocaldate.until(LocalDate.now(), ChronoUnit.YEARS);
+					String add3 = Integer.toString(age);
+					lblElderAge.setText(add3);
 					
 					String add4 = rs.getString("room");
-					rmNum.setText(add4);
+					lblRoomNumber.setText(add4);
 					
 					String add5 = rs.getString("nric");
-					nric.setText(add5);
-				}
-				
-			}catch(Exception e1){
-				JOptionPane.showMessageDialog(null, e1);
+					lblNRIC.setText(add5);
+					}
+				}catch(Exception e1){
+					JOptionPane.showMessageDialog(null, e1);
 				}
 			}
 		});
 	}
+}
 /////////////////////////////////////////
-		
-	/*	ArrayList<String> elderList = new ArrayList<String>();
-		for (int i=0; i<elderList.size(); i++){
-			
-		}		
-		ArrayList<String> pdfFiles = new ArrayList<String>(); */
-		
-};
+	
+	
