@@ -151,7 +151,7 @@ public class MedCheckPanel extends JPanel {
 		add(lblBlood);
 		lblBlood.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 
-	    JFormattedTextField  BloodField= new JFormattedTextField (formatter);
+	    JFormattedTextField  BloodField= new JFormattedTextField (doubleformat);
 		BloodField.setColumns(10);
 		BloodField.setBounds(260, 331, 61, 25);
 		add(BloodField);
@@ -161,7 +161,7 @@ public class MedCheckPanel extends JPanel {
 		lblHeartRate.setBounds(120, 366, 130, 30);
 		add(lblHeartRate);
 
-		JFormattedTextField HeartField = new JFormattedTextField(doubleformat);
+		JFormattedTextField HeartField = new JFormattedTextField(formatter);
 		HeartField.setBounds(260, 373, 61, 25);
 		HeartField.setColumns(10);
 		add(HeartField);
@@ -354,9 +354,9 @@ public class MedCheckPanel extends JPanel {
 						try {
 							CheckUpObject checkElder=new CheckUpObject();
 							checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-							checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+							checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
 							checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-							checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+							checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
 							if(comboEye.getSelectedItem().toString().equals("Yes")){
 								checkElder.setElderEye(true);
 							}

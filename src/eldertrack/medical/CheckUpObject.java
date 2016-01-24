@@ -20,9 +20,9 @@ public class CheckUpObject  implements Serializable {
 	 */
 	private static final long serialVersionUID = -4101958710431937395L;
 	private double elderTemp;
-	private int elderBlood;
+	private double elderBlood;
 	private int elderHeart;
-	private int elderSugar;
+	private double elderSugar;
 	private boolean elderEye =false;
 	private boolean elderEar =false;
 	private String elderDate;
@@ -40,10 +40,10 @@ public class CheckUpObject  implements Serializable {
 
 	}
 
-	public int getElderSugar() {
+	public double getElderSugar() {
 		return elderSugar;
 	}
-	public void setElderSugar(int elderSugar) {
+	public void setElderSugar(double elderSugar) {
 		this.elderSugar = elderSugar;
 	}
 	public double getElderTemp() {
@@ -52,10 +52,10 @@ public class CheckUpObject  implements Serializable {
 	public void setElderTemp(double elderTemp) {
 		this.elderTemp = elderTemp;
 	}
-	public int getElderBlood() {
+	public double getElderBlood() {
 		return elderBlood;
 	}
-	public void setElderBlood(int elderBlood) {
+	public void setElderBlood(double elderBlood) {
 		this.elderBlood = elderBlood;
 	}
 	public int getElderHeart() {
