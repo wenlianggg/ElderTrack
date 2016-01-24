@@ -29,9 +29,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 
 public class MedManagePanel extends JPanel {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1318196195924759182L;
 	private JTable eldertable;
 	private JTextField ElderIDField;
@@ -40,6 +37,8 @@ public class MedManagePanel extends JPanel {
 	private JTextField GenderField;
 	private JTextPane summaryPane;
 	
+	private DefaultTableModel allEldersData;
+	private JScrollPane elderDataPane;
 	
 	private JTable MorningTable;
 	private JTable AfterNoonTable;
@@ -50,9 +49,7 @@ public class MedManagePanel extends JPanel {
 	private DefaultTableModel Noonmodel;
 	
 	private JTextField SearchField;
-	/**
-	 * Create the panel.
-	 */
+	
 	public MedManagePanel() {
 		setLayout(null);
 
@@ -62,8 +59,7 @@ public class MedManagePanel extends JPanel {
 		lblNewLabel.setBounds(25, 25, 300, 41);
 		add(lblNewLabel);
 
-		eldertable = new JTable();
-		DefaultTableModel allEldersData;
+
 		try {
 			allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
 			eldertable = new JTable(allEldersData);
@@ -71,12 +67,7 @@ public class MedManagePanel extends JPanel {
 			e.printStackTrace();
 		}
 		
-		eldertable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		eldertable.getColumnModel().getColumn(0).setPreferredWidth(20);
-		eldertable.getColumnModel().getColumn(2).setPreferredWidth(60);
-		eldertable.getColumnModel().getColumn(3).setPreferredWidth(50);
-		eldertable.getColumnModel().getColumn(5).setPreferredWidth(90);
-		JScrollPane elderDataPane = new JScrollPane(eldertable);
+		elderDataPane = new JScrollPane(DosageObject.managementTableModel(eldertable));
 		elderDataPane.setBounds(25, 126, 469, 504);
 		add(elderDataPane);
 		eldertable.addMouseListener(new MouseAdapter() {
@@ -292,7 +283,6 @@ public class MedManagePanel extends JPanel {
 		btnRemoveAfternoon.setBounds(880, 382, 89, 20);
 		add(btnRemoveAfternoon);
 		
-		
 		Noonmodel=new DefaultTableModel(
 				new Object[][] {
 				},
@@ -348,7 +338,6 @@ public class MedManagePanel extends JPanel {
 		JButton btnSaveChange = new JButton("SAVE CHANGES");
 		btnSaveChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				if(Morningmodel.getRowCount()!=0){
 					DosageObject.updateProcessTable(MorningTable);
 					DosageObject.setTableManage("morning", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(MorningTable), 0);
@@ -367,10 +356,23 @@ public class MedManagePanel extends JPanel {
 					DosageObject.updateProcessTable(NoonTable);
 					DosageObject.setTableManage("noon", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(NoonTable), 1);
 				}
+			
 				
+			
+				try {
+					allEldersData=new DefaultTableModel();
+					allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
+					eldertable = new JTable(allEldersData);
+					elderDataPane=new JScrollPane();
+					elderDataPane = new JScrollPane(DosageObject.managementTableModel(eldertable));
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				JOptionPane.showMessageDialog(null, "Changes has been saved!");
 			}
 		});
-		btnSaveChange.setBounds(861, 607, 107, 23);
+		btnSaveChange.setBounds(828, 607, 140, 23);
 		add(btnSaveChange);
 		
 		

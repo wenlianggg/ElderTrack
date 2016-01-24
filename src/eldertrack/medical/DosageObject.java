@@ -62,6 +62,15 @@ private String MedDosage;
 		System.out.println("Dos: "+getMedDosage());
 	}
 	
+	public static JTable managementTableModel(JTable MainTable ){
+		MainTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		MainTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+		MainTable.getColumnModel().getColumn(2).setPreferredWidth(60);
+		MainTable.getColumnModel().getColumn(3).setPreferredWidth(50);
+		MainTable.getColumnModel().getColumn(5).setPreferredWidth(90);
+		return MainTable;
+	}
+	
 	
 	public static Boolean checkDosageNeeded(ElderData summaryData){
 		if(summaryData.getElderNumDosageNeeded()==0){
