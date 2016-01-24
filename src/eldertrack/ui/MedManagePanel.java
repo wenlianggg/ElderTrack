@@ -30,6 +30,7 @@ import javax.swing.JTextPane;
 
 public class MedManagePanel extends JPanel {
 	private static final long serialVersionUID = -1318196195924759182L;
+	private SQLObject so=new SQLObject();
 	private JTable eldertable;
 	private JTextField ElderIDField;
 	private JTextField NameField;
@@ -74,7 +75,6 @@ public class MedManagePanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try{
-					SQLObject so=new SQLObject();
 					int row = eldertable.getSelectedRow();
 					String table_clicked = (eldertable.getModel().getValueAt(row, 0).toString());
 					String sql = "SELECT * FROM et_elderly WHERE id=?";
@@ -338,6 +338,10 @@ public class MedManagePanel extends JPanel {
 		JButton btnSaveChange = new JButton("SAVE CHANGES");
 		btnSaveChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				ElderData.UpdateDosageSummary(so, summaryPane.getText(), Integer.parseInt(ElderIDField.getText()));
+				
+				
 				if(Morningmodel.getRowCount()!=0){
 					DosageObject.updateProcessTable(MorningTable);
 					DosageObject.setTableManage("morning", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(MorningTable), 0);
@@ -357,14 +361,10 @@ public class MedManagePanel extends JPanel {
 					DosageObject.setTableManage("noon", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(NoonTable), 1);
 				}
 			
-				
-			
 				try {
-					allEldersData=new DefaultTableModel();
 					allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
-					eldertable = new JTable(allEldersData);
-					elderDataPane=new JScrollPane();
-					elderDataPane = new JScrollPane(DosageObject.managementTableModel(eldertable));
+					eldertable.setModel(allEldersData);
+					DosageObject.managementTableModel(eldertable);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

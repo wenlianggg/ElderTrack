@@ -88,7 +88,7 @@ public class MedDosageSearchPanel extends JPanel {
 		
 		roomcombobox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				summaryDetails=ElderData.updatesummary(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so);
+				summaryDetails=ElderData.UpdateOverview(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so);
 				if(summaryDetails!=null){
 				txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryDetails.getElderNumMale() 
 				+"\r\nTotal Female elderly:" +summaryDetails.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+summaryDetails.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+summaryDetails.getElderNumDosageNotNeeded());
@@ -113,7 +113,7 @@ public class MedDosageSearchPanel extends JPanel {
 		add(timeCombobox);
 		timeCombobox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				summaryDetails=ElderData.updatesummary(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so);
+				summaryDetails=ElderData.UpdateOverview(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so);
 				txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryDetails.getElderNumMale() 
 				+"\r\nTotal Female elderly:" +summaryDetails.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+summaryDetails.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+summaryDetails.getElderNumDosageNotNeeded());
 			}

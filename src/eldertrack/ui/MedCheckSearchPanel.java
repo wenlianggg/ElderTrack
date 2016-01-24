@@ -86,7 +86,7 @@ public class MedCheckSearchPanel extends JPanel {
 		
 		roomComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				summaryCheckDetails=ElderData.updatesummary(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so);
+				summaryCheckDetails=ElderData.UpdateOverview(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so);
 				if(summaryCheckDetails!=null){
 				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
 				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale());
@@ -113,7 +113,7 @@ public class MedCheckSearchPanel extends JPanel {
 
 		timeComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				summaryCheckDetails=ElderData.updatesummary(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so);
+				summaryCheckDetails=ElderData.UpdateOverview(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so);
 				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
 				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale());
 			}

@@ -144,13 +144,6 @@ public class ElderData{
 		this.elderNumDosageNotNeeded += elderNumDosageNotNeeded;
 	}
 	
-	public void printcheck(){
-		System.out.println("Elder Room Num: "+getElderRoomNumber());
-		System.out.println("Elder Num: "+getElderNum());
-		System.out.println("Elder Male: "+getElderNumMale());
-		System.out.println("Elder Female"+getElderNumFemale());
-	}
-	
 	public void print(){
 		System.out.println("ElderBed: "+getElderBed());
 		System.out.println("Name: "+getElderName());
@@ -158,6 +151,20 @@ public class ElderData{
 		System.out.println("Gender: "+getElderGender());
 
 	}
+	
+	public static void UpdateDosageSummary(SQLObject so,String dosageSummary,int id){
+		try {
+			PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET dosagesummary=? WHERE id=? ");
+			statement.setString(1, dosageSummary);
+			statement.setInt(2,id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 	public static String ManagementSummary(ArrayList<ElderData> manageSummary){
 		StringBuilder stringBuilder = new StringBuilder();
@@ -194,7 +201,7 @@ public class ElderData{
 	}
 	
 	
-	public static ElderData updatesummary(String roomNum,String time, SQLObject so ){
+	public static ElderData UpdateOverview(String roomNum,String time, SQLObject so ){
 		ResultSet rs;
 		if(!roomNum.equalsIgnoreCase(" ")){
 		ElderData summaryData = new ElderData();
@@ -265,6 +272,7 @@ public class ElderData{
 			dataInfo.setElderName(rs.getString("name"));
 			dataInfo.setElderAge(ElderData.getAge(year,month,day));
 			dataInfo.setElderGender(rs.getString("gender"));
+			dataInfo.setElderDosageSummary(rs.getString("dosagesummary"));
 		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
