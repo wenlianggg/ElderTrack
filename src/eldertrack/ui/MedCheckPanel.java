@@ -433,6 +433,7 @@ public class MedCheckPanel extends JPanel {
 
 
 	}
+	
 	public void DisplayInformation(ArrayList<ElderData> DosageList,ArrayList<String> commentsList, int counter){
 		BedField.setText(Integer.toString(DosageList.get(counter).getElderBed()));
 		NameField.setText(DosageList.get(counter).getElderName());

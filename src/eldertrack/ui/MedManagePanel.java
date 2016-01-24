@@ -13,7 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
-import eldertrack.medical.DosageObject;
 import eldertrack.medical.DosageTableHelper;
 import eldertrack.medical.ElderData;
 
@@ -25,7 +24,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 
@@ -44,15 +42,6 @@ public class MedManagePanel extends JPanel {
 	private JTable AfterNoonTable;
 	private JTable NoonTable;
 	private JTextField SearchField;
-
-	private DefaultTableModel Morningmodel;
-	private DefaultTableModel Afternoonmodel;
-	private DefaultTableModel Noonmodel;
-	private DefaultTableModel allEldersData;
-
-	private boolean morningchange;
-	private boolean afternoonchange;
-	private boolean noonchange;
 	/**
 	 * Create the panel.
 	 */
@@ -66,13 +55,14 @@ public class MedManagePanel extends JPanel {
 		add(lblNewLabel);
 
 		eldertable = new JTable();
+		DefaultTableModel allEldersData;
 		try {
 			allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
 			eldertable = new JTable(allEldersData);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		eldertable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		eldertable.getColumnModel().getColumn(0).setPreferredWidth(20);
 		eldertable.getColumnModel().getColumn(2).setPreferredWidth(60);
@@ -89,9 +79,9 @@ public class MedManagePanel extends JPanel {
 					int row = eldertable.getSelectedRow();
 					String table_clicked = (eldertable.getModel().getValueAt(row, 0).toString());
 					String sql = "SELECT * FROM et_elderly WHERE id=?";
-
+					
 					ResultSet rs = so.getResultSet(sql, table_clicked);
-
+					
 					while(rs.next()){
 						ElderIDField.setText(Integer.toString(rs.getInt("id")));
 						NameField.setText(rs.getString("name"));
@@ -105,35 +95,47 @@ public class MedManagePanel extends JPanel {
 						AgeField.setText(Integer.toString(ElderData.getAge(year, month, day)));
 						summaryPane.setText(rs.getString("dosagesummary"));
 						if(rs.getBlob("morningdosage")!=null){
-							Morningmodel=DosageTableHelper.getElderlyFromQueryManagementDos("morning",rs.getString("name"));
-							MorningTable.setModel(Morningmodel);
+							MorningTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("morning",rs.getString("name")));
 						}
 						else{
-							Morningmodel=DosageObject.buildDefaultManageModel();
-							MorningTable.setModel(Morningmodel);;
+							MorningTable.setModel(new DefaultTableModel(
+									new Object[][] {
+									},
+									new String[] {
+											"Description", "Prescription", "Medication Type","Dosage"
+									}
+									));
 						}
 						if(rs.getBlob("afternoondosage")!=null){
-							Afternoonmodel=DosageTableHelper.getElderlyFromQueryManagementDos("afternoon",rs.getString("name"));
-							AfterNoonTable.setModel(Afternoonmodel);
+							AfterNoonTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("afternoon",rs.getString("name")));
 						}
 						else{
-							Afternoonmodel=DosageObject.buildDefaultManageModel();
-							AfterNoonTable.setModel(Afternoonmodel);;
+							AfterNoonTable.setModel(new DefaultTableModel(
+									new Object[][] {
+									},
+									new String[] {
+											"Description", "Prescription", "Medication Type","Dosage"
+									}
+									));
 						}
 						if(rs.getBlob("noondosage") !=null){
-							Noonmodel=DosageTableHelper.getElderlyFromQueryManagementDos("noon",rs.getString("name"));
-							NoonTable.setModel(Noonmodel);
+							NoonTable.setModel(DosageTableHelper.getElderlyFromQueryManagementDos("noon",rs.getString("name")));
 						}
 						else{
-							Noonmodel=DosageObject.buildDefaultManageModel();
-							NoonTable.setModel(Noonmodel);;
+							NoonTable.setModel(new DefaultTableModel(
+									new Object[][] {
+									},
+									new String[] {
+											"Description", "Prescription", "Medication Type","Dosage"
+									}
+									));
 						}
-
+						
 					}
 				}catch(Exception e1){
 					JOptionPane.showMessageDialog(null, e1);
 				}
-
+			
 			}
 		});
 
@@ -216,109 +218,70 @@ public class MedManagePanel extends JPanel {
 		lblNoon.setBounds(525, 486, 80, 20);
 		add(lblNoon);
 
-		// Morning
-		Morningmodel=DosageObject.buildDefaultManageModel();
-		MorningTable = new JTable(Morningmodel);
-
+		MorningTable = new JTable();
+		MorningTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"Description", "Prescription", "Medication Type","Dosage"
+				}
+				));
 
 		JScrollPane MorningPane = new JScrollPane(MorningTable);
 		MorningPane.setBounds(525, 291, 444, 86);
 		add(MorningPane);
 
-		JButton btnMorningAdd = new JButton("ADD");
-		btnMorningAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Morningmodel.addRow(new Object [][] {{null, null,null}});
-				Morningmodel.setValueAt(null,MorningTable.getRowCount()-1,0);
-				morningchange=true;
-			}
-		});
-		btnMorningAdd.setBounds(781, 272, 89, 20);
-		add(btnMorningAdd);
+		AfterNoonTable = new JTable();
+		AfterNoonTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"Description", "Prescription", "Medication Type","Dosage"
+				}
+				));
+
+		JScrollPane AfterNoonPane = new JScrollPane(AfterNoonTable);
+		AfterNoonPane.setBounds(525, 400, 444, 86);
+		add(AfterNoonPane);
+
+		NoonTable = new JTable();
+		NoonTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"Description", "Prescription", "Medication Type","Dosage"
+				}
+				));
+
+		JScrollPane NoonPane = new JScrollPane(NoonTable);
+		NoonPane.setBounds(525, 508, 444, 86);
+		add(NoonPane);
 
 		JButton btnRemoveMorning = new JButton("REMOVE");
 		btnRemoveMorning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(MorningTable.getSelectedRow()<0){
-					JOptionPane.showMessageDialog(null,"Select morning dosage to remove");
-				}
-				else{
-					Morningmodel.removeRow(MorningTable.getSelectedRow());
-				}
-				morningchange=true;
+				
+				
 			}
 		});
 		btnRemoveMorning.setBounds(880, 272, 89, 20);
 		add(btnRemoveMorning);
 
-		// Afternoon
-		Afternoonmodel=DosageObject.buildDefaultManageModel();
-		AfterNoonTable = new JTable(Afternoonmodel);
-		JScrollPane AfterNoonPane = new JScrollPane(AfterNoonTable);
-		AfterNoonPane.setBounds(525, 400, 444, 86);
-		add(AfterNoonPane);
-
-		JButton btnAfternoonAdd = new JButton("ADD");
-		btnAfternoonAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Afternoonmodel.addRow(new Object [][] {{null, null,null}});
-				Afternoonmodel.setValueAt(null,AfterNoonTable.getRowCount()-1,0);
-				afternoonchange=true;
-			}
-		});
-		btnAfternoonAdd.setBounds(781, 382, 89, 20);
-		add(btnAfternoonAdd);
-
 		JButton btnRemoveAfternoon = new JButton("REMOVE");
 		btnRemoveAfternoon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(AfterNoonTable.getSelectedRow()<0){
-					JOptionPane.showMessageDialog(null,"Select afternoon dosage to remove");
-				}
-				else{
-					Afternoonmodel.removeRow(AfterNoonTable.getSelectedRow());
-				}
-				afternoonchange=true;
 			}
 		});
 		btnRemoveAfternoon.setBounds(880, 382, 89, 20);
 		add(btnRemoveAfternoon);
 
-		// Noon
-		Noonmodel=DosageObject.buildDefaultManageModel();
-		NoonTable = new JTable(Noonmodel);
-		JScrollPane NoonPane = new JScrollPane(NoonTable);
-		NoonPane.setBounds(525, 508, 444, 86);
-		add(NoonPane);
-
-		JButton btnNoonAdd = new JButton("ADD");
-		btnNoonAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Noonmodel.addRow(new Object [][] {{null, null,null}});
-				Noonmodel.setValueAt(null,NoonTable.getRowCount()-1,0);
-				noonchange=true;
-			}
-		});
-		btnNoonAdd.setBounds(781, 489, 89, 20);
-		add(btnNoonAdd);
-
 		JButton btnRemoveNoon = new JButton("REMOVE");
 		btnRemoveNoon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(NoonTable.getSelectedRow()<0){
-					JOptionPane.showMessageDialog(null,"Select noon dosage to remove");
-				}
-				else{
-					Noonmodel.removeRow(NoonTable.getSelectedRow());
-				}
-				noonchange=true;
 			}
 		});
 		btnRemoveNoon.setBounds(880, 489, 89, 20);
 		add(btnRemoveNoon);
-
-
-
 
 		JLabel lblSearch = new JLabel("SEARCH:");
 		lblSearch.setFont(new Font("Segoe UI", Font.PLAIN, 18));
@@ -330,60 +293,32 @@ public class MedManagePanel extends JPanel {
 		SearchField.setBounds(105, 90, 100, 25);
 		add(SearchField);
 		SearchField.setColumns(10);
-
+		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(213, 92, 89, 23);
 		add(btnSearch);
-
+		
 		JButton btnSaveChange = new JButton("SAVE CHANGES");
-		btnSaveChange.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(morningchange==true || afternoonchange==true || noonchange==true){
-
-					if(MorningTable.getRowCount()!=0){
-						ArrayList<DosageObject> morningUpdateList=DosageObject.updateProcessTable(MorningTable);
-						DosageObject.setTableManage("morning",Integer.parseInt(ElderIDField.getText()),morningUpdateList,0);
-					}
-					else{
-						DosageObject.setTableManage("morning",Integer.parseInt(ElderIDField.getText()),null,1);
-
-					}
-
-					if(AfterNoonTable.getRowCount()!=0){
-						ArrayList<DosageObject> afternoonUpdateList=DosageObject.updateProcessTable(AfterNoonTable);
-						DosageObject.setTableManage("afternoon",Integer.parseInt(ElderIDField.getText()),afternoonUpdateList,0);
-					}
-					else{
-						DosageObject.setTableManage("afternoon",Integer.parseInt(ElderIDField.getText()),null,1);
-					}
-
-					if(NoonTable.getRowCount()!=0){
-						ArrayList<DosageObject> noonUpdateList=DosageObject.updateProcessTable(NoonTable);
-						DosageObject.setTableManage("noon",Integer.parseInt(ElderIDField.getText()),noonUpdateList,0);
-					}
-					else{
-						DosageObject.setTableManage("noon",Integer.parseInt(ElderIDField.getText()),null,1);
-					}
-
-					try {
-						allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
-						eldertable.setModel(allEldersData);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-
-				}
-				else{
-					JOptionPane.showMessageDialog(null,"There were no changes");
-				}				
-			}
-		});
-		btnRemoveNoon.setBounds(880, 489, 89, 20);
-		add(btnRemoveNoon);
-		btnSaveChange.setBounds(840, 607, 128, 23);
+		btnSaveChange.setBounds(861, 607, 107, 23);
 		add(btnSaveChange);
+		
+		JButton btnAdd = new JButton("ADD");
+		btnAdd.setBounds(781, 272, 89, 20);
+		add(btnAdd);
+		
+		JButton btnAdd_1 = new JButton("ADD");
+		btnAdd_1.setBounds(781, 382, 89, 20);
+		add(btnAdd_1);
+		
+		JButton btnNewButton = new JButton("ADD");
+		btnNewButton.setBounds(781, 489, 89, 20);
+		add(btnNewButton);
+		
+		
+
+
+
+
 
 	}
 	public static void main(String[] args) {

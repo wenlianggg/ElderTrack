@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,113 +23,31 @@ public class MedManageSearchPanel extends JPanel {
 
 	private static final long serialVersionUID = 4090792694881415463L;
 	private static 	SQLObject so = new SQLObject();
-	private ElderData room101=new ElderData();
-	private ElderData room102=new ElderData();
-	private ElderData room103=new ElderData();
-	private ElderData room104=new ElderData();
-	private ElderData room105=new ElderData();
-	private ElderData room201=new ElderData();
-	private ElderData room202=new ElderData();
-	private ElderData room203=new ElderData();
 
 	public MedManageSearchPanel() {
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
-		ResultSet rs;
+
+		ArrayList<ElderData> manageSummary = new ArrayList<ElderData>();
+		ArrayList<Integer> roomNumberList=new ArrayList<Integer>();
 		try {
-			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly ");
-			rs = statement.executeQuery();
+			ResultSet rs;
+			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT distinct room FROM et_elderly ");
+			rs = statement2.executeQuery();
+
 			while(rs.next()){
-				String roomNum=rs.getString("room");
-				String roomGender=rs.getString("gender");
-
-				if(roomNum.equalsIgnoreCase("101")){
-					room101.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room101.setElderNumMale(1);
-					}
-					else{
-						room101.setElderNumFemale(1);
-					}
-
-
-				}
-				else if(roomNum.equalsIgnoreCase("102")){
-					room102.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room102.setElderNumMale(1);
-					}
-					else{
-						room102.setElderNumFemale(1);
-					}
-
-				}
-				else if(roomNum.equalsIgnoreCase("103")){
-					room103.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room103.setElderNumMale(1);
-					}
-					else{
-						room103.setElderNumFemale(1);
-					}
-
-				}
-				else if(roomNum.equalsIgnoreCase("104")){
-					room104.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room104.setElderNumMale(1);
-					}
-					else{
-						room104.setElderNumFemale(1);
-					}
-
-				}
-				else if(roomNum.equalsIgnoreCase("105")){
-					room105.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room105.setElderNumMale(1);
-					}
-					else{
-						room105.setElderNumFemale(1);
-					}
-
-				}
-				else if(roomNum.equalsIgnoreCase("201")){
-					room201.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room201.setElderNumMale(1);
-					}
-					else{
-						room201.setElderNumFemale(1);
-					}
-
-				}
-				else if(roomNum.equalsIgnoreCase("202")){
-					room202.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room202.setElderNumMale(1);
-					}
-					else{
-						room202.setElderNumFemale(1);
-					}
-
-				}
-				else if(roomNum.equalsIgnoreCase("203")){
-					room203.setElderNum(1);
-					if(roomGender.equalsIgnoreCase("m")){
-						room203.setElderNumMale(1);
-					}
-					else{
-						room203.setElderNumFemale(1);
-					}
-
-				}
+				roomNumberList.add(rs.getInt("room"));
 			}
 
-		} catch (SQLException e1) {
+		} catch (SQLException e2) {
 
-			e1.printStackTrace();
+			e2.printStackTrace();
 		}
+		
+		for(int i=0;i<roomNumberList.size();i++){
+			manageSummary.add(ElderData.updateManagementSummary(roomNumberList.get(i),so));
+		}
+		
 		JLabel lblManage = new JLabel("Dosage Management");
 		lblManage.setForeground(UIManager.getColor("TextField.selectionBackground"));
 		lblManage.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -144,33 +62,7 @@ public class MedManageSearchPanel extends JPanel {
 
 		JTextPane txtpnRoomNumber = new JTextPane();
 		txtpnRoomNumber.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtpnRoomNumber.setText(
-				"============================================================================="		
-						+"\r\nRoom Number: 101 \r\nTotal number of elderly:"+room101.getElderNum() 
-						+"\r\nTotal Male elderly: " +room101.getElderNumMale() +"\r\nTotal Female elderly:" +room101.getElderNumFemale()
-						+"\r\n============================================================================="	
-						+"\r\nRoom Number: 102 \r\nTotal number of elderly: "+room102.getElderNum() 
-						+"\r\nTotal Male elderly: " +room102.getElderNumMale() +"\r\nTotal Female elderly:" +room102.getElderNumFemale()
-						+"\r\n============================================================================="	
-						+"\r\nRoom Number: 103 \r\nTotal number of elderly: "+room103.getElderNum() 
-						+"\r\nTotal Male elderly: " +room103.getElderNumMale() +"\r\nTotal Female elderly:" +room103.getElderNumFemale()
-						+"\r\n============================================================================="	
-						+"\r\nRoom Number: 104 \r\nTotal number of elderly: "+room104.getElderNum() 
-						+"\r\nTotal Male elderly: " +room104.getElderNumMale() +"\r\nTotal Female elderly:" +room104.getElderNumFemale()		
-						+"\r\n============================================================================="	
-						+"\r\nRoom Number: 105 \r\nTotal number of elderly: "+room105.getElderNum() 
-						+"\r\nTotal Male elderly: " +room105.getElderNumMale() +"\r\nTotal Female elderly:" +room105.getElderNumFemale()	
-						+"\r\n============================================================================="	
-						+"\r\nRoom Number: 201 \r\nTotal number of elderly: "+room201.getElderNum() 
-						+"\r\nTotal Male elderly: " +room201.getElderNumMale() +"\r\nTotal Female elderly:" +room201.getElderNumFemale()	
-						+"\r\n============================================================================="	
-						+"\r\nRoom Number: 202 \r\nTotal number of elderly: "+room202.getElderNum() 
-						+"\r\nTotal Male elderly: " +room202.getElderNumMale() +"\r\nTotal Female elderly:" +room202.getElderNumFemale()
-						+"\r\n============================================================================="	
-						+"\r\nRoom Number: 203 \r\nTotal number of elderly: "+room203.getElderNum() 
-						+"\r\nTotal Male elderly: " +room203.getElderNumMale() +"\r\nTotal Female elderly:" +room203.getElderNumFemale()
-						+"\r\n============================================================================="	
-				);
+		txtpnRoomNumber.setText(ElderData.ManagementSummary(manageSummary));
 
 		JScrollPane txtpnScroll=new JScrollPane(txtpnRoomNumber);
 		txtpnScroll.setBounds(85, 145, 796, 226);
@@ -195,5 +87,4 @@ public class MedManageSearchPanel extends JPanel {
 
 
 	}
-
 }

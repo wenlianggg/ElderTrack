@@ -143,7 +143,14 @@ public class ElderData{
 	public void setElderNumDosageNotNeeded(int elderNumDosageNotNeeded) {
 		this.elderNumDosageNotNeeded += elderNumDosageNotNeeded;
 	}
-
+	
+	public void printcheck(){
+		System.out.println("Elder Room Num: "+getElderRoomNumber());
+		System.out.println("Elder Num: "+getElderNum());
+		System.out.println("Elder Male: "+getElderNumMale());
+		System.out.println("Elder Female"+getElderNumFemale());
+	}
+	
 	public void print(){
 		System.out.println("ElderBed: "+getElderBed());
 		System.out.println("Name: "+getElderName());
@@ -151,6 +158,41 @@ public class ElderData{
 		System.out.println("Gender: "+getElderGender());
 
 	}
+	
+	public static String ManagementSummary(ArrayList<ElderData> manageSummary){
+		StringBuilder stringBuilder = new StringBuilder();
+		for(int k=0;k<manageSummary.size();k++){	
+			stringBuilder.append("\r\n============================================================================ \r\nRoom Number: "+manageSummary.get(k).getElderRoomNumber() +"\r\nTotal number of elderly:"+manageSummary.get(k).getElderNum() 
+			+"\r\nTotal Male elderly: " +manageSummary.get(k).getElderNumMale() +"\r\nTotal Female elderly:" +manageSummary.get(k).getElderNumFemale());
+		}
+		String finalString=stringBuilder.toString();
+		return finalString;
+	}
+	public static ElderData updateManagementSummary(int roomNum,SQLObject so){
+		ElderData data=new ElderData();
+		try {
+			ResultSet rs;
+			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room=? ");
+			statement.setInt(1, roomNum);
+			rs = statement.executeQuery();
+			data.setElderRoomNumber(roomNum);
+			while(rs.next()){
+				String gender=rs.getString("gender");
+				data.setElderNum(1);
+				if(gender.equalsIgnoreCase("m")){
+					data.setElderNumMale(1);
+				}
+				else{
+					data.setElderNumFemale(1);
+				}
+			}		
+		} catch (SQLException e2) {
+
+			e2.printStackTrace();
+		}
+		return data;
+	}
+	
 	
 	public static ElderData updatesummary(String roomNum,String time, SQLObject so ){
 		ResultSet rs;
