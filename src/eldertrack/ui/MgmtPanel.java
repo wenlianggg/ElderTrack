@@ -7,7 +7,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import eldertrack.db.SQLObject;
 
@@ -17,11 +19,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -64,6 +71,150 @@ public class MgmtPanel extends JPanel {
 		
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
+		
+		JPanel staffManagementPanel = new JPanel();
+		staffManagementPanel.setBounds(625, 79, 350, 340);
+		add(staffManagementPanel);
+		staffManagementPanel.setVisible(false);
+		staffManagementPanel.setLayout(null);
+		
+		JLabel staffFirstName_1 = new JLabel("FIRST NAME");
+		staffFirstName_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffFirstName_1.setBounds(19, 60, 123, 25);
+		staffManagementPanel.add(staffFirstName_1);
+		
+		JLabel staffLastName_1 = new JLabel("LAST NAME");
+		staffLastName_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffLastName_1.setBounds(19, 90, 124, 25);
+		staffManagementPanel.add(staffLastName_1);
+		
+		JLabel staffId_1 = new JLabel("STAFF ID");
+		staffId_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffId_1.setBounds(19, 30, 123, 25);
+		staffManagementPanel.add(staffId_1);
+		
+		JLabel staffDob_1 = new JLabel("DOB");
+		staffDob_1.setBounds(19, 120, 109, 25);
+		staffManagementPanel.add(staffDob_1);
+		staffDob_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+		
+		JLabel label_12 = new JLabel(":");
+		label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_12.setBounds(152, 30, 23, 25);
+		staffManagementPanel.add(label_12);
+		
+		JLabel label_13 = new JLabel(":");
+		label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_13.setBounds(152, 60, 23, 25);
+		staffManagementPanel.add(label_13);
+		
+		JLabel label_14 = new JLabel(":");
+		label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_14.setBounds(152, 90, 23, 25);
+		staffManagementPanel.add(label_14);
+		
+		staffFirstNameValue = new JTextField();
+		staffFirstNameValue.setColumns(10);
+		staffFirstNameValue.setBounds(180, 60, 116, 22);
+		staffManagementPanel.add(staffFirstNameValue);
+		
+		JLabel label_22 = new JLabel(":");
+		label_22.setBounds(152, 120, 23, 25);
+		staffManagementPanel.add(label_22);
+		label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
+		
+		staffDobValue = new JTextField();
+		staffDobValue.setBounds(180, 120, 116, 22);
+		staffManagementPanel.add(staffDobValue);
+		staffDobValue.setColumns(10);
+		
+		staffLastNameValue = new JTextField();
+		staffLastNameValue.setColumns(10);
+		staffLastNameValue.setBounds(180, 90, 116, 22);
+		staffManagementPanel.add(staffLastNameValue);
+		
+		JLabel staffAge = new JLabel("AGE");
+		staffAge.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffAge.setBounds(19, 150, 109, 25);
+		staffManagementPanel.add(staffAge);
+		
+		JLabel label = new JLabel(":");
+		label.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label.setBounds(152, 150, 23, 25);
+		staffManagementPanel.add(label);
+		
+		JLabel staffAgeValue = new JLabel("");
+		staffAgeValue.setBounds(180, 150, 116, 22);
+		staffManagementPanel.add(staffAgeValue);
+		
+		JLabel staffNric_1 = new JLabel("NRIC");
+		staffNric_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffNric_1.setBounds(19, 180, 109, 25);
+		staffManagementPanel.add(staffNric_1);
+		
+		JLabel label_7 = new JLabel(":");
+		label_7.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_7.setBounds(152, 180, 23, 25);
+		staffManagementPanel.add(label_7);
+		
+		staffNricValue = new JTextField();
+		staffNricValue.setColumns(10);
+		staffNricValue.setBounds(180, 180, 116, 22);
+		staffManagementPanel.add(staffNricValue);
+		
+		JLabel staffIdValue = new JLabel("");
+		staffIdValue.setBounds(180, 30, 116, 22);
+		staffManagementPanel.add(staffIdValue);
+		
+		JLabel staffAccessLevel = new JLabel("ACCESS LVL");
+		staffAccessLevel.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffAccessLevel.setBounds(19, 210, 123, 25);
+		staffManagementPanel.add(staffAccessLevel);
+		
+		JLabel label_10 = new JLabel(":");
+		label_10.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_10.setBounds(152, 210, 23, 25);
+		staffManagementPanel.add(label_10);
+		
+		JLabel staffUsername_1 = new JLabel("USERNAME");
+		staffUsername_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffUsername_1.setBounds(19, 270, 123, 25);
+		staffManagementPanel.add(staffUsername_1);
+		
+		JLabel label_11 = new JLabel(":");
+		label_11.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_11.setBounds(152, 240, 23, 25);
+		staffManagementPanel.add(label_11);
+		
+		JLabel staffSetPassword = new JLabel("SET PW");
+		staffSetPassword.setFont(new Font("Calibri", Font.PLAIN, 24));
+		staffSetPassword.setBounds(19, 240, 109, 25);
+		staffManagementPanel.add(staffSetPassword);
+		
+		staffSetPasswordValue = new JPasswordField();
+		staffSetPasswordValue.setBounds(180, 240, 116, 22);
+		staffManagementPanel.add(staffSetPasswordValue);
+		
+		JLabel label_1 = new JLabel(":");
+		label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+		label_1.setBounds(152, 270, 23, 25);
+		staffManagementPanel.add(label_1);
+		
+		editableUsernameValue = new JTextField();
+		editableUsernameValue.setColumns(10);
+		editableUsernameValue.setBounds(180, 270, 116, 22);
+		editableUsernameValue.setVisible(false);
+		staffManagementPanel.add(editableUsernameValue);
+		
+		JLabel uneditableUsernameValue = new JLabel("");
+		uneditableUsernameValue.setBounds(180, 270, 116, 22);
+		uneditableUsernameValue.setVisible(true);
+		staffManagementPanel.add(uneditableUsernameValue);
+		
+		JComboBox<String> editableAccessLevel = new JComboBox<String>();
+		editableAccessLevel.setModel(new DefaultComboBoxModel<String>(new String[] {"No Access", "Staff", "Sr Staff", "Admin", "Manager"}));
+		editableAccessLevel.setBounds(180, 210, 116, 22);
+		staffManagementPanel.add(editableAccessLevel);
 		
 		JPanel elderlyManagementPanel = new JPanel();
 		elderlyManagementPanel.setBounds(625, 79, 340, 327);
@@ -384,150 +535,6 @@ public class MgmtPanel extends JPanel {
 			cancelAddElderly.setVisible(false);
 			add(cancelAddElderly);
 			
-			JPanel staffManagementPanel = new JPanel();
-			staffManagementPanel.setBounds(625, 79, 350, 340);
-			add(staffManagementPanel);
-			staffManagementPanel.setVisible(false);
-			staffManagementPanel.setLayout(null);
-			
-			JLabel staffFirstName_1 = new JLabel("FIRST NAME");
-			staffFirstName_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-			staffFirstName_1.setBounds(19, 60, 123, 25);
-			staffManagementPanel.add(staffFirstName_1);
-			
-			JLabel staffLastName_1 = new JLabel("LAST NAME");
-			staffLastName_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-			staffLastName_1.setBounds(19, 90, 124, 25);
-			staffManagementPanel.add(staffLastName_1);
-			
-			JLabel staffId_1 = new JLabel("STAFF ID");
-			staffId_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-			staffId_1.setBounds(19, 30, 123, 25);
-			staffManagementPanel.add(staffId_1);
-			
-			JLabel staffDob_1 = new JLabel("DOB");
-			staffDob_1.setBounds(19, 120, 109, 25);
-			staffManagementPanel.add(staffDob_1);
-			staffDob_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			JLabel label_12 = new JLabel(":");
-			label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_12.setBounds(152, 30, 23, 25);
-			staffManagementPanel.add(label_12);
-			
-			JLabel label_13 = new JLabel(":");
-			label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_13.setBounds(152, 60, 23, 25);
-			staffManagementPanel.add(label_13);
-			
-			JLabel label_14 = new JLabel(":");
-			label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_14.setBounds(152, 90, 23, 25);
-			staffManagementPanel.add(label_14);
-			
-			staffFirstNameValue = new JTextField();
-			staffFirstNameValue.setColumns(10);
-			staffFirstNameValue.setBounds(180, 60, 116, 22);
-			staffManagementPanel.add(staffFirstNameValue);
-			
-			JLabel label_22 = new JLabel(":");
-			label_22.setBounds(152, 120, 23, 25);
-			staffManagementPanel.add(label_22);
-			label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
-			
-			staffDobValue = new JTextField();
-			staffDobValue.setBounds(180, 120, 116, 22);
-			staffManagementPanel.add(staffDobValue);
-			staffDobValue.setColumns(10);
-			
-			staffLastNameValue = new JTextField();
-			staffLastNameValue.setColumns(10);
-			staffLastNameValue.setBounds(180, 90, 116, 22);
-			staffManagementPanel.add(staffLastNameValue);
-			
-			JLabel staffAge = new JLabel("AGE");
-			staffAge.setFont(new Font("Calibri", Font.PLAIN, 24));
-			staffAge.setBounds(19, 150, 109, 25);
-			staffManagementPanel.add(staffAge);
-			
-			JLabel label = new JLabel(":");
-			label.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label.setBounds(152, 150, 23, 25);
-			staffManagementPanel.add(label);
-			
-			JLabel staffAgeValue = new JLabel("");
-			staffAgeValue.setBounds(180, 150, 116, 22);
-			staffManagementPanel.add(staffAgeValue);
-			
-			JLabel staffNric_1 = new JLabel("NRIC");
-			staffNric_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-			staffNric_1.setBounds(19, 180, 109, 25);
-			staffManagementPanel.add(staffNric_1);
-			
-			JLabel label_7 = new JLabel(":");
-			label_7.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_7.setBounds(152, 180, 23, 25);
-			staffManagementPanel.add(label_7);
-			
-			staffNricValue = new JTextField();
-			staffNricValue.setColumns(10);
-			staffNricValue.setBounds(180, 180, 116, 22);
-			staffManagementPanel.add(staffNricValue);
-			
-			JLabel staffIdValue = new JLabel("");
-			staffIdValue.setBounds(180, 30, 116, 22);
-			staffManagementPanel.add(staffIdValue);
-			
-			JLabel staffAccessLevel = new JLabel("ACCESS LVL");
-			staffAccessLevel.setFont(new Font("Calibri", Font.PLAIN, 24));
-			staffAccessLevel.setBounds(19, 210, 123, 25);
-			staffManagementPanel.add(staffAccessLevel);
-			
-			JLabel label_10 = new JLabel(":");
-			label_10.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_10.setBounds(152, 210, 23, 25);
-			staffManagementPanel.add(label_10);
-			
-			JLabel staffUsername_1 = new JLabel("USERNAME");
-			staffUsername_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-			staffUsername_1.setBounds(19, 270, 123, 25);
-			staffManagementPanel.add(staffUsername_1);
-			
-			JLabel label_11 = new JLabel(":");
-			label_11.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_11.setBounds(152, 240, 23, 25);
-			staffManagementPanel.add(label_11);
-			
-			JLabel staffSetPassword = new JLabel("SET PW");
-			staffSetPassword.setFont(new Font("Calibri", Font.PLAIN, 24));
-			staffSetPassword.setBounds(19, 240, 109, 25);
-			staffManagementPanel.add(staffSetPassword);
-			
-			staffSetPasswordValue = new JPasswordField();
-			staffSetPasswordValue.setBounds(180, 240, 116, 22);
-			staffManagementPanel.add(staffSetPasswordValue);
-			
-			JLabel label_1 = new JLabel(":");
-			label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-			label_1.setBounds(152, 270, 23, 25);
-			staffManagementPanel.add(label_1);
-			
-			editableUsernameValue = new JTextField();
-			editableUsernameValue.setColumns(10);
-			editableUsernameValue.setBounds(180, 270, 116, 22);
-			editableUsernameValue.setVisible(false);
-			staffManagementPanel.add(editableUsernameValue);
-			
-			JLabel uneditableUsernameValue = new JLabel("");
-			uneditableUsernameValue.setBounds(180, 270, 116, 22);
-			uneditableUsernameValue.setVisible(true);
-			staffManagementPanel.add(uneditableUsernameValue);
-			
-			JComboBox<String> editableAccessLevel = new JComboBox<String>();
-			editableAccessLevel.setModel(new DefaultComboBoxModel<String>(new String[] {"No Access", "Staff", "Sr Staff", "Admin", "Manager"}));
-			editableAccessLevel.setBounds(180, 210, 116, 22);
-			staffManagementPanel.add(editableAccessLevel);
-			
 			
 			addStaff.addMouseListener(new MouseAdapter() {
 				@Override
@@ -731,12 +738,21 @@ public class MgmtPanel extends JPanel {
 							String staffNric = staffNricValue.getText();
 							String staffBirthString = staffDobValue.getText();
 							String staffUsername = editableUsernameValue.getText();
-							char[] pwCharArr = staffSetPasswordValue.getPassword();
-							String password = DigestUtils.sha512Hex(new String(pwCharArr));
 							int accessLevel = editableAccessLevel.getSelectedIndex();
 							
-							
-							if(staffFirstName.equals("") || staffLastName.equals("") || staffNric.equals("") || staffBirthString.equals("") || staffUsername.equals("") || password.equals("")){
+							if(staffSetPasswordValue.getPassword() == null || staffSetPasswordValue.getPassword().length == 0){
+								JOptionPane.showMessageDialog(null, "The password field is empty!");
+							}else{
+								// Obtain char array
+								char[] passChar = staffSetPasswordValue.getPassword();
+								// Conversion from char array to byte array
+								byte[] passByte = toBytes(passChar);
+								// Generate salt
+								String salt = saltGenerator();
+								// Hashing password with salt...
+								String securePassword = passwordHasher(passByte, salt);
+								
+							if(staffFirstName.equals("") || staffLastName.equals("") || staffNric.equals("") || staffBirthString.equals("") || staffUsername.equals("")){
 								JOptionPane.showMessageDialog(null, "One or more fields are empty! Please check your entries!");
 							}else{
 							PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_staff");
@@ -749,57 +765,56 @@ public class MgmtPanel extends JPanel {
 								JOptionPane.showMessageDialog(null,"There are duplicate NRICS! Please check your entries!");
 							}else if(validNric == false){
 								JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
-							}else if(password.equals("")){
-								JOptionPane.showMessageDialog(null, "The password field is empty!");
 							}else{
-								PreparedStatement ps1 = so.getPreparedStatement("INSERT INTO et_staff (username, password, firstname, lastname, nric, dob, accesslevel) VALUES (?, ?, ?, ?, ?, ?, ?)");
+								PreparedStatement ps1 = so.getPreparedStatement("INSERT INTO et_staff (username, password, firstname, lastname, nric, dob, accesslevel, salt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 								DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 								LocalDate staffDob = LocalDate.parse(staffBirthString, formatter);
 								ps1.setString(1, staffUsername);
-								ps1.setString(2, password);
+								ps1.setString(2, securePassword);
 								ps1.setString(3, staffFirstName);
 								ps1.setString(4, staffLastName);
 								ps1.setString(5, staffNric);
 								ps1.setDate(6, java.sql.Date.valueOf(staffDob));
 								ps1.setInt(7, accessLevel);
+								ps1.setString(8, salt);
 								ps1.executeUpdate();
 								JOptionPane.showMessageDialog(null,"New staff has been successfully added!");
+								
+								if(confirmAddStaff.isVisible() == true){
+									confirmAddStaff.setVisible(false);
+									addStaff.setVisible(true);
+									staffSave.setVisible(true);
+									uneditableUsernameValue.setVisible(true);
+									editableUsernameValue.setVisible(false);
+									cancelAddStaff.setVisible(false);
+									editableAccessLevel.setSelectedIndex(0);
+									
+									staffAgeValue.setText("");
+									staffFirstNameValue.setText("");
+									staffLastNameValue.setText("");
+									staffDobValue.setText("");
+									staffIdValue.setText("");
+									staffAgeValue.setText("");
+									staffNricValue.setText("");
+									uneditableUsernameValue.setText("");
+									editableUsernameValue.setText("");
+									staffSetPasswordValue.setText("");
 							}
 							
 							staffTable.setModel(TableHelper.getStaff(""));
 							setColumnWidths();
-							
-						}
-							}catch(SQLException e){
+										}
+									}
+								}
+							}
+							catch(SQLException e){
 							e.printStackTrace();
 						}
-						
-						
-
-						if(confirmAddStaff.isVisible() == true){
-							confirmAddStaff.setVisible(false);
-							addStaff.setVisible(true);
-							staffSave.setVisible(true);
-							uneditableUsernameValue.setVisible(true);
-							editableUsernameValue.setVisible(false);
-							cancelAddStaff.setVisible(false);
-							editableAccessLevel.setSelectedIndex(0);
-							
-							staffAgeValue.setText("");
-							staffFirstNameValue.setText("");
-							staffLastNameValue.setText("");
-							staffDobValue.setText("");
-							staffIdValue.setText("");
-							staffAgeValue.setText("");
-							staffNricValue.setText("");
-							uneditableUsernameValue.setText("");
-							editableUsernameValue.setText("");
-							staffSetPasswordValue.setText("");
 						
 						}
 					}
 				}
-			});
+			);
 			
 			staffSave.addMouseListener(new MouseAdapter() {
 				@Override
@@ -812,8 +827,6 @@ public class MgmtPanel extends JPanel {
 									String lastName = staffLastNameValue.getText();
 									String nric = staffNricValue.getText();
 									String birthString = staffDobValue.getText();
-									char[] pwCharArr = staffSetPasswordValue.getPassword();
-									String password = DigestUtils.sha512Hex(new String(pwCharArr));
 									int accessLevel = editableAccessLevel.getSelectedIndex();
 									
 									if(firstName.equals("") || lastName.equals("") || nric.equals("") || birthString.equals("")){
@@ -822,7 +835,6 @@ public class MgmtPanel extends JPanel {
 									PreparedStatement ps = so.getPreparedStatement("SELECT nric FROM et_staff WHERE staffid NOT IN(?)");
 									ps.setString(1, staffId);
 									ResultSet check = ps.executeQuery();
-									
 									boolean dupeNric = checkDuplicateNrics(nric, check);
 									boolean validNric = NRICUtils.validate(nric);
 									
@@ -830,15 +842,28 @@ public class MgmtPanel extends JPanel {
 										JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
 									}else if (validNric == false){
 										JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
-									}else if(password.equals("")){
-										PreparedStatement ps1 = so.getPreparedStatement("UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=?, password=?, accesslevel=? WHERE staffid=?");
+									}else if(staffSetPasswordValue.getPassword() != null || staffSetPasswordValue.getPassword().length != 0){
+										PreparedStatement ps1 = so.getPreparedStatement("UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=?, password=?, accesslevel=? WHERE staffid=?");				
+										
+										// Password encryption
+										char[] passChar = staffSetPasswordValue.getPassword();
+										// Conversion from char array to byte array
+										byte[] passByte = toBytes(passChar);
+										// Retrieval of salt of user
+										PreparedStatement getSalt = so.getPreparedStatement("SELECT salt FROM et_staff WHERE id=?");
+										getSalt.setString(1, staffId);
+										ResultSet userSalt = getSalt.executeQuery();
+										String salt = userSalt.getString("salt");
+										// Hashing password with retrieved salt...
+										String securePassword = passwordHasher(passByte, salt);
+									
 										DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 										LocalDate dob = LocalDate.parse(birthString, formatter);
 										ps1.setString(1, firstName);
 										ps1.setString(2, lastName);
 										ps1.setDate(3, java.sql.Date.valueOf(dob));
 										ps1.setString(4, nric);
-										ps1.setString(5, password);
+										ps1.setString(5, securePassword);
 										ps1.setInt(6, accessLevel);
 										ps1.setString(7, staffId);
 										ps1.executeUpdate();
@@ -1207,4 +1232,39 @@ public class MgmtPanel extends JPanel {
 			}else
 				return true;
 		}
+	
+	private byte[] toBytes(char[] chars) {
+	    CharBuffer charBuffer = CharBuffer.wrap(chars);
+	    ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+	    byte[] bytes = Arrays.copyOfRange(byteBuffer.array(),
+	            byteBuffer.position(), byteBuffer.limit());
+	    Arrays.fill(charBuffer.array(), '\u0000'); // clear sensitive data
+	    Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
+	    return bytes;
 	}
+	
+	private String saltGenerator(){
+		// Generating of salt value
+				SecureRandom sr = new SecureRandom();
+				byte[] salt = new byte[32];
+				sr.nextBytes(salt);
+				
+		// Converting salt value to encoded string then printing it
+				String encoded = Base64.encodeBase64String(salt);
+				
+		// Return the salt value
+				return encoded;
+	}
+	
+	private String passwordHasher(byte[] basePw, String pwSalt){
+		// Obtain base password
+		byte[] base = basePw;
+		// Obtain password salt
+		byte[] salt = Base64.decodeBase64(pwSalt);
+		// Apply salt to base password
+		String result = DigestUtils.sha512Hex(ArrayUtils.addAll(base,salt));
+		
+		return result;
+	}
+
+}
