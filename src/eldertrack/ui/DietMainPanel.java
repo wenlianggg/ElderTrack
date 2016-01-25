@@ -79,7 +79,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 		    	presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
 		    }
 		});
-		eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
+		setColumnWidths();
 		tableScrollPane.setViewportView(eldersTable);
 		
 		lblDietLabel = new JLabel("ElderTrack Diet Management");
@@ -103,7 +103,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				eldersTable.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
-				eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
+				setColumnWidths();
 			}
 		});
 		btnSearch.setBounds(228, 99, 65, 23);
@@ -120,7 +120,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 		infoPanel.setLayout(null);
 		
 		lblElderid = new JLabel("ElderID:");
-		lblElderid.setBounds(10, 55, 209, 14);
+		lblElderid.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblElderid.setBounds(10, 55, 209, 20);
 		infoPanel.add(lblElderid);
 		
 		lblInfoName = new JLabel("Elderly Name");
@@ -130,61 +131,73 @@ public class DietMainPanel extends JPanel implements Presentable {
 		infoPanel.add(lblInfoName);
 		
 		lblAge = new JLabel("Age: --");
-		lblAge.setBounds(10, 95, 209, 14);
+		lblAge.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblAge.setBounds(10, 95, 209, 20);
 		infoPanel.add(lblAge);
 		
 		lblRoomNumber = new JLabel("Room Number: --");
-		lblRoomNumber.setBounds(10, 75, 209, 14);
+		lblRoomNumber.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRoomNumber.setBounds(10, 75, 209, 20);
 		infoPanel.add(lblRoomNumber);
 		
-		lblNric = new JLabel("NRIC: SXXXXXXXA");
-		lblNric.setBounds(10, 115, 209, 14);
+		lblNric = new JLabel("NRIC: --");
+		lblNric.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNric.setBounds(10, 115, 209, 20);
 		infoPanel.add(lblNric);
 		
 		separator = new JSeparator();
-		separator.setBounds(3, 139, 659, 3);
+		separator.setBounds(2, 146, 659, 3);
 		infoPanel.add(separator);
 		
 		lblStatisticsForToday = new JLabel("Statistics For Today");
 		lblStatisticsForToday.setForeground(new Color(0, 128, 128));
 		lblStatisticsForToday.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		lblStatisticsForToday.setBounds(10, 145, 209, 29);
+		lblStatisticsForToday.setBounds(11, 158, 209, 29);
 		infoPanel.add(lblStatisticsForToday);
 		
-		lblCalories = new JLabel("RDA Calories (kcal):  --- (x% of RDA)");
-		lblCalories.setBounds(10, 181, 209, 14);
+		lblCalories = new JLabel("RDA Calories (kcal):  --- ");
+		lblCalories.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCalories.setBounds(11, 195, 209, 20);
 		infoPanel.add(lblCalories);
 		
-		lblCarbohydrates = new JLabel("Carbohydrates (g): --- (x% of RDA)");
-		lblCarbohydrates.setBounds(10, 201, 209, 14);
+		lblCarbohydrates = new JLabel("Carbohydrates (g): --- ");
+		lblCarbohydrates.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCarbohydrates.setBounds(11, 215, 209, 20);
 		infoPanel.add(lblCarbohydrates);
 		
-		lblProtein = new JLabel("Protein(g) :  --- (x% of RDA)");
-		lblProtein.setBounds(10, 221, 209, 14);
+		lblProtein = new JLabel("Protein(g) :  --- ");
+		lblProtein.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblProtein.setBounds(11, 235, 209, 20);
 		infoPanel.add(lblProtein);
 		
-		lblIron = new JLabel("Iron(mg):  --- (x% of RDA)");
-		lblIron.setBounds(11, 241, 208, 14);
+		lblIron = new JLabel("Iron(mg):  --- ");
+		lblIron.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblIron.setBounds(12, 255, 208, 20);
 		infoPanel.add(lblIron);
 		
-		lblVitaminA = new JLabel("Vitamin A (mg):  --- (x% of RDA)");
-		lblVitaminA.setBounds(10, 261, 209, 14);
+		lblVitaminA = new JLabel("Vitamin A (mg):  --- ");
+		lblVitaminA.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVitaminA.setBounds(11, 275, 209, 20);
 		infoPanel.add(lblVitaminA);
 		
-		lblVitaminC = new JLabel("Vitamin C (mg):  --- (x% of RDA)");
-		lblVitaminC.setBounds(10, 281, 209, 14);
+		lblVitaminC = new JLabel("Vitamin C (mg):  --- ");
+		lblVitaminC.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVitaminC.setBounds(11, 295, 209, 20);
 		infoPanel.add(lblVitaminC);
 		
-		lblVitaminD = new JLabel("Vitamin D (mg):  --- (x% of RDA)");
-		lblVitaminD.setBounds(10, 321, 209, 14);
+		lblVitaminD = new JLabel("Vitamin D (mg):  --- ");
+		lblVitaminD.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVitaminD.setBounds(11, 335, 209, 20);
 		infoPanel.add(lblVitaminD);
 		
-		lblVitaminE = new JLabel("Vitamin E (mg):  --- (x% of RDA)");
-		lblVitaminE.setBounds(10, 301, 209, 14);
+		lblVitaminE = new JLabel("Vitamin E (mg):  --- ");
+		lblVitaminE.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVitaminE.setBounds(11, 315, 209, 20);
 		infoPanel.add(lblVitaminE);
 		
 		lblPreviousMeal = new JLabel("Previous Meal: ______________________");
-		lblPreviousMeal.setBounds(9, 357, 209, 14);
+		lblPreviousMeal.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblPreviousMeal.setBounds(10, 370, 286, 37);
 		infoPanel.add(lblPreviousMeal);
 		
 		lblReviewInfo = new JLabel("Review Information");
@@ -258,6 +271,17 @@ public class DietMainPanel extends JPanel implements Presentable {
 		add(btnMainMenu);
 	}
 	
+	private void setColumnWidths() {
+		eldersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		eldersTable.getTableHeader().setResizingAllowed(false);
+		eldersTable.getTableHeader().setReorderingAllowed(false);
+		eldersTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+		eldersTable.getColumnModel().getColumn(0).setMaxWidth(25);
+		eldersTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+		eldersTable.getColumnModel().getColumn(1).setMaxWidth(200);
+		eldersTable.getColumnModel().getColumn(2).setPreferredWidth(120);
+	}
+	
 	public void presentData(String personid) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
 		Elderly el = eldermap.get(Integer.parseInt(personid));
@@ -268,16 +292,17 @@ public class DietMainPanel extends JPanel implements Presentable {
 		lblRoomNumber.setText("Room Number: " + el.getRoomnum());
 		lblNric.setText("NRIC: " + el.getNric());
 		
-		el.getMeals();
-		lblCalories.setText("RDA Calories (kcal): (x% of RDA)");
-		lblCarbohydrates.setText("Carbohydrates (g): --- (x% of RDA)");
-		lblProtein.setText("Protein(g) :  --- (x% of RDA)");		
-		lblIron.setText("Iron(mg):  --- (x% of RDA)");		
-		lblVitaminA.setText("Vitamin A (mg):  --- (x% of RDA)");		
-		lblVitaminC.setText("Vitamin C (mg):  --- (x% of RDA)");		
-		lblVitaminD.setText("Vitamin D (mg):  --- (x% of RDA)");		
-		lblVitaminE.setText("Vitamin E (mg):  --- (x% of RDA)");
-		lblPreviousMeal.setText("Previous Meal: ______________________");
+		Nutrition n = el.getMeals().getNutritionToday();
+		lblCalories.setText("RDA Calories (kcal): " + n.getCalories());
+		lblCarbohydrates.setText("Carbohydrates (g): " + n.getCarbs());
+		lblProtein.setText("Protein(g): " + n.getProtein());		
+		lblIron.setText("Iron(mg): " + n.getIron());		
+		lblVitaminA.setText("Vitamin A (%): " + n.getVita());		
+		lblVitaminC.setText("Vitamin C (%): " + n.getVitc());		
+		lblVitaminD.setText("Vitamin D (%): " + n.getVitd());		
+		lblVitaminE.setText("Vitamin E (%): " + n.getVite());
+		
+		lblPreviousMeal.setText("Previous Meal: " + el.getMeals().getPrevMealName());
 
 	}
 
