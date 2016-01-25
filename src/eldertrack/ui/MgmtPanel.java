@@ -65,150 +65,6 @@ public class MgmtPanel extends JPanel {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		
-		JPanel staffManagementPanel = new JPanel();
-		staffManagementPanel.setBounds(625, 79, 350, 340);
-		add(staffManagementPanel);
-		staffManagementPanel.setVisible(false);
-		staffManagementPanel.setLayout(null);
-		
-		JLabel staffFirstName = new JLabel("FIRST NAME");
-		staffFirstName.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffFirstName.setBounds(19, 60, 123, 25);
-		staffManagementPanel.add(staffFirstName);
-		
-		JLabel staffLastName = new JLabel("LAST NAME");
-		staffLastName.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffLastName.setBounds(19, 90, 124, 25);
-		staffManagementPanel.add(staffLastName);
-		
-		JLabel staffId_1 = new JLabel("STAFF ID");
-		staffId_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffId_1.setBounds(19, 30, 123, 25);
-		staffManagementPanel.add(staffId_1);
-		
-		JLabel staffDob = new JLabel("DOB");
-		staffDob.setBounds(19, 120, 109, 25);
-		staffManagementPanel.add(staffDob);
-		staffDob.setFont(new Font("Calibri", Font.PLAIN, 24));
-		
-		JLabel label_12 = new JLabel(":");
-		label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_12.setBounds(152, 30, 23, 25);
-		staffManagementPanel.add(label_12);
-		
-		JLabel label_13 = new JLabel(":");
-		label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_13.setBounds(152, 60, 23, 25);
-		staffManagementPanel.add(label_13);
-		
-		JLabel label_14 = new JLabel(":");
-		label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_14.setBounds(152, 90, 23, 25);
-		staffManagementPanel.add(label_14);
-		
-		staffFirstNameValue = new JTextField();
-		staffFirstNameValue.setColumns(10);
-		staffFirstNameValue.setBounds(180, 60, 116, 22);
-		staffManagementPanel.add(staffFirstNameValue);
-		
-		JLabel label_22 = new JLabel(":");
-		label_22.setBounds(152, 120, 23, 25);
-		staffManagementPanel.add(label_22);
-		label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
-		
-		staffDobValue = new JTextField();
-		staffDobValue.setBounds(180, 120, 116, 22);
-		staffManagementPanel.add(staffDobValue);
-		staffDobValue.setColumns(10);
-		
-		staffLastNameValue = new JTextField();
-		staffLastNameValue.setColumns(10);
-		staffLastNameValue.setBounds(180, 90, 116, 22);
-		staffManagementPanel.add(staffLastNameValue);
-		
-		JLabel staffAge = new JLabel("AGE");
-		staffAge.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffAge.setBounds(19, 150, 109, 25);
-		staffManagementPanel.add(staffAge);
-		
-		JLabel label = new JLabel(":");
-		label.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label.setBounds(152, 150, 23, 25);
-		staffManagementPanel.add(label);
-		
-		JLabel staffAgeValue = new JLabel("");
-		staffAgeValue.setBounds(180, 150, 116, 22);
-		staffManagementPanel.add(staffAgeValue);
-		
-		JLabel staffNric = new JLabel("NRIC");
-		staffNric.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffNric.setBounds(19, 180, 109, 25);
-		staffManagementPanel.add(staffNric);
-		
-		JLabel label_7 = new JLabel(":");
-		label_7.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_7.setBounds(152, 180, 23, 25);
-		staffManagementPanel.add(label_7);
-		
-		staffNricValue = new JTextField();
-		staffNricValue.setColumns(10);
-		staffNricValue.setBounds(180, 180, 116, 22);
-		staffManagementPanel.add(staffNricValue);
-		
-		JLabel staffIdValue = new JLabel("");
-		staffIdValue.setBounds(180, 30, 116, 22);
-		staffManagementPanel.add(staffIdValue);
-		
-		JLabel staffAccessLevel = new JLabel("ACCESS LVL");
-		staffAccessLevel.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffAccessLevel.setBounds(19, 210, 123, 25);
-		staffManagementPanel.add(staffAccessLevel);
-		
-		JLabel label_10 = new JLabel(":");
-		label_10.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_10.setBounds(152, 210, 23, 25);
-		staffManagementPanel.add(label_10);
-		
-		JLabel staffUsername = new JLabel("USERNAME");
-		staffUsername.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffUsername.setBounds(19, 270, 123, 25);
-		staffManagementPanel.add(staffUsername);
-		
-		JLabel label_11 = new JLabel(":");
-		label_11.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_11.setBounds(152, 240, 23, 25);
-		staffManagementPanel.add(label_11);
-		
-		JLabel staffSetPassword = new JLabel("SET PW");
-		staffSetPassword.setFont(new Font("Calibri", Font.PLAIN, 24));
-		staffSetPassword.setBounds(19, 240, 109, 25);
-		staffManagementPanel.add(staffSetPassword);
-		
-		staffSetPasswordValue = new JPasswordField();
-		staffSetPasswordValue.setBounds(180, 240, 116, 22);
-		staffManagementPanel.add(staffSetPasswordValue);
-		
-		JLabel label_1 = new JLabel(":");
-		label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
-		label_1.setBounds(152, 270, 23, 25);
-		staffManagementPanel.add(label_1);
-		
-		editableUsernameValue = new JTextField();
-		editableUsernameValue.setColumns(10);
-		editableUsernameValue.setBounds(180, 270, 116, 22);
-		editableUsernameValue.setVisible(false);
-		staffManagementPanel.add(editableUsernameValue);
-		
-		JLabel uneditableUsernameValue = new JLabel("");
-		uneditableUsernameValue.setBounds(180, 270, 116, 22);
-		uneditableUsernameValue.setVisible(true);
-		staffManagementPanel.add(uneditableUsernameValue);
-		
-		JComboBox<String> editableAccessLevel = new JComboBox<String>();
-		editableAccessLevel.setModel(new DefaultComboBoxModel<String>(new String[] {"No Access", "Staff", "Sr Staff", "Admin", "Manager"}));
-		editableAccessLevel.setBounds(180, 210, 116, 22);
-		staffManagementPanel.add(editableAccessLevel);
-		
 		JPanel elderlyManagementPanel = new JPanel();
 		elderlyManagementPanel.setBounds(625, 79, 340, 327);
 		add(elderlyManagementPanel);
@@ -527,6 +383,150 @@ public class MgmtPanel extends JPanel {
 			cancelAddElderly.setBounds(625, 432, 132, 25);
 			cancelAddElderly.setVisible(false);
 			add(cancelAddElderly);
+			
+			JPanel staffManagementPanel = new JPanel();
+			staffManagementPanel.setBounds(625, 79, 350, 340);
+			add(staffManagementPanel);
+			staffManagementPanel.setVisible(false);
+			staffManagementPanel.setLayout(null);
+			
+			JLabel staffFirstName_1 = new JLabel("FIRST NAME");
+			staffFirstName_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffFirstName_1.setBounds(19, 60, 123, 25);
+			staffManagementPanel.add(staffFirstName_1);
+			
+			JLabel staffLastName_1 = new JLabel("LAST NAME");
+			staffLastName_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffLastName_1.setBounds(19, 90, 124, 25);
+			staffManagementPanel.add(staffLastName_1);
+			
+			JLabel staffId_1 = new JLabel("STAFF ID");
+			staffId_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffId_1.setBounds(19, 30, 123, 25);
+			staffManagementPanel.add(staffId_1);
+			
+			JLabel staffDob_1 = new JLabel("DOB");
+			staffDob_1.setBounds(19, 120, 109, 25);
+			staffManagementPanel.add(staffDob_1);
+			staffDob_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			JLabel label_12 = new JLabel(":");
+			label_12.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_12.setBounds(152, 30, 23, 25);
+			staffManagementPanel.add(label_12);
+			
+			JLabel label_13 = new JLabel(":");
+			label_13.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_13.setBounds(152, 60, 23, 25);
+			staffManagementPanel.add(label_13);
+			
+			JLabel label_14 = new JLabel(":");
+			label_14.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_14.setBounds(152, 90, 23, 25);
+			staffManagementPanel.add(label_14);
+			
+			staffFirstNameValue = new JTextField();
+			staffFirstNameValue.setColumns(10);
+			staffFirstNameValue.setBounds(180, 60, 116, 22);
+			staffManagementPanel.add(staffFirstNameValue);
+			
+			JLabel label_22 = new JLabel(":");
+			label_22.setBounds(152, 120, 23, 25);
+			staffManagementPanel.add(label_22);
+			label_22.setFont(new Font("Calibri", Font.PLAIN, 24));
+			
+			staffDobValue = new JTextField();
+			staffDobValue.setBounds(180, 120, 116, 22);
+			staffManagementPanel.add(staffDobValue);
+			staffDobValue.setColumns(10);
+			
+			staffLastNameValue = new JTextField();
+			staffLastNameValue.setColumns(10);
+			staffLastNameValue.setBounds(180, 90, 116, 22);
+			staffManagementPanel.add(staffLastNameValue);
+			
+			JLabel staffAge = new JLabel("AGE");
+			staffAge.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffAge.setBounds(19, 150, 109, 25);
+			staffManagementPanel.add(staffAge);
+			
+			JLabel label = new JLabel(":");
+			label.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label.setBounds(152, 150, 23, 25);
+			staffManagementPanel.add(label);
+			
+			JLabel staffAgeValue = new JLabel("");
+			staffAgeValue.setBounds(180, 150, 116, 22);
+			staffManagementPanel.add(staffAgeValue);
+			
+			JLabel staffNric_1 = new JLabel("NRIC");
+			staffNric_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffNric_1.setBounds(19, 180, 109, 25);
+			staffManagementPanel.add(staffNric_1);
+			
+			JLabel label_7 = new JLabel(":");
+			label_7.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_7.setBounds(152, 180, 23, 25);
+			staffManagementPanel.add(label_7);
+			
+			staffNricValue = new JTextField();
+			staffNricValue.setColumns(10);
+			staffNricValue.setBounds(180, 180, 116, 22);
+			staffManagementPanel.add(staffNricValue);
+			
+			JLabel staffIdValue = new JLabel("");
+			staffIdValue.setBounds(180, 30, 116, 22);
+			staffManagementPanel.add(staffIdValue);
+			
+			JLabel staffAccessLevel = new JLabel("ACCESS LVL");
+			staffAccessLevel.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffAccessLevel.setBounds(19, 210, 123, 25);
+			staffManagementPanel.add(staffAccessLevel);
+			
+			JLabel label_10 = new JLabel(":");
+			label_10.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_10.setBounds(152, 210, 23, 25);
+			staffManagementPanel.add(label_10);
+			
+			JLabel staffUsername_1 = new JLabel("USERNAME");
+			staffUsername_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffUsername_1.setBounds(19, 270, 123, 25);
+			staffManagementPanel.add(staffUsername_1);
+			
+			JLabel label_11 = new JLabel(":");
+			label_11.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_11.setBounds(152, 240, 23, 25);
+			staffManagementPanel.add(label_11);
+			
+			JLabel staffSetPassword = new JLabel("SET PW");
+			staffSetPassword.setFont(new Font("Calibri", Font.PLAIN, 24));
+			staffSetPassword.setBounds(19, 240, 109, 25);
+			staffManagementPanel.add(staffSetPassword);
+			
+			staffSetPasswordValue = new JPasswordField();
+			staffSetPasswordValue.setBounds(180, 240, 116, 22);
+			staffManagementPanel.add(staffSetPasswordValue);
+			
+			JLabel label_1 = new JLabel(":");
+			label_1.setFont(new Font("Calibri", Font.PLAIN, 24));
+			label_1.setBounds(152, 270, 23, 25);
+			staffManagementPanel.add(label_1);
+			
+			editableUsernameValue = new JTextField();
+			editableUsernameValue.setColumns(10);
+			editableUsernameValue.setBounds(180, 270, 116, 22);
+			editableUsernameValue.setVisible(false);
+			staffManagementPanel.add(editableUsernameValue);
+			
+			JLabel uneditableUsernameValue = new JLabel("");
+			uneditableUsernameValue.setBounds(180, 270, 116, 22);
+			uneditableUsernameValue.setVisible(true);
+			staffManagementPanel.add(uneditableUsernameValue);
+			
+			JComboBox<String> editableAccessLevel = new JComboBox<String>();
+			editableAccessLevel.setModel(new DefaultComboBoxModel<String>(new String[] {"No Access", "Staff", "Sr Staff", "Admin", "Manager"}));
+			editableAccessLevel.setBounds(180, 210, 116, 22);
+			staffManagementPanel.add(editableAccessLevel);
 			
 			
 			addStaff.addMouseListener(new MouseAdapter() {
