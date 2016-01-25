@@ -50,14 +50,14 @@ public class Meals implements java.io.Serializable {
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		Date today = c.getTime();
-		// Iterating through MealProperties
+		// Loop through MealProperties and find where today ends
 		for(int i = 0; i < mealprop.size(); i++)
 			if(mealprop.get(i).getCreated().after(today)) {
 				System.out.println(i);
 				selected.add(nutrition.get(i));
 			}
 		Nutrition totaln = new Nutrition();
-		for (int i = 0; i < nutrition.size(); i++)
+		for (int i = 0; i < nutrition.size() - 1; i++)
 			totaln.add(selected.get(i));
 		return totaln;
 	}

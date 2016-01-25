@@ -77,6 +77,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
 		    	presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+		    	showNutritionToday(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
 		    }
 		});
 		eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
@@ -151,35 +152,35 @@ public class DietMainPanel extends JPanel implements Presentable {
 		lblStatisticsForToday.setBounds(10, 145, 209, 29);
 		infoPanel.add(lblStatisticsForToday);
 		
-		lblCalories = new JLabel("RDA Calories (kcal):  --- (x% of RDA)");
+		lblCalories = new JLabel("RDA Calories (kcal):  --- ");
 		lblCalories.setBounds(10, 181, 209, 14);
 		infoPanel.add(lblCalories);
 		
-		lblCarbohydrates = new JLabel("Carbohydrates (g): --- (x% of RDA)");
+		lblCarbohydrates = new JLabel("Carbohydrates (g): --- ");
 		lblCarbohydrates.setBounds(10, 201, 209, 14);
 		infoPanel.add(lblCarbohydrates);
 		
-		lblProtein = new JLabel("Protein(g) :  --- (x% of RDA)");
+		lblProtein = new JLabel("Protein(g) :  --- ");
 		lblProtein.setBounds(10, 221, 209, 14);
 		infoPanel.add(lblProtein);
 		
-		lblIron = new JLabel("Iron(mg):  --- (x% of RDA)");
+		lblIron = new JLabel("Iron(mg):  --- ");
 		lblIron.setBounds(11, 241, 208, 14);
 		infoPanel.add(lblIron);
 		
-		lblVitaminA = new JLabel("Vitamin A (mg):  --- (x% of RDA)");
+		lblVitaminA = new JLabel("Vitamin A (mg):  --- ");
 		lblVitaminA.setBounds(10, 261, 209, 14);
 		infoPanel.add(lblVitaminA);
 		
-		lblVitaminC = new JLabel("Vitamin C (mg):  --- (x% of RDA)");
+		lblVitaminC = new JLabel("Vitamin C (mg):  --- ");
 		lblVitaminC.setBounds(10, 281, 209, 14);
 		infoPanel.add(lblVitaminC);
 		
-		lblVitaminD = new JLabel("Vitamin D (mg):  --- (x% of RDA)");
+		lblVitaminD = new JLabel("Vitamin D (mg):  --- ");
 		lblVitaminD.setBounds(10, 321, 209, 14);
 		infoPanel.add(lblVitaminD);
 		
-		lblVitaminE = new JLabel("Vitamin E (mg):  --- (x% of RDA)");
+		lblVitaminE = new JLabel("Vitamin E (mg):  --- ");
 		lblVitaminE.setBounds(10, 301, 209, 14);
 		infoPanel.add(lblVitaminE);
 		
@@ -258,6 +259,10 @@ public class DietMainPanel extends JPanel implements Presentable {
 		add(btnMainMenu);
 	}
 	
+	public void showNutritionToday(String personid) {
+		
+	}
+	
 	public void presentData(String personid) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
 		Elderly el = eldermap.get(Integer.parseInt(personid));
@@ -268,16 +273,15 @@ public class DietMainPanel extends JPanel implements Presentable {
 		lblRoomNumber.setText("Room Number: " + el.getRoomnum());
 		lblNric.setText("NRIC: " + el.getNric());
 		
-		el.getMeals();
-		lblCalories.setText("RDA Calories (kcal): (x% of RDA)");
-		lblCarbohydrates.setText("Carbohydrates (g): --- (x% of RDA)");
-		lblProtein.setText("Protein(g) :  --- (x% of RDA)");		
-		lblIron.setText("Iron(mg):  --- (x% of RDA)");		
-		lblVitaminA.setText("Vitamin A (mg):  --- (x% of RDA)");		
-		lblVitaminC.setText("Vitamin C (mg):  --- (x% of RDA)");		
-		lblVitaminD.setText("Vitamin D (mg):  --- (x% of RDA)");		
-		lblVitaminE.setText("Vitamin E (mg):  --- (x% of RDA)");
-		lblPreviousMeal.setText("Previous Meal: ______________________");
+		Nutrition n = el.getMeals().getNutritionToday();
+		lblCalories.setText("RDA Calories (kcal): " + n.getCalories());
+		lblCarbohydrates.setText("Carbohydrates (g): " + n.getCarbs());
+		lblProtein.setText("Protein(g) :" + n.getProtein());		
+		lblIron.setText("Iron(mg): " + n.getIron());		
+		lblVitaminA.setText("Vitamin A (mg): " + n.getVita());		
+		lblVitaminC.setText("Vitamin C (mg): " + n.getVitc());		
+		lblVitaminD.setText("Vitamin D (mg): " + n.getVitd());		
+		lblVitaminE.setText("Vitamin E (mg): " + n.getVite());
 
 	}
 
