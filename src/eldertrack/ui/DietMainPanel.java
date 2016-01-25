@@ -22,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -256,6 +257,19 @@ public class DietMainPanel extends JPanel implements Presentable {
 		});
 		
 		btnViewInMgmt = new JButton("View Elderly in Management");
+		btnViewInMgmt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (eldersTable.getSelectedRow() != -1) {
+					Integer selectedelderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+					CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+					mainCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
+					MgmtPanel mgp = MainFrame.getInstance().getManagementPanel();
+					JTable jtb = (JTable) mgp.getComponentAt(200, 200).getComponentAt(50, 50).getComponentAt(50, 50).getComponentAt(50, 50);
+					jtb.getSelectionModel().setSelectionInterval(selectedelderly, selectedelderly);
+				} else
+					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
+			}
+		});
 		btnViewInMgmt.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnViewInMgmt.setBounds(759, 631, 216, 28);
 		add(btnViewInMgmt);

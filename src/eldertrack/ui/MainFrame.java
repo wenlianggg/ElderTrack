@@ -1,6 +1,8 @@
 package eldertrack.ui;
 
 import java.awt.EventQueue;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -67,10 +69,14 @@ public class MainFrame extends JFrame {
 	 */
 	
 	private MainFrame() {
-		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
+		this.setTitle("ElderTrack - Utilities For Nursing Homes (ITP192-03-Team 2)");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1000, 810);
 		setResizable(false);
+		
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		Image img = kit.createImage("ElderTrack.png");
+		setIconImage(img);
 		
 		MasterPane = new JPanel();
 		MasterPane.setBorder(null);
@@ -239,6 +245,10 @@ public class MainFrame extends JFrame {
 			return true;
 		else
 			return false;
+	}
+	
+	MgmtPanel getManagementPanel() {
+		return this.MgmtPanel;
 	}
 	
 	DietSection getDietPanel() {

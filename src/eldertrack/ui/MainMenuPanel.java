@@ -36,14 +36,14 @@ public class MainMenuPanel extends JPanel {
 		setLayout(null);
 		setBounds(0, 0, 995, 670);
 		
-		lblTitle = new JLabel("Welcome to ElderTrack!");
-		lblTitle.setBounds(10, 0, 754, 54);
+		lblTitle = new JLabel("ElderTrack Suite");
+		lblTitle.setBounds(10, 0, 372, 54);
 		lblTitle.setForeground(SystemColor.textHighlight);
 		lblTitle.setFont(new Font("Segoe UI", Font.ITALIC, 40));
 		add(lblTitle);
 		
 		btnMedTrack = new JButton("Medication Tracking");
-		btnMedTrack.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnMedTrack.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 		btnMedTrack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 		        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
@@ -54,7 +54,7 @@ public class MainMenuPanel extends JPanel {
 		add(btnMedTrack);
 		
 		btnDietManagement = new JButton("Diet Management");
-		btnDietManagement.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnDietManagement.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 		btnDietManagement.setBounds(10, 230, 242, 120);
 		btnDietManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -65,7 +65,7 @@ public class MainMenuPanel extends JPanel {
 		add(btnDietManagement);
 		
 		btnReportGeneration = new JButton("Report Generation");
-		btnReportGeneration.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnReportGeneration.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 		btnReportGeneration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 		        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
@@ -77,7 +77,7 @@ public class MainMenuPanel extends JPanel {
 		
 		if(MainFrame.getInstance().isManagementShown()) {
 			btnStaffManagement = new JButton("People Management");
-			btnStaffManagement.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnStaffManagement.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 			btnStaffManagement.setBounds(10, 492, 242, 120);
 			btnStaffManagement.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -115,7 +115,7 @@ public class MainMenuPanel extends JPanel {
 		detailsPanel.add(lblLoginNric);
 		
 		btnLogout = new JButton("Sign Out");
-		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnLogout.setFont(new Font("Segoe UI", Font.PLAIN, 17));
 		btnLogout.setBounds(585, 12, 128, 36);
 		detailsPanel.add(btnLogout);
 		btnLogout.addActionListener(new ActionListener() {
@@ -136,13 +136,19 @@ public class MainMenuPanel extends JPanel {
 		add(txtarea_stickynotes);
 		
 		JButton btnSaveNotes = new JButton("Save Notes");
+		btnSaveNotes.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnSaveNotes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				MainFrame.getInstance().getSessionInstance().setNotes(txtarea_stickynotes.getText());
 			}
 		});
-		btnSaveNotes.setBounds(855, 565, 130, 47);
+		btnSaveNotes.setBounds(838, 565, 147, 47);
 		add(btnSaveNotes);
+		
+		JLabel lblUtilitiesForNursing = new JLabel("Utilities for Nursing Homes");
+		lblUtilitiesForNursing.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblUtilitiesForNursing.setBounds(10, 42, 262, 30);
+		add(lblUtilitiesForNursing);
 	}
 	
 	void fillDetails() {
@@ -159,6 +165,4 @@ public class MainMenuPanel extends JPanel {
 		lblLastLogin.setText("Last Login: ");
 		txtarea_stickynotes.setText("");
 	}
-	
-
 }
