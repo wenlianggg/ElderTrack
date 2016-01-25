@@ -104,10 +104,10 @@ public class LoginPanel extends JPanel {
 		loginButton.addActionListener(loginAction);
 		
 		lblEldertrackLogin = new JLabel("ElderTrack Authentication");
-		lblEldertrackLogin.setBounds(10, 0, 441, 54);
+		lblEldertrackLogin.setBounds(10, 0, 535, 54);
 		add(lblEldertrackLogin);
 		lblEldertrackLogin.setForeground(SystemColor.textHighlight);
-		lblEldertrackLogin.setFont(new Font("Segoe UI", Font.ITALIC, 40));
+		lblEldertrackLogin.setFont(new Font("Segoe UI", Font.PLAIN, 40));
 		
 		JButton btnBypassLogin = new JButton("Bypass Login");
 		btnBypassLogin.addActionListener(new ActionListener() {

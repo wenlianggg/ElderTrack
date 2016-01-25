@@ -86,6 +86,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		personInfoPanel.add(lblInfoName);
 		
 		JButton btnBackToMain = new JButton("Back (Elderly View)");
+		btnBackToMain.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnBackToMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 		        CardLayout parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
@@ -93,7 +94,8 @@ public class DietMenuPanel extends JPanel implements Presentable {
 			}
 		});
 		
-		JButton btnRemoveEntry = new JButton("Remove Menu Entry");
+		JButton btnRemoveEntry = new JButton("Remove Entry");
+		btnRemoveEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnRemoveEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				removeEntry();
@@ -102,7 +104,8 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		btnRemoveEntry.setBounds(782, 358, 203, 109);
 		add(btnRemoveEntry);
 		
-		JButton btnUpdateEntry = new JButton("Update Menu Entry");
+		JButton btnUpdateEntry = new JButton("Save Menu Edits");
+		btnUpdateEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnUpdateEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				updateMenu();
@@ -295,7 +298,8 @@ public class DietMenuPanel extends JPanel implements Presentable {
 			}
 		});
 		
-		JButton btnCreateNewMeal = new JButton("Create Menu Entry");
+		JButton btnCreateNewMeal = new JButton("Add To Menu");
+		btnCreateNewMeal.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnCreateNewMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				addEntry();
@@ -303,19 +307,10 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		});
 		btnCreateNewMeal.setBounds(782, 118, 203, 109);
 		add(btnCreateNewMeal);
-		
-		JButton btnMainMenu = new JButton("Back to Main Menu");
-		btnMainMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
-				parentCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
-			}
-		});
-		btnMainMenu.setBounds(820, 15, 139, 40);
-		add(btnMainMenu);
 	}
 	
 	private void setColumnWidths() {
+		
 		availMealsTable.getTableHeader().setResizingAllowed(false);
 		availMealsTable.getTableHeader().setReorderingAllowed(false);
 		availMealsTable.getColumnModel().getColumn(0).setPreferredWidth(25);
