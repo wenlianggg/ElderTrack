@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
+import java.net.URL;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
@@ -75,7 +76,8 @@ public class MainFrame extends JFrame {
 		setResizable(false);
 		
 		Toolkit kit = Toolkit.getDefaultToolkit();
-		Image img = kit.createImage("ElderTrack.png");
+		URL url = MainFrame.class.getResource("/eldertrack/resources/icon.png");
+		Image img = kit.createImage(url);
 		setIconImage(img);
 		
 		MasterPane = new JPanel();
