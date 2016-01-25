@@ -36,6 +36,7 @@ import eldertrack.misc.TableHelper;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.SystemColor;
 
 public class MgmtPanel extends JPanel {
 	private static SQLObject so = new SQLObject();
@@ -282,7 +283,7 @@ public class MgmtPanel extends JPanel {
 			elderlyGenderValue.setBounds(179, 150, 116, 22);
 			elderlyManagementPanel.add(elderlyGenderValue);
 			elderlyGenderValue.setColumns(10);
-			
+						
 			JLabel elderlyAge = new JLabel("AGE");
 			elderlyAge.setFont(new Font("Calibri", Font.PLAIN, 24));
 			elderlyAge.setBounds(19, 180, 121, 25);
@@ -361,7 +362,8 @@ public class MgmtPanel extends JPanel {
 			elderlyContactValue.setBounds(179, 300, 116, 22);
 			elderlyManagementPanel.add(elderlyContactValue);
 		lblEManagementLbl = new JLabel("ElderTrack Management");
-		lblEManagementLbl.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		lblEManagementLbl.setForeground(SystemColor.textHighlight);
+		lblEManagementLbl.setFont(new Font("Segoe UI", Font.ITALIC, 40));
 		lblEManagementLbl.setBounds(26, 5, 430, 61);
 		add(lblEManagementLbl);
 		
@@ -728,13 +730,15 @@ public class MgmtPanel extends JPanel {
 							String staffLastName = staffLastNameValue.getText();
 							String staffNric = staffNricValue.getText();
 							String staffBirthString = staffDobValue.getText();
-							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-							LocalDate staffDob = LocalDate.parse(staffBirthString, formatter);
 							String staffUsername = editableUsernameValue.getText();
 							char[] pwCharArr = staffSetPasswordValue.getPassword();
 							String password = DigestUtils.sha512Hex(new String(pwCharArr));
 							int accessLevel = editableAccessLevel.getSelectedIndex();
 							
+							
+							if(staffFirstName.equals("") || staffLastName.equals("") || staffNric.equals("") || staffBirthString.equals("") || staffUsername.equals("") || password.equals("")){
+								JOptionPane.showMessageDialog(null, "One or more fields are empty! Please check your entries!");
+							}else{
 							PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_staff");
 							ResultSet rs = ps.executeQuery();
 							
@@ -749,6 +753,8 @@ public class MgmtPanel extends JPanel {
 								JOptionPane.showMessageDialog(null, "The password field is empty!");
 							}else{
 								PreparedStatement ps1 = so.getPreparedStatement("INSERT INTO et_staff (username, password, firstname, lastname, nric, dob, accesslevel) VALUES (?, ?, ?, ?, ?, ?, ?)");
+								DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+								LocalDate staffDob = LocalDate.parse(staffBirthString, formatter);
 								ps1.setString(1, staffUsername);
 								ps1.setString(2, password);
 								ps1.setString(3, staffFirstName);
@@ -763,9 +769,12 @@ public class MgmtPanel extends JPanel {
 							staffTable.setModel(TableHelper.getStaff(""));
 							setColumnWidths();
 							
-						}catch(SQLException e){
+						}
+							}catch(SQLException e){
 							e.printStackTrace();
 						}
+						
+						
 
 						if(confirmAddStaff.isVisible() == true){
 							confirmAddStaff.setVisible(false);
@@ -786,8 +795,8 @@ public class MgmtPanel extends JPanel {
 							uneditableUsernameValue.setText("");
 							editableUsernameValue.setText("");
 							staffSetPasswordValue.setText("");
+						
 						}
-					
 					}
 				}
 			});
@@ -807,6 +816,9 @@ public class MgmtPanel extends JPanel {
 									String password = DigestUtils.sha512Hex(new String(pwCharArr));
 									int accessLevel = editableAccessLevel.getSelectedIndex();
 									
+									if(firstName.equals("") || lastName.equals("") || nric.equals("") || birthString.equals("")){
+										JOptionPane.showMessageDialog(null, "One or more fields are empty! Please check your entires!");
+									}else{
 									PreparedStatement ps = so.getPreparedStatement("SELECT nric FROM et_staff WHERE staffid NOT IN(?)");
 									ps.setString(1, staffId);
 									ResultSet check = ps.executeQuery();
@@ -845,6 +857,7 @@ public class MgmtPanel extends JPanel {
 									}
 											staffTable.setModel(TableHelper.getStaff(""));
 											setColumnWidths();
+										}
 									}catch(SQLException e){
 									e.printStackTrace();
 								}
