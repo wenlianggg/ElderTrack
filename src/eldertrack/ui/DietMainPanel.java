@@ -77,10 +77,9 @@ public class DietMainPanel extends JPanel implements Presentable {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
 		    	presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
-		    	showNutritionToday(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
 		    }
 		});
-		eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
+		setColumnWidths();
 		tableScrollPane.setViewportView(eldersTable);
 		
 		lblDietLabel = new JLabel("ElderTrack Diet Management");
@@ -104,7 +103,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				eldersTable.setModel(TableHelper.getElderlyBasic("%" + searchField.getText() + "%"));
-				eldersTable.getColumnModel().getColumn(0).setPreferredWidth(36);
+				setColumnWidths();
 			}
 		});
 		btnSearch.setBounds(228, 99, 65, 23);
@@ -141,7 +140,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 		lblRoomNumber.setBounds(10, 75, 209, 20);
 		infoPanel.add(lblRoomNumber);
 		
-		lblNric = new JLabel("NRIC: SXXXXXXXA");
+		lblNric = new JLabel("NRIC: --");
 		lblNric.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNric.setBounds(10, 115, 209, 20);
 		infoPanel.add(lblNric);
@@ -197,7 +196,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 		infoPanel.add(lblVitaminE);
 		
 		lblPreviousMeal = new JLabel("Previous Meal: ______________________");
-		lblPreviousMeal.setBounds(10, 370, 209, 14);
+		lblPreviousMeal.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblPreviousMeal.setBounds(10, 370, 286, 37);
 		infoPanel.add(lblPreviousMeal);
 		
 		lblReviewInfo = new JLabel("Review Information");
@@ -271,8 +271,15 @@ public class DietMainPanel extends JPanel implements Presentable {
 		add(btnMainMenu);
 	}
 	
-	public void showNutritionToday(String personid) {
-		
+	private void setColumnWidths() {
+		eldersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		eldersTable.getTableHeader().setResizingAllowed(false);
+		eldersTable.getTableHeader().setReorderingAllowed(false);
+		eldersTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+		eldersTable.getColumnModel().getColumn(0).setMaxWidth(25);
+		eldersTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+		eldersTable.getColumnModel().getColumn(1).setMaxWidth(200);
+		eldersTable.getColumnModel().getColumn(2).setPreferredWidth(120);
 	}
 	
 	public void presentData(String personid) {
@@ -288,12 +295,14 @@ public class DietMainPanel extends JPanel implements Presentable {
 		Nutrition n = el.getMeals().getNutritionToday();
 		lblCalories.setText("RDA Calories (kcal): " + n.getCalories());
 		lblCarbohydrates.setText("Carbohydrates (g): " + n.getCarbs());
-		lblProtein.setText("Protein(g) :" + n.getProtein());		
+		lblProtein.setText("Protein(g): " + n.getProtein());		
 		lblIron.setText("Iron(mg): " + n.getIron());		
 		lblVitaminA.setText("Vitamin A (%): " + n.getVita());		
 		lblVitaminC.setText("Vitamin C (%): " + n.getVitc());		
 		lblVitaminD.setText("Vitamin D (%): " + n.getVitd());		
 		lblVitaminE.setText("Vitamin E (%): " + n.getVite());
+		
+		lblPreviousMeal.setText("Previous Meal: " + el.getMeals().getPrevMealName());
 
 	}
 

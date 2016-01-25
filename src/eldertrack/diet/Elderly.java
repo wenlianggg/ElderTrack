@@ -114,6 +114,10 @@ public class Elderly {
 		return eldermap;
 	}
 	
+	public static void clearElderMap() {
+		eldermap = null;
+	}
+	
 	public static boolean updateElderlyInDb(Elderly el) {
 		return SerializerSQL.storeMeals(el.getId(), el.getMeals(), so);
 	}
