@@ -57,13 +57,12 @@ public class Meals implements java.io.Serializable {
 				selected.add(nutrition.get(i));
 			}
 		Nutrition totaln = new Nutrition();
-		for (int i = 0; i < nutrition.size() - 1; i++)
+		for (int i = 0; i < nutrition.size(); i++)
 			totaln.add(selected.get(i));
 		return totaln;
 	}
 	
 	public DefaultTableModel getTableModel() {
-		
 		Vector<Vector<Object>> mealvector = new Vector<Vector<Object>>();
 		Vector<String> columns = new Vector<String>();
 		Vector<String> createdvector = new Vector<String>();
@@ -85,34 +84,7 @@ public class Meals implements java.io.Serializable {
 		DefaultTableModel dtm = new DefaultTableModel(mealvector, columns);
 		return dtm;
 	}
-	
-	public String getMealName(int i) {
-		return mealname.get(i);
-	}
-	
-	public Nutrition getNutrition(int i) {
-		return nutrition.get(i);
-	}
-	
-	public void setNutrition(int i, Nutrition n) {
-		nutrition.set(i, n);
-	}
-	
-	public MealProperties getMealProperties(int i) {
-		return mealprop.get(i);
-	}
-	
-	public ArrayList<String> getMealName() {
-		return this.mealname;
-	}
-	
-	public ArrayList<Nutrition> getNutrition() {
-		return this.nutrition;
-	}
-	
-	public ArrayList<MealProperties> getMealProperties() {
-		return this.mealprop;
-	}
+
 
 	Meals addTestMeal() {
 		mealname.add("Test Meal");
@@ -162,5 +134,34 @@ public class Meals implements java.io.Serializable {
 	        ret.add(col);
 	    }
 	    return ret;
+	}
+	
+	
+	public String getMealName(int i) {
+		return mealname.get(i);
+	}
+	
+	public Nutrition getNutrition(int i) {
+		return nutrition.get(i);
+	}
+	
+	public void setNutrition(int i, Nutrition n) {
+		nutrition.set(i, n);
+	}
+	
+	public MealProperties getMealProperties(int i) {
+		return mealprop.get(i);
+	}
+	
+	public ArrayList<String> getMealName() {
+		return this.mealname;
+	}
+	
+	public ArrayList<Nutrition> getNutrition() {
+		return this.nutrition;
+	}
+	
+	public ArrayList<MealProperties> getMealProperties() {
+		return this.mealprop;
 	}
 }

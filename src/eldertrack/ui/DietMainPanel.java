@@ -121,7 +121,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 		infoPanel.setLayout(null);
 		
 		lblElderid = new JLabel("ElderID:");
-		lblElderid.setBounds(10, 55, 209, 14);
+		lblElderid.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblElderid.setBounds(10, 55, 209, 20);
 		infoPanel.add(lblElderid);
 		
 		lblInfoName = new JLabel("Elderly Name");
@@ -131,61 +132,72 @@ public class DietMainPanel extends JPanel implements Presentable {
 		infoPanel.add(lblInfoName);
 		
 		lblAge = new JLabel("Age: --");
-		lblAge.setBounds(10, 95, 209, 14);
+		lblAge.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblAge.setBounds(10, 95, 209, 20);
 		infoPanel.add(lblAge);
 		
 		lblRoomNumber = new JLabel("Room Number: --");
-		lblRoomNumber.setBounds(10, 75, 209, 14);
+		lblRoomNumber.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRoomNumber.setBounds(10, 75, 209, 20);
 		infoPanel.add(lblRoomNumber);
 		
 		lblNric = new JLabel("NRIC: SXXXXXXXA");
-		lblNric.setBounds(10, 115, 209, 14);
+		lblNric.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNric.setBounds(10, 115, 209, 20);
 		infoPanel.add(lblNric);
 		
 		separator = new JSeparator();
-		separator.setBounds(3, 139, 659, 3);
+		separator.setBounds(2, 146, 659, 3);
 		infoPanel.add(separator);
 		
 		lblStatisticsForToday = new JLabel("Statistics For Today");
 		lblStatisticsForToday.setForeground(new Color(0, 128, 128));
 		lblStatisticsForToday.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		lblStatisticsForToday.setBounds(10, 145, 209, 29);
+		lblStatisticsForToday.setBounds(11, 158, 209, 29);
 		infoPanel.add(lblStatisticsForToday);
 		
 		lblCalories = new JLabel("RDA Calories (kcal):  --- ");
-		lblCalories.setBounds(10, 181, 209, 14);
+		lblCalories.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCalories.setBounds(11, 195, 209, 20);
 		infoPanel.add(lblCalories);
 		
 		lblCarbohydrates = new JLabel("Carbohydrates (g): --- ");
-		lblCarbohydrates.setBounds(10, 201, 209, 14);
+		lblCarbohydrates.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCarbohydrates.setBounds(11, 215, 209, 20);
 		infoPanel.add(lblCarbohydrates);
 		
 		lblProtein = new JLabel("Protein(g) :  --- ");
-		lblProtein.setBounds(10, 221, 209, 14);
+		lblProtein.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblProtein.setBounds(11, 235, 209, 20);
 		infoPanel.add(lblProtein);
 		
 		lblIron = new JLabel("Iron(mg):  --- ");
-		lblIron.setBounds(11, 241, 208, 14);
+		lblIron.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblIron.setBounds(12, 255, 208, 20);
 		infoPanel.add(lblIron);
 		
 		lblVitaminA = new JLabel("Vitamin A (mg):  --- ");
-		lblVitaminA.setBounds(10, 261, 209, 14);
+		lblVitaminA.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVitaminA.setBounds(11, 275, 209, 20);
 		infoPanel.add(lblVitaminA);
 		
 		lblVitaminC = new JLabel("Vitamin C (mg):  --- ");
-		lblVitaminC.setBounds(10, 281, 209, 14);
+		lblVitaminC.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVitaminC.setBounds(11, 295, 209, 20);
 		infoPanel.add(lblVitaminC);
 		
 		lblVitaminD = new JLabel("Vitamin D (mg):  --- ");
-		lblVitaminD.setBounds(10, 321, 209, 14);
+		lblVitaminD.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVitaminD.setBounds(11, 335, 209, 20);
 		infoPanel.add(lblVitaminD);
 		
 		lblVitaminE = new JLabel("Vitamin E (mg):  --- ");
-		lblVitaminE.setBounds(10, 301, 209, 14);
+		lblVitaminE.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVitaminE.setBounds(11, 315, 209, 20);
 		infoPanel.add(lblVitaminE);
 		
 		lblPreviousMeal = new JLabel("Previous Meal: ______________________");
-		lblPreviousMeal.setBounds(9, 357, 209, 14);
+		lblPreviousMeal.setBounds(10, 370, 209, 14);
 		infoPanel.add(lblPreviousMeal);
 		
 		lblReviewInfo = new JLabel("Review Information");
@@ -278,10 +290,10 @@ public class DietMainPanel extends JPanel implements Presentable {
 		lblCarbohydrates.setText("Carbohydrates (g): " + n.getCarbs());
 		lblProtein.setText("Protein(g) :" + n.getProtein());		
 		lblIron.setText("Iron(mg): " + n.getIron());		
-		lblVitaminA.setText("Vitamin A (mg): " + n.getVita());		
-		lblVitaminC.setText("Vitamin C (mg): " + n.getVitc());		
-		lblVitaminD.setText("Vitamin D (mg): " + n.getVitd());		
-		lblVitaminE.setText("Vitamin E (mg): " + n.getVite());
+		lblVitaminA.setText("Vitamin A (%): " + n.getVita());		
+		lblVitaminC.setText("Vitamin C (%): " + n.getVitc());		
+		lblVitaminD.setText("Vitamin D (%): " + n.getVitd());		
+		lblVitaminE.setText("Vitamin E (%): " + n.getVite());
 
 	}
 
