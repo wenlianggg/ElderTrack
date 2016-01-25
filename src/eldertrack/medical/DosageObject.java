@@ -8,7 +8,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -67,6 +70,7 @@ private String MedDosage;
 		System.out.println("Dos: "+getMedDosage());
 	}
 	
+	
 	public static void ResetDosage(SQLObject so){
 		ResultSet rs;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -99,6 +103,56 @@ private String MedDosage;
 			}
 		}
 	}
+	
+	public static JComboBox<String> GetListOfTreatMent(SQLObject so){
+		ResultSet rs;
+		
+		List<String> treatmentList=new ArrayList<String>();
+		try {
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT DISTINCT treatment FROM et_medication");
+			stmt.executeQuery();
+			rs=stmt.getResultSet();
+			treatmentList.add("-Selection-");
+			while(rs.next()){
+				treatmentList.add(rs.getString("treatment"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		JComboBox<String> treatmentBox=new JComboBox<String>();
+		treatmentBox.setModel(new DefaultComboBoxModel(treatmentList.toArray()));
+		
+		return treatmentBox;
+	}
+	
+	public static JComboBox<String> GetListOfMedication(SQLObject so,String treatment){
+		ResultSet rs;
+		
+		List<String> medicationList=new ArrayList<String>();
+		try {
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT medication FROM et_medication WHERE treatment=? ");
+			stmt.setString(1, treatment);
+			stmt.executeQuery();
+			rs=stmt.getResultSet();
+			medicationList.add("-Selection-");
+			while(rs.next()){
+				medicationList.add(rs.getString("medication"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		JComboBox<String> medicationBox=new JComboBox<String>();
+		medicationBox.setModel(new DefaultComboBoxModel(medicationList.toArray()));
+		
+		return medicationBox;
+	}
+	
+	
+	
 	
 	
 	public static JTable managementTableModel(JTable MainTable ){
@@ -241,13 +295,20 @@ private String MedDosage;
 	public static DefaultTableModel buildDefaultManageModel(){
 		DefaultTableModel defModel;
 		defModel=new DefaultTableModel(
-				new Object[][] {
-				},
+				new Object[][] {{null, null,null}},
 				new String[] {
 						"Description", "Prescription", "Medication Type","Dosage"
 				}
 				);
 		return defModel;
 	}
-
+	
+	
+	/*public static void main(String[] args) {
+		SQLObject so=new SQLObject();
+		List<String> treatmentList=GetListOfMedication(so);
+		for(int i=0;i<treatmentList.size();i++){
+			System.out.println(treatmentList.get(i));
+		}
+	}*/
 }
