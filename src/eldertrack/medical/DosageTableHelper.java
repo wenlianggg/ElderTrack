@@ -18,27 +18,28 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 
 public class DosageTableHelper  {
-	public static DefaultTableModel getElderlyFromQueryDos(String timing,String position) throws SQLException {
+	
+	public static DefaultTableModel getElderlyFromQueryDos(String TimeOfDay,String name) throws SQLException {
 		SQLObject so = new SQLObject();
 		ResultSet rs = null;
 
-		if(timing.equalsIgnoreCase("Morning")){
+		if(TimeOfDay.equalsIgnoreCase("Morning")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT morningdosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		else if(timing.equalsIgnoreCase("Afternoon")){
+		else if(TimeOfDay.equalsIgnoreCase("Afternoon")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT afternoondosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		else if(timing.equalsIgnoreCase("Noon")){
+		else if(TimeOfDay.equalsIgnoreCase("Noon")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT noondosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
@@ -116,7 +117,6 @@ public class DosageTableHelper  {
 
 	public static DefaultTableModel buildTableModelForManagement(ResultSet rs) throws SQLException {
 		Vector<String> columnNames = new Vector<String>();
-
 		columnNames.add("ID");
 		columnNames.add("NAME");
 		columnNames.add("GENDER");
@@ -156,27 +156,25 @@ public class DosageTableHelper  {
 		return dtm;
 	}
 
-	public static DefaultTableModel getElderlyFromQueryManagementDos(String timing,String position,SQLObject so) throws SQLException {
-		
+	public static DefaultTableModel getElderlyFromQueryManagementDos(String TimeOfDay,String name,SQLObject so) throws SQLException {
 		ResultSet rs = null;
-
-		if(timing.equalsIgnoreCase("Morning")){
+		if(TimeOfDay.equalsIgnoreCase("Morning")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT morningdosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		else if(timing.equalsIgnoreCase("Afternoon")){
+		else if(TimeOfDay.equalsIgnoreCase("Afternoon")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT afternoondosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		else if(timing.equalsIgnoreCase("Noon")){
+		else if(TimeOfDay.equalsIgnoreCase("Noon")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT noondosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();

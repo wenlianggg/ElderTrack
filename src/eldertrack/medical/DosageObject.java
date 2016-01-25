@@ -85,7 +85,6 @@ private String MedDosage;
 			rs.next();
 			lastlogin=rs.getTimestamp("lastlogin");	
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String lastDate=dateFormat.format(lastlogin);
@@ -98,12 +97,12 @@ private String MedDosage;
 				stmt.setInt(3, 0);
 				stmt.executeUpdate();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static JComboBox<String> GetListOfTreatMent(SQLObject so){
 		ResultSet rs;
 		
@@ -127,6 +126,7 @@ private String MedDosage;
 		return treatmentBox;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static JComboBox<String> GetListOfMedication(SQLObject so,String treatment){
 		ResultSet rs;
 		
@@ -153,8 +153,6 @@ private String MedDosage;
 	
 	
 	
-	
-	
 	public static JTable managementTableModel(JTable MainTable ){
 		MainTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		MainTable.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -164,7 +162,7 @@ private String MedDosage;
 		return MainTable;
 	}
 	
-	
+
 	public static Boolean checkDosageNeeded(ElderData summaryData){
 		if(summaryData.getElderNumDosageNeeded()==0){
 			JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
@@ -175,32 +173,32 @@ private String MedDosage;
 		}
 	}
 	
-	public static Boolean checkDosageValid(String roomNum,String timing,SQLObject so){
+	public static Boolean checkDosageValid(String roomNum,String TimeOfDay,SQLObject so){
 		ResultSet rs = null;
 		int totalElder=0;
-		int checked=0;
+		int checkedDosage=0;
 		try {
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
 			stmt.setString(1,roomNum);
 			stmt.executeQuery();
 			rs = stmt.getResultSet();
 			while(rs.next()){
-				if(timing.equalsIgnoreCase("morning")){
+				if(TimeOfDay.equalsIgnoreCase("morning")){
 					if(rs.getInt("morningtaken")!=0){
-						checked++;
+						checkedDosage++;
 					}
 					totalElder++;
 				}
-				else if(timing.equalsIgnoreCase("afternoon")){
+				else if(TimeOfDay.equalsIgnoreCase("afternoon")){
 					if(rs.getInt("afternoontaken")!=0){
-						checked++;
+						checkedDosage++;
 					}
 					totalElder++;
 				}
 
 				else{
 					if(rs.getInt("noontaken")!=0){
-						checked++;
+						checkedDosage++;
 					}
 					totalElder++;
 				}
@@ -209,7 +207,7 @@ private String MedDosage;
 
 			e.printStackTrace();
 		}
-		if(checked==totalElder){
+		if(checkedDosage==totalElder){
 			return false;
 		}
 		else{
@@ -239,7 +237,6 @@ private String MedDosage;
 				ps.executeUpdate();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -270,7 +267,6 @@ private String MedDosage;
 			}
 			
 		}catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

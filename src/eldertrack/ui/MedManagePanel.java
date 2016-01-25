@@ -2,29 +2,20 @@ package eldertrack.ui;
 
 import java.awt.CardLayout;
 import java.awt.Font;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-
 import eldertrack.db.SQLObject;
 import eldertrack.medical.DosageObject;
 import eldertrack.medical.DosageTableHelper;
 import eldertrack.medical.ElderData;
-
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -38,26 +29,29 @@ import javax.swing.JTextPane;
 public class MedManagePanel extends JPanel {
 	private static final long serialVersionUID = -1318196195924759182L;
 	private SQLObject so=new SQLObject();
-	private JTable eldertable;
+	
+	// Elder Details
 	private JTextField ElderIDField;
 	private JTextField NameField;
 	private JTextField AgeField;
 	private JTextField GenderField;
 	private JTextPane summaryPane;
-
+	// Main Table
+	private JTextField SearchField;
+	private JTable eldertable;
 	private DefaultTableModel allEldersData;
 	private JScrollPane elderDataPane;
-
+	// Dosage Tables
 	private JTable MorningTable;
 	private JTable AfterNoonTable;
 	private JTable NoonTable;
-
+	// Dosage Models
 	private DefaultTableModel Morningmodel;
 	private DefaultTableModel Afternoonmodel;
 	private DefaultTableModel Noonmodel;
 
 
-	private JTextField SearchField;
+	
 
 	public MedManagePanel() {
 		setLayout(null);
