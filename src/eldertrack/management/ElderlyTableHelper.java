@@ -18,7 +18,7 @@ public class ElderlyTableHelper {
 	public static SQLObject so = new SQLObject();
 	public static DefaultTableModel getElderlyFromQuery(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
-		return buildTableModel(so.getResultSet("SELECT id, name, dob, nric, gender, room, bed, address FROM et_elderly WHERE name LIKE ?", search));
+		return buildTableModel(so.getResultSet("SELECT id, name, dob, nric, gender, room, bed, contact, address FROM et_elderly WHERE name LIKE ?", search));
 	}
 	
 	// Method from http://stackoverflow.com/questions/10620448/most-simple-code-to-populate-jtable-from-resultset
@@ -33,6 +33,7 @@ public class ElderlyTableHelper {
 	    columnNames.add("G");
 	    columnNames.add("R");
 	    columnNames.add("B");
+	    columnNames.add("NOK");
 	    columnNames.add("ADDRESS");
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	    while (rs.next()) {

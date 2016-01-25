@@ -33,6 +33,7 @@ public class LoginPanel extends JPanel {
 	JButton forgetPassButton;
 	String loginMessage = "Outcome Undefined";
 	JProgressBar progressBar;
+	private JLabel lblUtilitiesForNursing;
 	
 	LoginPanel() {
 		setLayout(null);
@@ -103,11 +104,16 @@ public class LoginPanel extends JPanel {
 		passwordField.addActionListener(loginAction);
 		loginButton.addActionListener(loginAction);
 		
-		lblEldertrackLogin = new JLabel("ElderTrack Authentication");
+		lblEldertrackLogin = new JLabel("ElderTrack Suite");
 		lblEldertrackLogin.setBounds(10, 0, 535, 54);
 		add(lblEldertrackLogin);
 		lblEldertrackLogin.setForeground(SystemColor.textHighlight);
-		lblEldertrackLogin.setFont(new Font("Segoe UI", Font.PLAIN, 40));
+		lblEldertrackLogin.setFont(new Font("Segoe UI", Font.ITALIC, 40));
+		
+		lblUtilitiesForNursing = new JLabel("Utilities for Nursing Homes");
+		lblUtilitiesForNursing.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblUtilitiesForNursing.setBounds(10, 42, 262, 30);
+		add(lblUtilitiesForNursing);
 		
 		JButton btnBypassLogin = new JButton("Bypass Login");
 		btnBypassLogin.addActionListener(new ActionListener() {
@@ -122,7 +128,7 @@ public class LoginPanel extends JPanel {
 		
 		progressBar = new JProgressBar(0, 100);
 		progressBar.setToolTipText("Login Progress");
-		progressBar.setString("Login to begin loading!");
+		progressBar.setString("Login to begin loading");
 		progressBar.setBounds(250, 471, 387, 35);
 		progressBar.setStringPainted(true);
 		add(progressBar);
