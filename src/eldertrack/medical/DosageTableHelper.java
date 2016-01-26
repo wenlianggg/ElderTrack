@@ -238,14 +238,15 @@ public class DosageTableHelper  {
 							JComboBox<String> comboBox = null;
 							TableColumn feedingCol=Model.getColumnModel().getColumn(1);
 							comboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
-							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));		
+							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));
 						}
 					}
 				}
 			}
 		});
 	}
-	// when i have time to add
+	
+/*	// when i have time to add
 	public static void MasterTabelListener(JTable MorningModel,JTable AfternoonModel,JTable NoonModel,SQLObject so){
 		MorningModel.getModel().addTableModelListener(new TableModelListener() {
 			public void tableChanged(TableModelEvent evt) {
@@ -266,12 +267,18 @@ public class DosageTableHelper  {
 			}
 		});
 	}
-	
+	*/
 	public static void AddManagementModel(JTable Model,SQLObject so){
-		JComboBox<String> comboBox = null;
-		TableColumn feedingCol=Model.getColumnModel().getColumn(0);
-		comboBox=DosageObject.GetListOfTreatMent(so);
-		feedingCol.setCellEditor(new DefaultCellEditor(comboBox));
+		JComboBox<String> treatmentBox = null;
+		TableColumn treatmentCol=Model.getColumnModel().getColumn(0);
+		treatmentBox=DosageObject.GetListOfTreatMent(so);
+		treatmentCol.setCellEditor(new DefaultCellEditor(treatmentBox));
+		
+		
+		JComboBox<Double> dosLimitBox = null;
+		TableColumn dosLimitCol=Model.getColumnModel().getColumn(3);
+		dosLimitBox=DosageObject.GetListOfDosageLimit(so,"Glucofin");
+		dosLimitCol.setCellEditor(new DefaultCellEditor(dosLimitBox));
 	}
 
 }

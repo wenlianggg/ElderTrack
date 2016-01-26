@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -145,7 +146,6 @@ private String MedDosage;
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static JComboBox<String> GetListOfMedication(SQLObject so,String treatment){
 		ResultSet rs;
-		
 		List<String> medicationList=new ArrayList<String>();
 		try {
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT medication FROM et_medication WHERE treatment=? ");
@@ -166,7 +166,36 @@ private String MedDosage;
 		
 		return medicationBox;
 	}
-	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static JComboBox<Double> GetListOfDosageLimit(SQLObject so,String medication){
+		ResultSet rs;
+		List<Double> dosageLimitList=new ArrayList<Double>();
+		double dosLimit = 0;
+		double dosAmt=0.5;
+		try {
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT dosagelimit FROM et_medication WHERE medication=? ");
+			stmt.setString(1, medication);
+			stmt.executeQuery();
+			rs=stmt.getResultSet();
+			while(rs.next()){
+				dosLimit=rs.getDouble("dosagelimit");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for(double k=50;k<dosLimit;k+=50){
+			if(dosLimit/50>0){
+				dosageLimitList.add(dosAmt);
+				
+			}
+			dosAmt+=0.5;
+		}
+		JComboBox<Double> dosLimitBox=new JComboBox<Double>();
+		dosLimitBox.setModel(new DefaultComboBoxModel(dosageLimitList.toArray()));
+		return dosLimitBox;
+		
+	}
 	
 	/*
 	 * Method: managementTableModel(JTable MainTable )
@@ -303,38 +332,42 @@ private String MedDosage;
 		DosageObject updateDosage;
 		
 		for(int i=0;i<tablemodel.getRowCount();i++){
-			if(!tablemodel.getModel().getValueAt(i,0).equals("-Selection-")){
+			if(!((String) tablemodel.getModel().getValueAt(i,0)).equalsIgnoreCase("-Selection-")){
 				updateDosage=new DosageObject();
 				updateDosage.setMedDescrip((String) tablemodel.getModel().getValueAt(i,0));
 				updateDosage.setMedPrescrip((String) tablemodel.getModel().getValueAt(i,1));
 				updateDosage.setMedType((String) tablemodel.getModel().getValueAt(i,2));
-				updateDosage.setMedDosage((String) tablemodel.getModel().getValueAt(i,3));
+				updateDosage.setMedDosage(tablemodel.getModel().getValueAt(i,3).toString());
 				updateList.add(updateDosage);
 			}
+			
 		}
-		
+
 		return updateList;
 	}
 	
 	public static Boolean CheckDuplicateManagementTable(JTable tablemodel){
-		
-		
-		
-		for (int i=0; i<tablemodel.getRowCount(); i++) {
-		    
-		} 
-		
-		
-		
-		return false;
-		
+		ArrayList<String> duplicationCheckList=new ArrayList<String>();
+		Boolean result=true;
+		for(int i=0;i<tablemodel.getRowCount();i++){
+			if(!tablemodel.getModel().getValueAt(i,0).equals("-Selection-")){
+				if(duplicationCheckList.contains((String) tablemodel.getModel().getValueAt(i,0))){
+					result=false;
+					break;
+				}
+				else{
+					duplicationCheckList.add((String) tablemodel.getModel().getValueAt(i,0));
+				}
+			}
+		}		
+		return result;
 	}
 	
 	
 	public static DefaultTableModel buildDefaultManageModel(){
 		DefaultTableModel defModel;
 		defModel=new DefaultTableModel(
-				new Object[][] {{null, null,null}},
+				new Object[][] {},
 				new String[] {
 						"Description", "Prescription", "Medication Type","Dosage"
 				}
@@ -345,9 +378,12 @@ private String MedDosage;
 	
 	/*public static void main(String[] args) {
 		SQLObject so=new SQLObject();
-		List<String> treatmentList=GetListOfMedication(so);
-		for(int i=0;i<treatmentList.size();i++){
-			System.out.println(treatmentList.get(i));
-		}
+		JComboBox<Double> comboBox =GetListOfDosageLimit(so,"Glucofin");
+		ComboBoxModel model = comboBox.getModel();
+        int size = model.getSize();
+        for(int i=0;i<size;i++) {
+            Object element = model.getElementAt(i);
+            System.out.println("Element at " + i + " = " + element);
+        }
 	}*/
 }
