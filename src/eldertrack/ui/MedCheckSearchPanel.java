@@ -41,6 +41,7 @@ public class MedCheckSearchPanel extends JPanel {
 	public static String timeselected;
 	private ElderData summaryCheckDetails;
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public MedCheckSearchPanel() {
 		setBounds(5, 5, 975, 510);
 		setLayout(null);

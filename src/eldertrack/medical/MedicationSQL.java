@@ -27,7 +27,7 @@ public class MedicationSQL {
 
 		PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningtaken = ? WHERE id = ?");
 		statement.setObject(1, 0);
-		statement.setInt(2, id);
+		statement.setInt(2, id); 
 		statement.executeUpdate();
 	}
 

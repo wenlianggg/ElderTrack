@@ -310,12 +310,10 @@ public class MedCheckPanel extends JPanel {
 		add(btnSaveQuit);
 
 		btnSaveQuit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {	
-				if(TempField.getText().equals("") ||  BloodField.getText().equals("") || 
-						HeartField.getText().equals("") || SugarField.getText().equals("")|| 
-						comboEye.getSelectedItem().toString().equals(" ") || comboEar.getSelectedItem().toString().equals(" ")
-						){
-					JOptionPane.showMessageDialog(null, "Please Check Again");
+			public void actionPerformed(ActionEvent e) {
+				boolean valid = CheckUpObject.validValues(TempField.getText(), BloodField.getText(), HeartField.getText(), SugarField.getText());
+				if(valid == false){
+					JOptionPane.showMessageDialog(null, "Either fields are empty or values are invalid. Please check your entries again!");
 				}
 				else{
 					try {
@@ -368,14 +366,12 @@ public class MedCheckPanel extends JPanel {
 
 
 		btnNextElder.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				numofElder--;
-				if(TempField.getText().equals("") ||  BloodField.getText().equals("") || 
-						HeartField.getText().equals("") || SugarField.getText().equals("")|| 
-						comboEye.getSelectedItem().toString().equals(" ") || comboEar.getSelectedItem().toString().equals(" ")
-						){
-					JOptionPane.showMessageDialog(null, "Please Check Again");
+				// Validation of values
+				boolean valid = CheckUpObject.validValues(TempField.getText(), BloodField.getText(), HeartField.getText(), SugarField.getText());
+				if(valid == false){
+					JOptionPane.showMessageDialog(null, "Either fields are empty or values are invalid. Please check your entries again!");
 				}
 				else{
 					if(counter+1!=CheckList.size()){
