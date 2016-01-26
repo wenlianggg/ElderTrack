@@ -271,6 +271,7 @@ public class DietModifyPanel extends JPanel implements Presentable {
 			public void actionPerformed(ActionEvent e) {
 				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 		        parentCards.show(DietSection.CardsPanel, DietSection.DMAINPANEL);
+		        clearData();
 			}
 		});
 		btnBackToDiet.setBounds(782, 611, 203, 48);
@@ -316,24 +317,29 @@ public class DietModifyPanel extends JPanel implements Presentable {
 	
 	private void saveData() {
 		System.out.println("Saving modified meal...");
-		int currentMealSelected = (Integer) prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0);
+		int mealid = Integer.parseInt((String)prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0));
 		Nutrition n = new Nutrition();
 		
 		// Build a new nutrition object with given inputs
-		n.setVita(Integer.parseInt(fieldVitA.getText())).
-		setVitc(Integer.parseInt(fieldVitC.getText())).
-		setVitd(Integer.parseInt(fieldVitD.getText())).
-		setVite(Integer.parseInt(fieldVitE.getText())).
-		setFat(Integer.parseInt(fieldFat.getText())).
-		setIron(Integer.parseInt(fieldIron.getText())).
-		setCarbs(Integer.parseInt(fieldCarbohydrates.getText())).
-		setCalories(Integer.parseInt(fieldCalories.getText())).
-		setProtein(Integer.parseInt(fieldProtein.getText()));
-		
-		eldermap.get(this.currentElderly).getMeals().setNutrition(currentMealSelected, n);
-		Meals m = eldermap.get(this.currentElderly).getMeals();
-		SerializerSQL.storeMeals(this.currentElderly, m, TableHelper.getSQLInstance());
+		try {
+			n.setVita(Integer.parseInt(fieldVitA.getText())).
+			setVitc(Integer.parseInt(fieldVitC.getText())).
+			setVitd(Integer.parseInt(fieldVitD.getText())).
+			setVite(Integer.parseInt(fieldVitE.getText())).
+			setFat(Integer.parseInt(fieldFat.getText())).
+			setIron(Integer.parseInt(fieldIron.getText())).
+			setCarbs(Integer.parseInt(fieldCarbohydrates.getText())).
+			setCalories(Integer.parseInt(fieldCalories.getText())).
+			setProtein(Integer.parseInt(fieldProtein.getText()));
+			
+			eldermap.get(this.currentElderly).getMeals().setNutrition(mealid, n);
+			Meals m = eldermap.get(this.currentElderly).getMeals();
+			SerializerSQL.storeMeals(this.currentElderly, m, TableHelper.getSQLInstance());
+			JOptionPane.showMessageDialog(null, "Changes were saved successfully!");
 		System.out.println("Saved meal into database!");
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "ERROR: Please check that all your inputs are correct!");
+		}
 	}
 	
 	private void removeEntry() {
@@ -370,16 +376,21 @@ public class DietModifyPanel extends JPanel implements Presentable {
 			lblModifiedBy.setText("Modified By: Staff ID - " + mp.getEditor().toString());
 		} else {
 			System.out.println("Nutrition is null.");
-			fieldVitA.setText("");
-			fieldVitC.setText("");
-			fieldVitD.setText("");
-			fieldVitE.setText("");
-			fieldFat.setText("");
-			fieldIron.setText("");
-			fieldCarbohydrates.setText("");
-			fieldCalories.setText("");
-			fieldProtein.setText("");
+			clearData();
 		}
+	}
+	
+	void clearData() {
+		lblMealName.setText("");
+		fieldVitA.setText("");
+		fieldVitC.setText("");
+		fieldVitD.setText("");
+		fieldVitE.setText("");
+		fieldFat.setText("");
+		fieldIron.setText("");
+		fieldCarbohydrates.setText("");
+		fieldCalories.setText("");
+		fieldProtein.setText("");
 	}
 
 	@Override
