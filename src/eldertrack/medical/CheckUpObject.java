@@ -19,7 +19,6 @@ import eldertrack.login.StaffSession;
 import eldertrack.ui.MainFrame;
 
 public class CheckUpObject  implements Serializable {
-
 	/**
 	 * 
 	 */
@@ -31,7 +30,7 @@ public class CheckUpObject  implements Serializable {
 	private boolean elderEye =false;
 	private boolean elderEar =false;
 	private String elderDate;
-	
+
 
 	public CheckUpObject(){
 	}
@@ -98,7 +97,7 @@ public class CheckUpObject  implements Serializable {
 		System.out.println(getElderDate());
 
 	}
-	
+
 	public static void ResetCheckUp(SQLObject so){
 		ResultSet rs;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -131,13 +130,13 @@ public class CheckUpObject  implements Serializable {
 			}
 		}
 	}
-	
+
 	public static Boolean CheckUpInputValidation(){
-		
-		
-		
-		
-		
+
+
+
+
+
 		return false;
 	}
 	public static Boolean checkupValid(String roomNum,String timing,SQLObject so){
@@ -182,7 +181,7 @@ public class CheckUpObject  implements Serializable {
 			return true;
 		}
 	}
-	
+
 	public static void UpdateCheckUpTaken(int id,String timing,SQLObject so) {
 		try {
 			if(timing.equalsIgnoreCase("morning")){
@@ -210,7 +209,7 @@ public class CheckUpObject  implements Serializable {
 		}
 
 	}
-	
+
 	public static void StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime) throws SQLException{
 		SQLObject so = new SQLObject();
 		PreparedStatement statement = so.getPreparedStatementWithKey("INSERT into et_elderly_checkup(id,name,date,checktime)"+"values(?,?,?,?)");
@@ -225,7 +224,7 @@ public class CheckUpObject  implements Serializable {
 		statementBlob.setInt(2, elderID);
 		statementBlob.executeUpdate();
 	}
-	
+
 	public static void StoreComments(int id,String comments) throws SQLException{
 		SQLObject so = new SQLObject();
 		PreparedStatement statement = so.getPreparedStatementWithKey("update et_elderly set checkupsummary=? where id=?");
@@ -236,29 +235,33 @@ public class CheckUpObject  implements Serializable {
 	// for report
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
 		SQLObject so = new SQLObject();
-		ResultSet rs = so.getResultSet("SELECT name,date FROM et_elderly_checkup " );
-
-		while(rs.next()){
-			String name=rs.getString("name");
-			String date=rs.getString("date");
-			System.out.println(name);
-			System.out.println(date);
-		}
-
-		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup FROM et_elderly_checkup WHERE id = ?");
+		CheckUpObject checking=null;
+		String name=null;
+		String date=null;
+		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT name,date FROM et_elderly_checkup WHERE id = ?");
 		statement.setInt(1, id);
-		ResultSet rs1 = statement.executeQuery();
-		rs1.next();
-		ByteArrayInputStream in = new ByteArrayInputStream(rs1.getBytes(1));
-		ObjectInputStream is = new ObjectInputStream(in);
-		Object checkingBlob =(Object) is.readObject();
-		CheckUpObject checking=(CheckUpObject) checkingBlob;
+		ResultSet rs = statement.executeQuery();
+		while(rs.next()){
+			name=rs.getString("name");
+			date=rs.getString("date");
+		}
+		PreparedStatement statement1 = so.getPreparedStatementWithKey("SELECT checkup FROM et_elderly_checkup WHERE id = ?");
+		statement1.setInt(1, id);
+		ResultSet rs1 = statement1.executeQuery();
+		while(rs1.next()){
+			ByteArrayInputStream in = new ByteArrayInputStream(rs1.getBytes(1));
+			ObjectInputStream is = new ObjectInputStream(in);
+			Object checkingBlob =(Object) is.readObject();
+			checking=(CheckUpObject) checkingBlob;
+		}
+		System.out.println(name);
+		System.out.println(date);
 		checking.view();
 	}
-	
+
 	// Methods for validation
 	public static boolean validValues(String temp, String bloodPressure, String heartRate, String sugarLvl){
-	
+
 		if(Double.parseDouble(temp) < 0 || Double.parseDouble(temp) > 60 || temp.equals("")){
 			return false;
 		}else if(Double.parseDouble(bloodPressure) < 70 || Double.parseDouble(bloodPressure) > 190 || bloodPressure.equals("")){
@@ -271,7 +274,7 @@ public class CheckUpObject  implements Serializable {
 			return true;
 		}
 	}
-	
+
 	// debug mode
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
 		//	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -281,7 +284,7 @@ public class CheckUpObject  implements Serializable {
 		//CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
 		//StoreCheckUp("Ang Siew Fong",reportDate,id, checking);
 
-		RetrieveCheckUp(id);
+		RetrieveCheckUp(1);
 	}
-	
+
 }
