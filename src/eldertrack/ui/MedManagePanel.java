@@ -100,6 +100,7 @@ public class MedManagePanel extends JPanel {
 							MorningTable.setModel(Morningmodel);
 							DosageTableHelper.AddManagementModel(MorningTable, so);
 							DosageTableHelper.TableListen(MorningTable,so);
+						//DosageTableHelper.MasterTabelListener(MorningTable,AfterNoonTable,NoonTable,so);
 						}
 						else{
 							Morningmodel=DosageObject.buildDefaultManageModel();
@@ -232,8 +233,7 @@ public class MedManagePanel extends JPanel {
 		btnMorningAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Morningmodel.addRow(new Object [][] {{"", null,null}});
-				Morningmodel.setValueAt("-Selection-", MorningTable.getRowCount()-1,0);
-				DosageTableHelper.AddManagementModel(MorningTable, so);
+				Morningmodel.setValueAt("-Selection-", MorningTable.getRowCount()-1,0);		
 			}
 		});
 		btnMorningAdd.setBounds(781, 272, 89, 20);
@@ -357,9 +357,11 @@ public class MedManagePanel extends JPanel {
 
 				if(!ElderIDField.getText().equalsIgnoreCase("")){
 					ElderData.UpdateDosageSummary(so, summaryPane.getText(), Integer.parseInt(ElderIDField.getText()));
-					
+				
 					if(Morningmodel.getRowCount()!=0){
 						DosageObject.updateProcessTable(MorningTable);
+						
+						
 						DosageObject.setTableManage("morning", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(MorningTable), 0);
 					}
 					else{

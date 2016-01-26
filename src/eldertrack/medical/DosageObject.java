@@ -71,6 +71,11 @@ private String MedDosage;
 	}
 	
 	
+	/*
+	 * Method: ResetDosage(SQLObject so)
+	 * Purpose: To check if its a new day, if so reset the dosage tracker
+	 * Return: void
+	 */
 	public static void ResetDosage(SQLObject so){
 		ResultSet rs;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -102,6 +107,11 @@ private String MedDosage;
 		}
 	}
 	
+	/*
+	 * Method: GetListOfTreatMent(SQLObject so)
+	 * Purpose: Get the list of treatment from DB and store into a List<String>
+	 * Return: List<String>
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static JComboBox<String> GetListOfTreatMent(SQLObject so){
 		ResultSet rs;
@@ -126,6 +136,12 @@ private String MedDosage;
 		return treatmentBox;
 	}
 	
+	
+	/*
+	 * Method: GetListOfMedication(SQLObject so,String treatment)
+	 * Purpose: Get the list of medicine corresponding with the type of treatment selected from DB and store into a List<String>
+	 * Return: List<String>
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static JComboBox<String> GetListOfMedication(SQLObject so,String treatment){
 		ResultSet rs;
@@ -152,7 +168,11 @@ private String MedDosage;
 	}
 	
 	
-	
+	/*
+	 * Method: managementTableModel(JTable MainTable )
+	 * Purpose: Passes in a table to set the model for the management table
+	 * Return: JTable
+	 */
 	public static JTable managementTableModel(JTable MainTable ){
 		MainTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		MainTable.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -162,7 +182,11 @@ private String MedDosage;
 		return MainTable;
 	}
 	
-
+	/*
+	 * Method: checkDosageNeeded(ElderData summaryData)
+	 * Purpose: To check if dosage is needed
+	 * Return: Boolean
+	 */
 	public static Boolean checkDosageNeeded(ElderData summaryData){
 		if(summaryData.getElderNumDosageNeeded()==0){
 			JOptionPane.showMessageDialog(null, "There is no requirement to do Dosage Tracking for this room");
@@ -274,17 +298,36 @@ private String MedDosage;
 	}
 	
 	public static ArrayList<DosageObject> updateProcessTable(JTable tablemodel){
+		
 		ArrayList<DosageObject> updateList=new ArrayList<DosageObject>();
 		DosageObject updateDosage;
+		
 		for(int i=0;i<tablemodel.getRowCount();i++){
-			updateDosage=new DosageObject();
-			updateDosage.setMedDescrip((String) tablemodel.getModel().getValueAt(i,0));
-			updateDosage.setMedPrescrip((String) tablemodel.getModel().getValueAt(i,1));
-			updateDosage.setMedType((String) tablemodel.getModel().getValueAt(i,2));
-			updateDosage.setMedDosage((String) tablemodel.getModel().getValueAt(i,3));
-			updateList.add(updateDosage);
+			if(!tablemodel.getModel().getValueAt(i,0).equals("-Selection-")){
+				updateDosage=new DosageObject();
+				updateDosage.setMedDescrip((String) tablemodel.getModel().getValueAt(i,0));
+				updateDosage.setMedPrescrip((String) tablemodel.getModel().getValueAt(i,1));
+				updateDosage.setMedType((String) tablemodel.getModel().getValueAt(i,2));
+				updateDosage.setMedDosage((String) tablemodel.getModel().getValueAt(i,3));
+				updateList.add(updateDosage);
+			}
 		}
+		
 		return updateList;
+	}
+	
+	public static Boolean CheckDuplicateManagementTable(JTable tablemodel){
+		
+		
+		
+		for (int i=0; i<tablemodel.getRowCount(); i++) {
+		    
+		} 
+		
+		
+		
+		return false;
+		
 	}
 	
 	

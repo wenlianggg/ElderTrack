@@ -234,11 +234,32 @@ public class DosageTableHelper  {
 				if(Model.getModel().getRowCount()!=0){
 					if(Model.getSelectedColumn()==0){
 						if(!Model.getModel().getValueAt( Model.getSelectedRow(), 0).toString().equals("-Selection-")){
-							String treatChoice=Model.getModel().getValueAt(Model.getSelectedRow(), Model.getSelectedColumn()).toString();
+							String treatmentChoice=Model.getModel().getValueAt(Model.getSelectedRow(), Model.getSelectedColumn()).toString();
 							JComboBox<String> comboBox = null;
 							TableColumn feedingCol=Model.getColumnModel().getColumn(1);
-							comboBox=DosageObject.GetListOfMedication(so,treatChoice);
-							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));
+							comboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
+							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));		
+						}
+					}
+				}
+			}
+		});
+	}
+	// when i have time to add
+	public static void MasterTabelListener(JTable MorningModel,JTable AfternoonModel,JTable NoonModel,SQLObject so){
+		MorningModel.getModel().addTableModelListener(new TableModelListener() {
+			public void tableChanged(TableModelEvent evt) {
+				if(MorningModel.getModel().getRowCount()!=0){
+					if(MorningModel.getSelectedColumn()==0){
+						if(!MorningModel.getModel().getValueAt( MorningModel.getSelectedRow(), 0).toString().equals("-Selection-")){
+							String treatmentChoice=MorningModel.getModel().getValueAt(MorningModel.getSelectedRow(), MorningModel.getSelectedColumn()).toString();
+							
+							AfternoonModel.setValueAt(treatmentChoice, 1, 0);
+							
+							JComboBox<String> comboBox = null;
+							TableColumn feedingCol=MorningModel.getColumnModel().getColumn(1);
+							comboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
+							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));		
 						}
 					}
 				}
