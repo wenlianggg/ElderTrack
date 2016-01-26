@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import eldertrack.weather.Weather;
+import java.awt.SystemColor;
 
 public class WeatherPanel extends JPanel {
 	private static final long serialVersionUID = -30875959185202451L;
@@ -22,7 +23,7 @@ public class WeatherPanel extends JPanel {
 		setLayout(null);
 		
 		lblWeatherText = new JLabel("Weather");
-		lblWeatherText.setForeground(new Color(64, 224, 208));
+		lblWeatherText.setForeground(new Color(0, 191, 255));
 		lblWeatherText.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		lblWeatherText.setBounds(10, 0, 194, 25);
 		

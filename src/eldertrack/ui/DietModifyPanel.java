@@ -149,19 +149,19 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		lblIron.setBounds(11, 160, 100, 14);
 		nutriInfoPanel.add(lblIron);
 		
-		JLabel lblVitaminA = new JLabel("Vitamin A (mg):");
+		JLabel lblVitaminA = new JLabel("Vitamin A (%):");
 		lblVitaminA.setBounds(12, 185, 100, 14);
 		nutriInfoPanel.add(lblVitaminA);
 		
-		JLabel lblVitaminC = new JLabel("Vitamin C (mg):");
+		JLabel lblVitaminC = new JLabel("Vitamin C (%):");
 		lblVitaminC.setBounds(11, 210, 100, 14);
 		nutriInfoPanel.add(lblVitaminC);
 		
-		JLabel lblVitaminE = new JLabel("Vitamin E (mg):");
+		JLabel lblVitaminE = new JLabel("Vitamin E (%):");
 		lblVitaminE.setBounds(12, 235, 100, 14);
 		nutriInfoPanel.add(lblVitaminE);
 		
-		JLabel lblVitaminD = new JLabel("Vitamin D (mg):");
+		JLabel lblVitaminD = new JLabel("Vitamin D (%):");
 		lblVitaminD.setBounds(12, 260, 100, 14);
 		nutriInfoPanel.add(lblVitaminD);
 		

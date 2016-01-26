@@ -2,15 +2,24 @@ package eldertrack.ui;
 
 import java.awt.EventQueue;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import java.awt.CardLayout;
 import javax.swing.JComboBox;
 
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
@@ -18,6 +27,9 @@ import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
 import eldertrack.weather.Weather;
 import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -67,10 +79,15 @@ public class MainFrame extends JFrame {
 	 */
 	
 	private MainFrame() {
-		this.setTitle("ElderTrack Toolkit - ITP192-03 Team 2");
+		this.setTitle("ElderTrack - Utilities For Nursing Homes (ITP192-03-Team 2)");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1000, 810);
 		setResizable(false);
+		
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		URL url = MainFrame.class.getResource("/eldertrack/resources/icon.png");
+		Image img = kit.createImage(url);
+		setIconImage(img);
 		
 		MasterPane = new JPanel();
 		MasterPane.setBorder(null);
@@ -97,12 +114,26 @@ public class MainFrame extends JFrame {
 		
 		String s = "Hello ElderTrack Implementers! This is a sample scrolling announcement text, support for querying will be added soon!";
 		MarqueePanel marqueePanel = new MarqueePanel(s, 160);
-		marqueePanel.setForeground(new Color(255, 255, 255));
 		marqueePanel.setBackground(new Color(0, 153, 255));
 		marqueePanel.setBounds(0, 752, 790, 29);
 		marqueePanel.start();
 		MasterPane.add(marqueePanel);
+		
+		JLabel lblCurrentTime = new JLabel("Current Time Now");
+		lblCurrentTime.setForeground(new Color(25, 25, 112));
+		lblCurrentTime.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCurrentTime.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 21));
+		lblCurrentTime.setBounds(496, 724, 293, 29);
+		MasterPane.add(lblCurrentTime);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy / HH:mm:ss");
+		Timer SimpleTimer = new Timer(1000, new ActionListener(){
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        lblCurrentTime.setText(sdf.format(new Date()));
+		    }
 
+		});
+		SimpleTimer.start();
 		
 	}
 	
@@ -239,6 +270,10 @@ public class MainFrame extends JFrame {
 			return true;
 		else
 			return false;
+	}
+	
+	MgmtPanel getManagementPanel() {
+		return this.MgmtPanel;
 	}
 	
 	DietSection getDietPanel() {

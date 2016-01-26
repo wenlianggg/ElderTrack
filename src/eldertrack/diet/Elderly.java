@@ -63,6 +63,7 @@ public class Elderly {
 	public void addMeal(String mealid) {
 		Integer mid = Integer.parseInt(mealid);
 		MealProperties mp = new MealProperties();
+		Nutrition n = SerializerSQL.retrieveNutrition(mid, so);
 		try {
 		PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_menu WHERE itemid = ?");
 		ps.setInt(1, mid);
@@ -70,7 +71,8 @@ public class Elderly {
 		rs.next();
 		m.getMealProperties().add(mp);
 		m.getMealName().add(rs.getString("name"));
-		m.getNutrition().add(SerializerSQL.retrieveNutrition(mid, so));
+		m.getNutrition().add(n);
+		System.out.println(n.getCalories());
 		SerializerSQL.storeMeals(this.id, m, so);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -110,6 +112,10 @@ public class Elderly {
 			Elderly.eldermap = eldermap;
 		}
 		return eldermap;
+	}
+	
+	public static void clearElderMap() {
+		eldermap = null;
 	}
 	
 	public static boolean updateElderlyInDb(Elderly el) {
