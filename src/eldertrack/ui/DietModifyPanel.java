@@ -13,11 +13,13 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.JCheckBox;
 
@@ -63,6 +65,7 @@ public class DietModifyPanel extends JPanel implements Presentable {
 	DietModifyPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
@@ -106,6 +109,11 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		add(lblReviewInfo);
 		
 		JButton btnRemoveEntry = new JButton("Remove Entry");
+		btnRemoveEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				removeEntry();
+			}
+		});
 		btnRemoveEntry.setForeground(new Color(255, 0, 0));
 		btnRemoveEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnRemoveEntry.setBounds(782, 274, 203, 109);
@@ -283,19 +291,21 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		});
 	}
 
-	private void setPrevMealsColumnWidth() {
+	private void setColumnWidths() {
+		prevMealsTable.getTableHeader().setResizingAllowed(false);
+		prevMealsTable.getTableHeader().setReorderingAllowed(false);
 		prevMealsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		prevMealsTable.getColumnModel().getColumn(0).setPreferredWidth(40);
 		prevMealsTable.getColumnModel().getColumn(1).setPreferredWidth(150);
 		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(250);
 	}
 	
-	public void presentData(String personid) {
-		this.currentElderly = Integer.parseInt(personid);
+	public void presentData(int personid) {
+		this.currentElderly = personid;
 		eldermap = Elderly.getElderlyMap();
 		Elderly el = eldermap.get(this.currentElderly);
 		prevMealsTable.setModel(el.getMeals().getTableModel());
-		setPrevMealsColumnWidth();
+		setColumnWidths();
 		
 		lblInfoName.setText(el.getName());
 		lblElderid.setText("ElderID: " + el.getId());
@@ -306,8 +316,9 @@ public class DietModifyPanel extends JPanel implements Presentable {
 	
 	private void saveData() {
 		System.out.println("Saving modified meal...");
-		int currentMealSelected = Integer.parseInt(prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0).toString());
+		int currentMealSelected = (Integer) prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0);
 		Nutrition n = new Nutrition();
+		
 		// Build a new nutrition object with given inputs
 		n.setVita(Integer.parseInt(fieldVitA.getText())).
 		setVitc(Integer.parseInt(fieldVitC.getText())).
@@ -318,10 +329,22 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		setCarbs(Integer.parseInt(fieldCarbohydrates.getText())).
 		setCalories(Integer.parseInt(fieldCalories.getText())).
 		setProtein(Integer.parseInt(fieldProtein.getText()));
+		
 		eldermap.get(this.currentElderly).getMeals().setNutrition(currentMealSelected, n);
 		Meals m = eldermap.get(this.currentElderly).getMeals();
 		SerializerSQL.storeMeals(this.currentElderly, m, TableHelper.getSQLInstance());
 		System.out.println("Saved meal into database!");
+	}
+	
+	private void removeEntry() {
+		int mealid = Integer.parseInt((String)prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0));
+		eldermap = Elderly.getElderlyMap();
+		eldermap.get(this.currentElderly).getMeals().removeMeal(mealid);
+		SerializerSQL.storeMeals(this.currentElderly, eldermap.get(this.currentElderly).getMeals(), Meals.getSQLInstance());
+		JOptionPane.showMessageDialog(null, "Meal Removed!");
+
+		// Refresh table model
+		presentData(this.currentElderly);
 	}
 	
 	private void presentMealData(String mid) {

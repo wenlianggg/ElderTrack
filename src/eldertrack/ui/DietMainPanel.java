@@ -22,10 +22,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
 public class DietMainPanel extends JPanel implements Presentable {
@@ -67,6 +68,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 	DietMainPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		tableScrollPane = new JScrollPane(eldersTable);
 		tableScrollPane.setViewportBorder(null);
@@ -78,7 +80,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 		eldersTable.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
-		    	presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+		    	int selectedElderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+		    	presentData(selectedElderly);
 		    }
 		});
 		setColumnWidths();
@@ -217,7 +220,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 				DietAddPanel dap = MainFrame.getInstance().getDietPanel().getDietAddPanel();
 				// Present person data on DietAddPanel
 				if (eldersTable.getSelectedRow() != -1) {
-					dap.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+					int selectedElderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+					dap.presentData(selectedElderly);
 					parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 					parentCards.show(DietSection.CardsPanel, DietSection.DADDPANEL);
 				} else
@@ -236,7 +240,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 					DietModifyPanel dmp = MainFrame.getInstance().getDietPanel().getDietModifyPanel();
 					// Present person data on DietAddPanel
 					if (eldersTable.getSelectedRow() != -1) {
-						dmp.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+						int selectedElderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+						dmp.presentData(selectedElderly);
 						parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 						parentCards.show(DietSection.CardsPanel, DietSection.DMODPANEL);
 					} else
@@ -302,9 +307,9 @@ public class DietMainPanel extends JPanel implements Presentable {
 		eldersTable.getColumnModel().getColumn(2).setPreferredWidth(120);
 	}
 	
-	public void presentData(String personid) {
+	public void presentData(int personid) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
-		Elderly el = eldermap.get(Integer.parseInt(personid));
+		Elderly el = eldermap.get(personid);
 		
 		lblInfoName.setText(el.getName());
 		lblElderid.setText("ElderID: " + el.getId());

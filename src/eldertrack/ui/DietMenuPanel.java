@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
 import eldertrack.db.SQLObject;
@@ -65,6 +66,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	DietMenuPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
@@ -273,7 +275,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
 		        selectedRow = (Integer) availMealsTable.getValueAt(availMealsTable.getSelectedRow(), 0);
-		        presentData(selectedRow.toString());
+		        presentData(selectedRow);
 		    }
 		});
 		availMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -331,10 +333,10 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		availMealsTable.getColumnModel().getColumn(3).setMaxWidth(70);
 	}
 	
-	public void presentData(String mealid) {
+	public void presentData(int mealid) {
 		try {
 			SQLObject so = TableHelper.getSQLInstance();
-			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", mealid);
+			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", new Integer(mealid).toString());
 			rs.next();
 			String name = rs.getString("name");
 			byte[] ba = rs.getBytes("nutrition");
