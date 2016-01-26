@@ -69,29 +69,29 @@ public class Meals implements java.io.Serializable {
 	}
 	
 	public DefaultTableModel getTableModel() {
-		Vector<String> colheader = new Vector<String>();
-		Vector<String> idvector = new Vector<String>();
 		Vector<Vector<Object>> mealvector = new Vector<Vector<Object>>();
+		Vector<String> columns = new Vector<String>();
 		Vector<String> createdvector = new Vector<String>();
+		Vector<String> idvector = new Vector<String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM - HH:mm");
-		
 		// Simple ID Counting
-		for (int i = 0; i < mealvector.size(); i++)
+		for (int i = 0; i < this.mealprop.size(); i++)
 			idvector.add(Integer.toString(i));
 		// Store created date into Vector<String>
 		for (MealProperties mp : this.mealprop)
 			createdvector.add(sdf.format(mp.getCreated()));
-		colheader.add("ID");
-		colheader.add("Time");
-		colheader.add("Meal");
-		Collections.reverse(idvector);
-		Collections.reverse(mealvector);
+		ArrayList<String> mealnames = new ArrayList<String>(this.mealname);
+		columns.add("ID");
+		columns.add("Time");
+		columns.add("Meal");
+		Collections.reverse(mealnames);
 		Collections.reverse(createdvector);
+		Collections.reverse(idvector);
 		mealvector.add(new Vector<>(idvector));
 		mealvector.add(new Vector<>(createdvector));
-		mealvector.add(new Vector<>(this.mealname));
+		mealvector.add(new Vector<>(mealnames));
 		mealvector = transpose(mealvector);
-		DefaultTableModel dtm = new DefaultTableModel(mealvector, colheader) {
+		DefaultTableModel dtm = new DefaultTableModel(mealvector, columns) {
 			private static final long serialVersionUID = 1L;
 			@Override
 		    public boolean isCellEditable(int row, int column) {

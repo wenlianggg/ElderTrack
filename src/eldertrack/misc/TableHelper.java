@@ -80,7 +80,7 @@ public class TableHelper {
 		String[] columns = {"ID", "Category", "Name", "Halal?"};
 		try {
 			search = (search.equalsIgnoreCase("")) ? "%" : search;
-			rs = so.getResultSet("SELECT itemid, category, name, halal FROM et_menu WHERE name LIKE ? ORDER BY itemid DESC", search);
+			rs = so.getResultSet("SELECT itemid, category, name, halal FROM et_menu WHERE name LIKE ?", search);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
