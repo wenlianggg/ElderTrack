@@ -256,6 +256,22 @@ public class CheckUpObject  implements Serializable {
 		checking.view();
 	}
 	
+	// Methods for validation
+	public static boolean validValues(String temp, String bloodPressure, String heartRate, String sugarLvl){
+	
+		if(Double.parseDouble(temp) < 0 || Double.parseDouble(temp) > 60 || temp.equals("")){
+			return false;
+		}else if(Double.parseDouble(bloodPressure) < 70 || Double.parseDouble(bloodPressure) > 190 || bloodPressure.equals("")){
+			return false;
+		}else if(Integer.parseInt(heartRate) < 80 || Integer.parseInt(heartRate) > 200 || heartRate.equals("")){
+			return false;
+		}else if(Double.parseDouble(sugarLvl) < 2.6 || Double.parseDouble(sugarLvl) > 21.1 || sugarLvl.equals("")){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
 	// debug mode
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
 		//	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -267,4 +283,5 @@ public class CheckUpObject  implements Serializable {
 
 		RetrieveCheckUp(id);
 	}
+	
 }
