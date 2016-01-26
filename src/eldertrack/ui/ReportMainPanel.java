@@ -172,11 +172,11 @@ public class ReportMainPanel extends JPanel {
 		lblReportForThisMonth.setBounds(10, 145, 358, 29);
 		panel.add(lblReportForThisMonth);
 		
-		JLabel lblMedicalHistoryaverage = new JLabel("Medical History (Average of past month)");
-		lblMedicalHistoryaverage.setForeground(new Color(0, 128, 128));
-		lblMedicalHistoryaverage.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblMedicalHistoryaverage.setBounds(10, 171, 285, 29);
-		panel.add(lblMedicalHistoryaverage);
+		JLabel lblMedicalHistorySum = new JLabel("Medical History (Summary): ");
+		lblMedicalHistorySum.setForeground(new Color(0, 128, 128));
+		lblMedicalHistorySum.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblMedicalHistorySum.setBounds(10, 171, 285, 29);
+		panel.add(lblMedicalHistorySum);
 		
 		JLabel lblTemperature = new JLabel("Temperature:");
 		lblTemperature.setBounds(10, 203, 96, 14);
@@ -340,6 +340,8 @@ public class ReportMainPanel extends JPanel {
 					
 					int index = Integer.parseInt(lblElderid.getText());
 					// delete indexed null entry
+					comments.remove(index-1);
+
 					comments.add(index-1, txtrAddComment.getText());
 
                 	JOptionPane.showMessageDialog(null, "Changes saved.");
@@ -389,9 +391,22 @@ public class ReportMainPanel extends JPanel {
 			}
 		});
 		
-		JButton btnViewInMgmt = new JButton("View Elderly in Management Panel");
+		JButton btnViewInMgmt = new JButton("View Elderly in Management");
 		btnViewInMgmt.setBounds(759, 611, 216, 45);
 		add(btnViewInMgmt);
+		btnViewInMgmt.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				if (elderDataTable.getSelectedRow() != -1) {
+					Integer selectedelderly = Integer.parseInt(elderDataTable.getValueAt(elderDataTable.getSelectedRow(), 0).toString());
+					CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+					mainCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
+					MgmtPanel mgp = MainFrame.getInstance().getManagementPanel();
+					JTable jtb = (JTable) mgp.getComponentAt(200, 200).getComponentAt(50, 50).getComponentAt(50, 50).getComponentAt(50, 50);
+					jtb.getSelectionModel().setSelectionInterval(selectedelderly, selectedelderly);
+				} else
+					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
+			}
+		});
 		
 		JButton btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.setBounds(820, 15, 139, 40);
@@ -432,6 +447,9 @@ public class ReportMainPanel extends JPanel {
 					
 					String add5 = rs.getString("nric");
 					lblNRIC.setText(add5);
+					
+					String sql2 = "SELECT * FROM et_reportTemp WHERE name=?";
+					ResultSet rs2 = so.getResultSet(sql2, add2);
 					}
 				}catch(Exception e1){
 					JOptionPane.showMessageDialog(null, e1);

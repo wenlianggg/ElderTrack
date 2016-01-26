@@ -1,13 +1,7 @@
 package eldertrack.report;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,40 +18,10 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import eldertrack.db.SQLObject;
-import eldertrack.medical.CheckUpObject;
-
 public class CreatePdf{
 	Date dNow = new Date();
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
-    MedicalData elderList = new MedicalData();
-    
-    public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
-		SQLObject so = new SQLObject();
-		ResultSet rs = so.getResultSet("SELECT name,date FROM et_elderly_checkup " );
-
-		while(rs.next()){
-			String name=rs.getString("name");
-			String date=rs.getString("date");
-			System.out.println(name);
-			System.out.println(date);
-		}
-
-		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup FROM et_elderly_checkup WHERE id = ?");
-		statement.setInt(1, id);
-		ResultSet rs1 = statement.executeQuery();
-		rs1.next();
-		ByteArrayInputStream in = new ByteArrayInputStream(rs1.getBytes(1));
-		ObjectInputStream is = new ObjectInputStream(in);
-		Object checkingBlob =(Object) is.readObject();
-		CheckUpObject checking=(CheckUpObject) checkingBlob;
-		checking.view();
-		
-	}
-
-	{
-		
-		
+    {
 		try{
 			Document document = new Document();
 	
@@ -105,48 +69,56 @@ public class CreatePdf{
 			PdfPCell c18 = new PdfPCell(new Phrase("Comments",
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
   			
+			//Date
 			t1.addCell(c11);
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");	    
 			t1.addCell(" ");
   	
+			//Temp
 			t1.addCell(c12);
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
   	
+			//BP
 			t1.addCell(c13);
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
   	
+			//Heart rate
 			t1.addCell(c14);
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
 			
+			//Sugar level
 			t1.addCell(c15);
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
   	
+			//Eye
 			t1.addCell(c16);
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
 			
+			//ear
 			t1.addCell(c17);
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
 			t1.addCell(" ");
   	
+			//comments
 			t1.addCell(c18);
 			t1.addCell(" ");
 			t1.addCell(" ");
