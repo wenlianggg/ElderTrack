@@ -90,7 +90,7 @@ public class SerializerSQL {
 		Nutrition n;
 		try {
 			ps = so.getPreparedStatementWithKey(SQL_READ_NUTRITION);
-			ps.setInt(1, 1);
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 			if (rs.getBytes(1) != null) {

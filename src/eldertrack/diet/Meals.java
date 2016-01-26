@@ -50,10 +50,9 @@ public class Meals implements java.io.Serializable {
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		Date today = c.getTime();
-		// Iterating through MealProperties
+		// Loop through MealProperties and find where today ends
 		for(int i = 0; i < mealprop.size(); i++)
 			if(mealprop.get(i).getCreated().after(today)) {
-				System.out.println(i);
 				selected.add(nutrition.get(i));
 			}
 		Nutrition totaln = new Nutrition();
@@ -63,7 +62,6 @@ public class Meals implements java.io.Serializable {
 	}
 	
 	public DefaultTableModel getTableModel() {
-		
 		Vector<Vector<Object>> mealvector = new Vector<Vector<Object>>();
 		Vector<String> columns = new Vector<String>();
 		Vector<String> createdvector = new Vector<String>();
@@ -85,34 +83,7 @@ public class Meals implements java.io.Serializable {
 		DefaultTableModel dtm = new DefaultTableModel(mealvector, columns);
 		return dtm;
 	}
-	
-	public String getMealName(int i) {
-		return mealname.get(i);
-	}
-	
-	public Nutrition getNutrition(int i) {
-		return nutrition.get(i);
-	}
-	
-	public void setNutrition(int i, Nutrition n) {
-		nutrition.set(i, n);
-	}
-	
-	public MealProperties getMealProperties(int i) {
-		return mealprop.get(i);
-	}
-	
-	public ArrayList<String> getMealName() {
-		return this.mealname;
-	}
-	
-	public ArrayList<Nutrition> getNutrition() {
-		return this.nutrition;
-	}
-	
-	public ArrayList<MealProperties> getMealProperties() {
-		return this.mealprop;
-	}
+
 
 	Meals addTestMeal() {
 		mealname.add("Test Meal");
@@ -162,5 +133,42 @@ public class Meals implements java.io.Serializable {
 	        ret.add(col);
 	    }
 	    return ret;
+	}
+	
+	
+	public String getMealName(int i) {
+		return mealname.get(i);
+	}
+	
+	public String getPrevMealName() {
+		if (mealname.size() > 0) {
+			return mealname.get(mealname.size() - 1);
+		} else {
+			return "";
+		}
+	}
+	
+	public Nutrition getNutrition(int i) {
+		return nutrition.get(i);
+	}
+	
+	public void setNutrition(int i, Nutrition n) {
+		nutrition.set(i, n);
+	}
+	
+	public MealProperties getMealProperties(int i) {
+		return mealprop.get(i);
+	}
+	
+	public ArrayList<String> getMealName() {
+		return this.mealname;
+	}
+	
+	public ArrayList<Nutrition> getNutrition() {
+		return this.nutrition;
+	}
+	
+	public ArrayList<MealProperties> getMealProperties() {
+		return this.mealprop;
 	}
 }

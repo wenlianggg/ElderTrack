@@ -86,6 +86,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		personInfoPanel.add(lblInfoName);
 		
 		JButton btnBackToMain = new JButton("Back (Elderly View)");
+		btnBackToMain.setForeground(SystemColor.textHighlight);
 		btnBackToMain.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnBackToMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -95,16 +96,18 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		});
 		
 		JButton btnRemoveEntry = new JButton("Remove Entry");
+		btnRemoveEntry.setForeground(new Color(255, 0, 0));
 		btnRemoveEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnRemoveEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				removeEntry();
 			}
 		});
-		btnRemoveEntry.setBounds(782, 358, 203, 109);
+		btnRemoveEntry.setBounds(782, 358, 203, 54);
 		add(btnRemoveEntry);
 		
-		JButton btnUpdateEntry = new JButton("Save Menu Edits");
+		JButton btnUpdateEntry = new JButton("Save Entry");
+		btnUpdateEntry.setForeground(new Color(255, 102, 0));
 		btnUpdateEntry.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnUpdateEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -117,7 +120,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		add(btnBackToMain);
 		
 		JPanel nutriInfoPanel = new JPanel();
-		nutriInfoPanel.setBorder(null);
+		nutriInfoPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		nutriInfoPanel.setBounds(382, 113, 388, 545);
 		add(nutriInfoPanel);
 		nutriInfoPanel.setLayout(null);
@@ -298,7 +301,8 @@ public class DietMenuPanel extends JPanel implements Presentable {
 			}
 		});
 		
-		JButton btnCreateNewMeal = new JButton("Add To Menu");
+		JButton btnCreateNewMeal = new JButton("New Entry");
+		btnCreateNewMeal.setForeground(new Color(34, 139, 34));
 		btnCreateNewMeal.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnCreateNewMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
