@@ -66,10 +66,10 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		
-		lblDietLabel = new JLabel("ElderTrack Diet Management");
+		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
 		lblDietLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		lblDietLabel.setBounds(10, 0, 557, 54);
+		lblDietLabel.setBounds(10, 0, 281, 54);
 		
 		add(lblDietLabel);
 		
@@ -311,6 +311,11 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		});
 		btnCreateNewMeal.setBounds(782, 118, 203, 109);
 		add(btnCreateNewMeal);
+		
+		JLabel lblDietManagement = new JLabel("Diet Management\r\n - Menu Management");
+		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblDietManagement.setBounds(300, 20, 388, 30);
+		add(lblDietManagement);
 	}
 	
 	private void setColumnWidths() {

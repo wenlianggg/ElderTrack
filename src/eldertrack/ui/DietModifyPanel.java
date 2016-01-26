@@ -57,16 +57,17 @@ public class DietModifyPanel extends JPanel implements Presentable {
 	private JLabel lblLastModified;
 	private JLabel lblModifiedBy;
 	private SimpleDateFormat sdf;
+	private JLabel lblDietManagement;
 	
 	// Constructor
 	DietModifyPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		
-		lblDietLabel = new JLabel("ElderTrack Diet Management");
+		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
 		lblDietLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		lblDietLabel.setBounds(10, 0, 557, 54);
+		lblDietLabel.setBounds(10, 0, 281, 54);
 		
 		add(lblDietLabel);
 		
@@ -270,6 +271,11 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		prevMealsTable = new JTable();
 		prevMealsTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		scrollPane.setViewportView(prevMealsTable);
+		
+		lblDietManagement = new JLabel("Diet Management\r\n - Meal Tracker (Modify Entries)");
+		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblDietManagement.setBounds(300, 20, 468, 30);
+		add(lblDietManagement);
 		prevMealsTable.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				presentMealData(prevMealsTable.getValueAt(prevMealsTable.getSelectedRow(), 0).toString());

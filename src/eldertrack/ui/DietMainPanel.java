@@ -61,6 +61,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 	private JButton btnMainMenu;
 	private JScrollPane tableScrollPane;
 	CardLayout parentCards;
+	private JLabel lblDietManagement;
 	
 	// Constructor
 	DietMainPanel() {
@@ -83,14 +84,14 @@ public class DietMainPanel extends JPanel implements Presentable {
 		setColumnWidths();
 		tableScrollPane.setViewportView(eldersTable);
 		
-		lblDietLabel = new JLabel("ElderTrack Diet Management");
+		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
 		lblDietLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		lblDietLabel.setBounds(10, 0, 557, 54);
+		lblDietLabel.setBounds(10, 0, 290, 54);
 		
 		lblSelectElderly = new JLabel("Select An Elderly");
 		lblSelectElderly.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		lblSelectElderly.setBounds(10, 57, 290, 31);
+		lblSelectElderly.setBounds(10, 69, 290, 24);
 		
 		add(lblDietLabel);
 		add(lblSelectElderly);
@@ -283,6 +284,11 @@ public class DietMainPanel extends JPanel implements Presentable {
 		});
 		btnMainMenu.setBounds(820, 15, 139, 40);
 		add(btnMainMenu);
+		
+		lblDietManagement = new JLabel("Diet Management\r\n - Main Menu");
+		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblDietManagement.setBounds(300, 20, 331, 30);
+		add(lblDietManagement);
 	}
 	
 	private void setColumnWidths() {

@@ -56,6 +56,7 @@ public class DietAddPanel extends JPanel implements Presentable {
 	private JLabel lblInfoName;
 	private CardLayout parentCards;
 	private JCheckBox chckbxHalal;
+	private JLabel lblDietManagement;
 	
 	// Constructor
 	DietAddPanel() {
@@ -77,10 +78,10 @@ public class DietAddPanel extends JPanel implements Presentable {
 		});
 		tableScrollPane.setViewportView(mealSearchTable);
 		
-		lblDietLabel = new JLabel("ElderTrack Diet Management");
+		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
 		lblDietLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		lblDietLabel.setBounds(10, 0, 557, 54);
+		lblDietLabel.setBounds(10, 0, 283, 54);
 		
 		lblSelectElderly = new JLabel("Select A Meal");
 		lblSelectElderly.setForeground(new Color(0, 128, 128));
@@ -233,6 +234,11 @@ public class DietAddPanel extends JPanel implements Presentable {
 		prevMealsTable = new JTable();
 
 		scrollPane.setViewportView(prevMealsTable);
+		
+		lblDietManagement = new JLabel("Diet Management\r\n - Meal Tracker (New Meal)");
+		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblDietManagement.setBounds(300, 20, 414, 30);
+		add(lblDietManagement);
 	}
 	
 	private void setMenuColumnWidths() {
