@@ -1,7 +1,7 @@
 package eldertrack.ui;
 
 public interface Presentable {
-	void presentData(String id);
+	void presentData(int id);
 	
 	void printDebug();
 }

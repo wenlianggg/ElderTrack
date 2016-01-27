@@ -37,7 +37,7 @@ public class MainMenuPanel extends JPanel {
 		setBounds(0, 0, 995, 670);
 		
 		lblTitle = new JLabel("ElderTrack Suite");
-		lblTitle.setBounds(10, 0, 372, 54);
+		lblTitle.setBounds(10, 0, 280, 54);
 		lblTitle.setForeground(SystemColor.textHighlight);
 		lblTitle.setFont(new Font("Segoe UI", Font.ITALIC, 40));
 		add(lblTitle);
@@ -147,7 +147,7 @@ public class MainMenuPanel extends JPanel {
 		
 		JLabel lblUtilitiesForNursing = new JLabel("Utilities for Nursing Homes");
 		lblUtilitiesForNursing.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
-		lblUtilitiesForNursing.setBounds(10, 42, 262, 30);
+		lblUtilitiesForNursing.setBounds(300, 20, 262, 30);
 		add(lblUtilitiesForNursing);
 	}
 	
