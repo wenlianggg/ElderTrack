@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
 import eldertrack.db.SQLObject;
@@ -34,7 +35,7 @@ public class DietAddPanel extends JPanel implements Presentable {
 	private static final long serialVersionUID = 4318548492960279050L;
 	JLabel lblDietLabel;
 	JLabel lblSelectElderly;
-	private String currentElderly;
+	private int currentElderly;
 	private JTable mealSearchTable;
 	private JTextField searchField;
 	private JButton btnSearch;
@@ -56,11 +57,13 @@ public class DietAddPanel extends JPanel implements Presentable {
 	private JLabel lblInfoName;
 	private CardLayout parentCards;
 	private JCheckBox chckbxHalal;
+	private JLabel lblDietManagement;
 	
 	// Constructor
 	DietAddPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		JScrollPane tableScrollPane = new JScrollPane(mealSearchTable);
 		tableScrollPane.setViewportBorder(null);
@@ -77,10 +80,10 @@ public class DietAddPanel extends JPanel implements Presentable {
 		});
 		tableScrollPane.setViewportView(mealSearchTable);
 		
-		lblDietLabel = new JLabel("ElderTrack Diet Management");
+		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
 		lblDietLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		lblDietLabel.setBounds(10, 0, 557, 54);
+		lblDietLabel.setBounds(10, 0, 283, 54);
 		
 		lblSelectElderly = new JLabel("Select A Meal");
 		lblSelectElderly.setForeground(new Color(0, 128, 128));
@@ -233,6 +236,11 @@ public class DietAddPanel extends JPanel implements Presentable {
 		prevMealsTable = new JTable();
 
 		scrollPane.setViewportView(prevMealsTable);
+		
+		lblDietManagement = new JLabel("Diet Management\r\n - Meal Tracker (New Meal)");
+		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblDietManagement.setBounds(300, 20, 414, 30);
+		add(lblDietManagement);
 	}
 	
 	private void setMenuColumnWidths() {
@@ -255,9 +263,8 @@ public class DietAddPanel extends JPanel implements Presentable {
 		prevMealsTable.getColumnModel().getColumn(2).setPreferredWidth(250);
 	}
 	
-	public void presentData(String personid) {
-		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
-		Elderly el = eldermap.get(Integer.parseInt(personid));
+	public void presentData(int personid) {
+		Elderly el = Elderly.getElderlyMap().get(personid);
 		prevMealsTable.setModel(el.getMeals().getTableModel());
 		setPrevMealsColumnWidth();
 		this.currentElderly = personid;
@@ -271,7 +278,7 @@ public class DietAddPanel extends JPanel implements Presentable {
 	
 	private void addMealEntry(String mid) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
-		Elderly el = eldermap.get(Integer.parseInt(currentElderly));
+		Elderly el = eldermap.get(this.currentElderly);
 		el.addMeal(mid);
 		presentData(this.currentElderly);
 		setPrevMealsColumnWidth();

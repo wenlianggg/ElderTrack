@@ -1,7 +1,5 @@
 package eldertrack.medical;
 
-import java.awt.Component;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,38 +9,42 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import eldertrack.db.SQLObject;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 
 public class DosageTableHelper  {
-	public static DefaultTableModel getElderlyFromQueryDos(String timing,String position) throws SQLException {
+	
+	public static DefaultTableModel getElderlyFromQueryDos(String TimeOfDay,String name) throws SQLException {
 		SQLObject so = new SQLObject();
 		ResultSet rs = null;
 
-		if(timing.equalsIgnoreCase("Morning")){
+		if(TimeOfDay.equalsIgnoreCase("Morning")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT morningdosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		else if(timing.equalsIgnoreCase("Afternoon")){
+		else if(TimeOfDay.equalsIgnoreCase("Afternoon")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT afternoondosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		else if(timing.equalsIgnoreCase("Noon")){
+		else if(TimeOfDay.equalsIgnoreCase("Noon")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT noondosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
+		
 		return (DefaultTableModel) buildTableModelForDos(rs);
 	}
 
@@ -51,8 +53,7 @@ public class DosageTableHelper  {
 	@SuppressWarnings("unchecked")
 	public static DefaultTableModel buildTableModelForDos(ResultSet rs) throws SQLException {
 		ArrayList<DosageObject> DosageList=null;
-
-
+		// debug statement
 		System.out.println(rs);
 		try {
 			while(rs.next()){
@@ -97,17 +98,17 @@ public class DosageTableHelper  {
 
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				  if (columnIndex < 4) {
-		                return false;
-		            } else {
-		                return true;
-		            }
+				if (columnIndex < 4) {
+					return false;
+				} else {
+					return true;
+				}
 			}
 		};
 		return dtm;
 	}
 
-// For Management
+	// For Management
 	public static DefaultTableModel getElderlyFromQueryManagement(String search) throws SQLException {
 		search = (search.equalsIgnoreCase("")) ? "%" : search;
 		SQLObject so = new SQLObject();
@@ -115,68 +116,65 @@ public class DosageTableHelper  {
 	}
 
 	public static DefaultTableModel buildTableModelForManagement(ResultSet rs) throws SQLException {
-	    Vector<String> columnNames = new Vector<String>();
-
-	    columnNames.add("ID");
-	    columnNames.add("NAME");
-	    columnNames.add("GENDER");
-	    columnNames.add("ROOM");
-	    columnNames.add("MORNING");
-	    columnNames.add("AFTERNOON");
-	    columnNames.add("NOON");
-	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-	    while (rs.next()) {
-	        Vector<Object> vector = new Vector<Object>();
-	        for (int columnIndex = 1; columnIndex <= 4; columnIndex++) {
-	            vector.add(rs.getObject(columnIndex));
-	        }
-	        if(rs.getObject(5)!=null){
-	        	vector.add("Added");
-	        }
-	        if(rs.getObject(6)!=null){
-	        	vector.add("Added");
-	        }
-	        if(rs.getObject(7)!=null){
-	        	vector.add("Added");
-	        }
-	        data.add(vector);
-	    }
-	    DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
+		Vector<String> columnNames = new Vector<String>();
+		columnNames.add("ID");
+		columnNames.add("NAME");
+		columnNames.add("GENDER");
+		columnNames.add("ROOM");
+		columnNames.add("MORNING");
+		columnNames.add("AFTERNOON");
+		columnNames.add("NOON");
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+		while (rs.next()) {
+			Vector<Object> vector = new Vector<Object>();
+			for (int columnIndex = 1; columnIndex <= 4; columnIndex++) {
+				vector.add(rs.getObject(columnIndex));
+			}
+			if(rs.getObject(5)!=null){
+				vector.add("Added");
+			}
+			if(rs.getObject(6)!=null){
+				vector.add("Added");
+			}
+			if(rs.getObject(7)!=null){
+				vector.add("Added");
+			}
+			data.add(vector);
+		}
+		DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
 			private static final long serialVersionUID = 4234183862785566645L;
 
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				  if (columnIndex < 7) {
-		                return false;
-		            } else {
-		                return true;
-		            }
+				if (columnIndex < 7) {
+					return false;
+				} else {
+					return true;
+				}
 			}
 		};
-	    return dtm;
+		return dtm;
 	}
-	
-	public static DefaultTableModel getElderlyFromQueryManagementDos(String timing,String position) throws SQLException {
-		SQLObject so = new SQLObject();
-		ResultSet rs = null;
 
-		if(timing.equalsIgnoreCase("Morning")){
+	public static DefaultTableModel getElderlyFromQueryManagementDos(String TimeOfDay,String name,SQLObject so) throws SQLException {
+		ResultSet rs = null;
+		if(TimeOfDay.equalsIgnoreCase("Morning")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT morningdosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		else if(timing.equalsIgnoreCase("Afternoon")){
+		else if(TimeOfDay.equalsIgnoreCase("Afternoon")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT afternoondosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
 		}
-		else if(timing.equalsIgnoreCase("Noon")){
+		else if(TimeOfDay.equalsIgnoreCase("Noon")){
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT noondosage FROM et_elderly WHERE name = ?");
-			stmt.setString(1,position);
+			stmt.setString(1,name);
 			stmt.executeQuery();
 			System.out.println(stmt);
 			rs = stmt.getResultSet();
@@ -205,9 +203,6 @@ public class DosageTableHelper  {
 
 			e.printStackTrace();
 		}
-
-		// storing array list in an array list for future uses
-
 		Vector<String> columnNames = new Vector<String>();
 
 		columnNames.add("Description");
@@ -233,42 +228,58 @@ public class DosageTableHelper  {
 		return dtm;
 	}
 	
+	public static void TableListen(JTable Model,SQLObject so){
+		Model.getModel().addTableModelListener(new TableModelListener() {
+			public void tableChanged(TableModelEvent evt) {
+				if(Model.getModel().getRowCount()!=0){
+					if(Model.getSelectedColumn()==0){
+						if(!Model.getModel().getValueAt( Model.getSelectedRow(), 0).toString().equals("-Selection-")){
+							String treatmentChoice=Model.getModel().getValueAt(Model.getSelectedRow(), Model.getSelectedColumn()).toString();
+							JComboBox<String> comboBox = null;
+							TableColumn feedingCol=Model.getColumnModel().getColumn(1);
+							comboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
+							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));
+						}
+					}
+				}
+			}
+		});
+	}
 	
-	
-	
-	
-
-}
-@SuppressWarnings("rawtypes")
-class MyComboBoxRenderer extends JComboBox implements TableCellRenderer {
-
-	private static final long serialVersionUID = 1319299961084034009L;
-
-	@SuppressWarnings("unchecked")
-	public MyComboBoxRenderer(String[] items) {
-		super(items);
+/*	// when i have time to add
+	public static void MasterTabelListener(JTable MorningModel,JTable AfternoonModel,JTable NoonModel,SQLObject so){
+		MorningModel.getModel().addTableModelListener(new TableModelListener() {
+			public void tableChanged(TableModelEvent evt) {
+				if(MorningModel.getModel().getRowCount()!=0){
+					if(MorningModel.getSelectedColumn()==0){
+						if(!MorningModel.getModel().getValueAt( MorningModel.getSelectedRow(), 0).toString().equals("-Selection-")){
+							String treatmentChoice=MorningModel.getModel().getValueAt(MorningModel.getSelectedRow(), MorningModel.getSelectedColumn()).toString();
+							
+							AfternoonModel.setValueAt(treatmentChoice, 1, 0);
+							
+							JComboBox<String> comboBox = null;
+							TableColumn feedingCol=MorningModel.getColumnModel().getColumn(1);
+							comboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
+							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));		
+						}
+					}
+				}
+			}
+		});
+	}
+	*/
+	public static void AddManagementModel(JTable Model,SQLObject so){
+		JComboBox<String> treatmentBox = null;
+		TableColumn treatmentCol=Model.getColumnModel().getColumn(0);
+		treatmentBox=DosageObject.GetListOfTreatMent(so);
+		treatmentCol.setCellEditor(new DefaultCellEditor(treatmentBox));
+		
+		
+		JComboBox<Double> dosLimitBox = null;
+		TableColumn dosLimitCol=Model.getColumnModel().getColumn(3);
+		dosLimitBox=DosageObject.GetListOfDosageLimit(so,"Glucofin");
+		dosLimitCol.setCellEditor(new DefaultCellEditor(dosLimitBox));
 	}
 
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-			boolean hasFocus, int row, int column) {
-		if (isSelected) {
-			setForeground(table.getSelectionForeground());
-			super.setBackground(table.getSelectionBackground());
-		} else {
-			setForeground(table.getForeground());
-			setBackground(table.getBackground());
-		}
-		setSelectedItem(value);
-		return this;
-	}
 }
 
-class MyComboBoxEditor extends DefaultCellEditor {
-
-	private static final long serialVersionUID = -1702063500403826596L;
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public MyComboBoxEditor(String[] items) {
-		super(new JComboBox(items));
-	}
-}

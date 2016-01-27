@@ -22,10 +22,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
 public class DietMainPanel extends JPanel implements Presentable {
@@ -61,11 +62,13 @@ public class DietMainPanel extends JPanel implements Presentable {
 	private JButton btnMainMenu;
 	private JScrollPane tableScrollPane;
 	CardLayout parentCards;
+	private JLabel lblDietManagement;
 	
 	// Constructor
 	DietMainPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		tableScrollPane = new JScrollPane(eldersTable);
 		tableScrollPane.setViewportBorder(null);
@@ -77,20 +80,21 @@ public class DietMainPanel extends JPanel implements Presentable {
 		eldersTable.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
-		    	presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+		    	int selectedElderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+		    	presentData(selectedElderly);
 		    }
 		});
 		setColumnWidths();
 		tableScrollPane.setViewportView(eldersTable);
 		
-		lblDietLabel = new JLabel("ElderTrack Diet Management");
+		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
 		lblDietLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		lblDietLabel.setBounds(10, 0, 557, 54);
+		lblDietLabel.setBounds(10, 0, 290, 54);
 		
 		lblSelectElderly = new JLabel("Select An Elderly");
 		lblSelectElderly.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		lblSelectElderly.setBounds(10, 57, 290, 31);
+		lblSelectElderly.setBounds(10, 69, 290, 24);
 		
 		add(lblDietLabel);
 		add(lblSelectElderly);
@@ -216,7 +220,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 				DietAddPanel dap = MainFrame.getInstance().getDietPanel().getDietAddPanel();
 				// Present person data on DietAddPanel
 				if (eldersTable.getSelectedRow() != -1) {
-					dap.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+					int selectedElderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+					dap.presentData(selectedElderly);
 					parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 					parentCards.show(DietSection.CardsPanel, DietSection.DADDPANEL);
 				} else
@@ -235,7 +240,8 @@ public class DietMainPanel extends JPanel implements Presentable {
 					DietModifyPanel dmp = MainFrame.getInstance().getDietPanel().getDietModifyPanel();
 					// Present person data on DietAddPanel
 					if (eldersTable.getSelectedRow() != -1) {
-						dmp.presentData(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+						int selectedElderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+						dmp.presentData(selectedElderly);
 						parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 						parentCards.show(DietSection.CardsPanel, DietSection.DMODPANEL);
 					} else
@@ -283,6 +289,11 @@ public class DietMainPanel extends JPanel implements Presentable {
 		});
 		btnMainMenu.setBounds(820, 15, 139, 40);
 		add(btnMainMenu);
+		
+		lblDietManagement = new JLabel("Diet Management\r\n - Main Menu");
+		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblDietManagement.setBounds(300, 20, 331, 30);
+		add(lblDietManagement);
 	}
 	
 	private void setColumnWidths() {
@@ -296,9 +307,9 @@ public class DietMainPanel extends JPanel implements Presentable {
 		eldersTable.getColumnModel().getColumn(2).setPreferredWidth(120);
 	}
 	
-	public void presentData(String personid) {
+	public void presentData(int personid) {
 		HashMap<Integer, Elderly> eldermap = Elderly.getElderlyMap();
-		Elderly el = eldermap.get(Integer.parseInt(personid));
+		Elderly el = eldermap.get(personid);
 		
 		lblInfoName.setText(el.getName());
 		lblElderid.setText("ElderID: " + el.getId());

@@ -6,7 +6,10 @@ import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
+import eldertrack.db.SQLObject;
+
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 public class Meals implements java.io.Serializable {
@@ -14,6 +17,7 @@ public class Meals implements java.io.Serializable {
 	private ArrayList<String> mealname;
 	private ArrayList<Nutrition> nutrition;
 	private ArrayList<MealProperties> mealprop;
+	private static SQLObject so = new SQLObject();
 	
 	// Constructor that creates an empty Meals entry
 	public Meals() {
@@ -56,8 +60,11 @@ public class Meals implements java.io.Serializable {
 				selected.add(nutrition.get(i));
 			}
 		Nutrition totaln = new Nutrition();
-		for (int i = 0; i < nutrition.size(); i++)
-			totaln.add(selected.get(i));
+		if (selected.size() > 0) {
+			for (int i = 0; i < selected.size(); i++) {
+				totaln.add(selected.get(i));
+			}
+		}
 		return totaln;
 	}
 	
@@ -73,14 +80,24 @@ public class Meals implements java.io.Serializable {
 		// Store created date into Vector<String>
 		for (MealProperties mp : this.mealprop)
 			createdvector.add(sdf.format(mp.getCreated()));
+		ArrayList<String> mealnames = new ArrayList<String>(this.mealname);
 		columns.add("ID");
 		columns.add("Time");
 		columns.add("Meal");
+		Collections.reverse(mealnames);
+		Collections.reverse(createdvector);
+		Collections.reverse(idvector);
 		mealvector.add(new Vector<>(idvector));
 		mealvector.add(new Vector<>(createdvector));
-		mealvector.add(new Vector<>(this.mealname));
+		mealvector.add(new Vector<>(mealnames));
 		mealvector = transpose(mealvector);
-		DefaultTableModel dtm = new DefaultTableModel(mealvector, columns);
+		DefaultTableModel dtm = new DefaultTableModel(mealvector, columns) {
+			private static final long serialVersionUID = 1L;
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
 		return dtm;
 	}
 
@@ -148,16 +165,20 @@ public class Meals implements java.io.Serializable {
 		}
 	}
 	
+	public static SQLObject getSQLInstance() {
+		return so;
+	}
+	
 	public Nutrition getNutrition(int i) {
-		return nutrition.get(i);
+		return this.nutrition.get(i);
 	}
 	
 	public void setNutrition(int i, Nutrition n) {
-		nutrition.set(i, n);
+		this.nutrition.set(i, n);
 	}
 	
 	public MealProperties getMealProperties(int i) {
-		return mealprop.get(i);
+		return this.mealprop.get(i);
 	}
 	
 	public ArrayList<String> getMealName() {
@@ -170,5 +191,12 @@ public class Meals implements java.io.Serializable {
 	
 	public ArrayList<MealProperties> getMealProperties() {
 		return this.mealprop;
+	}
+	
+	public boolean removeMeal(int id) {
+		this.mealname.remove(id);
+		this.mealprop.remove(id);
+		this.nutrition.remove(id);
+		return true;
 	}
 }
