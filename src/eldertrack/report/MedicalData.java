@@ -27,7 +27,7 @@ public class MedicalData implements Serializable{
 	static SQLObject so = new SQLObject();
 
 	@SuppressWarnings("unused")
-	public static void RetrieveCheckUp() {		
+	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
 		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup,name,date,checktime FROM et_elderly_checkup WHERE id = ?");
 		statement.setInt(1, id);
 		ResultSet rs = statement.executeQuery();
@@ -47,7 +47,8 @@ public class MedicalData implements Serializable{
 			heart=checking.getElderHeart();
 			sugar=checking.getElderSugar();
 			eye=checking.isElderEye();
-			ear=checking.isElderEar();			
+			ear=checking.isElderEar();		
+			
 			name=rs.getString("name");
 			date=rs.getString("date");
 			checktime=rs.getString("checktime");
@@ -64,13 +65,17 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.executeUpdate();
 		} 
 	}
-		
 	public static void main(String[] args) throws ClassNotFoundException, IOException{
 		try {
-			RetrieveCheckUp(id);
-		} catch (SQLException e) {
-			e.printStackTrace();	
+			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_elderly_checkup ORDER BY name,date");
+						
+			while(rsLoadID.next()) {
+				RetrieveCheckUp(rsLoadID.getInt("id"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();	
 			}
+		
 		System.out.println("Data processed");
 		}
 	}

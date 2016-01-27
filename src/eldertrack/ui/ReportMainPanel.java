@@ -46,6 +46,7 @@ import eldertrack.report.SendEmails;
 public class ReportMainPanel extends JPanel {
 	private static SQLObject so = new SQLObject();
 	private static final long serialVersionUID = 4318548492960279050L;
+	public static JLabel lblElderid;
 	JLabel lblReportLabel;
 	JLabel lblSelectElderly;
 	private JTable elderDataTable;

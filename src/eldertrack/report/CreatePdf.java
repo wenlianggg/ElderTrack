@@ -2,6 +2,8 @@ package eldertrack.report;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,11 +20,51 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import eldertrack.db.SQLObject;
+
 public class CreatePdf{
+	private String name;
+	private String date;
+	private String checktime;
+	
 	Date dNow = new Date();
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
+    
+	static SQLObject so = new SQLObject();
+    ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, date, checktime");
+	private double temp;
+	private double blood;
+	private double heart;
+	private double sugar;
+	private boolean eye;
+	private boolean ear;
+	private String eyeString;
+	private String earString;
+	
     {
 		try{
+			while (rsTmp.next()){
+				name=rsTmp.getString("name");
+				date=rsTmp.getString("date");
+				checktime=rsTmp.getString("checktime");
+				temp=rsTmp.getDouble("temp");
+				blood=rsTmp.getDouble("blood");
+				heart=rsTmp.getDouble("heart");
+				sugar=rsTmp.getDouble("sugar");
+				eye=rsTmp.getBoolean("eye");
+				ear=rsTmp.getBoolean("ear");
+				
+				if (eye==true)
+					eyeString = "Yes";
+				else
+					eyeString="No";
+				
+				if (ear==true)
+					earString = "Yes";
+				else
+					earString="No";
+				
+				
 			Document document = new Document();
 	
 			PdfWriter.getInstance(document,
@@ -30,7 +72,7 @@ public class CreatePdf{
 
 			document.open();
   
-			Paragraph title1 = new Paragraph("Report for Name for " +ft.format(dNow), 
+			Paragraph title1 = new Paragraph("Report for "+name +" for " +ft.format(dNow), 
 					FontFactory.getFont(FontFactory.HELVETICA, 
 							24, Font.BOLD, new CMYKColor(255, 230, 0,0)));
   		   
@@ -46,13 +88,17 @@ public class CreatePdf{
 			Paragraph someSectionText = new Paragraph("Weekly Checkup: ", 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 			section1.add(someSectionText);
+			
+			someSectionText = new Paragraph(date, 
+					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
+			section1.add(someSectionText);
   
 			PdfPTable t1 = new PdfPTable(5);
 			t1.setWidthPercentage(100);
 			t1.setSpacingBefore(25); //above table
 			t1.setSpacingAfter(25); //below table
 
-			PdfPCell c11 = new PdfPCell(new Phrase("Date",
+			PdfPCell c11 = new PdfPCell(new Phrase("Time of Day",
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
 			PdfPCell c12 = new PdfPCell(new Phrase("Temperature (deg Celcius)",
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));  
@@ -69,67 +115,67 @@ public class CreatePdf{
 			PdfPCell c18 = new PdfPCell(new Phrase("Comments",
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
   			
-			//Date
+			//Time of day
 			t1.addCell(c11);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");	    
-			t1.addCell(" ");
+			t1.addCell("Morning");
+			t1.addCell("Afternoon");
+			t1.addCell("Night");	    
+			t1.addCell("Average");
   	
 			//Temp
 			t1.addCell(c12);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell(""+calAvr(0, 0, 0, 0));
   	
 			//BP
 			t1.addCell(c13);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell(""+calAvr(0, 0, 0, 0));
   	
 			//Heart rate
 			t1.addCell(c14);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell(""+calAvr(0, 0, 0, 0));
 			
 			//Sugar level
 			t1.addCell(c15);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell(""+calAvr(0, 0, 0, 0));
   	
 			//Eye
 			t1.addCell(c16);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("-");
 			
 			//ear
 			t1.addCell(c17);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("-");
   	
 			//comments
 			t1.addCell(c18);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("");
+			t1.addCell("-");
   
 			section1.add(t1);
 	
 //////////////////////
 	
-			someSectionText = new Paragraph("Average Results: ", 
+			someSectionText = new Paragraph("Average per Month: ", 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 			section1.add(someSectionText);
 	
@@ -158,15 +204,25 @@ public class CreatePdf{
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 
 			section1.add(someSectionText);
+			
+			someSectionText = new Paragraph("" +addComment, 
+					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 	
 			document.add(section1);
   
 			document.close();
+			}
 			}catch (DocumentException e) {
 				e.printStackTrace();
 				} 
 		catch (FileNotFoundException e2) {
 			e2.printStackTrace();
-			}
+			} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
+		}
+	private double calAvr(double val1, double val2, double val3, double val4) {
+		return (val1+val2+val3+val4)/4;
 	}
+}
