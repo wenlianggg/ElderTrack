@@ -825,7 +825,7 @@ public class MgmtPanel extends JPanel {
 										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
 									}else{
 										// Executes update without the password
-										ManagementObject.executeStaffUpdateNoPassword(birthString, firstName, lastName, nric, staffId);
+										ManagementObject.executeStaffUpdateNoPassword(birthString, firstName, lastName, nric, staffId, accessLevel);
 										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
 									}
 											refreshStaff();
@@ -1031,7 +1031,13 @@ public class MgmtPanel extends JPanel {
 			}
 			});
 			
+			if(CurrentAL == AccessLevel.SRSTAFF){
+				elderlyNameValue.setEditable(false);
+				elderlyEmailValue.setEditable(false);
+				elderlyDay.setEditable(false);
+			}		
 	}
+	
 	
 	//Methods	
 	private void setColumnWidths(){

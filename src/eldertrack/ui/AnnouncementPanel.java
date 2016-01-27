@@ -28,22 +28,18 @@ public class AnnouncementPanel extends JPanel{
 	private SQLObject so = new SQLObject();
 	private static final long serialVersionUID = -8742307067990031379L;
 	private JLabel AnnouncementManager;
-	private String s;
+	private String defaultText;
+	private String fontText;
 	private String newText;
 	private MarqueePanel previewMarquee;
-	private String marqueeText;
-	
+	private JPanel panel_1;
 	
 	AnnouncementPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		
 		// Get current announcement text
-		try {
-			s = getMarqueeText();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		defaultText = getMarqueeText();
 		
 		JButton btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.setBounds(820, 15, 139, 40);
@@ -68,13 +64,14 @@ public class AnnouncementPanel extends JPanel{
 		editAnnouncementText.setToolTipText("");
 		editAnnouncementText.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		editAnnouncementText.setBounds(26, 385, 933, 30);
+		editAnnouncementText.setText(defaultText);
 		add(editAnnouncementText);
 		
 		JButton btnNewButton = new JButton("Save Announcement Text");
 		btnNewButton.setBounds(26, 428, 206, 25);
 		add(btnNewButton);
 		
-		JPanel panel_1 = new JPanel();
+		panel_1 = new JPanel();
 		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_1.setBounds(26, 120, 933, 225);
 		add(panel_1);
@@ -85,9 +82,9 @@ public class AnnouncementPanel extends JPanel{
 		announcementPreview.setBounds(26, 99, 189, 22);
 		add(announcementPreview);
 		
-		previewMarquee = new MarqueePanel(s, 300);
+		previewMarquee = new MarqueePanel(defaultText, 185);
 		previewMarquee.setBounds(0, 100, 933, 29);
-		previewMarquee.setFont(new Font("Tele-Marines", Font.BOLD, 18));
+		previewMarquee.setFont("Tahoma", Font.BOLD, 18);
 		panel_1.add(previewMarquee);
 		previewMarquee.setBackground(new Color(0, 153, 255));
 		previewMarquee.start();
@@ -98,6 +95,7 @@ public class AnnouncementPanel extends JPanel{
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				updateMarqueeText(editAnnouncementText.getText());
 			}
 		});
 		
@@ -120,16 +118,8 @@ public class AnnouncementPanel extends JPanel{
 		editAnnouncementText.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				newText = editAnnouncementText.getText();
-				
 				// Remove and Re-add marquee
-				panel_1.remove(previewMarquee);
-				previewMarquee = null;
-				previewMarquee = new MarqueePanel(newText, 160);
-				previewMarquee.setBounds(0, 100, 933, 29);
-				panel_1.add(previewMarquee);
-				previewMarquee.setBackground(new Color(0, 153, 255));
-				previewMarquee.start();
+				repaintMarquee(editAnnouncementText.getText());
 				
 				// Reload
 				panel_1.repaint();
@@ -143,14 +133,39 @@ public class AnnouncementPanel extends JPanel{
 	
 	// Methods
 	
-	private String getMarqueeText() throws SQLException{
+	private String getMarqueeText(){
+		try{
 		PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_scrollcfg");
 		ResultSet config = ps.executeQuery();
 		config.next();
-		return marqueeText = config.getString("value");
+		return config.getString("value");
+		}catch(SQLException e){
+			e.printStackTrace();
+			return "";
+		}
 	}
 	
-	private void updateMarqueeText(String text) throws SQLException{
-		PreparedStatement ps = so.getPreparedStatement("");
+	private void updateMarqueeText(String text){
+		try{
+		PreparedStatement ps = so.getPreparedStatement("UPDATE et_scrollcfg SET value=? WHERE cfg = 'text' ");
+		ps.setString(1, text);
+		ps.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		
+		MainFrame.getInstance().setScrollText(text);
+	}
+	
+	private void repaintMarquee(String newText){
+		panel_1.remove(previewMarquee);
+		previewMarquee = null;
+		previewMarquee = new MarqueePanel(newText, 160);
+		previewMarquee.setBounds(0, 100, 933, 29);
+		previewMarquee.setFont("Tahoma", Font.BOLD, 18);
+		panel_1.add(previewMarquee);
+		previewMarquee.setBackground(new Color(0, 153, 255));
+		previewMarquee.start();
 	}
 }
