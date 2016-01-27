@@ -31,12 +31,10 @@ public class MedicalData implements Serializable{
 		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup,name,date,checktime,id FROM et_elderly_checkup WHERE id = ?");
 		statement.setInt(1, id);
 		ResultSet rs = statement.executeQuery();
-		System.out.println("rs complete");
 				
 		ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp" );
 		PreparedStatement statementInsertTmp = so.getPreparedStatementWithKey
 				("INSERT INTO et_reportTemp (name,date,checktime,temperature,blood,heart,sugar,eye,ear) values(?,?,?,?,?,?,?,?,?)");
-		System.out.println("rstmp done");
 		
 		while(rs.next()){
 			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id FROM et_elderly_checkup WHERE id = ?");
