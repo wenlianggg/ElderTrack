@@ -269,8 +269,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 					Integer selectedelderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
 					CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
 					mainCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
-					MgmtPanel mgp = MainFrame.getInstance().getManagementPanel();
-					JTable jtb = (JTable) mgp.getComponentAt(200, 200).getComponentAt(50, 50).getComponentAt(50, 50).getComponentAt(50, 50);
+					JTable jtb = MainFrame.getInstance().getManagementPanel().getElderlyTable();
 					jtb.getSelectionModel().setSelectionInterval(selectedelderly, selectedelderly);
 				} else
 					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
