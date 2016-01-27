@@ -72,6 +72,9 @@ public class MgmtPanel extends JPanel {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	MgmtPanel() {
+		// Obtain access level from staff session
+		AccessLevel CurrentAL = MainFrame.getInstance().getSessionInstance().getAccessLevel();
+		
 		ArrayList<String> years_tmp = new ArrayList<String>();
 		years_tmp.add("");
         for(int years = 1900 ; years <= Calendar.getInstance().get(Calendar.YEAR);years++){
@@ -507,14 +510,15 @@ public class MgmtPanel extends JPanel {
 					JScrollPane scrollPane = new JScrollPane();
 					tabbedPane.addTab("Elderly", null, scrollPane, null);
 					
-					
 					DefaultTableModel allEldersData;
 					allEldersData = TableHelper.getElderlyDetailed("");
 					elderlyTable = new JTable(allEldersData);
 					setColumnWidths();
 					
 					JScrollPane scrollPane2 = new JScrollPane();
-					tabbedPane.addTab("Staff", null, scrollPane2, null);
+					if(CurrentAL == AccessLevel.MANAGER){
+						tabbedPane.addTab("Staff", null, scrollPane2, null);	
+					}
 					
 					DefaultTableModel allStaffData;
 					allStaffData = TableHelper.getStaff("");
@@ -524,8 +528,6 @@ public class MgmtPanel extends JPanel {
 					scrollPane2.setViewportView(staffTable);
 					scrollPane.setViewportView(elderlyTable);
 					
-					// Obtain access level from staff session
-					AccessLevel CurrentAL = MainFrame.getInstance().getSessionInstance().getAccessLevel();
 		
 		elderlyTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -579,9 +581,7 @@ public class MgmtPanel extends JPanel {
 			addStaff.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					if(CurrentAL != AccessLevel.ADMIN || CurrentAL != AccessLevel.MANAGER){
-						JOptionPane.showMessageDialog(null, "You do not have enough priveleges to add a new elderly!");
-					}else if(addStaff.isVisible() == true){
+					if(addStaff.isVisible() == true){
 						confirmAddStaff.setVisible(true);
 						addStaff.setVisible(false);
 						staffSave.setVisible(false);
