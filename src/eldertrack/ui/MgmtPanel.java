@@ -1127,4 +1127,8 @@ public class MgmtPanel extends JPanel {
 			}
 		}
 	}
+	
+	public JTable getElderlyTable(){
+		return elderlyTable;
+	}
 }
