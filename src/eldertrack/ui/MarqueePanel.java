@@ -9,13 +9,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-class MarqueePanel extends JPanel implements ActionListener {
+public class MarqueePanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 8319487979316580272L;
 	private static final int RATE = 16;
-    private final Timer timer = new Timer(1000 / RATE, this);
-    private final JLabel label = new JLabel();
-    private final String s;
-    private final int n;
+    private Timer timer = new Timer(1000 / RATE, this);
+    private JLabel label = new JLabel();
+    private String s;
+    private int n;
     private int index;
 
     public MarqueePanel(String s, int n) {
@@ -40,6 +40,10 @@ class MarqueePanel extends JPanel implements ActionListener {
 
     public void stop() {
         timer.stop();
+    }
+    
+    public void setFont(String font, int fonttype, int size) {
+    	label.setFont(new Font(font, fonttype, size));
     }
 
     @Override

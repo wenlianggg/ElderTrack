@@ -53,7 +53,7 @@ public class MainMenuPanel extends JPanel {
 		btnMedTrack.setBounds(10, 95, 242, 120);
 		add(btnMedTrack);
 		
-		btnDietManagement = new JButton("Diet Management");
+		btnDietManagement = new JButton("Diet Tracking");
 		btnDietManagement.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 		btnDietManagement.setBounds(10, 230, 242, 120);
 		btnDietManagement.addActionListener(new ActionListener() {
@@ -76,7 +76,7 @@ public class MainMenuPanel extends JPanel {
 		add(btnReportGeneration);
 		
 		if(MainFrame.getInstance().isManagementShown()) {
-			btnStaffManagement = new JButton("People Management");
+			btnStaffManagement = new JButton("Management");
 			btnStaffManagement.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 			btnStaffManagement.setBounds(10, 492, 242, 120);
 			btnStaffManagement.addActionListener(new ActionListener() {

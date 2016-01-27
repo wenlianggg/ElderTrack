@@ -28,4 +28,8 @@ public class MgmtSection extends JPanel{
 		CardDeck.setBounds(0, 0, 994, 671);
 		add(CardDeck);
 	}
+	
+	 public MgmtPanel getManagementPanel(){
+		return (MgmtPanel)this.mgmtPanel;
+	}
 }
