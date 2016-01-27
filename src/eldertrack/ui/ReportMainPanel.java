@@ -8,10 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -59,8 +54,8 @@ public class ReportMainPanel extends JPanel {
     
     ResultSet rsAvr = so.getResultSet("SELECT name, addComment FROM et_reportAvr" );
 	PreparedStatement statementInsertComment = so.getPreparedStatementWithKey
-			("UPDATE et_reportAvr SET addComments=? WHERE name =?");
-	PreparedStatement chkFile = so.getPreparedStatementWithKey("SELECT report FROM et_report");
+			("UPDATE et_reportAvr SET addComments=? WHERE name =?, id=?");
+	ResultSet chkFile = so.getResultSet("SELECT report FROM et_report");
 	
 	// Constructor
 	ReportMainPanel() {
@@ -178,19 +173,19 @@ public class ReportMainPanel extends JPanel {
 		lblReportForThisMonth.setBounds(10, 145, 358, 29);
 		panel.add(lblReportForThisMonth);
 		
-		JLabel lblMedicalHistorySum = new JLabel("Medical History (Summary): ");
+		JLabel lblMedicalHistorySum = new JLabel("Medical History (Average for Month): ");
 		lblMedicalHistorySum.setForeground(new Color(0, 128, 128));
 		lblMedicalHistorySum.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblMedicalHistorySum.setBounds(10, 171, 285, 29);
 		panel.add(lblMedicalHistorySum);
 		
-		JLabel lblTemperature = new JLabel("Temperature:");
-		lblTemperature.setBounds(10, 203, 96, 14);
-		panel.add(lblTemperature);
+		JLabel lblTemp = new JLabel("Temperature:");
+		lblTemp.setBounds(10, 203, 96, 14);
+		panel.add(lblTemp);
 		
-		JLabel lblBloodPressure = new JLabel("Blood Pressure:");
-		lblBloodPressure.setBounds(10, 223, 99, 14);
-		panel.add(lblBloodPressure);
+		JLabel lblBP = new JLabel("Blood Pressure:");
+		lblBP.setBounds(10, 223, 99, 14);
+		panel.add(lblBP);
 		
 		JLabel lblHeartRate = new JLabel("Heart Rate:");
 		lblHeartRate.setBounds(10, 243, 96, 14);
@@ -295,6 +290,7 @@ public class ReportMainPanel extends JPanel {
                 	try {
 						statementInsertComment.setString(1, txtrAddComment.getText());
 						statementInsertComment.setString(2, lblInfoName.getText());
+						statementInsertComment.setString(3, lblElderid.getText());
 						statementInsertComment.executeUpdate();
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -327,7 +323,6 @@ public class ReportMainPanel extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Send all reports?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                	
                 	if(chkFile!=null) { 
                 		JOptionPane.showMessageDialog(null, "Reports have already been sent.");
                 	}
@@ -336,8 +331,6 @@ public class ReportMainPanel extends JPanel {
                 		CreatePdf pdfs = new CreatePdf();
                 		@SuppressWarnings("unused")
                 		SendEmails emails = new SendEmails();   
-                    	
-                		             	
                     	JOptionPane.showMessageDialog(null, "Reports sent.");
                 	}
                 }
@@ -380,8 +373,8 @@ public class ReportMainPanel extends JPanel {
 				String table_clicked = (elderDataTable.getModel().getValueAt(row, 0).toString());
 				String sql = "SELECT * FROM et_elderly WHERE id=?";
 				ResultSet rs = so.getResultSet(sql, table_clicked);
-				ResultSet rsAvr = so.getResultSet("SELECT tempMonthAvr, bloodMonthAvr, heartMonthAvr,"
-						+ "sugarMonthAvr FROM et_reportAvr WHERE name=?");
+				ResultSet rsAvr = so.getResultSet("SELECT tempMAvr, bloodMAvr, heartMAvr,"
+						+ "sugarMAvr, eyeMAvr, earMAvr FROM et_reportAvr WHERE name=?");
 				
 				while(rs.next()){
 					String add1 = rs.getString("id");
@@ -403,7 +396,38 @@ public class ReportMainPanel extends JPanel {
 					String add5 = rs.getString("nric");
 					lblNRIC.setText(add5);
 					
-			//		String add 6 = 
+					((PreparedStatement) rsAvr).setString(1, rs.getString(add2));
+					((PreparedStatement) rsAvr).executeQuery();
+					
+					double add6 =rsAvr.getDouble("tempMAvr");
+					txtrTemp.setText(add6 +"\u00b0C");
+					
+					double add7 =rsAvr.getDouble("bloodMAvr");
+					txtrBP.setText(add7 +" mmHg");
+					
+					double add8 =rsAvr.getDouble("heartMonthAvr");
+					txtrHeartRate.setText(add8 +" bpm");
+					
+					int add9 =rsAvr.getInt("sugarMonthAvr");
+					txtrSugarLevel.setText(add9 +" mmol/L");
+					
+					@SuppressWarnings("unused")
+					boolean add10 =rsAvr.getBoolean("eyeMAvr");
+					String add10S = "";
+					if (add10=true)
+						add10S="Yes";
+					else
+						add10S="No";
+					txtrEye.setText(add10S);
+					
+					@SuppressWarnings("unused")
+					boolean add11 =rsAvr.getBoolean("earMAvr");
+					String add11S = "";
+					if (add11=true)
+						add11S="Yes";
+					else
+						add11S="No";
+					txtrEye.setText(add11S);
 					
 					}
 				}catch(Exception e1){
@@ -412,7 +436,4 @@ public class ReportMainPanel extends JPanel {
 			}
 		});
 	}
-}
-/////////////////////////////////////////
-	
-	
+}	

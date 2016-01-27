@@ -82,6 +82,9 @@ public class MedicalData implements Serializable{
 		} catch (SQLException e) {
 			e.printStackTrace();	
 			}
+		try {
+			ResultSet rsCalAvr=so.getResultSet("SELECT * FROM et_reportAvr" )
+		}
 		System.out.println("Data processed");
 		}
 	}
