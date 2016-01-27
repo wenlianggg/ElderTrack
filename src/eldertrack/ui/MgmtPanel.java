@@ -69,6 +69,7 @@ public class MgmtPanel extends JPanel {
 	private JLabel staffIdValue;
 	private JComboBox<String> editableAccessLevel;
 	private JLabel uneditableUsernameValue;
+	CardLayout parentcards;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	MgmtPanel() {
@@ -528,7 +529,19 @@ public class MgmtPanel extends JPanel {
 					scrollPane2.setViewportView(staffTable);
 					scrollPane.setViewportView(elderlyTable);
 					
+					JButton announcementSettings = new JButton("Edit Announcement Settings\r\n");
+					announcementSettings.setBounds(625, 499, 307, 25);
+					add(announcementSettings);
+					
 		
+					announcementSettings.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent arg0) {
+							parentcards = (CardLayout)MgmtSection.CardDeck.getLayout();
+							parentcards.show(MgmtSection.CardDeck, MgmtSection.ANNOUNCEMENTPANEL);
+						}
+					});			
+					
 		elderlyTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
