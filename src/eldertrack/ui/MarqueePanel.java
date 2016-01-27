@@ -42,9 +42,8 @@ public class MarqueePanel extends JPanel implements ActionListener {
         timer.stop();
     }
     
-    public void setText(String s) {
-    	this.s = s;
-    	index = 0;
+    public void setFont(String font, Font fonttype, int size) {
+    	this.setFont(font, fonttype, size);
     }
 
     @Override
