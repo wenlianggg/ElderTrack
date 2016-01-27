@@ -6,6 +6,7 @@ import java.awt.SystemColor;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JEditorPane;
+import javax.swing.JTextArea;
 
 public class AnnouncementPanel extends JPanel{
 	private static final long serialVersionUID = -8742307067990031379L;
@@ -21,13 +22,14 @@ public class AnnouncementPanel extends JPanel{
 		AnnouncementManager.setFont(new Font("Segoe UI", Font.ITALIC, 40));
 		add(AnnouncementManager);
 		
-		JEditorPane editorPane = new JEditorPane();
-		editorPane.setBounds(258, 485, 106, 22);
-		add(editorPane);
-		
-		JLabel lblNewLabel = new JLabel("Edit announcement text\r\n");
-		lblNewLabel.setBounds(90, 485, 143, 22);
+		JLabel lblNewLabel = new JLabel("Edit announcement text :\r\n\r\n");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel.setBounds(27, 483, 206, 22);
 		add(lblNewLabel);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(26, 517, 650, 61);
+		add(textArea);
 		
 	}
 }
