@@ -500,7 +500,7 @@ public class MgmtPanel extends JPanel {
 					staffMonth.setBounds(225, 120, 40, 22);
 					staffManagementPanel.add(staffMonth);
 					
-					JLabel lblDietManagement = new JLabel("Management\r\n");
+					JLabel lblDietManagement = new JLabel("Management\r\n - Community");
 					lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
 					lblDietManagement.setBounds(300, 20, 388, 30);
 					add(lblDietManagement);
@@ -1056,6 +1056,7 @@ public class MgmtPanel extends JPanel {
 				elderlySave.setVisible(false);
 				elderlyRemove.setVisible(false);
 				discardChanges.setVisible(false);
+				announcementSettings.setVisible(false);
 			}		
 	}
 	

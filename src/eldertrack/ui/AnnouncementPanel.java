@@ -33,6 +33,7 @@ public class AnnouncementPanel extends JPanel{
 	private String newText;
 	private MarqueePanel previewMarquee;
 	private JPanel panel_1;
+	private JLabel lblEManagementLbl;
 	
 	AnnouncementPanel() {
 		setBounds(0, 0, 995, 670);
@@ -48,6 +49,17 @@ public class AnnouncementPanel extends JPanel{
 		JButton eManagement = new JButton("Back to people management\r\n");
 		eManagement.setBounds(26, 555, 307, 25);
 		add(eManagement);
+		
+		lblEManagementLbl = new JLabel("ElderTrack Suite");
+		lblEManagementLbl.setForeground(SystemColor.textHighlight);
+		lblEManagementLbl.setFont(new Font("Segoe UI", Font.ITALIC, 40));
+		lblEManagementLbl.setBounds(10, 0, 280, 54);
+		add(lblEManagementLbl);
+		
+		JLabel lblDietManagement = new JLabel("Management\r\n - Announcement Settings");
+		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblDietManagement.setBounds(300, 20, 388, 30);
+		add(lblDietManagement);
 		
 		AnnouncementManager = new JLabel("ElderTrack Announcement Settings");
 		AnnouncementManager.setBounds(26, 5, 594, 61);
