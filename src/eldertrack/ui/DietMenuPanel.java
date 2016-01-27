@@ -320,6 +320,17 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
 		lblDietManagement.setBounds(300, 20, 388, 30);
 		add(lblDietManagement);
+		
+		JButton btnClrFlds = new JButton("Clear Fields");
+		btnClrFlds.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				clearFields();
+			}
+		});
+		btnClrFlds.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnClrFlds.setForeground(Color.GRAY);
+		btnClrFlds.setBounds(782, 423, 203, 54);
+		add(btnClrFlds);
 	}
 	
 	private void setColumnWidths() {
@@ -361,15 +372,8 @@ public class DietMenuPanel extends JPanel implements Presentable {
 				fieldCalories.setText(Integer.toString(n.getCalories()));
 				fieldProtein.setText(Integer.toString(n.getProtein()));
 			} else {
-				fieldVitA.setText("");
-				fieldVitC.setText("");
-				fieldVitD.setText("");
-				fieldVitE.setText("");
-				fieldFat.setText("");
-				fieldIron.setText("");
-				fieldCarbohydrates.setText("");
-				fieldCalories.setText("");
-				fieldProtein.setText("");
+				clearFields();
+				fieldMealName.setText(name);
 			}
 			switch(rs.getString("category")) {
 				case "Breakfast":
@@ -391,39 +395,36 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		}
 	}
 	
+	private void clearFields() {
+		fieldMealName.setText("");
+		fieldVitA.setText("");
+		fieldVitC.setText("");
+		fieldVitD.setText("");
+		fieldVitE.setText("");
+		fieldFat.setText("");
+		fieldIron.setText("");
+		fieldCarbohydrates.setText("");
+		fieldCalories.setText("");
+		fieldProtein.setText("");
+		chckbxHalal.setSelected(false);
+	}
+	
 	private void updateMenu() {
 		try {
-				if (selectedRow != -1) {
-					SerializerSQL.storeNutrition(selectedRow, getNutritionFromFields(), TableHelper.getSQLInstance());
-					PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET category=?, name=?, halal=? WHERE itemid=?");
-					ps.setString(1, getSelectedRadio());
-					ps.setString(2, fieldMealName.getText());
-					ps.setBoolean(3, chckbxHalal.isSelected());
-					ps.setInt(4, selectedRow);
-					ps.executeUpdate();
-					System.out.println("Meal Successfully Updated!");
-				}
+			MenuItem.getMenuMap().get(selectedRow).
+					editMenuItem(getSelectedRadio(), fieldMealName.getText(), chckbxHalal.isSelected(), getNutritionFromFields());
 				availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 				setColumnWidths();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
 	private void removeEntry() {
-		try {
-		PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET active = 0 WHERE itemid=?");
-		ps.setInt(1, selectedRow);
-		ps.executeUpdate();
+		MenuItem.getMenuMap().get(selectedRow).removeMenuItem();
 		availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 		setColumnWidths();
-		JOptionPane.showMessageDialog(null, "Meal Removed!");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		clearFields();
 	}
 	
 	private void addEntry() {
@@ -436,7 +437,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		}
 	}
 	
-	private Nutrition getNutritionFromFields() {
+	private Nutrition getNutritionFromFields() throws NumberFormatException {
 		int cal = Integer.parseInt(fieldCalories.getText()),
 				prot = Integer.parseInt(fieldProtein.getText()),
 				fat = Integer.parseInt(fieldFat.getText()),

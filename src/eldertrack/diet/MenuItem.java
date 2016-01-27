@@ -55,14 +55,14 @@ public class MenuItem {
 				return;
 			}
 			PreparedStatement ps2 = TableHelper.getSQLInstance().getPreparedStatementWithKey
-				("INSERT INTO et_menu (category, name, halal, addedby, dateadded) VALUES (?, ?, ?, ?, ?)");
+				("INSERT INTO et_menu (category, name, halal, addedby, nutrition, dateadded) VALUES (?, ?, ?, ?, ?, ?)");
 			ps2.setString(1, this.category);
 			ps2.setString(2, this.name);
 			ps2.setBoolean(3, this.halal);
 			ps2.setInt(4, this.addedBy);
-			ps2.setDate(5, new java.sql.Date(dateadded.getTime()));
+			ps2.setObject(5, this.nutrition);
+			ps2.setDate(6, new java.sql.Date(dateadded.getTime()));
 			ps2.executeUpdate();
-			SerializerSQL.storeNutrition(this.itemid, this.nutrition, TableHelper.getSQLInstance());
 			refreshMap();
 			JOptionPane.showMessageDialog(null, "Meal Added!");
 		} catch (SQLException e) {
@@ -94,11 +94,11 @@ public class MenuItem {
 		JOptionPane.showMessageDialog(null, "Meal Edited!");
 	}
 	
-	public void removeMenuItem(Integer id) {
+	public void removeMenuItem() {
 		PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET active=? WHERE itemid=?");
 		try {
 			ps.setBoolean(1, false);
-			ps.setInt(2, id);
+			ps.setInt(2, this.itemid);
 			ps.executeUpdate();
 			refreshMap();
 			JOptionPane.showMessageDialog(null, "Meal Removed!");
@@ -160,6 +160,7 @@ public class MenuItem {
 				// Put Menu Item into HashMap
 				menumap.put(itemid, mi);
 			}
+			MenuItem.menumap = menumap;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
