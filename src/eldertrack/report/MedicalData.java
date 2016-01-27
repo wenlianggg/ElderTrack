@@ -28,17 +28,24 @@ public class MedicalData implements Serializable{
 
 	@SuppressWarnings("unused")
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
-		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup,name,date,checktime FROM et_elderly_checkup WHERE id = ?");
+		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup,name,date,checktime,id FROM et_elderly_checkup WHERE id = ?");
 		statement.setInt(1, id);
 		ResultSet rs = statement.executeQuery();
+		System.out.println("rs complete");
 				
 		ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp" );
 		PreparedStatement statementInsertTmp = so.getPreparedStatementWithKey
 				("INSERT INTO et_reportTemp (name,date,checktime,temperature,blood,heart,sugar,eye,ear) values(?,?,?,?,?,?,?,?,?)");
+		System.out.println("rstmp done");
 		
 		while(rs.next()){
-			ByteArrayInputStream in = new ByteArrayInputStream(rs.getBytes(1));			 
-			ObjectInputStream is = new ObjectInputStream(in);			 
+			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id FROM et_elderly_checkup WHERE id = ?");
+			statement2.setInt(1, rs.getInt("id"));
+			ResultSet rsBlob = statement2.executeQuery();
+			rsBlob.next();
+			
+			ByteArrayInputStream in = new ByteArrayInputStream(rsBlob.getBytes(1));
+			ObjectInputStream is = new ObjectInputStream(in);
 			Object checkingBlob =(Object) is.readObject();
 			checking=(CheckUpObject) checkingBlob;
 			
@@ -47,8 +54,7 @@ public class MedicalData implements Serializable{
 			heart=checking.getElderHeart();
 			sugar=checking.getElderSugar();
 			eye=checking.isElderEye();
-			ear=checking.isElderEar();		
-			
+			ear=checking.isElderEar();			
 			name=rs.getString("name");
 			date=rs.getString("date");
 			checktime=rs.getString("checktime");
@@ -58,24 +64,26 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.setString(3, checktime);
 			statementInsertTmp.setDouble(4, temp);
 			statementInsertTmp.setDouble(5, blood);
-			statementInsertTmp.setDouble(6, heart);
+			statementInsertTmp.setInt(6, heart);
 			statementInsertTmp.setDouble(7, sugar);
 			statementInsertTmp.setBoolean(8, eye);
 			statementInsertTmp.setBoolean(9, ear);
 			statementInsertTmp.executeUpdate();
 		} 
 	}
+		
 	public static void main(String[] args) throws ClassNotFoundException, IOException{
 		try {
 			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_elderly_checkup ORDER BY name,date");
 						
 			while(rsLoadID.next()) {
-				RetrieveCheckUp(rsLoadID.getInt("id"));
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();	
+				int id = rsLoadID.getInt("id");
+				RetrieveCheckUp(id);
 			}
-		
+				
+		} catch (SQLException e) {
+			e.printStackTrace();	
+			}
 		System.out.println("Data processed");
 		}
 	}
