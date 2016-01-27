@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
+import eldertrack.login.AccessLevel;
 import eldertrack.management.ManagementObject;
 
 import java.awt.CardLayout;
@@ -499,6 +500,7 @@ public class MgmtPanel extends JPanel {
 					add(lblEManagementLbl);
 		
 					JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+					tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 					tabbedPane.setBounds(29, 79, 584, 445);
 					add(tabbedPane);
 					
@@ -521,6 +523,9 @@ public class MgmtPanel extends JPanel {
 					
 					scrollPane2.setViewportView(staffTable);
 					scrollPane.setViewportView(elderlyTable);
+					
+					// Obtain access level from staff session
+					AccessLevel CurrentAL = MainFrame.getInstance().getSessionInstance().getAccessLevel();
 		
 		elderlyTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -538,28 +543,7 @@ public class MgmtPanel extends JPanel {
 						String add2 = rs.getString("name");
 						elderlyNameValue.setText(add2);
 						
-						String add3 = rs.getString("dob");
-						char[] dobChar = add3.toCharArray();
-						String day = (String.valueOf(dobChar[8]) + String.valueOf(dobChar[9]));
-						String month = (String.valueOf(dobChar[5]) + String.valueOf(dobChar[6]));
-						String year = (String.valueOf(dobChar[0]) + String.valueOf(dobChar[1]) + String.valueOf(dobChar[2]) + String.valueOf(dobChar[3]));
-						for(int i = 0 ; i < elderlyDay.getItemCount(); i++){
-							if(elderlyDay.getItemAt(i).equals(day)){
-								elderlyDay.setSelectedIndex(i);
-							}
-						}
-						
-						for(int i = 0 ; i < elderlyMonth.getItemCount(); i++){
-							if(elderlyMonth.getItemAt(i).equals(month)){
-								elderlyMonth.setSelectedIndex(i);
-							}
-						}
-						
-						for(int i = 0 ; i < elderlyYear.getItemCount(); i++){
-							if(elderlyYear.getItemAt(i).equals(year)){
-								elderlyYear.setSelectedIndex(i);
-							}
-						}
+						setElderlyBirthday(rs.getString("dob").toCharArray());
 						
 						String add4 = rs.getString("nric");
 						elderlyNricValue.setText(add4);
@@ -592,13 +576,12 @@ public class MgmtPanel extends JPanel {
 			}
 		});
 			
-			
-			
-			
 			addStaff.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					if(addStaff.isVisible() == true){
+					if(CurrentAL != AccessLevel.ADMIN || CurrentAL != AccessLevel.MANAGER){
+						JOptionPane.showMessageDialog(null, "You do not have enough priveleges to add a new elderly!");
+					}else if(addStaff.isVisible() == true){
 						confirmAddStaff.setVisible(true);
 						addStaff.setVisible(false);
 						staffSave.setVisible(false);
@@ -813,7 +796,7 @@ public class MgmtPanel extends JPanel {
 										JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
 									}else if (validNric == false){
 										JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
-									}else if(staffSetPasswordValue.getPassword() != null || staffSetPasswordValue.getPassword().length != 0){			
+									}else if(staffSetPasswordValue.getPassword().length != 0){			
 										
 										// Password encryption
 										char[] passChar = staffSetPasswordValue.getPassword();
@@ -836,9 +819,7 @@ public class MgmtPanel extends JPanel {
 										}
 									}catch(SQLException e){
 									e.printStackTrace();
-								}
-							
-								
+								}		
 							}
 				}
 			});
@@ -890,10 +871,7 @@ public class MgmtPanel extends JPanel {
 								JOptionPane.showMessageDialog(null,e1);	
 							}
 								}
-								
-					
 						}
-							
 				}
 			);
 			
@@ -954,7 +932,7 @@ public class MgmtPanel extends JPanel {
 			    	//Cancel Buttons
 			    	cancelAddStaff.setVisible(true);
 			    	cancelAddElderly.setVisible(false);
-			    } else {
+			    }else{
 			    	//Panels
 			    	staffManagementPanel.setVisible(false);
 			    	elderlyManagementPanel.setVisible(true);
@@ -976,7 +954,7 @@ public class MgmtPanel extends JPanel {
 			    	//Cancel Buttons
 			    	cancelAddStaff.setVisible(false);
 			    	cancelAddElderly.setVisible(true);
-			    }
+			    	}
 			    }
 			});
 			
@@ -999,28 +977,7 @@ public class MgmtPanel extends JPanel {
 							String add3 = rs1.getString("lastname");
 							staffLastNameValue.setText(add3);
 							
-							String add4 = rs1.getString("dob");
-							char[] dobChar = add4.toCharArray();
-							String day = (String.valueOf(dobChar[8]) + String.valueOf(dobChar[9]));
-							String month = (String.valueOf(dobChar[5]) + String.valueOf(dobChar[6]));
-							String year = (String.valueOf(dobChar[0]) + String.valueOf(dobChar[1]) + String.valueOf(dobChar[2]) + String.valueOf(dobChar[3]));
-							for(int i = 0 ; i < staffDay.getItemCount(); i++){
-								if(staffDay.getItemAt(i).equals(day)){
-									staffDay.setSelectedIndex(i);
-								}
-							}
-							
-							for(int i = 0 ; i < staffMonth.getItemCount(); i++){
-								if(staffMonth.getItemAt(i).equals(month)){
-									staffMonth.setSelectedIndex(i);
-								}
-							}
-							
-							for(int i = 0 ; i < staffYear.getItemCount(); i++){
-								if(staffYear.getItemAt(i).equals(year)){
-									staffYear.setSelectedIndex(i);
-								}
-							}
+							setStaffBirthday(rs1.getString("dob").toCharArray());
 							
 							String add5 = rs1.getString("nric");
 							staffNricValue.setText(add5);
@@ -1123,5 +1080,51 @@ public class MgmtPanel extends JPanel {
 		editableUsernameValue.setText("");
 		staffSetPasswordValue.setText("");
 		editableAccessLevel.setSelectedIndex(0);
+	}
+	
+	private void setStaffBirthday(char[] dobChar){
+		String day = (String.valueOf(dobChar[8]) + String.valueOf(dobChar[9]));
+		String month = (String.valueOf(dobChar[5]) + String.valueOf(dobChar[6]));
+		String year = (String.valueOf(dobChar[0]) + String.valueOf(dobChar[1]) + String.valueOf(dobChar[2]) + String.valueOf(dobChar[3]));
+		for(int i = 0 ; i < staffDay.getItemCount(); i++){
+			if(staffDay.getItemAt(i).equals(day)){
+				staffDay.setSelectedIndex(i);
+			}
+		}
+		
+		for(int i = 0 ; i < staffMonth.getItemCount(); i++){
+			if(staffMonth.getItemAt(i).equals(month)){
+				staffMonth.setSelectedIndex(i);
+			}
+		}
+		
+		for(int i = 0 ; i < staffYear.getItemCount(); i++){
+			if(staffYear.getItemAt(i).equals(year)){
+				staffYear.setSelectedIndex(i);
+			}
+		}
+	}
+	
+	private void setElderlyBirthday(char[] dobChar){
+		String day = (String.valueOf(dobChar[8]) + String.valueOf(dobChar[9]));
+		String month = (String.valueOf(dobChar[5]) + String.valueOf(dobChar[6]));
+		String year = (String.valueOf(dobChar[0]) + String.valueOf(dobChar[1]) + String.valueOf(dobChar[2]) + String.valueOf(dobChar[3]));
+		for(int i = 0 ; i < elderlyDay.getItemCount(); i++){
+			if(elderlyDay.getItemAt(i).equals(day)){
+				elderlyDay.setSelectedIndex(i);
+			}
+		}
+		
+		for(int i = 0 ; i < elderlyMonth.getItemCount(); i++){
+			if(elderlyMonth.getItemAt(i).equals(month)){
+				elderlyMonth.setSelectedIndex(i);
+			}
+		}
+		
+		for(int i = 0 ; i < elderlyYear.getItemCount(); i++){
+			if(elderlyYear.getItemAt(i).equals(year)){
+				elderlyYear.setSelectedIndex(i);
+			}
+		}
 	}
 }
