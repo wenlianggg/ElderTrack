@@ -279,7 +279,4 @@ public class CreatePdf{
 		}
 		
 		}
-	private double calAvr(double val1, double val2, double val3) {
-		return (val1+val2+val3)/3;
-	}
 }

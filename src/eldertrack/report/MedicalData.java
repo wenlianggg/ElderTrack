@@ -25,6 +25,7 @@ public class MedicalData implements Serializable{
 	private static String checktime;
 	private static CheckUpObject checking;
 	static SQLObject so = new SQLObject();
+	private static String rsid;
 
 	@SuppressWarnings("unused")
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
@@ -34,7 +35,7 @@ public class MedicalData implements Serializable{
 				
 		ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp" );
 		PreparedStatement statementInsertTmp = so.getPreparedStatementWithKey
-				("INSERT INTO et_reportTemp (name,date,checktime,temperature,blood,heart,sugar,eye,ear) values(?,?,?,?,?,?,?,?,?)");
+				("INSERT INTO et_reportTemp (name,date,checktime,temperature,blood,heart,sugar,eye,ear,id) values(?,?,?,?,?,?,?,?,?,?)");
 		
 		while(rs.next()){
 			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id FROM et_elderly_checkup WHERE id = ?");
@@ -66,8 +67,14 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.setDouble(7, sugar);
 			statementInsertTmp.setBoolean(8, eye);
 			statementInsertTmp.setBoolean(9, ear);
+			statementInsertTmp.setInt(10, id);
 			statementInsertTmp.executeUpdate();
 		} 
+	}
+	
+	private static void CalAverage(int id) {
+		ResultSet rsCalAvr = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, id, date, checktime");
+		PreparedStatement calAvr = so.getPreparedStatementWithKey(")
 	}
 		
 	public static void main(String[] args) throws ClassNotFoundException, IOException{
@@ -82,9 +89,20 @@ public class MedicalData implements Serializable{
 		} catch (SQLException e) {
 			e.printStackTrace();	
 			}
+		
 		try {
-			ResultSet rsCalAvr=so.getResultSet("SELECT * FROM et_reportAvr" )
-		}
+			ResultSet rsCalAvr = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, id, date, checktime");
+						
+			while(rsCalAvr.next()) {
+				int id = rsCalAvr.getInt("id");
+				CalAverage(id);
+			}
+				
+		} catch (SQLException e) {
+			e.printStackTrace();	
+			}
+		
 		System.out.println("Data processed");
 		}
-	}
+
+}

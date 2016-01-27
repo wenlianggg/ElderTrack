@@ -1,5 +1,7 @@
 package eldertrack.report;
 
+import java.io.ByteArrayInputStream;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,7 +9,6 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,6 +19,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 import javax.swing.JOptionPane;
 
 import eldertrack.db.SQLObject;
@@ -68,24 +70,18 @@ private static SQLObject so = new SQLObject();
     	    			multipart.addBodyPart(messageBodyPart);
     	    			
     	    			
-    	   /* 			SQLObject so = new SQLObject();
-    	    			// open table and load onto so
-    	    			ResultSet rs = so.getResultSet("SELECT name,timestamp,report FROM et_report" );
+    	   				PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT report FROM et_report WHERE name = ?");
+    	   				statement2.setString(1, rs.getString("name"));
+    	   				ResultSet rsBlob = statement2.executeQuery();
+    	   				rsBlob.next();
     	    			
-    	    			PreparedStatement statement = so.getPreparedStatementWithKey("SELECT report FROM et_report WHERE name");
-    					statement.setString(1, nameList.get(i));
-    	    			// get your inputstream from your db
-    	    			InputStream isGetBlob = new BufferedInputStream();  
-    	    			DataSource sourceBlob = new ByteArrayDataSource(isGetBlob, "application/pdf");
-    	    			// add the attachment
-    	    		//	email.attach(source, "somefile.pdf", "Description of some file");
-    	   */
     	    			messageBodyPart = new MimeBodyPart();
     	    			String filename = ft.format(dNow)+" Report.pdf";
-    	    			DataSource source = new FileDataSource(filename);
-    	    			messageBodyPart.setDataHandler(new DataHandler(source));
+    	    			ByteArrayInputStream isGetBlob = new ByteArrayInputStream(rsBlob.getBytes(1));  
+    	    			DataSource sourceBlob = new ByteArrayDataSource(isGetBlob, "application/pdf");
+    	    			messageBodyPart.setDataHandler(new DataHandler(sourceBlob));
     	    			messageBodyPart.setFileName(filename);
-
+				
     	    			multipart.addBodyPart(messageBodyPart);
 
     	    			message.setContent(multipart);
@@ -93,9 +89,6 @@ private static SQLObject so = new SQLObject();
     	    			Transport.send(message);
     	    			}catch (MessagingException mex) {
     	    				mex.printStackTrace();
-    	    		//	} catch (SQLException e) {
-    				//		e.printStackTrace();
-    				//	}
     	    		}    			
 			}
 		}catch(Exception e1){
