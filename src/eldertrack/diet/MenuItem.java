@@ -79,12 +79,13 @@ public class MenuItem {
 		this.halal = halal;
 		this.nutrition = nutrition;
 		this.modifiedBy = MainFrame.getInstance().getSessionInstance().getStaffid();
-		PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET category=?, name=?, halal=? WHERE itemid=?");
+		PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET category=?, name=?, halal=?, modifiedby=? WHERE itemid=?");
 		try {
-			ps.setString(1, category);
-			ps.setString(2, name);
-			ps.setBoolean(3, halal);
-			ps.setInt(4, itemid);
+			ps.setString(1, this.category);
+			ps.setString(2, this.name);
+			ps.setBoolean(3, this.halal);
+			ps.setInt(4, this.modifiedBy);
+			ps.setInt(5, this.itemid);
 			ps.executeUpdate();
 			SerializerSQL.storeNutrition(itemid, nutrition, TableHelper.getSQLInstance());
 		} catch (SQLException e) {
@@ -136,6 +137,9 @@ public class MenuItem {
 		return modifiedBy;
 	}
 	
+	public static void nullMap() {
+		menumap = null;
+	}
 	
 	private static void refreshMap() {
 		SQLObject so = TableHelper.getSQLInstance();

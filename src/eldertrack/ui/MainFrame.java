@@ -26,6 +26,8 @@ import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
 import eldertrack.db.SQLObject;
+import eldertrack.diet.Elderly;
+import eldertrack.diet.MenuItem;
 import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
 import eldertrack.weather.Weather;
@@ -234,6 +236,9 @@ public class MainFrame extends JFrame {
 		LoginPanel.progressBar.setValue(0);
 		LoginPanel.progressBar.setString("Login to begin loading!");
 		LoginPanel.progressBar.update(LoginPanel.progressBar.getGraphics());
+		Elderly.nullMap();
+		MenuItem.nullMap();
+		StaffSession.nullMap();
 		System.out.println("Panels deconstructed!");
 	}
 	

@@ -2,6 +2,7 @@ package eldertrack.login;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -18,6 +19,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class StaffSession{
+	private static HashMap<Integer, String> namemap = null;
 	private int staffid = 0;
 	private String username = "";
 	private String firstname  = "";
@@ -168,6 +170,32 @@ public class StaffSession{
 	
 	public String getFullName() {
 		return this.firstname + " " + this.lastname;
+	}
+	
+	public static String nameFromID(Integer id) {
+		if (id == 0)
+			return "Nobody";
+		if (namemap == null) {
+			namemap = new HashMap<Integer, String>();
+			try {
+				PreparedStatement ps = new SQLObject().getPreparedStatement("SELECT staffid, firstname, lastname FROM et_staff");
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()) {
+					namemap.put(rs.getInt("staffid"), rs.getString("firstname") + " " + rs.getString("lastname"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		String name = namemap.get(id);
+		if (name == null)
+			return "Not Found, ID: " + id.toString();
+		else
+			return name;
+	}
+	
+	public static void nullMap() {
+		namemap = null;
 	}
 	
 	public void setNotes(String text) {

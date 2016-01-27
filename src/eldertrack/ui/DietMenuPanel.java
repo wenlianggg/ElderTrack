@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 
 import javax.swing.JButton;
@@ -30,6 +31,7 @@ import eldertrack.db.SQLObject;
 import eldertrack.diet.MenuItem;
 import eldertrack.diet.Nutrition;
 import eldertrack.diet.SerializerSQL;
+import eldertrack.login.StaffSession;
 import eldertrack.misc.TableHelper;
 
 import javax.swing.JCheckBox;
@@ -53,12 +55,13 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	private JTextField searchQuery;
 	private JTextField fieldMealName;
 	private JLabel lblRda;
-	private JLabel lblAddedOnDdmmyy;
-	private JLabel lblAddedByDdmmyy;
-	private JLabel lblLastModifiedDdmmyy;
+	private JLabel lblAddedDate;
+	private JLabel lblAddedBy;
+	private JLabel lblLastModified;
 	private JCheckBox chckbxHalal;
 	private Integer selectedRow = -1;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
 	private JRadioButton rdbtnBreakfast;
 	private JRadioButton rdbtnLunch;
 	private JRadioButton rdbtnDinner;
@@ -228,20 +231,20 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		lblRda.setBounds(12, 419, 306, 29);
 		nutriInfoPanel.add(lblRda);
 		
-		lblAddedOnDdmmyy = new JLabel("Added On: dd/mm/yy hh:mmAM");
-		lblAddedOnDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblAddedOnDdmmyy.setBounds(12, 475, 306, 20);
-		nutriInfoPanel.add(lblAddedOnDdmmyy);
+		lblAddedDate = new JLabel("Added On: dd/mm/yy");
+		lblAddedDate.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAddedDate.setBounds(12, 475, 306, 20);
+		nutriInfoPanel.add(lblAddedDate);
 		
-		lblAddedByDdmmyy = new JLabel("Added By: PERSON NAME");
-		lblAddedByDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblAddedByDdmmyy.setBounds(12, 494, 257, 20);
-		nutriInfoPanel.add(lblAddedByDdmmyy);
+		lblAddedBy = new JLabel("Added By: PERSON NAME");
+		lblAddedBy.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAddedBy.setBounds(12, 494, 257, 20);
+		nutriInfoPanel.add(lblAddedBy);
 		
-		lblLastModifiedDdmmyy = new JLabel("Last Modified: dd/mm/yy hh:mmAM by PERSON NAME");
-		lblLastModifiedDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblLastModifiedDdmmyy.setBounds(12, 514, 318, 20);
-		nutriInfoPanel.add(lblLastModifiedDdmmyy);
+		lblLastModified = new JLabel("Last Modified: PERSON NAME");
+		lblLastModified.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblLastModified.setBounds(12, 514, 318, 20);
+		nutriInfoPanel.add(lblLastModified);
 		
 		fieldMealName = new JTextField();
 		fieldMealName.setBounds(146, 63, 232, 33);
@@ -334,7 +337,6 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	}
 	
 	private void setColumnWidths() {
-		
 		availMealsTable.getTableHeader().setResizingAllowed(false);
 		availMealsTable.getTableHeader().setReorderingAllowed(false);
 		availMealsTable.getColumnModel().getColumn(0).setPreferredWidth(25);
@@ -347,51 +349,37 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	}
 	
 	public void presentData(int mealid) {
-		try {
-			SQLObject so = TableHelper.getSQLInstance();
-			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", new Integer(mealid).toString());
-			rs.next();
-			String name = rs.getString("name");
-			byte[] ba = rs.getBytes("nutrition");
-			boolean isHalal = rs.getBoolean("halal");
-			Nutrition n = null;
-			if (ba != null) {
-				ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(ba));
-				n = (Nutrition) is.readObject();
-			}
-			fieldMealName.setText(name);
-			chckbxHalal.setSelected(isHalal);
-			if (n != null) {
-				fieldVitA.setText(Integer.toString(n.getVita()));
-				fieldVitC.setText(Integer.toString(n.getVitc()));
-				fieldVitD.setText(Integer.toString(n.getVitd()));
-				fieldVitE.setText(Integer.toString(n.getVite()));
-				fieldFat.setText(Integer.toString(n.getFat()));
-				fieldIron.setText(Integer.toString(n.getIron()));
-				fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
-				fieldCalories.setText(Integer.toString(n.getCalories()));
-				fieldProtein.setText(Integer.toString(n.getProtein()));
-			} else {
-				clearFields();
-				fieldMealName.setText(name);
-			}
-			switch(rs.getString("category")) {
-				case "Breakfast":
-					rdbtnBreakfast.setSelected(true);
-					break;
-				case "Lunch":
-					rdbtnLunch.setSelected(true);
-					break;
-				case "Dinner":
-					rdbtnDinner.setSelected(true);
-					break;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		MenuItem mi = MenuItem.getMenuMap().get(mealid);
+		fieldMealName.setText(mi.getName());
+		chckbxHalal.setSelected(mi.isHalal());
+		lblAddedBy.setText("Added By: " + StaffSession.nameFromID(mi.getAddedby()));
+		lblAddedDate.setText("Added On: " + sdf.format(mi.getDateadded()));
+		lblLastModified.setText("Last Modified By: " + StaffSession.nameFromID(mi.getModifiedBy()));
+		Nutrition n = mi.getNutrition();
+		if (n != null) {
+			fieldVitA.setText(Integer.toString(n.getVita()));
+			fieldVitC.setText(Integer.toString(n.getVitc()));
+			fieldVitD.setText(Integer.toString(n.getVitd()));
+			fieldVitE.setText(Integer.toString(n.getVite()));
+			fieldFat.setText(Integer.toString(n.getFat()));
+			fieldIron.setText(Integer.toString(n.getIron()));
+			fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
+			fieldCalories.setText(Integer.toString(n.getCalories()));
+			fieldProtein.setText(Integer.toString(n.getProtein()));
+		} else {
+			clearFields();
+			fieldMealName.setText(mi.getName());
+		}
+		switch(mi.getCategory()) {
+			case "Breakfast":
+				rdbtnBreakfast.setSelected(true);
+				break;
+			case "Lunch":
+				rdbtnLunch.setSelected(true);
+				break;
+			case "Dinner":
+				rdbtnDinner.setSelected(true);
+				break;
 		}
 	}
 	
