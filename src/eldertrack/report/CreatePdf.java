@@ -2,6 +2,7 @@ package eldertrack.report;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -26,14 +27,6 @@ public class CreatePdf{
 	private String name;
 	private String date;
 	private String checktime;
-	private double temp;
-	private double blood;
-	private double heart;
-	private double sugar;
-	private boolean eye;
-	private boolean ear;
-	private String eyeString;
-	private String earString;
 	private double tempM;
 	private double bloodM;
 	private double heartM;
@@ -52,35 +45,38 @@ public class CreatePdf{
 	private double sugarN;
 	private boolean eyeN;
 	private boolean earN;
+	private double tempMAvr;
+	private double bloodMAvr;
+	private double heartMAvr;
+	private double sugarMAvr;
 	
 	Date dNow = new Date();
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
     
 	static SQLObject so = new SQLObject();
     ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, date, checktime");
+    ResultSet rsAvr=so.getResultSet("SELECT * FROM et_reportAvr WHERE name=?");
+    ResultSet rsReport = so.getResultSet("SELECT * FROM et_report");
+    PreparedStatement statementUpdateReport = so.getPreparedStatementWithKey
+    		("INSERT INTO et_report (name,report) values(?,?)");
+	private String eyeMString;
+	private String earMString;
+	private String earAString;
+	private String eyeAString;
+	private String eyeNString;
+	private String earNString;
+	private String tempD1Avr;
+	private String heartD1Avr;
+	private String bloodD1Avr;
+	private String sugarD1Avr;
 	
+    
     {
 		try{
 			while (rsTmp.next()){
 				name=rsTmp.getString("name");
 				date=rsTmp.getString("date");
 				checktime=rsTmp.getString("checktime");
-				temp=rsTmp.getDouble("temp");
-				blood=rsTmp.getDouble("blood");
-				heart=rsTmp.getDouble("heart");
-				sugar=rsTmp.getDouble("sugar");
-				eye=rsTmp.getBoolean("eye");
-				ear=rsTmp.getBoolean("ear");
-				
-				if (eye==true)
-					eyeString = "Yes";
-				else
-					eyeString="No";
-				
-				if (ear==true)
-					earString = "Yes";
-				else
-					earString="No";
 				
 				if (checktime=="Morning"){
 					tempM=rsTmp.getDouble("temp");
@@ -89,6 +85,15 @@ public class CreatePdf{
 					sugarM=rsTmp.getDouble("sugar");
 					eyeM=rsTmp.getBoolean("eye");
 					earM=rsTmp.getBoolean("ear");
+					if (eyeM==true)
+						eyeMString = "Yes";
+					else
+						eyeMString="No";
+					
+					if (earM==true)
+						earMString = "Yes";
+					else
+						earMString="No";
 				}
 				else if (checktime=="Afternoon"){
 					tempA=rsTmp.getDouble("temp");
@@ -97,6 +102,15 @@ public class CreatePdf{
 					sugarA=rsTmp.getDouble("sugar");
 					eyeA=rsTmp.getBoolean("eye");
 					earA=rsTmp.getBoolean("ear");
+					if (eyeA==true)
+						eyeAString = "Yes";
+					else
+						eyeAString="No";
+					
+					if (earA==true)
+						earAString = "Yes";
+					else
+						earAString="No";
 				}
 				else {
 					tempN=rsTmp.getDouble("temp");
@@ -105,6 +119,15 @@ public class CreatePdf{
 					sugarN=rsTmp.getDouble("sugar");
 					eyeN=rsTmp.getBoolean("eye");
 					earN=rsTmp.getBoolean("ear");
+					if (eyeN==true)
+						eyeNString = "Yes";
+					else
+						eyeNString="No";
+					
+					if (earN==true)
+						earNString = "Yes";
+					else
+						earNString="No";
 				}
 				
 				
@@ -155,8 +178,6 @@ public class CreatePdf{
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
 			PdfPCell c17 = new PdfPCell(new Phrase("Ear Infection",
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
-			PdfPCell c18 = new PdfPCell(new Phrase("Comments",
-					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
   			
 			//Time of day
 			t1.addCell(c11);
@@ -170,50 +191,43 @@ public class CreatePdf{
 			t1.addCell(""+tempM);
 			t1.addCell(""+tempA);
 			t1.addCell(""+tempN);
-			t1.addCell(""+calAvr(tempM, tempA, tempN));
+			t1.addCell(""+tempD1Avr);
   	
 			//BP
 			t1.addCell(c13);
 			t1.addCell(""+bloodM);
 			t1.addCell(""+bloodA);
 			t1.addCell(""+bloodN);
-			t1.addCell(""+calAvr(bloodM, bloodA, bloodN));
+			t1.addCell(""+bloodD1Avr);
   	
 			//Heart rate
 			t1.addCell(c14);
 			t1.addCell(""+heartM);
 			t1.addCell(""+heartA);
 			t1.addCell(""+heartN);
-			t1.addCell(""+calAvr(heartM, heartA, heartN));
+			t1.addCell(""+heartD1Avr);
 			
 			//Sugar level
 			t1.addCell(c15);
 			t1.addCell(""+sugarM);
 			t1.addCell(""+sugarA);
 			t1.addCell(""+sugarN);
-			t1.addCell(""+calAvr(sugarM, sugarA, sugarN));
+			t1.addCell(""+sugarD1Avr);
   	
 			//Eye
 			t1.addCell(c16);
-			t1.addCell("");
-			t1.addCell("");
-			t1.addCell("");
+			t1.addCell(""+eyeMString);
+			t1.addCell(""+eyeAString);
+			t1.addCell(""+eyeNString);
 			t1.addCell("-");
 			
 			//ear
 			t1.addCell(c17);
-			t1.addCell("");
-			t1.addCell("");
-			t1.addCell("");
+			t1.addCell(""+earMString);
+			t1.addCell(""+earAString);
+			t1.addCell(""+earNString);
 			t1.addCell("-");
   	
-			//comments
-			t1.addCell(c18);
-			t1.addCell("");
-			t1.addCell("");
-			t1.addCell("");
-			t1.addCell("-");
-  
 			section1.add(t1);
 	
 //////////////////////
@@ -228,16 +242,16 @@ public class CreatePdf{
 			t2.setSpacingAfter(25); //below table
 	
 			t2.addCell(c12);
-			t2.addCell(" ");
+			t2.addCell(""+tempMAvr);
 			
 			t2.addCell(c13);
-			t2.addCell(" ");
+			t2.addCell(""+bloodMAvr);
 
 			t2.addCell(c14);
-			t2.addCell(" ");
+			t2.addCell(""+heartMAvr);
 
 			t2.addCell(c15);
-			t2.addCell(" ");
+			t2.addCell(""+sugarMAvr);
 	
 			section1.add(t2);
 	
@@ -248,7 +262,7 @@ public class CreatePdf{
 
 			section1.add(someSectionText);
 			
-			someSectionText = new Paragraph("" +addComment, 
+			someSectionText = new Paragraph("" +rsAvr, 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 	
 			document.add(section1);
@@ -265,7 +279,4 @@ public class CreatePdf{
 		}
 		
 		}
-	private double calAvr(double val1, double val2, double val3) {
-		return (val1+val2+val3)/3;
-	}
 }

@@ -8,10 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -37,7 +32,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
-import eldertrack.medical.CheckUpObject;
 import eldertrack.misc.TableHelper;
 import eldertrack.report.CreatePdf;
 import eldertrack.report.MedicalData;
@@ -57,6 +51,11 @@ public class ReportMainPanel extends JPanel {
 
 	Date dNow = new Date( );
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
+    
+    ResultSet rsAvr = so.getResultSet("SELECT name, addComment FROM et_reportAvr" );
+	PreparedStatement statementInsertComment = so.getPreparedStatementWithKey
+			("UPDATE et_reportAvr SET addComments=? WHERE name =?, id=?");
+	ResultSet chkFile = so.getResultSet("SELECT report FROM et_report");
 	
 	// Constructor
 	ReportMainPanel() {
@@ -74,6 +73,7 @@ public class ReportMainPanel extends JPanel {
 		elderDataTable.getColumnModel().getColumn(0).setPreferredWidth(36);
 		tableScrollPane.setViewportView(elderDataTable);
 		
+		@SuppressWarnings("unused")
 		MedicalData elderList = new MedicalData();
 		
 		lblReportLabel = new JLabel("ElderTrack Report Generation");
@@ -109,7 +109,7 @@ public class ReportMainPanel extends JPanel {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
-		panel.setBounds(310, 97, 665, 468);
+		panel.setBounds(305, 97, 665, 468);
 		add(panel);
 		panel.setLayout(null);
 		
@@ -173,19 +173,19 @@ public class ReportMainPanel extends JPanel {
 		lblReportForThisMonth.setBounds(10, 145, 358, 29);
 		panel.add(lblReportForThisMonth);
 		
-		JLabel lblMedicalHistorySum = new JLabel("Medical History (Summary): ");
+		JLabel lblMedicalHistorySum = new JLabel("Medical History (Average for Month): ");
 		lblMedicalHistorySum.setForeground(new Color(0, 128, 128));
 		lblMedicalHistorySum.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblMedicalHistorySum.setBounds(10, 171, 285, 29);
 		panel.add(lblMedicalHistorySum);
 		
-		JLabel lblTemperature = new JLabel("Temperature:");
-		lblTemperature.setBounds(10, 203, 96, 14);
-		panel.add(lblTemperature);
+		JLabel lblTemp = new JLabel("Temperature:");
+		lblTemp.setBounds(10, 203, 96, 14);
+		panel.add(lblTemp);
 		
-		JLabel lblBloodPressure = new JLabel("Blood Pressure:");
-		lblBloodPressure.setBounds(10, 223, 99, 14);
-		panel.add(lblBloodPressure);
+		JLabel lblBP = new JLabel("Blood Pressure:");
+		lblBP.setBounds(10, 223, 99, 14);
+		panel.add(lblBP);
 		
 		JLabel lblHeartRate = new JLabel("Heart Rate:");
 		lblHeartRate.setBounds(10, 243, 96, 14);
@@ -263,52 +263,6 @@ public class ReportMainPanel extends JPanel {
 		txtrEar.setBounds(121, 363, 178, 18);
 		panel.add(txtrEar);
 		
-		JLabel lblComments = new JLabel("Comments (if any):");
-		lblComments.setForeground(new Color(0, 128, 128));
-		lblComments.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblComments.setBounds(343, 171, 285, 29);
-		panel.add(lblComments);
-		
-		JTextArea txtrComment1 = new JTextArea();
-		txtrComment1.setText("");
-		txtrComment1.setEditable(false);
-		txtrComment1.setWrapStyleWord(true);
-		txtrComment1.setLineWrap(true);
-		txtrComment1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtrComment1.setBackground(SystemColor.menu);
-		txtrComment1.setBounds(343, 202, 257, 18);
-		panel.add(txtrComment1);
-		
-		JTextArea txtComment2 = new JTextArea();
-		txtComment2.setText("");
-		txtComment2.setEditable(false);
-		txtComment2.setWrapStyleWord(true);
-		txtComment2.setLineWrap(true);
-		txtComment2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtComment2.setBackground(SystemColor.menu);
-		txtComment2.setBounds(343, 222, 257, 18);
-		panel.add(txtComment2);
-		
-		JTextArea txtrComment3 = new JTextArea();
-		txtrComment3.setEditable(false);
-		txtrComment3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtrComment3.setBackground(SystemColor.menu);
-		txtrComment3.setWrapStyleWord(true);
-		txtrComment3.setLineWrap(true);
-		txtrComment3.setText("");
-		txtrComment3.setBounds(343, 242, 257, 18);
-		panel.add(txtrComment3);
-		
-		JTextArea txtrComment4 = new JTextArea();
-		txtrComment4.setWrapStyleWord(true);
-		txtrComment4.setText("");
-		txtrComment4.setLineWrap(true);
-		txtrComment4.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtrComment4.setEditable(false);
-		txtrComment4.setBackground(SystemColor.menu);
-		txtrComment4.setBounds(343, 262, 257, 18);
-		panel.add(txtrComment4);
-		
 		JLabel lblAdditionalComments = new JLabel("Additional Comments:");
 		lblAdditionalComments.setForeground(new Color(0, 128, 128));
 		lblAdditionalComments.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -316,6 +270,7 @@ public class ReportMainPanel extends JPanel {
 		panel.add(lblAdditionalComments);
 		
 		JTextArea txtrAddComment = new JTextArea();
+		txtrAddComment.setToolTipText("");
 		txtrAddComment.setText("");
 		txtrAddComment.setBackground(SystemColor.text);
 		txtrAddComment.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -332,22 +287,16 @@ public class ReportMainPanel extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Save changes?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-					
-// -------------------->
-					ArrayList<String> comments = new ArrayList<String>();
-					for (int i=0; i<elderList.size(); i++){
-						comments.add("");
+                	try {
+						statementInsertComment.setString(1, txtrAddComment.getText());
+						statementInsertComment.setString(2, lblInfoName.getText());
+						statementInsertComment.setString(3, lblElderid.getText());
+						statementInsertComment.executeUpdate();
+					} catch (SQLException e) {
+						e.printStackTrace();
 					}
-					
-					int index = Integer.parseInt(lblElderid.getText());
-					// delete indexed null entry
-					comments.remove(index-1);
-
-					comments.add(index-1, txtrAddComment.getText());
-
                 	JOptionPane.showMessageDialog(null, "Changes saved.");
                 	txtrAddComment.setText("");
-                	
                 }
 			}
 		});
@@ -374,18 +323,14 @@ public class ReportMainPanel extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Send all reports?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                	File f = new File(ft.format(dNow)+" Report.pdf");
-                	if(f.exists() && !f.isDirectory()) { 
+                	if(chkFile!=null) { 
                 		JOptionPane.showMessageDialog(null, "Reports have already been sent.");
                 	}
                 	else {
-                		
                 		@SuppressWarnings("unused")
                 		CreatePdf pdfs = new CreatePdf();
                 		@SuppressWarnings("unused")
                 		SendEmails emails = new SendEmails();   
-                    	
-                		             	
                     	JOptionPane.showMessageDialog(null, "Reports sent.");
                 	}
                 }
@@ -428,6 +373,8 @@ public class ReportMainPanel extends JPanel {
 				String table_clicked = (elderDataTable.getModel().getValueAt(row, 0).toString());
 				String sql = "SELECT * FROM et_elderly WHERE id=?";
 				ResultSet rs = so.getResultSet(sql, table_clicked);
+				ResultSet rsAvr = so.getResultSet("SELECT tempMAvr, bloodMAvr, heartMAvr,"
+						+ "sugarMAvr, eyeMAvr, earMAvr FROM et_reportAvr WHERE name=?");
 				
 				while(rs.next()){
 					String add1 = rs.getString("id");
@@ -449,8 +396,39 @@ public class ReportMainPanel extends JPanel {
 					String add5 = rs.getString("nric");
 					lblNRIC.setText(add5);
 					
-					String sql2 = "SELECT * FROM et_reportTemp WHERE name=?";
-					ResultSet rs2 = so.getResultSet(sql2, add2);
+					((PreparedStatement) rsAvr).setString(1, rs.getString(add2));
+					((PreparedStatement) rsAvr).executeQuery();
+					
+					double add6 =rsAvr.getDouble("tempMAvr");
+					txtrTemp.setText(add6 +"\u00b0C");
+					
+					double add7 =rsAvr.getDouble("bloodMAvr");
+					txtrBP.setText(add7 +" mmHg");
+					
+					double add8 =rsAvr.getDouble("heartMonthAvr");
+					txtrHeartRate.setText(add8 +" bpm");
+					
+					int add9 =rsAvr.getInt("sugarMonthAvr");
+					txtrSugarLevel.setText(add9 +" mmol/L");
+					
+					@SuppressWarnings("unused")
+					boolean add10 =rsAvr.getBoolean("eyeMAvr");
+					String add10S = "";
+					if (add10=true)
+						add10S="Yes";
+					else
+						add10S="No";
+					txtrEye.setText(add10S);
+					
+					@SuppressWarnings("unused")
+					boolean add11 =rsAvr.getBoolean("earMAvr");
+					String add11S = "";
+					if (add11=true)
+						add11S="Yes";
+					else
+						add11S="No";
+					txtrEye.setText(add11S);
+					
 					}
 				}catch(Exception e1){
 					JOptionPane.showMessageDialog(null, e1);
@@ -458,7 +436,4 @@ public class ReportMainPanel extends JPanel {
 			}
 		});
 	}
-}
-/////////////////////////////////////////
-	
-	
+}	
