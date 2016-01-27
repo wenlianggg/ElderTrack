@@ -13,17 +13,35 @@ import javax.swing.JButton;
 
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
+
+import eldertrack.db.SQLObject;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class AnnouncementPanel extends JPanel{
+	private SQLObject so = new SQLObject();
 	private static final long serialVersionUID = -8742307067990031379L;
 	private JLabel AnnouncementManager;
-	private String s = "This is a test text";
+	private String s;
+	private String newText;
+	private MarqueePanel previewMarquee;
+	private String marqueeText;
+	
 	
 	AnnouncementPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
+		
+		// Get current announcement text
+		try {
+			s = getMarqueeText();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		
 		JButton btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.setBounds(820, 15, 139, 40);
@@ -65,13 +83,12 @@ public class AnnouncementPanel extends JPanel{
 		announcementPreview.setBounds(26, 99, 189, 22);
 		add(announcementPreview);
 		
-		/*MarqueePanel previewMarquee = new MarqueePanel();
-		previewMarquee.setBounds(0, 89, 933, 29);
-		previewMarquee.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		previewMarquee = new MarqueePanel(s, 300);
+		previewMarquee.setBounds(0, 100, 933, 29);
+		previewMarquee.setFont(new Font("Tele-Marines", Font.BOLD, 18));
 		panel_1.add(previewMarquee);
 		previewMarquee.setBackground(new Color(0, 153, 255));
 		previewMarquee.start();
-		*/
 		
 		//// Event Handlers ////
 		
@@ -94,9 +111,33 @@ public class AnnouncementPanel extends JPanel{
 		editAnnouncementText.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				String s = editAnnouncementText.getText();
+				newText = editAnnouncementText.getText();
+				
+				// Remove and Re-add marquee
+				panel_1.remove(previewMarquee);
+				previewMarquee = null;
+				previewMarquee = new MarqueePanel(newText, 160);
+				previewMarquee.setBounds(0, 100, 933, 29);
+				panel_1.add(previewMarquee);
+				previewMarquee.setBackground(new Color(0, 153, 255));
+				previewMarquee.start();
+				
+				// Reload
+				panel_1.repaint();
+				panel_1.revalidate();
+				previewMarquee.repaint();
+				previewMarquee.revalidate();
 			}
 		});
 		
+	}
+	
+	// Methods
+	
+	private String getMarqueeText() throws SQLException{
+		PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_scrollcfg");
+		ResultSet config = ps.executeQuery();
+		config.next();
+		return marqueeText = config.getString("value");
 	}
 }
