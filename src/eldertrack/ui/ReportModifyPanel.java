@@ -8,13 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -28,25 +23,25 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
-import eldertrack.medical.CheckUpObject;
 import eldertrack.misc.TableHelper;
 import eldertrack.report.CreatePdf;
 import eldertrack.report.MedicalData;
 import eldertrack.report.SendEmails;
 
-public class ReportMainPanel extends JPanel {
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+
+public class ReportModifyPanel extends JPanel {
 	private static SQLObject so = new SQLObject();
 	private static final long serialVersionUID = 4318548492960279050L;
-	public static JLabel lblElderid;
 	JLabel lblReportLabel;
 	JLabel lblSelectElderly;
 	private JTable elderDataTable;
@@ -59,7 +54,7 @@ public class ReportMainPanel extends JPanel {
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
 	
 	// Constructor
-	ReportMainPanel() {
+	ReportModifyPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 
