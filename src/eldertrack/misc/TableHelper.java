@@ -41,10 +41,10 @@ public class TableHelper {
 	public static DefaultTableModel getElderlyDetailed(String search) {
 		ResultSet rs = null;
 		boolean editable = false;
-		String[] columns = {"ID", "NAME", "DOB", "NRIC", "G", "R", "B","NOK", "ADDRESS"};
+		String[] columns = {"ID", "NAME", "DOB", "NRIC", "G", "R", "B","NOK", "ADDRESS", "NOK EMAIL"};
 		try {
 			search = (search.equalsIgnoreCase("")) ? "%" : search;
-			rs = so.getResultSet("SELECT id, name, dob, nric, gender, room, bed, contact, address FROM et_elderly WHERE name LIKE ?", search);
+			rs = so.getResultSet("SELECT id, name, dob, nric, gender, room, bed, contact, address, email FROM et_elderly WHERE name LIKE ?", search);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -45,7 +45,7 @@ public class MainFrame extends JFrame {
     private DietSection DietSection;
     private MedPanel MedPanel;
     private ReportMainPanel ReportPanel;
-    private MgmtPanel MgmtPanel;
+    private MgmtSection MgmtSection;
     private MainMenuPanel MainMenu;
 	private WeatherPanel weatherPanel;
     static JPanel CardsPanel;
@@ -146,7 +146,6 @@ public class MainFrame extends JFrame {
 		jpbar.setString("Initializing Diet Management...");
 		jpbar.update(jpbar.getGraphics());
 		DietSection = new DietSection();
-		DietSection.setBorder(lBorder);
 		CardsPanel.add(DietSection, DIETPANEL);
 		jpbar.setValue(50);
 
@@ -155,7 +154,6 @@ public class MainFrame extends JFrame {
 		jpbar.setString("Initializing Medication...");
 		jpbar.update(jpbar.getGraphics());
 		MedPanel = new MedPanel();
-		MedPanel.setBorder(lBorder);
 		CardsPanel.add(MedPanel, MEDICATIONPANEL);
 		jpbar.setValue(65);
 
@@ -164,9 +162,8 @@ public class MainFrame extends JFrame {
 		jpbar.setString("Initializing Management...");
 		jpbar.update(jpbar.getGraphics());
 		if(isManagementShown()) {
-			MgmtPanel = new MgmtPanel();
-			MgmtPanel.setBorder(lBorder);
-			CardsPanel.add(MgmtPanel, MGMTPANEL);
+			MgmtSection = new MgmtSection();
+			CardsPanel.add(MgmtSection, MGMTPANEL);
 		}
 		jpbar.setValue(85);
 
@@ -174,7 +171,6 @@ public class MainFrame extends JFrame {
 		jpbar.setString("Initializing Report Generation...");
 		jpbar.update(jpbar.getGraphics());
 		ReportPanel = new ReportMainPanel();
-		ReportPanel.setBorder(lBorder);
 		CardsPanel.add(ReportPanel, REPORTPANEL);
 
 		// Initialize Main Menu Panel
@@ -216,14 +212,14 @@ public class MainFrame extends JFrame {
 		CardsPanel.remove(MedPanel);
 		CardsPanel.remove(ReportPanel);
 		if(isManagementShown())
-			CardsPanel.remove(MgmtPanel);
+			CardsPanel.remove(MgmtSection);
 		CardsPanel.remove(MainMenu);
 		MasterPane.remove(comboBox);
 		comboBox = null;
 		DietSection = null;
 		MedPanel = null;
 		ReportPanel = null;
-		MgmtPanel = null;
+		MgmtSection = null;
 		MainMenu = null;
 		LoginPanel.progressBar.setValue(0);
 		LoginPanel.progressBar.setString("Login to begin loading!");
@@ -266,14 +262,14 @@ public class MainFrame extends JFrame {
 	
 	boolean isManagementShown() {
 		AccessLevel al = MainFrame.getInstance().getSessionInstance().getAccessLevel();
-		if (al == AccessLevel.MANAGER || al == AccessLevel.ADMIN)
+		if (al == AccessLevel.MANAGER || al == AccessLevel.ADMIN || al == AccessLevel.SRSTAFF)
 			return true;
 		else
 			return false;
 	}
 	
-	MgmtPanel getManagementPanel() {
-		return this.MgmtPanel;
+	MgmtSection getManagementSection() {
+		return this.MgmtSection;
 	}
 	
 	DietSection getDietPanel() {
