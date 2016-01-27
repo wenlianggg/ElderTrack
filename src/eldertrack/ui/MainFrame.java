@@ -52,6 +52,7 @@ public class MainFrame extends JFrame {
 	JComboBox<String> comboBox;
 	// Singleton Class Design
 	private StaffSession session;
+	private MarqueePanel marqueePanel;
 	private static MainFrame frame;
 	
 	// JFrame (MainFrame) > Normal JPanel (MasterPane) > CardLayout JPanel (MainPanel) > Feature Panels (LoginPanel)
@@ -113,7 +114,7 @@ public class MainFrame extends JFrame {
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
 		
 		String s = "Hello ElderTrack Implementers! This is a sample scrolling announcement text, support for querying will be added soon!";
-		MarqueePanel marqueePanel = new MarqueePanel(s, 160);
+		marqueePanel = new MarqueePanel(s, 160);
 		marqueePanel.setBackground(new Color(0, 153, 255));
 		marqueePanel.setBounds(0, 752, 790, 29);
 		marqueePanel.start();
@@ -134,7 +135,7 @@ public class MainFrame extends JFrame {
 
 		});
 		SimpleTimer.start();
-		
+
 	}
 	
 	void constructPanels() {
@@ -203,6 +204,7 @@ public class MainFrame extends JFrame {
 		MainMenu.fillDetails();
 		jpbar.setValue(100);
 		jpbar.update(jpbar.getGraphics());
+		
 	}
 	
 	void deconstructPanels() {
@@ -274,5 +276,16 @@ public class MainFrame extends JFrame {
 	
 	DietSection getDietPanel() {
 		return this.DietSection;
+	}
+	
+	public void setScrollText(String s) {
+		MasterPane.remove(marqueePanel);
+		marqueePanel = null;
+		marqueePanel = new MarqueePanel(s, 160);
+		marqueePanel.setBackground(new Color(0, 153, 255));
+		marqueePanel.setBounds(0, 752, 790, 29);
+		marqueePanel.start();
+		MasterPane.add(marqueePanel);
+
 	}
 }
