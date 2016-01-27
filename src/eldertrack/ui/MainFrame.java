@@ -270,8 +270,8 @@ public class MainFrame extends JFrame {
 			return false;
 	}
 	
-	MgmtSection getManagementSection() {
-		return this.MgmtSection;
+	MgmtPanel getManagementPanel() {
+		return MgmtSection.getManagementPanel();
 	}
 	
 	DietSection getDietPanel() {
