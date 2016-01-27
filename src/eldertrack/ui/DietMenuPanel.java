@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 
 import javax.swing.JButton;
@@ -27,8 +28,10 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
 import eldertrack.db.SQLObject;
+import eldertrack.diet.MenuItem;
 import eldertrack.diet.Nutrition;
 import eldertrack.diet.SerializerSQL;
+import eldertrack.login.StaffSession;
 import eldertrack.misc.TableHelper;
 
 import javax.swing.JCheckBox;
@@ -52,12 +55,13 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	private JTextField searchQuery;
 	private JTextField fieldMealName;
 	private JLabel lblRda;
-	private JLabel lblAddedOnDdmmyy;
-	private JLabel lblAddedByDdmmyy;
-	private JLabel lblLastModifiedDdmmyy;
+	private JLabel lblAddedDate;
+	private JLabel lblAddedBy;
+	private JLabel lblLastModified;
 	private JCheckBox chckbxHalal;
 	private Integer selectedRow = -1;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
 	private JRadioButton rdbtnBreakfast;
 	private JRadioButton rdbtnLunch;
 	private JRadioButton rdbtnDinner;
@@ -67,6 +71,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		MenuItem.getMenuMap();
 		
 		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
@@ -226,20 +231,20 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		lblRda.setBounds(12, 419, 306, 29);
 		nutriInfoPanel.add(lblRda);
 		
-		lblAddedOnDdmmyy = new JLabel("Added On: dd/mm/yy hh:mmAM");
-		lblAddedOnDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblAddedOnDdmmyy.setBounds(12, 475, 306, 20);
-		nutriInfoPanel.add(lblAddedOnDdmmyy);
+		lblAddedDate = new JLabel("Added On: dd/mm/yy");
+		lblAddedDate.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAddedDate.setBounds(12, 475, 306, 20);
+		nutriInfoPanel.add(lblAddedDate);
 		
-		lblAddedByDdmmyy = new JLabel("Added By: PERSON NAME");
-		lblAddedByDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblAddedByDdmmyy.setBounds(12, 494, 257, 20);
-		nutriInfoPanel.add(lblAddedByDdmmyy);
+		lblAddedBy = new JLabel("Added By: PERSON NAME");
+		lblAddedBy.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAddedBy.setBounds(12, 494, 257, 20);
+		nutriInfoPanel.add(lblAddedBy);
 		
-		lblLastModifiedDdmmyy = new JLabel("Last Modified: dd/mm/yy hh:mmAM by PERSON NAME");
-		lblLastModifiedDdmmyy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblLastModifiedDdmmyy.setBounds(12, 514, 318, 20);
-		nutriInfoPanel.add(lblLastModifiedDdmmyy);
+		lblLastModified = new JLabel("Last Modified: PERSON NAME");
+		lblLastModified.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblLastModified.setBounds(12, 514, 318, 20);
+		nutriInfoPanel.add(lblLastModified);
 		
 		fieldMealName = new JTextField();
 		fieldMealName.setBounds(146, 63, 232, 33);
@@ -318,10 +323,20 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
 		lblDietManagement.setBounds(300, 20, 388, 30);
 		add(lblDietManagement);
+		
+		JButton btnClrFlds = new JButton("Clear Fields");
+		btnClrFlds.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				clearFields();
+			}
+		});
+		btnClrFlds.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnClrFlds.setForeground(Color.GRAY);
+		btnClrFlds.setBounds(782, 423, 203, 54);
+		add(btnClrFlds);
 	}
 	
 	private void setColumnWidths() {
-		
 		availMealsTable.getTableHeader().setResizingAllowed(false);
 		availMealsTable.getTableHeader().setReorderingAllowed(false);
 		availMealsTable.getColumnModel().getColumn(0).setPreferredWidth(25);
@@ -334,124 +349,83 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	}
 	
 	public void presentData(int mealid) {
-		try {
-			SQLObject so = TableHelper.getSQLInstance();
-			ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", new Integer(mealid).toString());
-			rs.next();
-			String name = rs.getString("name");
-			byte[] ba = rs.getBytes("nutrition");
-			boolean isHalal = rs.getBoolean("halal");
-			Nutrition n = null;
-			if (ba != null) {
-				ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(ba));
-				n = (Nutrition) is.readObject();
-			}
-			fieldMealName.setText(name);
-			chckbxHalal.setSelected(isHalal);
-			if (n != null) {
-				fieldVitA.setText(Integer.toString(n.getVita()));
-				fieldVitC.setText(Integer.toString(n.getVitc()));
-				fieldVitD.setText(Integer.toString(n.getVitd()));
-				fieldVitE.setText(Integer.toString(n.getVite()));
-				fieldFat.setText(Integer.toString(n.getFat()));
-				fieldIron.setText(Integer.toString(n.getIron()));
-				fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
-				fieldCalories.setText(Integer.toString(n.getCalories()));
-				fieldProtein.setText(Integer.toString(n.getProtein()));
-			} else {
-				fieldVitA.setText("");
-				fieldVitC.setText("");
-				fieldVitD.setText("");
-				fieldVitE.setText("");
-				fieldFat.setText("");
-				fieldIron.setText("");
-				fieldCarbohydrates.setText("");
-				fieldCalories.setText("");
-				fieldProtein.setText("");
-			}
-			switch(rs.getString("category")) {
-				case "Breakfast":
-					rdbtnBreakfast.setSelected(true);
-					break;
-				case "Lunch":
-					rdbtnLunch.setSelected(true);
-					break;
-				case "Dinner":
-					rdbtnDinner.setSelected(true);
-					break;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		MenuItem mi = MenuItem.getMenuMap().get(mealid);
+		fieldMealName.setText(mi.getName());
+		chckbxHalal.setSelected(mi.isHalal());
+		lblAddedBy.setText("Added By: " + StaffSession.nameFromID(mi.getAddedby()));
+		lblAddedDate.setText("Added On: " + sdf.format(mi.getDateadded()));
+		lblLastModified.setText("Last Modified By: " + StaffSession.nameFromID(mi.getModifiedBy()));
+		Nutrition n = mi.getNutrition();
+		if (n != null) {
+			fieldVitA.setText(Integer.toString(n.getVita()));
+			fieldVitC.setText(Integer.toString(n.getVitc()));
+			fieldVitD.setText(Integer.toString(n.getVitd()));
+			fieldVitE.setText(Integer.toString(n.getVite()));
+			fieldFat.setText(Integer.toString(n.getFat()));
+			fieldIron.setText(Integer.toString(n.getIron()));
+			fieldCarbohydrates.setText(Integer.toString(n.getCarbs()));
+			fieldCalories.setText(Integer.toString(n.getCalories()));
+			fieldProtein.setText(Integer.toString(n.getProtein()));
+		} else {
+			clearFields();
+			fieldMealName.setText(mi.getName());
 		}
+		switch(mi.getCategory()) {
+			case "Breakfast":
+				rdbtnBreakfast.setSelected(true);
+				break;
+			case "Lunch":
+				rdbtnLunch.setSelected(true);
+				break;
+			case "Dinner":
+				rdbtnDinner.setSelected(true);
+				break;
+		}
+	}
+	
+	private void clearFields() {
+		fieldMealName.setText("");
+		fieldVitA.setText("");
+		fieldVitC.setText("");
+		fieldVitD.setText("");
+		fieldVitE.setText("");
+		fieldFat.setText("");
+		fieldIron.setText("");
+		fieldCarbohydrates.setText("");
+		fieldCalories.setText("");
+		fieldProtein.setText("");
+		chckbxHalal.setSelected(false);
 	}
 	
 	private void updateMenu() {
 		try {
-				if (selectedRow != -1) {
-					SerializerSQL.storeNutrition(selectedRow, getNutritionFromFields(), TableHelper.getSQLInstance());
-					PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET category=?, name=?, halal=? WHERE itemid=?");
-					ps.setString(1, getSelectedRadio());
-					ps.setString(2, fieldMealName.getText());
-					ps.setBoolean(3, chckbxHalal.isSelected());
-					ps.setInt(4, selectedRow);
-					ps.executeUpdate();
-					System.out.println("Meal Successfully Updated!");
-				}
+			MenuItem.getMenuMap().get(selectedRow).
+					editMenuItem(getSelectedRadio(), fieldMealName.getText(), chckbxHalal.isSelected(), getNutritionFromFields());
 				availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 				setColumnWidths();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
 	private void removeEntry() {
-		try {
-		PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("DELETE FROM et_menu WHERE itemid=?");
-		ps.setInt(1, selectedRow);
-		ps.executeUpdate();
+		MenuItem.getMenuMap().get(selectedRow).removeMenuItem();
 		availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 		setColumnWidths();
-		JOptionPane.showMessageDialog(null, "Meal Removed!");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		clearFields();
 	}
 	
 	private void addEntry() {
 		try {
-			PreparedStatement ps1 = TableHelper.getSQLInstance().getPreparedStatement
-				("SELECT * FROM et_menu WHERE name LIKE ?");
-			ps1.setString(1, fieldMealName.getText());
-			ResultSet rs1 = ps1.executeQuery();
-			if(rs1.next()) {
-				JOptionPane.showMessageDialog(null, "Meal Exists!");
-				return;
-			}
-			PreparedStatement ps2 = TableHelper.getSQLInstance().getPreparedStatementWithKey
-				("INSERT INTO et_menu (category, name, halal, nutrition) VALUES (?, ?, ?, ?)");
-			ps2.setString(1, getSelectedRadio());
-			ps2.setString(2, fieldMealName.getText());
-			ps2.setBoolean(3, chckbxHalal.isSelected());
-			ps2.setObject(4, getNutritionFromFields());
-			ps2.executeUpdate();
+			new MenuItem(getSelectedRadio(), fieldMealName.getText(), chckbxHalal.isSelected(), getNutritionFromFields(), true);
 			availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 			setColumnWidths();
-			JOptionPane.showMessageDialog(null, "Meal Added!");
-		} catch (SQLException e) {
-			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
+			JOptionPane.showMessageDialog(null, "One of the fields were empty or invalid!");
 		}
 	}
 	
-	private Nutrition getNutritionFromFields() {
+	private Nutrition getNutritionFromFields() throws NumberFormatException {
 		int cal = Integer.parseInt(fieldCalories.getText()),
 				prot = Integer.parseInt(fieldProtein.getText()),
 				fat = Integer.parseInt(fieldFat.getText()),

@@ -80,7 +80,20 @@ public class TableHelper {
 		String[] columns = {"ID", "Category", "Name", "Halal?"};
 		try {
 			search = (search.equalsIgnoreCase("")) ? "%" : search;
-			rs = so.getResultSet("SELECT itemid, category, name, halal FROM et_menu WHERE name LIKE ?", search);
+			rs = so.getResultSet("SELECT itemid, category, name, halal FROM et_menu WHERE name LIKE ? AND active = 1 ORDER BY case category WHEN 'Breakfast' then 1 WHEN 'Lunch' then 2 else 3 end, 'id' ASC", search);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return getModel(rs, columns, editable);
+	}
+	
+	public static DefaultTableModel getMealsWithInactive(String search) {
+		ResultSet rs = null;
+		boolean editable = false;
+		String[] columns = {"ID", "Category", "Name", "Halal?", "A"};
+		try {
+			search = (search.equalsIgnoreCase("")) ? "%" : search;
+			rs = so.getResultSet("SELECT itemid, category, name, halal, active FROM et_menu WHERE name LIKE ? ORDER BY case category WHEN 'Breakfast' then 1 WHEN 'Lunch' then 2 else 3 end, 'id' ASC", search);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
