@@ -21,6 +21,8 @@ import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AnnouncementPanel extends JPanel{
 	private SQLObject so = new SQLObject();
@@ -92,6 +94,13 @@ public class AnnouncementPanel extends JPanel{
 		
 		//// Event Handlers ////
 		
+		// Update text in database
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+			}
+		});
+		
 		// Return to management panel
 		eManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -139,5 +148,9 @@ public class AnnouncementPanel extends JPanel{
 		ResultSet config = ps.executeQuery();
 		config.next();
 		return marqueeText = config.getString("value");
+	}
+	
+	private void updateMarqueeText(String text) throws SQLException{
+		PreparedStatement ps = so.getPreparedStatement("");
 	}
 }
