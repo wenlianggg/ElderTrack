@@ -4,10 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import eldertrack.db.SQLObject;
 
 public class MarqueePanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 8319487979316580272L;
@@ -15,10 +19,15 @@ public class MarqueePanel extends JPanel implements ActionListener {
     private Timer timer = new Timer(1000 / RATE, this);
     private JLabel label = new JLabel();
     private String s;
+    static int type = Font.PLAIN;
+    static String font;
     private int n;
     private int index;
 
     public MarqueePanel(String s, int n) {
+    	if (s.equals("")) {
+
+    	}
         if (s == null || n < 1) {
             throw new IllegalArgumentException("Null string or n < 1");
         }
@@ -28,7 +37,7 @@ public class MarqueePanel extends JPanel implements ActionListener {
         }
         this.s = sb + s + sb;
         this.n = n;
-        label.setFont(new Font("Segoe UI", Font.PLAIN, 17));
+        label.setFont(new Font(font, type, 17));
         label.setForeground(Color.WHITE);
         label.setText(sb.toString());
         this.add(label);

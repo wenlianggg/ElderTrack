@@ -16,6 +16,8 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -23,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
+import eldertrack.db.SQLObject;
 import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
 import eldertrack.weather.Weather;
@@ -113,7 +116,7 @@ public class MainFrame extends JFrame {
 		CardsPanel.setSize(994, 671);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, LOGINPANEL);
 		
-		String s = "Hello ElderTrack Implementers! This is a sample scrolling announcement text, support for querying will be added soon!";
+		String s = "Text from database not shown for security reasons, please login!";
 		marqueePanel = new MarqueePanel(s, 160);
 		marqueePanel.setBackground(new Color(0, 153, 255));
 		marqueePanel.setBounds(0, 752, 790, 29);
@@ -141,14 +144,14 @@ public class MainFrame extends JFrame {
 	void constructPanels() {
 		JProgressBar jpbar = LoginPanel.progressBar;
 		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
-		jpbar.setValue(25);
+		jpbar.setValue(10);
 				
 		// Initialize Diet Panel
 		jpbar.setString("Initializing Diet Management...");
 		jpbar.update(jpbar.getGraphics());
 		DietSection = new DietSection();
 		CardsPanel.add(DietSection, DIETPANEL);
-		jpbar.setValue(50);
+		jpbar.setValue(20);
 
 		
 		// Initialize Med Panel
@@ -156,7 +159,7 @@ public class MainFrame extends JFrame {
 		jpbar.update(jpbar.getGraphics());
 		MedPanel = new MedPanel();
 		CardsPanel.add(MedPanel, MEDICATIONPANEL);
-		jpbar.setValue(65);
+		jpbar.setValue(30);
 
 		
 		// Initialize Management Panel
@@ -166,22 +169,27 @@ public class MainFrame extends JFrame {
 			MgmtSection = new MgmtSection();
 			CardsPanel.add(MgmtSection, MGMTPANEL);
 		}
-		jpbar.setValue(85);
+		jpbar.setValue(40);
 
 		// Initialize Report Panel
 		jpbar.setString("Initializing Report Generation...");
 		jpbar.update(jpbar.getGraphics());
 		ReportPanel = new ReportMainPanel();
 		CardsPanel.add(ReportPanel, REPORTPANEL);
+		jpbar.setValue(50);
 
 		// Initialize Main Menu Panel
 		jpbar.setString("Initializing Main Menu...");
-		LoginPanel.progressBar.setValue(90);
 		jpbar.update(jpbar.getGraphics());
 		MainMenu = new MainMenuPanel();
 		MainMenu.setBorder(lBorder);
 		CardsPanel.add(MainMenu, MENUPANEL);
-		jpbar.setValue(95);
+		jpbar.setValue(60);
+		jpbar.update(jpbar.getGraphics());
+		
+		jpbar.setString("Initializing Scroll Text");
+		initScrollText();
+		jpbar.setValue(80);
 		jpbar.update(jpbar.getGraphics());
 		
 		// Add menus to combo box
@@ -197,7 +205,7 @@ public class MainFrame extends JFrame {
 		comboBox.setLocation(10, 682);
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MENUPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, REPORTPANEL}));
 		comboBox.setSelectedIndex(0);
-		jpbar.setValue(98);
+		jpbar.setValue(90);
 		jpbar.update(jpbar.getGraphics());
 	
 		MasterPane.add(comboBox);
@@ -276,6 +284,33 @@ public class MainFrame extends JFrame {
 	
 	DietSection getDietPanel() {
 		return this.DietSection;
+	}
+	
+	private void initScrollText() {
+	// Initialize scroll text
+		try {
+    		SQLObject so = new SQLObject();
+    		ResultSet rs = so.getResultSet("SELECT * FROM et_scrollcfg");
+    		rs.next();
+			String text = rs.getString("value");
+			rs.next();
+			String font = rs.getString("value");
+			rs.next();
+			String fonttype = rs.getString("value");
+			setScrollText(text);
+			if (fonttype.equalsIgnoreCase("bold")) {
+				marqueePanel.setFont(font, Font.BOLD, 17);
+				MarqueePanel.type = Font.BOLD;
+			} else if (fonttype.equalsIgnoreCase("italic")) {
+				marqueePanel.setFont(font, Font.ITALIC, 17);
+				MarqueePanel.type = Font.ITALIC;
+			} else {
+				marqueePanel.setFont(font, Font.PLAIN, 17);
+				MarqueePanel.type = Font.PLAIN;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setScrollText(String s) {
