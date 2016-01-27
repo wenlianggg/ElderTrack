@@ -132,7 +132,7 @@ public class MgmtPanel extends JPanel {
 					add(staffSave);
 					
 					JButton staffRemove = new JButton("Remove Selected");
-				
+					staffRemove.setVisible(false);
 					staffRemove.setBounds(476, 534, 132, 25);
 					add(staffRemove);
 					
@@ -1033,10 +1033,23 @@ public class MgmtPanel extends JPanel {
 			
 			if(CurrentAL == AccessLevel.SRSTAFF){
 				elderlyNameValue.setEditable(false);
+				elderlyNricValue.setEditable(false);
+				elderlyAddressValue.setEditable(false);
+				elderlyRoomValue.setEditable(false);
+				elderlyGenderValue.setEditable(false);
+				elderlyDay.setEnabled(false);
+				elderlyYear.setEnabled(false);
+				elderlyMonth.setEnabled(false);
+				elderlyBedValue.setEditable(false);
+				elderlyContactValue.setEditable(false);
 				elderlyEmailValue.setEditable(false);
-				elderlyDay.setEditable(false);
+				addElderly.setVisible(false);
+				elderlySave.setVisible(false);
+				elderlyRemove.setVisible(false);
+				discardChanges.setVisible(false);
 			}		
 	}
+	
 	
 	
 	//Methods	
