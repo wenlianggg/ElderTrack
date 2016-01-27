@@ -8,12 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 
@@ -27,10 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
-import eldertrack.db.SQLObject;
 import eldertrack.diet.MenuItem;
 import eldertrack.diet.Nutrition;
-import eldertrack.diet.SerializerSQL;
 import eldertrack.login.StaffSession;
 import eldertrack.misc.TableHelper;
 

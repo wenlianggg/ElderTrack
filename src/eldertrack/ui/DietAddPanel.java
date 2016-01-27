@@ -8,11 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -25,8 +20,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
-import eldertrack.db.SQLObject;
 import eldertrack.diet.Elderly;
+import eldertrack.diet.MenuItem;
 import eldertrack.diet.Nutrition;
 import eldertrack.misc.TableHelper;
 import javax.swing.JCheckBox;
@@ -285,48 +280,32 @@ public class DietAddPanel extends JPanel implements Presentable {
 	}
 	
 	private void presentMealData(String mid) {
-			try {
-				SQLObject so = TableHelper.getSQLInstance();
-				ResultSet rs = so.getResultSet("SELECT name,category,nutrition,halal FROM et_menu WHERE itemid = ?", mid);
-				rs.next();
-				String name = rs.getString("name");
-				byte[] ba = rs.getBytes("nutrition");
-				boolean isHalal = rs.getBoolean("halal");
-				Nutrition n = null;
-				if (ba != null) {
-					ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(ba));
-					n = (Nutrition) is.readObject();
-				}
-				lblMealName.setText(name);
-				chckbxHalal.setSelected(isHalal);
-				if (n != null) {
-					lblVitA.setText("Vitamin A (%): " + Integer.toString(n.getVita()));
-					lblVitC.setText("Vitamin C (%): " + Integer.toString(n.getVitc()));
-					lblVitD.setText("Vitamin D (%): " + Integer.toString(n.getVitd()));
-					lblVitE.setText("Vitamin E (%): " + Integer.toString(n.getVite()));
-					lblFat.setText("Fat (g): " + Integer.toString(n.getFat()));
-					lblIron.setText("Iron (mg): " + Integer.toString(n.getIron()));
-					lblCarbohydrates.setText("Carbohydrates (g): " + Integer.toString(n.getCarbs()));
-					lblCalories.setText("Calories (kcal): " + Integer.toString(n.getCalories()));
-					lblProtein.setText("Protein (g): " + Integer.toString(n.getProtein()));
-				} else {
-					lblVitA.setText("Vitamin A (%): ");
-					lblVitC.setText("Vitamin C (%): ");
-					lblVitD.setText("Vitamin D (%): ");
-					lblVitE.setText("Vitamin E (%): ");
-					lblFat.setText("Fat (g): ");
-					lblIron.setText("Iron (g): ");
-					lblCarbohydrates.setText("Carbohydrates (g):");
-					lblCalories.setText("Calories (kcal): ");
-					lblProtein.setText("Protein (g): ");
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		MenuItem mi = MenuItem.getMenuMap().get(Integer.parseInt(mid));
+		lblMealName.setText(mi.getName());
+		chckbxHalal.setSelected(mi.isHalal());
+		Nutrition n = mi.getNutrition();
+		chckbxHalal.setSelected(mi.isHalal());
+		if (n != null) {
+			lblVitA.setText("Vitamin A (%): " + Integer.toString(n.getVita()));
+			lblVitC.setText("Vitamin C (%): " + Integer.toString(n.getVitc()));
+			lblVitD.setText("Vitamin D (%): " + Integer.toString(n.getVitd()));
+			lblVitE.setText("Vitamin E (%): " + Integer.toString(n.getVite()));
+			lblFat.setText("Fat (g): " + Integer.toString(n.getFat()));
+			lblIron.setText("Iron (mg): " + Integer.toString(n.getIron()));
+			lblCarbohydrates.setText("Carbohydrates (g): " + Integer.toString(n.getCarbs()));
+			lblCalories.setText("Calories (kcal): " + Integer.toString(n.getCalories()));
+			lblProtein.setText("Protein (g): " + Integer.toString(n.getProtein()));
+		} else {
+			lblVitA.setText("Vitamin A (%): ");
+			lblVitC.setText("Vitamin C (%): ");
+			lblVitD.setText("Vitamin D (%): ");
+			lblVitE.setText("Vitamin E (%): ");
+			lblFat.setText("Fat (g): ");
+			lblIron.setText("Iron (g): ");
+			lblCarbohydrates.setText("Carbohydrates (g):");
+			lblCalories.setText("Calories (kcal): ");
+			lblProtein.setText("Protein (g): ");
+		}
 	}
 
 	@Override

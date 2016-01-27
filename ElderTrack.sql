@@ -1,1 +1,0 @@
-SELECT * FROM et_staff WHERE username = 'wlgoh'

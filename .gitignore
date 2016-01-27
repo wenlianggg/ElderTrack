@@ -6,3 +6,4 @@
 # Package Files #
 *.war
 *.ear
+src/eldertrack/db/LDBConfig.java
