@@ -42,8 +42,8 @@ public class MarqueePanel extends JPanel implements ActionListener {
         timer.stop();
     }
     
-    public void setFont(String font, Font fonttype, int size) {
-    	this.setFont(font, fonttype, size);
+    public void setFont(String font, int fonttype, int size) {
+    	label.setFont(new Font(font, fonttype, size));
     }
 
     @Override
