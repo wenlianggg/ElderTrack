@@ -4,14 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import eldertrack.db.SQLObject;
 
 public class MarqueePanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 8319487979316580272L;

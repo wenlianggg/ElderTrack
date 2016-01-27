@@ -2,8 +2,6 @@ package eldertrack.login;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -30,7 +28,6 @@ public class StaffSession{
 	private boolean exists = false;
 	private boolean passwordcorrect = false;
 	private AccessLevel accesslevel = AccessLevel.NOACCESS;
-	private File dpfile;
 	SQLObject so = new SQLObject();
 	
 	StaffSession(String username, char[] password) throws WrongPasswordException, NoSuchUserException {

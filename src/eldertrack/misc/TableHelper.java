@@ -80,7 +80,7 @@ public class TableHelper {
 		String[] columns = {"ID", "Category", "Name", "Halal?"};
 		try {
 			search = (search.equalsIgnoreCase("")) ? "%" : search;
-			rs = so.getResultSet("SELECT itemid, category, name, halal FROM et_menu WHERE name LIKE ?", search);
+			rs = so.getResultSet("SELECT itemid, category, name, halal FROM et_menu WHERE name LIKE ? AND active = 1", search);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

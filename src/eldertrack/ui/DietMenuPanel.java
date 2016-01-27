@@ -27,6 +27,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
 import eldertrack.db.SQLObject;
+import eldertrack.diet.MenuItem;
 import eldertrack.diet.Nutrition;
 import eldertrack.diet.SerializerSQL;
 import eldertrack.misc.TableHelper;
@@ -67,6 +68,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		MenuItem.getMenuMap();
 		
 		lblDietLabel = new JLabel("ElderTrack Suite");
 		lblDietLabel.setForeground(SystemColor.textHighlight);
@@ -413,7 +415,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	
 	private void removeEntry() {
 		try {
-		PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("DELETE FROM et_menu WHERE itemid=?");
+		PreparedStatement ps = TableHelper.getSQLInstance().getPreparedStatement("UPDATE et_menu SET active = 0 WHERE itemid=?");
 		ps.setInt(1, selectedRow);
 		ps.executeUpdate();
 		availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
@@ -426,28 +428,11 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	
 	private void addEntry() {
 		try {
-			PreparedStatement ps1 = TableHelper.getSQLInstance().getPreparedStatement
-				("SELECT * FROM et_menu WHERE name LIKE ?");
-			ps1.setString(1, fieldMealName.getText());
-			ResultSet rs1 = ps1.executeQuery();
-			if(rs1.next()) {
-				JOptionPane.showMessageDialog(null, "Meal Exists!");
-				return;
-			}
-			PreparedStatement ps2 = TableHelper.getSQLInstance().getPreparedStatementWithKey
-				("INSERT INTO et_menu (category, name, halal, nutrition) VALUES (?, ?, ?, ?)");
-			ps2.setString(1, getSelectedRadio());
-			ps2.setString(2, fieldMealName.getText());
-			ps2.setBoolean(3, chckbxHalal.isSelected());
-			ps2.setObject(4, getNutritionFromFields());
-			ps2.executeUpdate();
+			new MenuItem(getSelectedRadio(), fieldMealName.getText(), chckbxHalal.isSelected(), getNutritionFromFields(), true);
 			availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 			setColumnWidths();
-			JOptionPane.showMessageDialog(null, "Meal Added!");
-		} catch (SQLException e) {
-			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
+			JOptionPane.showMessageDialog(null, "One of the fields were empty or invalid!");
 		}
 	}
 	
