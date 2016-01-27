@@ -11,17 +11,11 @@ import javax.swing.UIManager;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-
 import eldertrack.db.SQLObject;
 import eldertrack.medical.DosageObject;
 import eldertrack.medical.DosageTableHelper;
 import eldertrack.medical.ElderData;
-
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
