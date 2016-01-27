@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JButton;
@@ -110,10 +111,12 @@ public class MgmtPanel extends JPanel {
 					elderlySearchField.setColumns(10);
 					
 					JButton staffSearchBtn = new JButton("Search");
+					staffSearchBtn.setVisible(false);
 					staffSearchBtn.setBounds(156, 535, 73, 25);
 					add(staffSearchBtn);
 					
 					staffSearchField = new JTextField();
+					staffSearchField.setVisible(false);
 					staffSearchField.setColumns(10);
 					staffSearchField.setBounds(30, 536, 120, 22);
 					add(staffSearchField);
@@ -496,11 +499,16 @@ public class MgmtPanel extends JPanel {
 					staffMonth.setModel(new DefaultComboBoxModel<String>(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 					staffMonth.setBounds(225, 120, 40, 22);
 					staffManagementPanel.add(staffMonth);
+					
+					JLabel lblDietManagement = new JLabel("Management\r\n");
+					lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+					lblDietManagement.setBounds(300, 20, 388, 30);
+					add(lblDietManagement);
 			
-					lblEManagementLbl = new JLabel("ElderTrack Management");
+					lblEManagementLbl = new JLabel("ElderTrack Suite");
 					lblEManagementLbl.setForeground(SystemColor.textHighlight);
 					lblEManagementLbl.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-					lblEManagementLbl.setBounds(26, 5, 430, 61);
+					lblEManagementLbl.setBounds(10, 0, 280, 54);
 					add(lblEManagementLbl);
 		
 					JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -1043,6 +1051,7 @@ public class MgmtPanel extends JPanel {
 				elderlyBedValue.setEditable(false);
 				elderlyContactValue.setEditable(false);
 				elderlyEmailValue.setEditable(false);
+				
 				addElderly.setVisible(false);
 				elderlySave.setVisible(false);
 				elderlyRemove.setVisible(false);
@@ -1054,6 +1063,7 @@ public class MgmtPanel extends JPanel {
 	
 	//Methods	
 	private void setColumnWidths(){
+		elderlyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		elderlyTable.getTableHeader().setResizingAllowed(false);
 		elderlyTable.getTableHeader().setReorderingAllowed(false);
 		elderlyTable.getColumnModel().getColumn(0).setPreferredWidth(25);
