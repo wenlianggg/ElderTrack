@@ -25,7 +25,6 @@ public class MedicalData implements Serializable{
 	private static String checktime;
 	private static CheckUpObject checking;
 	static SQLObject so = new SQLObject();
-	private static String rsid;
 
 	@SuppressWarnings("unused")
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
@@ -71,11 +70,6 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.executeUpdate();
 		} 
 	}
-	
-	private static void CalAverage(int id) {
-		ResultSet rsCalAvr = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, id, date, checktime");
-		PreparedStatement calAvr = so.getPreparedStatementWithKey("SELECT");
-	}
 		
 	public static void main(String[] args) throws ClassNotFoundException, IOException{
 		try {
@@ -89,19 +83,6 @@ public class MedicalData implements Serializable{
 		} catch (SQLException e) {
 			e.printStackTrace();	
 			}
-		
-		try {
-			ResultSet rsCalAvr = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, id, date, checktime");
-						
-			while(rsCalAvr.next()) {
-				int id = rsCalAvr.getInt("id");
-				CalAverage(id);
-			}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();	
-			}
-		
 		System.out.println("Data processed");
 		}
 

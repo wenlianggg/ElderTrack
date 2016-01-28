@@ -65,8 +65,7 @@ private static SQLObject so = new SQLObject();
     	    					+ "\n"
     	    					+ "\nThank you."
     	    					+ "\n"
-    	    					+ "\nRegards,"
-    	    					+ "\nElder Home Name");
+    	    					+ "\n- Sent via ElderTrack Suite -");
     	    			multipart.addBodyPart(messageBodyPart);
     	    			
     	    			
