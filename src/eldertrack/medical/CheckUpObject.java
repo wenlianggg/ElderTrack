@@ -182,7 +182,6 @@ public class CheckUpObject  implements Serializable {
 				ps.setInt(1, 1);
 				ps.setInt(2, id);
 				ps.executeUpdate();
-
 			}
 			else if(timing.equalsIgnoreCase("afternoon")){
 				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternooncheck=?  WHERE id = ?");
@@ -220,11 +219,12 @@ public class CheckUpObject  implements Serializable {
 
 	public static void StoreComments(int id,String comments) throws SQLException{
 		SQLObject so = new SQLObject();
-		PreparedStatement statement = so.getPreparedStatementWithKey("update et_elderly set checkupsummary=? where id=?");
+		PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET checkupsummary=? WHERE id=?");
 		statement.setString(1, comments);
 		statement.setInt(2, id);
 		statement.executeUpdate();
 	}
+	
 	// for report
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
 		SQLObject so = new SQLObject();
