@@ -29,14 +29,14 @@ public class CheckUpObject  implements Serializable {
 	private double elderSugar;
 	private boolean elderEye =false;
 	private boolean elderEar =false;
-	
+
 	private String elderDate;
 
 
 	public CheckUpObject(){
-		
+
 	}
-	
+
 	public CheckUpObject(double elderTemp, double elderBlood, int elderHeart,double elderSugar, boolean elderEye, boolean elderEar) {
 		this.elderTemp = elderTemp;
 		this.elderBlood = elderBlood;
@@ -44,7 +44,6 @@ public class CheckUpObject  implements Serializable {
 		this.elderSugar=elderSugar;
 		this.elderEye = elderEye;
 		this.elderEar = elderEar;
-
 	}
 
 	public double getElderSugar() {
@@ -99,6 +98,12 @@ public class CheckUpObject  implements Serializable {
 		System.out.println(isElderEar());
 	}
 
+
+	/*
+	 * Method:  ResetCheckUp(SQLObject so
+	 * Purpose: Check if there is a need to reset check up
+	 * Return: void
+	 */	
 	public static void ResetCheckUp(SQLObject so){
 		ResultSet rs;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -113,7 +118,6 @@ public class CheckUpObject  implements Serializable {
 			rs.next();
 			lastlogin=rs.getTimestamp("lastlogin");	
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String lastDate=dateFormat.format(lastlogin);
@@ -126,13 +130,17 @@ public class CheckUpObject  implements Serializable {
 				stmt.setInt(3, 0);
 				stmt.executeUpdate();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public static Boolean checkupValid(String roomNum,String timing,SQLObject so){
+	/*
+	 * Method:  checkupValid(String roomNum,String timing,SQLObject so)
+	 * Purpose: Check if there is a need to do check up for this room
+	 * Return: Boolean
+	 */	
+	public static Boolean checkupValid(String roomNum,String timeOfDay,SQLObject so){
 		ResultSet rs = null;
 		int totalElder=0;
 		int checked=0;
@@ -141,21 +149,19 @@ public class CheckUpObject  implements Serializable {
 			stmt.setString(1,roomNum);
 			stmt.executeQuery();
 			rs = stmt.getResultSet();
-
 			while(rs.next()){
-				if(timing.equalsIgnoreCase("morning")){
+				if(timeOfDay.equalsIgnoreCase("morning")){
 					if(rs.getInt("morningcheck")!=0){
 						checked++;
 					}
 					totalElder++;
 				}
-				else if(timing.equalsIgnoreCase("afternoon")){
+				else if(timeOfDay.equalsIgnoreCase("afternoon")){
 					if(rs.getInt("afternooncheck")!=0){
 						checked++;
 					}
 					totalElder++;
 				}
-
 				else{
 					if(rs.getInt("nooncheck")!=0){
 						checked++;
@@ -164,7 +170,6 @@ public class CheckUpObject  implements Serializable {
 				}
 			}
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 		}
 		if(checked==totalElder){
@@ -175,6 +180,11 @@ public class CheckUpObject  implements Serializable {
 		}
 	}
 
+	/*
+	 * Method: UpdateCheckUpTaken(int id,String timing,SQLObject so)
+	 * Purpose: Check if there is a need to do check up for this room
+	 * Return: void
+	 */	
 	public static void UpdateCheckUpTaken(int id,String timing,SQLObject so) {
 		try {
 			if(timing.equalsIgnoreCase("morning")){
@@ -182,7 +192,6 @@ public class CheckUpObject  implements Serializable {
 				ps.setInt(1, 1);
 				ps.setInt(2, id);
 				ps.executeUpdate();
-
 			}
 			else if(timing.equalsIgnoreCase("afternoon")){
 				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternooncheck=?  WHERE id = ?");
@@ -203,28 +212,72 @@ public class CheckUpObject  implements Serializable {
 
 	}
 
-	public static void StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime) throws SQLException{
+	/*
+	 * Method: StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime)
+	 * Purpose: Store check up variables as an object into database
+	 * Return: void
+	 */	
+	public static void StoreCheckUp(String name,int elderID, String elderDate,CheckUpObject checkup,String checktime){
 		SQLObject so = new SQLObject();
 		PreparedStatement statement = so.getPreparedStatementWithKey("INSERT into et_elderly_checkup(id,name,date,checktime)"+"values(?,?,?,?)");
-		statement.setInt(1, elderID);
-		statement.setString(2,name);
-		statement.setString(3, elderDate);
-		statement.setString(4, checktime);
-		statement.executeUpdate();
+		try {
+			statement.setInt(1, elderID);
+			statement.setString(2,name);
+			statement.setString(3, elderDate);
+			statement.setString(4, checktime);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 
 		PreparedStatement statementBlob = so.getPreparedStatementWithKey("UPDATE et_elderly_checkup SET checkup = ? WHERE id = ?");
-		statementBlob.setObject(1, checkup);
-		statementBlob.setInt(2, elderID);
-		statementBlob.executeUpdate();
+		try {
+			statementBlob.setObject(1, checkup);
+			statementBlob.setInt(2, elderID);
+			statementBlob.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static void StoreComments(int id,String comments) throws SQLException{
+	/*
+	 * Method: StoreComments(int id,String comments)
+	 * Purpose: Store comments into database
+	 * Return: void
+	 */	
+	public static void StoreComments(int id,String comments){
 		SQLObject so = new SQLObject();
-		PreparedStatement statement = so.getPreparedStatementWithKey("update et_elderly set checkupsummary=? where id=?");
-		statement.setString(1, comments);
-		statement.setInt(2, id);
-		statement.executeUpdate();
+		PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET checkupsummary=? WHERE id=?");
+		try {
+			statement.setString(1, comments);
+			statement.setInt(2, id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
+
+	/*
+	 * Method: validValues(String temp, String bloodPressure, String heartRate, String sugarLvl)
+	 * Purpose: Check if values input are valid
+	 * Return: boolean
+	 */	
+	public static boolean validValues(String temp, String bloodPressure, String heartRate, String sugarLvl){
+
+		if(Double.parseDouble(temp) < 0 || Double.parseDouble(temp) > 60 || temp.equals("")){
+			return false;
+		}else if(Double.parseDouble(bloodPressure) < 70 || Double.parseDouble(bloodPressure) > 190 || bloodPressure.equals("")){
+			return false;
+		}else if(Integer.parseInt(heartRate) < 80 || Integer.parseInt(heartRate) > 200 || heartRate.equals("")){
+			return false;
+		}else if(Double.parseDouble(sugarLvl) < 2.6 || Double.parseDouble(sugarLvl) > 21.1 || sugarLvl.equals("")){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
 	// for report
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
 		SQLObject so = new SQLObject();
@@ -252,21 +305,6 @@ public class CheckUpObject  implements Serializable {
 		checking.view();
 	}
 
-	// Methods for validation
-	public static boolean validValues(String temp, String bloodPressure, String heartRate, String sugarLvl){
-
-		if(Double.parseDouble(temp) < 0 || Double.parseDouble(temp) > 60 || temp.equals("")){
-			return false;
-		}else if(Double.parseDouble(bloodPressure) < 70 || Double.parseDouble(bloodPressure) > 190 || bloodPressure.equals("")){
-			return false;
-		}else if(Integer.parseInt(heartRate) < 80 || Integer.parseInt(heartRate) > 200 || heartRate.equals("")){
-			return false;
-		}else if(Double.parseDouble(sugarLvl) < 2.6 || Double.parseDouble(sugarLvl) > 21.1 || sugarLvl.equals("")){
-			return false;
-		}else{
-			return true;
-		}
-	}
 
 	// debug mode
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {

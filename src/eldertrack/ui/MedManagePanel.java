@@ -80,9 +80,7 @@ public class MedManagePanel extends JPanel {
 					int row = eldertable.getSelectedRow();
 					String table_clicked = (eldertable.getModel().getValueAt(row, 0).toString());
 					String sql = "SELECT * FROM et_elderly WHERE id=?";
-
 					ResultSet rs = so.getResultSet(sql, table_clicked);
-
 					while(rs.next()){
 						ElderIDField.setText(Integer.toString(rs.getInt("id")));
 						NameField.setText(rs.getString("name"));
@@ -106,7 +104,7 @@ public class MedManagePanel extends JPanel {
 							MorningTable.setModel(Morningmodel);
 							DosageTableHelper.AddManagementModel(MorningTable, so);
 							DosageTableHelper.TableListen(MorningTable,so);
-							
+
 						}
 						if(rs.getBlob("afternoondosage")!=null){
 							Afternoonmodel=DosageTableHelper.getElderlyFromQueryManagementDos("afternoon",rs.getString("name"),so);
@@ -136,7 +134,6 @@ public class MedManagePanel extends JPanel {
 				}catch(Exception e1){
 					JOptionPane.showMessageDialog(null, e1);
 				}
-
 			}
 		});
 

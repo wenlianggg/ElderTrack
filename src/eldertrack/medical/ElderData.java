@@ -152,6 +152,11 @@ public class ElderData{
 
 	}
 	
+	/*
+	 * Method: UpdateDosageSummary(SQLObject so,String dosageSummary,int id)
+	 * Purpose: Update the dosage summary in database
+	 * Return: void
+	 */
 	public static void UpdateDosageSummary(SQLObject so,String dosageSummary,int id){
 		try {
 			PreparedStatement statement = so.getPreparedStatementWithKey("UPDATE et_elderly SET dosagesummary=? WHERE id=? ");
@@ -159,13 +164,16 @@ public class ElderData{
 			statement.setInt(2,id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
 	
-	
+	/*
+	 * Method: ManagementSummary(ArrayList<ElderData> manageSummary)
+	 * Purpose: Update management pre-summary of management search panel
+	 * Return: String
+	 */
 	public static String ManagementSummary(ArrayList<ElderData> manageSummary){
 		StringBuilder stringBuilder = new StringBuilder();
 		for(int k=0;k<manageSummary.size();k++){	
@@ -175,6 +183,12 @@ public class ElderData{
 		String finalString=stringBuilder.toString();
 		return finalString;
 	}
+	
+	/*
+	 * Method: updateManagementSummary(int roomNum,SQLObject so)
+	 * Purpose: Get data from database to calculate, then pass it back as object
+	 * Return: ElderData
+	 */
 	public static ElderData updateManagementSummary(int roomNum,SQLObject so){
 		ElderData data=new ElderData();
 		try {
@@ -200,7 +214,11 @@ public class ElderData{
 		return data;
 	}
 	
-	
+	/*
+	 * Method: UpdateOverview(String roomNum,String time, SQLObject so )
+	 * Purpose: 
+	 * Return: ElderData
+	 */
 	public static ElderData UpdateOverview(String roomNum,String time, SQLObject so ){
 		ResultSet rs;
 		if(!roomNum.equalsIgnoreCase(" ")){
@@ -256,6 +274,11 @@ public class ElderData{
 		
 	}
 	
+	/*
+	 * Method: getElderInformation(ResultSet rs)
+	 * Purpose: Retrieve data from database and return it as an object
+	 * Return: ElderData
+	 */
 	public static ElderData getElderInformation(ResultSet rs){
 		ElderData dataInfo=new ElderData();
 		try{
@@ -265,7 +288,6 @@ public class ElderData{
 			String year=text.substring(0, 4);
 			String month=text.substring(5,7);
 			String day=text.substring(8,10);
-
 			// setting the information
 			dataInfo.setElderID(rs.getInt("id"));
 			dataInfo.setElderBed(rs.getInt("bed"));
@@ -276,29 +298,27 @@ public class ElderData{
 		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-
 		return dataInfo;
 
 	}
-
-	public static int getAge(String year, String month, String day)
-	{
+	
+	/*
+	 * Method: getAge(String year, String month, String day)
+	 * Purpose: Calculate the age of the elderly
+	 * Return: int
+	 */
+	public static int getAge(String year, String month, String day){
 		Calendar calDOB = Calendar.getInstance();
 		calDOB.set( Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day) );
-
 		Calendar calNow = Calendar.getInstance();
 		calNow.setTime(new java.util.Date());
-
-		int ageYr = (calNow.get(Calendar.YEAR) - calDOB.get(Calendar.YEAR));
-
-		int ageMo = (calNow.get(Calendar.MONTH) - calDOB.get(Calendar.MONTH));
+		int ageYr =(calNow.get(Calendar.YEAR) - calDOB.get(Calendar.YEAR));
+		int ageMo =(calNow.get(Calendar.MONTH) - calDOB.get(Calendar.MONTH));
 		if (ageMo < 0){
 			ageYr--;
 		}
 		return ageYr;
 	}
-
-
 
 	//debuger
 	public static void main(String[] args) throws SQLException {
