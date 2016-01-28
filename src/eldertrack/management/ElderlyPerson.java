@@ -7,10 +7,12 @@ public class ElderlyPerson extends Person{
 	private String contact;
 	private String email;
 	private String fullName;
-	
+	private String gender;
+
 	// Constructor
 	public ElderlyPerson(String id, String birthString, String nric, String gender, String fullName, String room, String bed, String address, String contact, String email){
-		super(id, birthString, nric, gender);
+		super(id, birthString, nric);
+		this.gender = gender;
 		this.fullName = fullName;
 		this.room = room;
 		this.bed = bed;
@@ -19,6 +21,14 @@ public class ElderlyPerson extends Person{
 		this.email = email;
 	}
 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
 	public String getFullName() {
 		return fullName;
 	}

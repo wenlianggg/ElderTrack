@@ -4,14 +4,12 @@ public class Person {
 	private String id;
 	private String birthString;
 	private String nric;
-	private String gender;
 	
 	// Constructor
-	Person(String id, String birthString, String nric, String gender){
+	Person(String id, String birthString, String nric){
 		this.id = id;
 		this.birthString = birthString;
 		this.nric = nric;
-		this.gender = gender;
 	}
 
 	public String getId() {
@@ -37,14 +35,5 @@ public class Person {
 	public void setNric(String nric) {
 		this.nric = nric;
 	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	
 	
 }

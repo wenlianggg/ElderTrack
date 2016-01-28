@@ -35,17 +35,17 @@ public class ManagementObject {
 	public final static String UPDATE_ELDERLY = "UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, bed=?, contact=?, address=?, email=? WHERE id=?";
 	
 	// Add a staff member to the database
-	public static void executeAddStaff(String staffBirthString, String staffUsername, String securePassword, String staffFirstName, String staffLastName, String staffNric, int accessLevel, String salt) throws SQLException{
+	public static void executeAddStaff(StaffPerson sp, String salt) throws SQLException{
 		PreparedStatement ps1 = so.getPreparedStatement(ADD_STAFF);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-		LocalDate staffDob = LocalDate.parse(staffBirthString, formatter);
-		ps1.setString(1, staffUsername);
-		ps1.setString(2, securePassword);
-		ps1.setString(3, staffFirstName);
-		ps1.setString(4, staffLastName);
-		ps1.setString(5, staffNric);
+		LocalDate staffDob = LocalDate.parse(sp.getBirthString(), formatter);
+		ps1.setString(1, sp.getUsername());
+		ps1.setString(2, sp.getPassword());
+		ps1.setString(3, sp.getFirstName());
+		ps1.setString(4, sp.getLastName());
+		ps1.setString(5, sp.getNric());
 		ps1.setDate(6, java.sql.Date.valueOf(staffDob));
-		ps1.setInt(7, accessLevel);
+		ps1.setInt(7, sp.getAccessLevel());
 		ps1.setString(8, salt);
 		ps1.executeUpdate();
 	}
@@ -90,30 +90,30 @@ public class ManagementObject {
 	}
 	
 	// Execute a staff update with password
-	public static void executeStaffUpdateWithPassword(String birthString, String firstName, String lastName, String nric, String securePassword, int accessLevel, String staffId) throws SQLException{
+	public static void executeStaffUpdateWithPassword(StaffPerson sp) throws SQLException{
 		PreparedStatement ps1 = so.getPreparedStatement(UPDATE_STAFF_PASSWORD);	
-		LocalDate dob = ManagementObject.toLocalDate(birthString);
-		ps1.setString(1, firstName);
-		ps1.setString(2, lastName);
+		LocalDate dob = ManagementObject.toLocalDate(sp.getBirthString());
+		ps1.setString(1, sp.getFirstName());
+		ps1.setString(2, sp.getLastName());
 		ps1.setDate(3, java.sql.Date.valueOf(dob));
-		ps1.setString(4, nric);
-		ps1.setString(5, securePassword);
-		ps1.setInt(6, accessLevel);
-		ps1.setString(7, staffId);
+		ps1.setString(4, sp.getNric());
+		ps1.setString(5, sp.getPassword());
+		ps1.setInt(6, sp.getAccessLevel());
+		ps1.setString(7, sp.getId());
 		ps1.executeUpdate();
 	}
 	
 	// Execute a staff update without a password
-	public static void executeStaffUpdateNoPassword(String birthString, String firstName, String lastName, String nric, String staffId, int accessLevel) throws SQLException{
+	public static void executeStaffUpdateNoPassword(StaffPerson sp) throws SQLException{
 		PreparedStatement ps1 = so.getPreparedStatement(UPDATE_STAFF_NO_PASSWORD);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-		LocalDate dob = LocalDate.parse(birthString, formatter);
-		ps1.setString(1, firstName);
-		ps1.setString(2, lastName);
+		LocalDate dob = LocalDate.parse(sp.getBirthString(), formatter);
+		ps1.setString(1, sp.getFirstName());
+		ps1.setString(2, sp.getLastName());
 		ps1.setDate(3, java.sql.Date.valueOf(dob));
-		ps1.setString(4, nric);
-		ps1.setInt(5, accessLevel);
-		ps1.setString(6, staffId);
+		ps1.setString(4, sp.getNric());
+		ps1.setInt(5, sp.getAccessLevel());
+		ps1.setString(6, sp.getId());
 		ps1.executeUpdate();
 	}
 	
@@ -212,10 +212,11 @@ public class ManagementObject {
 	}
 	
 	// Check for empty fields for elderly
-	public static boolean elderlyEmptyFields(ElderlyPerson ep){
-		if(ep.getName().equals("") || ep.getBirthString().equals("") || ep.getNric().equals("") || 
-				ep.getGender().equals("") || ep.getRoom().equals("") || ep.getAddress().equals("") || 
-				ep.getAddress().equals("") || ep.getAddress().equals("") || ep.getAddress().equals("")){
+	public static boolean elderlyEmptyFields(ElderlyPerson ep, String years, String months, String days){
+		if(ep.getFullName().equals("") || ep.getNric().equals("") || ep.getGender().equals("") || 
+				ep.getRoom().equals("") || ep.getAddress().equals("") || 
+				ep.getAddress().equals("") || ep.getAddress().equals("") || ep.getAddress().equals("") || years.equals("") || 
+				months.equals("") || days.equals("")){
 			return true;
 		}else{
 			return false;
@@ -223,8 +224,8 @@ public class ManagementObject {
 	}
 	
 	// Check for empty fields for Staff
-	public static boolean staffEmptyFields(String firstName, String lastName, String nric, String birthString){
-		if(firstName.equals("") || lastName.equals("") || nric.equals("") || birthString.equals("")){
+	public static boolean staffEmptyFields(String firstName, String lastName, String nric, String years, String months, String days){
+		if(firstName.equals("") || lastName.equals("") || nric.equals("") || years.equals("") || months.equals("") || days.equals("")){
 			return true;
 		}else{
 			return false;

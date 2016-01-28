@@ -308,7 +308,7 @@ public class MainFrame extends JFrame {
 		MasterPane.remove(marqueePanel);
 		marqueePanel = null;
 		marqueePanel = new MarqueePanel(s, 160);
-		marqueePanel.setFont(MarqueePanel.font, MarqueePanel.type, 18);
+		marqueePanel.setFont(MarqueePanel.font, MarqueePanel.typeValue, 18);
 		marqueePanel.setBackground(new Color(0, 153, 255));
 		marqueePanel.setBounds(0, 752, 790, 29);
 		marqueePanel.start();

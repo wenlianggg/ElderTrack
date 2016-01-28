@@ -11,6 +11,7 @@ import eldertrack.db.SQLObject;
 import eldertrack.login.AccessLevel;
 import eldertrack.management.ElderlyPerson;
 import eldertrack.management.ManagementObject;
+import eldertrack.management.StaffPerson;
 
 import java.awt.CardLayout;
 import java.awt.Font;
@@ -640,10 +641,10 @@ public class MgmtPanel extends JPanel {
 						String birthString = (elderlyYear.getSelectedItem() + "-" + elderlyMonth.getSelectedItem() + "-" + elderlyDay.getSelectedItem());
 						
 						// Create new object
-						ElderlyPerson ep = createNewElderlyObj(birthString);
+						ElderlyPerson ep = createNewElderlyObj("");
 						
 						// Check for empty fields
-						boolean empty = ManagementObject.elderlyEmptyFields(ep);
+						boolean empty = ManagementObject.elderlyEmptyFields(ep, elderlyYear.getSelectedItem().toString(), elderlyMonth.getSelectedItem().toString(), elderlyDay.getSelectedItem().toString());
 						
 						if(empty == true){
 							JOptionPane.showMessageDialog(null, "One or more of the fields are empty! Please check your entries!");
@@ -651,6 +652,8 @@ public class MgmtPanel extends JPanel {
 						PreparedStatement ps1 = so.getPreparedStatement("SELECT bed, nric FROM et_elderly WHERE room=?");
 						ps1.setString(1, ep.getRoom());
 						ResultSet check = ps1.executeQuery();
+						
+						ep.setBirthString(birthString);
 						
 						int bed = Integer.parseInt(ep.getBed());
 						boolean dupeBed = ManagementObject.checkDuplicateBeds(bed, check);
@@ -724,16 +727,20 @@ public class MgmtPanel extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to add this staff?");
 					if(dialogResult == JOptionPane.YES_OPTION){
 						try{
-							String staffFirstName = staffFirstNameValue.getText();
-							String staffLastName = staffLastNameValue.getText();
-							String staffNric = staffNricValue.getText();
-							String staffBirthString = (staffYear.getSelectedItem() + "-" + staffMonth.getSelectedItem() + "-" + staffDay.getSelectedItem());
-							String staffUsername = editableUsernameValue.getText();
-							int accessLevel = editableAccessLevel.getSelectedIndex();
+							String birthString = (staffYear.getSelectedItem() + "-" + staffMonth.getSelectedItem() + "-" + staffDay.getSelectedItem());
+							
+							StaffPerson spCheck = createNewStaffObj(birthString, "");
 							
 							if(staffSetPasswordValue.getPassword() == null || staffSetPasswordValue.getPassword().length == 0){
 								JOptionPane.showMessageDialog(null, "The password field is empty!");
 							}else{
+								boolean empty = ManagementObject.staffEmptyFields(spCheck.getFirstName(), spCheck.getLastName(), spCheck.getNric(), 
+										staffYear.getSelectedItem().toString(), staffMonth.getSelectedItem().toString(), 
+										staffDay.getSelectedItem().toString());
+								if(empty == true){
+									JOptionPane.showMessageDialog(null, "One or more fields are empty! Please check your entries!");
+									System.out.println("Empty fields detected! Discontinuing update.");
+								}else{
 								// Obtain char array
 								char[] passChar = staffSetPasswordValue.getPassword();
 								// Conversion from char array to byte array
@@ -743,15 +750,13 @@ public class MgmtPanel extends JPanel {
 								// Hashing password with salt...
 								String securePassword = ManagementObject.passwordHasher(passByte, salt);
 								
-								boolean empty = ManagementObject.staffEmptyFields(staffFirstName, staffLastName, staffNric, staffBirthString);
+								StaffPerson sp = createNewStaffObj(birthString, securePassword);
 								
-							if(empty == true){
-								JOptionPane.showMessageDialog(null, "One or more fields are empty! Please check your entries!");
-								System.out.println("Empty fields detected! Discontinuing update.");
-							}else{
+								sp.setPassword(securePassword);
+	
 							ResultSet rs = ManagementObject.getAllStaff();
-							boolean dupeNric = ManagementObject.checkDuplicateNrics(staffNric,rs);
-							boolean validNric = NRICUtils.validate(staffNric);
+							boolean dupeNric = ManagementObject.checkDuplicateNrics(sp.getNric(), rs);
+							boolean validNric = NRICUtils.validate(sp.getNric());
 							
 							if(dupeNric == true){
 								JOptionPane.showMessageDialog(null,"There are duplicate NRICS! Please check your entries!");
@@ -759,7 +764,7 @@ public class MgmtPanel extends JPanel {
 								JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
 							}else{
 								// Executes the update and adds staff member to the database
-								ManagementObject.executeAddStaff(staffBirthString, staffUsername, securePassword, staffFirstName, staffLastName, staffNric, accessLevel, salt);
+								ManagementObject.executeAddStaff(sp, salt);
 								JOptionPane.showMessageDialog(null,"New staff has been successfully added!");
 								
 								if(confirmAddStaff.isVisible() == true){
@@ -794,20 +799,19 @@ public class MgmtPanel extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
 							if(dialogResult == JOptionPane.YES_OPTION){
 								try{
-									String staffId = staffIdValue.getText();
-									String firstName = staffFirstNameValue.getText();
-									String lastName = staffLastNameValue.getText();
-									String nric = staffNricValue.getText();
 									String birthString = (staffYear.getSelectedItem() + "-" + staffMonth.getSelectedItem() + "-" + staffDay.getSelectedItem());
-									int accessLevel = editableAccessLevel.getSelectedIndex();
-									boolean empty = ManagementObject.staffEmptyFields(firstName, lastName, nric, birthString);
+									StaffPerson spCheck = createNewStaffObj(birthString, "");
+									
+									boolean empty = ManagementObject.staffEmptyFields(spCheck.getFirstName(), spCheck.getLastName(), spCheck.getNric(), staffYear.getSelectedItem().toString(), staffMonth.getSelectedItem().toString(), staffDay.getSelectedItem().toString());
+									
+									StaffPerson sp = createNewStaffObj(birthString, "");
 									
 									if(empty == true){
 										JOptionPane.showMessageDialog(null, "One or more fields are empty! Please check your entires!");
 									}else{
-									ResultSet check = ManagementObject.retrieveStaffNrics(staffId);
-									boolean dupeNric = ManagementObject.checkDuplicateNrics(nric, check);
-									boolean validNric = NRICUtils.validate(nric);
+									ResultSet check = ManagementObject.retrieveStaffNrics(sp.getId());
+									boolean dupeNric = ManagementObject.checkDuplicateNrics(sp.getNric(), check);
+									boolean validNric = NRICUtils.validate(sp.getNric());
 									
 									if(dupeNric == true){
 										JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
@@ -820,16 +824,18 @@ public class MgmtPanel extends JPanel {
 										// Conversion from char array to byte array
 										byte[] passByte = ManagementObject.toBytes(passChar);
 										// Retrieval of salt of user
-										String salt = ManagementObject.getUserSalt(staffId);
+										String salt = ManagementObject.getUserSalt(sp.getId());
 										// Hashing password with retrieved salt...
 										String securePassword = ManagementObject.passwordHasher(passByte, salt);
 									
+										sp.setPassword(securePassword);
+										
 										// Executes update with a new password
-										ManagementObject.executeStaffUpdateWithPassword(birthString, firstName, lastName, nric, securePassword, accessLevel, staffId);
+										ManagementObject.executeStaffUpdateWithPassword(sp);
 										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
 									}else{
 										// Executes update without the password
-										ManagementObject.executeStaffUpdateNoPassword(birthString, firstName, lastName, nric, staffId, accessLevel);
+										ManagementObject.executeStaffUpdateNoPassword(sp);
 										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
 									}
 											refreshStaff();
@@ -849,14 +855,16 @@ public class MgmtPanel extends JPanel {
 							try{
 								String birthString = (elderlyYear.getSelectedItem() + "-" + elderlyMonth.getSelectedItem() + "-" + elderlyDay.getSelectedItem());
 								
-								ElderlyPerson ep = createNewElderlyObj(birthString);
+								ElderlyPerson ep = createNewElderlyObj("");
 								
-								boolean empty = ManagementObject.elderlyEmptyFields(ep);
+								boolean empty = ManagementObject.elderlyEmptyFields(ep, elderlyYear.getSelectedItem().toString(), elderlyMonth.getSelectedItem().toString(), elderlyDay.getSelectedItem().toString());
 								if(empty == true){
 									JOptionPane.showMessageDialog(null, "One or more of the fields are empty! Please check your entries!");
 								}else{
 									ResultSet checkBed = ManagementObject.retrieveElderlySameRoom(ep.getRoom(), ep.getId());
 									ResultSet checkNric = ManagementObject.retrieveElderlyNrics();
+									
+								ep.setBirthString(birthString);
 								
 								//Check for duplicate beds and exceeding bed limit
 								boolean dupeBed = ManagementObject.checkDuplicateBeds(Integer.parseInt(ep.getBed()), checkBed);
@@ -1167,6 +1175,12 @@ public class MgmtPanel extends JPanel {
 		
 		return ep;
 	}
+	
+	private StaffPerson createNewStaffObj(String birthString, String securePassword){
+		StaffPerson sp = new StaffPerson(staffIdValue.getText(), birthString, staffNricValue.getText(), staffFirstNameValue.getText(), staffLastNameValue.getText(), editableAccessLevel.getSelectedIndex(), editableUsernameValue.getText(), staffSetPasswordValue.getPassword(), securePassword);
+				return sp;
+	}
+	
 	public JTable getElderlyTable(){
 		return elderlyTable;
 	}

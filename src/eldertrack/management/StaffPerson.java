@@ -6,15 +6,25 @@ public class StaffPerson extends Person {
 	private String lastName;
 	private String username;
 	private String password;
+	private char[] passChar;
 
 	// Constructor
-	StaffPerson(String id, String birthString, String nric, String gender, String firstName, String lastName, int accessLevel, String username, String password){
-		super(id,birthString, nric, gender);
+	public StaffPerson(String id, String birthString, String nric, String firstName, String lastName, int accessLevel, String username, char[] passChar, String password){
+		super(id, birthString, nric);
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.accessLevel = accessLevel;
 		this.username = username;
+		this.passChar = passChar;
 		this.password = password;
+	}
+
+	public char[] getPassChar() {
+		return passChar;
+	}
+
+	public void setPassChar(char[] passChar) {
+		this.passChar = passChar;
 	}
 
 	public int getAccessLevel() {
