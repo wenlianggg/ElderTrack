@@ -28,9 +28,9 @@ public class AnnouncementPanel extends JPanel{
 	private SQLObject so = new SQLObject();
 	private static final long serialVersionUID = -8742307067990031379L;
 	private String defaultText;
-	private String fontType;
+	private String fontTypeString;
+	private int fontTypeValue;
 	private String fontName;
-	private String newText;
 	private MarqueePanel previewMarquee;
 	private JPanel panel_1;
 	private JLabel lblEManagementLbl;
@@ -89,7 +89,7 @@ public class AnnouncementPanel extends JPanel{
 		
 		previewMarquee = new MarqueePanel(defaultText, 185);
 		previewMarquee.setBounds(0, 100, 933, 29);
-		previewMarquee.setFont(fontName, Font.BOLD, 18);
+		previewMarquee.setFont(fontName, fontTypeValue, 18);
 		panel_1.add(previewMarquee);
 		previewMarquee.setBackground(new Color(0, 153, 255));
 		previewMarquee.start();
@@ -150,8 +150,14 @@ public class AnnouncementPanel extends JPanel{
 		this.fontName = config.getString("value");
 		config.next();
 		// Get font type
-		this.fontType = config.getString("value");
-		
+		this.fontTypeString = config.getString("value");
+			if(fontTypeString.equalsIgnoreCase("plain")){
+				fontTypeValue = Font.PLAIN;
+			}else if(fontTypeString.equalsIgnoreCase("bold")){
+				fontTypeValue = Font.BOLD;
+			}else if(fontTypeString.equalsIgnoreCase("italic")){
+				fontTypeValue = Font.ITALIC;
+			}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -176,7 +182,7 @@ public class AnnouncementPanel extends JPanel{
 		previewMarquee = null;
 		previewMarquee = new MarqueePanel(newText, 160);
 		previewMarquee.setBounds(0, 100, 933, 29);
-		previewMarquee.setFont(fontName, Font.BOLD, 18);
+		previewMarquee.setFont(fontName, fontTypeValue, 18);
 		panel_1.add(previewMarquee);
 		previewMarquee.setBackground(new Color(0, 153, 255));
 		previewMarquee.start();
