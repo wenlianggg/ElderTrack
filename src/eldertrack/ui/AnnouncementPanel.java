@@ -233,7 +233,6 @@ public class AnnouncementPanel extends JPanel{
 			fontValue = Font.ITALIC;
 		}
 		
-		MainFrame.getInstance().setScrollText(text, font, fontValue);
 	}
 	
 	private void repaintMarquee(String newText, String fontStyleValue, int fontTypeValue){
