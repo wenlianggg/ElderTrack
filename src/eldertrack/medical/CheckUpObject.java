@@ -265,13 +265,13 @@ public class CheckUpObject  implements Serializable {
 	 */	
 	public static boolean validValues(String temp, String bloodPressure, String heartRate, String sugarLvl){
 
-		if(Double.parseDouble(temp) < 0 || Double.parseDouble(temp) > 60 || temp.equals("")){
+		if(Double.parseDouble(temp) < 26 || Double.parseDouble(temp) > 50 || temp.equalsIgnoreCase("")){
 			return false;
-		}else if(Double.parseDouble(bloodPressure) < 70 || Double.parseDouble(bloodPressure) > 190 || bloodPressure.equals("")){
+		}else if(Double.parseDouble(bloodPressure) < 70 || Double.parseDouble(bloodPressure) > 190 || bloodPressure.equals(null)){
 			return false;
-		}else if(Integer.parseInt(heartRate) < 80 || Integer.parseInt(heartRate) > 200 || heartRate.equals("")){
+		}else if(Integer.parseInt(heartRate) < 80 || Integer.parseInt(heartRate) > 200 || heartRate.equals(null)){
 			return false;
-		}else if(Double.parseDouble(sugarLvl) < 2.6 || Double.parseDouble(sugarLvl) > 21.1 || sugarLvl.equals("")){
+		}else if(Double.parseDouble(sugarLvl) < 2.6 || Double.parseDouble(sugarLvl) > 21.1 || sugarLvl.equals(null)){
 			return false;
 		}else{
 			return true;
@@ -311,11 +311,11 @@ public class CheckUpObject  implements Serializable {
 		//	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		//	Date date = new Date();
 		//	String reportDate=dateFormat.format(date);
-		int id=1;
+	//	int id=1;
 		//CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
 		//StoreCheckUp("Ang Siew Fong",reportDate,id, checking);
-
-		RetrieveCheckUp(id);
+		
+		//RetrieveCheckUp(id);
 	}
 
 }
