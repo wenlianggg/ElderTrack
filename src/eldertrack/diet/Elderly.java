@@ -114,7 +114,7 @@ public class Elderly {
 		return eldermap;
 	}
 	
-	public static void clearElderMap() {
+	public static void nullMap() {
 		eldermap = null;
 	}
 	

@@ -1,10 +1,7 @@
 package eldertrack.report;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,40 +22,115 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import eldertrack.db.SQLObject;
-import eldertrack.medical.CheckUpObject;
 
 public class CreatePdf{
+	private String name;
+	private String date;
+	private String checktime;
+	private double tempM;
+	private double bloodM;
+	private double heartM;
+	private double sugarM;
+	private boolean eyeM;
+	private boolean earM;
+	private double tempA;
+	private double bloodA;
+	private double heartA;
+	private double sugarA;
+	private boolean eyeA;
+	private boolean earA;
+	private double tempN;
+	private double bloodN;
+	private double heartN;
+	private double sugarN;
+	private boolean eyeN;
+	private boolean earN;
+	private double tempMAvr;
+	private double bloodMAvr;
+	private double heartMAvr;
+	private double sugarMAvr;
+	
 	Date dNow = new Date();
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
-    MedicalData elderList = new MedicalData();
     
-    public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
-		SQLObject so = new SQLObject();
-		ResultSet rs = so.getResultSet("SELECT name,date FROM et_elderly_checkup " );
-
-		while(rs.next()){
-			String name=rs.getString("name");
-			String date=rs.getString("date");
-			System.out.println(name);
-			System.out.println(date);
-		}
-
-		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup FROM et_elderly_checkup WHERE id = ?");
-		statement.setInt(1, id);
-		ResultSet rs1 = statement.executeQuery();
-		rs1.next();
-		ByteArrayInputStream in = new ByteArrayInputStream(rs1.getBytes(1));
-		ObjectInputStream is = new ObjectInputStream(in);
-		Object checkingBlob =(Object) is.readObject();
-		CheckUpObject checking=(CheckUpObject) checkingBlob;
-		checking.view();
-		
-	}
-
-	{
-		
-		
+	static SQLObject so = new SQLObject();
+    ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, date, checktime");
+    ResultSet rsAvr=so.getResultSet("SELECT * FROM et_reportAvr WHERE name=?");
+    ResultSet rsReport = so.getResultSet("SELECT * FROM et_report");
+    PreparedStatement statementUpdateReport = so.getPreparedStatementWithKey
+    		("INSERT INTO et_report (name,report) values(?,?)");
+	private String eyeMString;
+	private String earMString;
+	private String earAString;
+	private String eyeAString;
+	private String eyeNString;
+	private String earNString;
+	private String tempD1Avr;
+	private String heartD1Avr;
+	private String bloodD1Avr;
+	private String sugarD1Avr;
+	
+    
+    {
 		try{
+			while (rsTmp.next()){
+				name=rsTmp.getString("name");
+				date=rsTmp.getString("date");
+				checktime=rsTmp.getString("checktime");
+				
+				if (checktime=="Morning"){
+					tempM=rsTmp.getDouble("temp");
+					bloodM=rsTmp.getDouble("blood");
+					heartM=rsTmp.getDouble("heart");
+					sugarM=rsTmp.getDouble("sugar");
+					eyeM=rsTmp.getBoolean("eye");
+					earM=rsTmp.getBoolean("ear");
+					if (eyeM==true)
+						eyeMString = "Yes";
+					else
+						eyeMString="No";
+					
+					if (earM==true)
+						earMString = "Yes";
+					else
+						earMString="No";
+				}
+				else if (checktime=="Afternoon"){
+					tempA=rsTmp.getDouble("temp");
+					bloodA=rsTmp.getDouble("blood");
+					heartA=rsTmp.getDouble("heart");
+					sugarA=rsTmp.getDouble("sugar");
+					eyeA=rsTmp.getBoolean("eye");
+					earA=rsTmp.getBoolean("ear");
+					if (eyeA==true)
+						eyeAString = "Yes";
+					else
+						eyeAString="No";
+					
+					if (earA==true)
+						earAString = "Yes";
+					else
+						earAString="No";
+				}
+				else {
+					tempN=rsTmp.getDouble("temp");
+					bloodN=rsTmp.getDouble("blood");
+					heartN=rsTmp.getDouble("heart");
+					sugarN=rsTmp.getDouble("sugar");
+					eyeN=rsTmp.getBoolean("eye");
+					earN=rsTmp.getBoolean("ear");
+					if (eyeN==true)
+						eyeNString = "Yes";
+					else
+						eyeNString="No";
+					
+					if (earN==true)
+						earNString = "Yes";
+					else
+						earNString="No";
+				}
+				
+				
 			Document document = new Document();
 	
 			PdfWriter.getInstance(document,
@@ -66,7 +138,7 @@ public class CreatePdf{
 
 			document.open();
   
-			Paragraph title1 = new Paragraph("Report for Name for " +ft.format(dNow), 
+			Paragraph title1 = new Paragraph("Report for "+name +" for " +ft.format(dNow), 
 					FontFactory.getFont(FontFactory.HELVETICA, 
 							24, Font.BOLD, new CMYKColor(255, 230, 0,0)));
   		   
@@ -82,13 +154,17 @@ public class CreatePdf{
 			Paragraph someSectionText = new Paragraph("Weekly Checkup: ", 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 			section1.add(someSectionText);
+			
+			someSectionText = new Paragraph(date, 
+					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
+			section1.add(someSectionText);
   
 			PdfPTable t1 = new PdfPTable(5);
 			t1.setWidthPercentage(100);
 			t1.setSpacingBefore(25); //above table
 			t1.setSpacingAfter(25); //below table
 
-			PdfPCell c11 = new PdfPCell(new Phrase("Date",
+			PdfPCell c11 = new PdfPCell(new Phrase("Time of Day",
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
 			PdfPCell c12 = new PdfPCell(new Phrase("Temperature (deg Celcius)",
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));  
@@ -102,62 +178,61 @@ public class CreatePdf{
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
 			PdfPCell c17 = new PdfPCell(new Phrase("Ear Infection",
 					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
-			PdfPCell c18 = new PdfPCell(new Phrase("Comments",
-					FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
   			
+			//Time of day
 			t1.addCell(c11);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");	    
-			t1.addCell(" ");
+			t1.addCell("Morning");
+			t1.addCell("Afternoon");
+			t1.addCell("Night");	    
+			t1.addCell("Average");
   	
+			//Temp
 			t1.addCell(c12);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell(""+tempM);
+			t1.addCell(""+tempA);
+			t1.addCell(""+tempN);
+			t1.addCell(""+tempD1Avr);
   	
+			//BP
 			t1.addCell(c13);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell(""+bloodM);
+			t1.addCell(""+bloodA);
+			t1.addCell(""+bloodN);
+			t1.addCell(""+bloodD1Avr);
   	
+			//Heart rate
 			t1.addCell(c14);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell(""+heartM);
+			t1.addCell(""+heartA);
+			t1.addCell(""+heartN);
+			t1.addCell(""+heartD1Avr);
 			
+			//Sugar level
 			t1.addCell(c15);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell(""+sugarM);
+			t1.addCell(""+sugarA);
+			t1.addCell(""+sugarN);
+			t1.addCell(""+sugarD1Avr);
   	
+			//Eye
 			t1.addCell(c16);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell(""+eyeMString);
+			t1.addCell(""+eyeAString);
+			t1.addCell(""+eyeNString);
+			t1.addCell("-");
 			
+			//ear
 			t1.addCell(c17);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
+			t1.addCell(""+earMString);
+			t1.addCell(""+earAString);
+			t1.addCell(""+earNString);
+			t1.addCell("-");
   	
-			t1.addCell(c18);
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-			t1.addCell(" ");
-  
 			section1.add(t1);
 	
 //////////////////////
 	
-			someSectionText = new Paragraph("Average Results: ", 
+			someSectionText = new Paragraph("Average per Month: ", 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 			section1.add(someSectionText);
 	
@@ -167,16 +242,16 @@ public class CreatePdf{
 			t2.setSpacingAfter(25); //below table
 	
 			t2.addCell(c12);
-			t2.addCell(" ");
+			t2.addCell(""+tempMAvr);
 			
 			t2.addCell(c13);
-			t2.addCell(" ");
+			t2.addCell(""+bloodMAvr);
 
 			t2.addCell(c14);
-			t2.addCell(" ");
+			t2.addCell(""+heartMAvr);
 
 			t2.addCell(c15);
-			t2.addCell(" ");
+			t2.addCell(""+sugarMAvr);
 	
 			section1.add(t2);
 	
@@ -186,15 +261,22 @@ public class CreatePdf{
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 
 			section1.add(someSectionText);
+			
+			someSectionText = new Paragraph("" +rsAvr, 
+					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 	
 			document.add(section1);
   
 			document.close();
+			}
 			}catch (DocumentException e) {
 				e.printStackTrace();
 				} 
 		catch (FileNotFoundException e2) {
 			e2.printStackTrace();
-			}
+			} catch (SQLException e) {
+			e.printStackTrace();
 		}
-	}
+		
+		}
+}

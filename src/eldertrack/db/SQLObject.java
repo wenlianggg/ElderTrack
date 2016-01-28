@@ -24,8 +24,11 @@ public class SQLObject {
 
 	public SQLObject() {
 		try { 
-			Class.forName("org.gjt.mm.mysql.Driver"); 
-			con = DriverManager.getConnection(url, dbuser, dbpw); 
+			Class.forName("org.gjt.mm.mysql.Driver");
+			if (LDBConfig.useLocal)
+				con = DriverManager.getConnection(LDBConfig.url, LDBConfig.dbuser, LDBConfig.dbpw);
+			else
+				con = DriverManager.getConnection(url, dbuser, dbpw); 
 			if (DEBUG_LEVEL >= 1)
 				System.out.println("DB Connection Initiated | SOURCE: " + new Exception().getStackTrace()[1].getClassName());
 		} catch (ClassNotFoundException e) { 

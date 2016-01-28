@@ -29,7 +29,7 @@ public class ManagementObject {
 	public final static String GET_ELDERLY_SAME_ROOM = "SELECT bed FROM et_elderly WHERE room=? AND id NOT IN (?)";
 	public final static String GET_ELDERLY_NRICS = "SELECT nric FROM et_elderly";
 	public final static String UPDATE_STAFF_PASSWORD = "UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=?, password=?, accesslevel=? WHERE staffid=?";
-	public final static String UPDATE_STAFF_NO_PASSWORD = "UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=? WHERE staffid=?";
+	public final static String UPDATE_STAFF_NO_PASSWORD = "UPDATE et_staff SET firstname=?, lastname=?, dob=?, nric=?, accesslevel=? WHERE staffid=?";
 	public final static String ADD_STAFF = "INSERT INTO et_staff (username, password, firstname, lastname, nric, dob, accesslevel, salt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 	public final static String GET_ALL_STAFF = "SELECT * FROM et_staff";
 	public final static String UPDATE_ELDERLY = "UPDATE et_elderly SET name=?, dob=?, nric=?, gender=?, room=?, bed=?, contact=?, address=?, email=? WHERE id=?";
@@ -104,7 +104,7 @@ public class ManagementObject {
 	}
 	
 	// Execute a staff update without a password
-	public static void executeStaffUpdateNoPassword(String birthString, String firstName, String lastName, String nric, String staffId) throws SQLException{
+	public static void executeStaffUpdateNoPassword(String birthString, String firstName, String lastName, String nric, String staffId, int accessLevel) throws SQLException{
 		PreparedStatement ps1 = so.getPreparedStatement(UPDATE_STAFF_NO_PASSWORD);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 		LocalDate dob = LocalDate.parse(birthString, formatter);
@@ -112,7 +112,8 @@ public class ManagementObject {
 		ps1.setString(2, lastName);
 		ps1.setDate(3, java.sql.Date.valueOf(dob));
 		ps1.setString(4, nric);
-		ps1.setString(5, staffId);
+		ps1.setInt(5, accessLevel);
+		ps1.setString(6, staffId);
 		ps1.executeUpdate();
 	}
 	
