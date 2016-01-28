@@ -318,10 +318,11 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
-	public void setScrollText(String s) {
+	public void setScrollText(String s, String font, int fonttype) {
 		MasterPane.remove(marqueePanel);
 		marqueePanel = null;
 		marqueePanel = new MarqueePanel(s, 160);
+		marqueePanel.setFont(font, fonttype, 18);
 		marqueePanel.setBackground(new Color(0, 153, 255));
 		marqueePanel.setBounds(0, 752, 790, 29);
 		marqueePanel.start();
