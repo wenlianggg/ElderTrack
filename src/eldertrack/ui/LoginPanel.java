@@ -143,7 +143,7 @@ public class LoginPanel extends JPanel {
 			if (session == null)
 				JOptionPane.showMessageDialog(null, "Login failed, try again!");
 			else if (session.isAuthenticated()) {
-				progressBar.setValue(25);
+				progressBar.setValue(10);
 				progressBar.update(progressBar.getGraphics());
 				MainFrame.getInstance().constructPanels();
 				CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();

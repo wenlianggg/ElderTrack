@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
@@ -30,6 +31,7 @@ public class MainMenuPanel extends JPanel {
 	private JButton btnLogout;
 	private JLabel lblYourNotes;
 	private JTextArea txtarea_stickynotes;
+	private JLabel lblAccessLevel;
 	
 	MainMenuPanel() {
 		setBackground(SystemColor.control);
@@ -53,7 +55,7 @@ public class MainMenuPanel extends JPanel {
 		btnMedTrack.setBounds(10, 95, 242, 120);
 		add(btnMedTrack);
 		
-		btnDietManagement = new JButton("Diet Management");
+		btnDietManagement = new JButton("Diet Tracking");
 		btnDietManagement.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 		btnDietManagement.setBounds(10, 230, 242, 120);
 		btnDietManagement.addActionListener(new ActionListener() {
@@ -76,7 +78,7 @@ public class MainMenuPanel extends JPanel {
 		add(btnReportGeneration);
 		
 		if(MainFrame.getInstance().isManagementShown()) {
-			btnStaffManagement = new JButton("People Management");
+			btnStaffManagement = new JButton("Management");
 			btnStaffManagement.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 			btnStaffManagement.setBounds(10, 492, 242, 120);
 			btnStaffManagement.addActionListener(new ActionListener() {
@@ -101,23 +103,27 @@ public class MainMenuPanel extends JPanel {
 		
 		lblLoggedInAs = new JLabel("Logged In:");
 		lblLoggedInAs.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblLoggedInAs.setBounds(10, 45, 467, 21);
+		lblLoggedInAs.setBounds(10, 45, 408, 21);
 		detailsPanel.add(lblLoggedInAs);
 		
 		lblLastLogin = new JLabel("Last Login:");
 		lblLastLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblLastLogin.setBounds(10, 95, 467, 21);
+		lblLastLogin.setBounds(10, 95, 408, 21);
 		detailsPanel.add(lblLastLogin);
 		
 		lblLoginNric = new JLabel("Login NRIC: ");
 		lblLoginNric.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblLoginNric.setBounds(10, 70, 467, 21);
+		lblLoginNric.setBounds(10, 70, 408, 21);
 		detailsPanel.add(lblLoginNric);
 		
 		btnLogout = new JButton("Sign Out");
 		btnLogout.setFont(new Font("Segoe UI", Font.PLAIN, 17));
-		btnLogout.setBounds(585, 12, 128, 36);
+		btnLogout.setBounds(585, 9, 128, 36);
 		detailsPanel.add(btnLogout);
+		
+		lblAccessLevel = new JLabel("Access Level: ");
+		lblAccessLevel.setBounds(585, 49, 128, 16);
+		detailsPanel.add(lblAccessLevel);
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				MainFrame.getInstance().endCurrentSession();
@@ -153,9 +159,28 @@ public class MainMenuPanel extends JPanel {
 	
 	void fillDetails() {
 		StaffSession session = MainFrame.getInstance().getSessionInstance();
+		AccessLevel al = session.getAccessLevel();
+		String access;
+		switch(al) {
+			case MANAGER:
+				access = "Manager";
+				break;
+			case ADMIN:
+				access = "Admin";
+				break;
+			case SRSTAFF:
+				access = "Senior Staff";
+				break;
+			case STAFF:
+				access = "Staff";
+				break;
+			default:
+				access = "Denied";
+		}
 		lblLoggedInAs.setText("Logged In: " + session.getFullName() + " [ID:" + session.getStaffid() + "]");
 		lblLoginNric.setText("Login NRIC: " + session.getNric());
 		lblLastLogin.setText("Last Login: " + session.getLastLoginTimeString());
+		lblAccessLevel.setText("Access Level: " + access);
 		txtarea_stickynotes.setText(MainFrame.getInstance().getSessionInstance().getNotes());
 	}
 	

@@ -29,12 +29,15 @@ public class CheckUpObject  implements Serializable {
 	private double elderSugar;
 	private boolean elderEye =false;
 	private boolean elderEar =false;
+	
 	private String elderDate;
 
 
 	public CheckUpObject(){
+		
 	}
-	public CheckUpObject(double elderTemp, int elderBlood, int elderHeart,int elderSugar, boolean elderEye, boolean elderEar) {
+	
+	public CheckUpObject(double elderTemp, double elderBlood, int elderHeart,double elderSugar, boolean elderEye, boolean elderEar) {
 		this.elderTemp = elderTemp;
 		this.elderBlood = elderBlood;
 		this.elderHeart = elderHeart;
@@ -94,8 +97,6 @@ public class CheckUpObject  implements Serializable {
 		System.out.println(getElderHeart());
 		System.out.println(isElderEye());
 		System.out.println(isElderEar());
-		System.out.println(getElderDate());
-
 	}
 
 	public static void ResetCheckUp(SQLObject so){
@@ -131,14 +132,6 @@ public class CheckUpObject  implements Serializable {
 		}
 	}
 
-	public static Boolean CheckUpInputValidation(){
-
-
-
-
-
-		return false;
-	}
 	public static Boolean checkupValid(String roomNum,String timing,SQLObject so){
 		ResultSet rs = null;
 		int totalElder=0;
@@ -284,7 +277,7 @@ public class CheckUpObject  implements Serializable {
 		//CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
 		//StoreCheckUp("Ang Siew Fong",reportDate,id, checking);
 
-		RetrieveCheckUp(1);
+		RetrieveCheckUp(id);
 	}
 
 }
