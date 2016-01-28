@@ -9,5 +9,5 @@ public class LDBConfig {
 	static final String schema = "eldertrack";
 	static final String dbuser = "eldertrackadmin";
 	static final String dbpw = "eldertrack4321";
-	static final String url = "jdbc:mysql://" + hostname + ":" + port + "/" + schema;
+	static final String url = "jdbc:mysql://" + hostname + ":" + port + "/" + schema + "?useSSL=false";
 }
