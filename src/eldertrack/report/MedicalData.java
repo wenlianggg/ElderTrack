@@ -74,7 +74,7 @@ public class MedicalData implements Serializable{
 	
 	private static void CalAverage(int id) {
 		ResultSet rsCalAvr = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, id, date, checktime");
-		PreparedStatement calAvr = so.getPreparedStatementWithKey(")
+		PreparedStatement calAvr = so.getPreparedStatementWithKey("");
 	}
 		
 	public static void main(String[] args) throws ClassNotFoundException, IOException{
