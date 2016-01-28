@@ -27,9 +27,9 @@ import java.awt.event.MouseEvent;
 public class AnnouncementPanel extends JPanel{
 	private SQLObject so = new SQLObject();
 	private static final long serialVersionUID = -8742307067990031379L;
-	private JLabel AnnouncementManager;
 	private String defaultText;
-	private String fontText;
+	private String fontType;
+	private String fontName;
 	private String newText;
 	private MarqueePanel previewMarquee;
 	private JPanel panel_1;
@@ -39,8 +39,7 @@ public class AnnouncementPanel extends JPanel{
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 		
-		// Get current announcement text
-		defaultText = getMarqueeText();
+		getMarqueeConfig();
 		
 		JButton btnMainMenu = new JButton("Back to Main Menu");
 		btnMainMenu.setBounds(820, 15, 139, 40);
@@ -60,12 +59,6 @@ public class AnnouncementPanel extends JPanel{
 		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
 		lblDietManagement.setBounds(300, 20, 388, 30);
 		add(lblDietManagement);
-		
-		AnnouncementManager = new JLabel("ElderTrack Announcement Settings");
-		AnnouncementManager.setBounds(26, 5, 594, 61);
-		AnnouncementManager.setForeground(SystemColor.textHighlight);
-		AnnouncementManager.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		add(AnnouncementManager);
 		
 		JLabel announcementTextHeader = new JLabel("Edit announcement text :");
 		announcementTextHeader.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -96,7 +89,7 @@ public class AnnouncementPanel extends JPanel{
 		
 		previewMarquee = new MarqueePanel(defaultText, 185);
 		previewMarquee.setBounds(0, 100, 933, 29);
-		previewMarquee.setFont("Tahoma", Font.BOLD, 18);
+		previewMarquee.setFont(fontName, Font.BOLD, 18);
 		panel_1.add(previewMarquee);
 		previewMarquee.setBackground(new Color(0, 153, 255));
 		previewMarquee.start();
@@ -145,17 +138,25 @@ public class AnnouncementPanel extends JPanel{
 	
 	// Methods
 	
-	private String getMarqueeText(){
+	private void getMarqueeConfig(){
 		try{
 		PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_scrollcfg");
 		ResultSet config = ps.executeQuery();
 		config.next();
-		return config.getString("value");
+		// Get marquee text
+		this.defaultText = config.getString("value");
+		config.next();
+		// Get font style
+		this.fontName = config.getString("value");
+		config.next();
+		// Get font type
+		this.fontType = config.getString("value");
+		
 		}catch(SQLException e){
 			e.printStackTrace();
-			return "";
 		}
 	}
+	
 	
 	private void updateMarqueeText(String text){
 		try{
@@ -175,7 +176,7 @@ public class AnnouncementPanel extends JPanel{
 		previewMarquee = null;
 		previewMarquee = new MarqueePanel(newText, 160);
 		previewMarquee.setBounds(0, 100, 933, 29);
-		previewMarquee.setFont("Tahoma", Font.BOLD, 18);
+		previewMarquee.setFont(fontName, Font.BOLD, 18);
 		panel_1.add(previewMarquee);
 		previewMarquee.setBackground(new Color(0, 153, 255));
 		previewMarquee.start();
