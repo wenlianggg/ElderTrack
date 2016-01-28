@@ -1168,6 +1168,7 @@ public class MgmtPanel extends JPanel {
 		}
 	}
 	
+	// Object construction
 	private ElderlyPerson createNewElderlyObj(String birthString){
 		ElderlyPerson ep = new ElderlyPerson(elderlyIdValue.getText(), birthString, elderlyNricValue.getText(), elderlyGenderValue.getText(), elderlyNameValue.getText(), 
 				elderlyRoomValue.getText(), elderlyBedValue.getText(), elderlyAddressValue.getText(), 
