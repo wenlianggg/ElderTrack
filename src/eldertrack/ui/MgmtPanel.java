@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
 import eldertrack.login.AccessLevel;
+import eldertrack.management.ElderlyPerson;
 import eldertrack.management.ManagementObject;
 
 import java.awt.CardLayout;
@@ -636,39 +637,34 @@ public class MgmtPanel extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to add?");
 					if (dialogResult == JOptionPane.YES_OPTION){
 						try{
-						String name = elderlyNameValue.getText();
 						String birthString = (elderlyYear.getSelectedItem() + "-" + elderlyMonth.getSelectedItem() + "-" + elderlyDay.getSelectedItem());
-						String nric = elderlyNricValue.getText();
-						String gender = elderlyGenderValue.getText();
-						String room = elderlyRoomValue.getText();
-						String address = elderlyAddressValue.getText();
-						String bedString = elderlyBedValue.getText();
-						String contact = elderlyContactValue.getText();
-						String email = elderlyEmailValue.getText();
+						
+						// Create new object
+						ElderlyPerson ep = createNewElderlyObj(birthString);
 						
 						// Check for empty fields
-						boolean empty = ManagementObject.elderlyEmptyFields(name, birthString, nric, gender, room, address, bedString, contact, email);
+						boolean empty = ManagementObject.elderlyEmptyFields(ep);
 						
 						if(empty == true){
 							JOptionPane.showMessageDialog(null, "One or more of the fields are empty! Please check your entries!");
 						}else{
 						PreparedStatement ps1 = so.getPreparedStatement("SELECT bed, nric FROM et_elderly WHERE room=?");
-						ps1.setString(1, room);
+						ps1.setString(1, ep.getRoom());
 						ResultSet check = ps1.executeQuery();
 						
-						int bed = Integer.parseInt(bedString);
+						int bed = Integer.parseInt(ep.getBed());
 						boolean dupeBed = ManagementObject.checkDuplicateBeds(bed, check);
-						boolean dupeNric = ManagementObject.checkDuplicateNrics(nric, check);
-						boolean validNric = NRICUtils.validate(nric);
-						boolean validPhoneNo = ManagementObject.checkValidPhoneNo(contact);
-						boolean validEmail = eldertrack.misc.ValidateEmail.validateEmail(email);
-						boolean invalid = ManagementObject.invalidEntries(dupeBed, dupeNric, validNric, validPhoneNo, bedString, validEmail);
+						boolean dupeNric = ManagementObject.checkDuplicateNrics(ep.getNric(), check);
+						boolean validNric = NRICUtils.validate(ep.getNric());
+						boolean validPhoneNo = ManagementObject.checkValidPhoneNo(ep.getContact());
+						boolean validEmail = eldertrack.misc.ValidateEmail.validateEmail(ep.getEmail());
+						boolean invalid = ManagementObject.invalidEntries(dupeBed, dupeNric, validNric, validPhoneNo, ep.getBed(), validEmail);
 					
 						if(invalid == true){
 							System.out.println("Invalid entries detected! Discontinuing update.");
 						}
 						else{
-						ManagementObject.executeAddElderly(birthString, name, nric, gender, room, address, bed, contact, email);
+						ManagementObject.executeAddElderly(ep);
 						
 						refreshElderly();
 					
@@ -851,36 +847,29 @@ public class MgmtPanel extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
 						if (dialogResult == JOptionPane.YES_OPTION){
 							try{
-								String id = elderlyIdValue.getText();
-								String name = elderlyNameValue.getText();
 								String birthString = (elderlyYear.getSelectedItem() + "-" + elderlyMonth.getSelectedItem() + "-" + elderlyDay.getSelectedItem());
-								String nric = elderlyNricValue.getText();
-								String gender = elderlyGenderValue.getText();
-								String room = elderlyRoomValue.getText();
-								String address = elderlyAddressValue.getText();
-								String bed = elderlyBedValue.getText();
-								String contact = elderlyContactValue.getText();
-								String email = elderlyEmailValue.getText();
 								
-								boolean empty = ManagementObject.elderlyEmptyFields(name, birthString, nric, gender, room, address, bed, contact, email);
+								ElderlyPerson ep = createNewElderlyObj(birthString);
+								
+								boolean empty = ManagementObject.elderlyEmptyFields(ep);
 								if(empty == true){
 									JOptionPane.showMessageDialog(null, "One or more of the fields are empty! Please check your entries!");
 								}else{
-									ResultSet checkBed = ManagementObject.retrieveElderlySameRoom(room, id);
+									ResultSet checkBed = ManagementObject.retrieveElderlySameRoom(ep.getRoom(), ep.getId());
 									ResultSet checkNric = ManagementObject.retrieveElderlyNrics();
 								
 								//Check for duplicate beds and exceeding bed limit
-								boolean dupeBed = ManagementObject.checkDuplicateBeds(Integer.parseInt(bed), checkBed);
-								boolean dupeNric = ManagementObject.checkDuplicateNrics(nric, checkNric);
-								boolean validNric = NRICUtils.validate(nric);
-								boolean validPhoneNo = ManagementObject.checkValidPhoneNo(contact);
-								boolean validEmail = eldertrack.misc.ValidateEmail.validateEmail(email);
-								boolean invalidEntries = ManagementObject.invalidEntries(dupeBed, dupeNric, validNric, validPhoneNo, bed, validEmail);
+								boolean dupeBed = ManagementObject.checkDuplicateBeds(Integer.parseInt(ep.getBed()), checkBed);
+								boolean dupeNric = ManagementObject.checkDuplicateNrics(ep.getNric(), checkNric);
+								boolean validNric = NRICUtils.validate(ep.getNric());
+								boolean validPhoneNo = ManagementObject.checkValidPhoneNo(ep.getContact());
+								boolean validEmail = eldertrack.misc.ValidateEmail.validateEmail(ep.getEmail());
+								boolean invalidEntries = ManagementObject.invalidEntries(dupeBed, dupeNric, validNric, validPhoneNo, ep.getBed(), validEmail);
 								
 								if(invalidEntries == true){
 									System.out.println("There were invalid entries encountered. Discontinuing update.");
 								}else{
-									ManagementObject.executeElderlyUpdate(name, nric, gender, room, bed, contact, address, id, birthString, email);
+									ManagementObject.executeElderlyUpdate(ep);
 									JOptionPane.showMessageDialog(null, "Update successfully completed!");	
 									
 									// Refresh table
@@ -1171,6 +1160,13 @@ public class MgmtPanel extends JPanel {
 		}
 	}
 	
+	private ElderlyPerson createNewElderlyObj(String birthString){
+		ElderlyPerson ep = new ElderlyPerson(elderlyIdValue.getText(), birthString, elderlyNricValue.getText(), elderlyGenderValue.getText(), elderlyNameValue.getText(), 
+				elderlyRoomValue.getText(), elderlyBedValue.getText(), elderlyAddressValue.getText(), 
+				elderlyContactValue.getText(), elderlyEmailValue.getText());
+		
+		return ep;
+	}
 	public JTable getElderlyTable(){
 		return elderlyTable;
 	}

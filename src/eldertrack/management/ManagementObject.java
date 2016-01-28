@@ -51,18 +51,18 @@ public class ManagementObject {
 	}
 	
 	// Add an elderly to the database
-	public static void executeAddElderly(String birthString, String name, String nric, String gender, String room, String address, int bed, String contact, String email) throws SQLException{
+	public static void executeAddElderly(ElderlyPerson ep) throws SQLException{
 		PreparedStatement ps = so.getPreparedStatement(ADD_ELDERLY);
-		LocalDate dob = ManagementObject.toLocalDate(birthString);
-		ps.setString(1, name);
+		LocalDate dob = ManagementObject.toLocalDate(ep.getBirthString());
+		ps.setString(1, ep.getFullName());
 		ps.setDate(2, java.sql.Date.valueOf(dob));
-		ps.setString(3,nric);
-		ps.setString(4, gender);
-		ps.setString(5, room);
-		ps.setString(6, address);
-		ps.setInt(7, bed);
-		ps.setString(8, contact);
-		ps.setString(9, email);
+		ps.setString(3, ep.getNric());
+		ps.setString(4, ep.getGender());
+		ps.setString(5, ep.getRoom());
+		ps.setString(6, ep.getAddress());
+		ps.setInt(7, Integer.parseInt(ep.getBed()));
+		ps.setString(8, ep.getContact());
+		ps.setString(9, ep.getEmail());
 		ps.executeUpdate();
 	}
 	
@@ -118,19 +118,19 @@ public class ManagementObject {
 	}
 	
 	// Execute an elderly update
-	public static void executeElderlyUpdate(String name, String nric, String gender, String room, String bed, String contact, String address, String id, String birthString, String email) throws SQLException{
+	public static void executeElderlyUpdate(ElderlyPerson ep) throws SQLException{
 		PreparedStatement ps = so.getPreparedStatement(UPDATE_ELDERLY);
-		LocalDate dob = ManagementObject.toLocalDate(birthString);
-		ps.setString(1, name);
+		LocalDate dob = ManagementObject.toLocalDate(ep.getBirthString());
+		ps.setString(1, ep.getFullName());
 		ps.setDate(2, java.sql.Date.valueOf(dob));
-		ps.setString(3, nric);
-		ps.setString(4, gender);
-		ps.setString(5, room);
-		ps.setInt(6, Integer.parseInt(bed));
-		ps.setString(7, contact);
-		ps.setString(8, address);
-		ps.setString(9, email);
-		ps.setInt(10, Integer.parseInt(id));
+		ps.setString(3, ep.getNric());
+		ps.setString(4, ep.getGender());
+		ps.setString(5, ep.getRoom());
+		ps.setInt(6, Integer.parseInt(ep.getBed()));
+		ps.setString(7, ep.getContact());
+		ps.setString(8, ep.getAddress());
+		ps.setString(9, ep.getEmail());
+		ps.setInt(10, Integer.parseInt(ep.getId()));
 		ps.executeUpdate();
 	}
 	
@@ -212,8 +212,10 @@ public class ManagementObject {
 	}
 	
 	// Check for empty fields for elderly
-	public static boolean elderlyEmptyFields(String name, String birthString, String nric, String gender, String room , String address , String bedString, String contact, String email){
-		if(name.equals("") || birthString.equals("") || nric.equals("") || gender.equals("") || room.equals("") || address.equals("") || bedString.equals("") || contact.equals("") || email.equals("")){
+	public static boolean elderlyEmptyFields(ElderlyPerson ep){
+		if(ep.getName().equals("") || ep.getBirthString().equals("") || ep.getNric().equals("") || 
+				ep.getGender().equals("") || ep.getRoom().equals("") || ep.getAddress().equals("") || 
+				ep.getAddress().equals("") || ep.getAddress().equals("") || ep.getAddress().equals("")){
 			return true;
 		}else{
 			return false;
