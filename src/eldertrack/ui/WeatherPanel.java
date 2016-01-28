@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import eldertrack.weather.Weather;
-import java.awt.SystemColor;
 
 public class WeatherPanel extends JPanel {
 	private static final long serialVersionUID = -30875959185202451L;

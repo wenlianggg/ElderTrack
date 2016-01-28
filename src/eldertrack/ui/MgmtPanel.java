@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
+import eldertrack.login.AccessLevel;
 import eldertrack.management.ManagementObject;
 
 import java.awt.CardLayout;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JButton;
@@ -56,8 +58,25 @@ public class MgmtPanel extends JPanel {
 	private JPasswordField staffSetPasswordValue;
 	private JTextField editableUsernameValue;
 	private JTextField elderlyEmailValue;
+	private JLabel elderlyAgeValue;
+	private JLabel elderlyIdValue;
+	private JComboBox<String> elderlyDay;
+	private JComboBox<String> elderlyYear;
+	private JComboBox<String> elderlyMonth;
+	private JLabel staffAgeValue;
+	private JComboBox<String> staffDay;
+	private JComboBox<String> staffMonth;
+	private JComboBox<String> staffYear;
+	private JLabel staffIdValue;
+	private JComboBox<String> editableAccessLevel;
+	private JLabel uneditableUsernameValue;
+	CardLayout parentcards;
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	MgmtPanel() {
+		// Obtain access level from staff session
+		AccessLevel CurrentAL = MainFrame.getInstance().getSessionInstance().getAccessLevel();
+		
 		ArrayList<String> years_tmp = new ArrayList<String>();
 		years_tmp.add("");
         for(int years = 1900 ; years <= Calendar.getInstance().get(Calendar.YEAR);years++){
@@ -92,10 +111,12 @@ public class MgmtPanel extends JPanel {
 					elderlySearchField.setColumns(10);
 					
 					JButton staffSearchBtn = new JButton("Search");
+					staffSearchBtn.setVisible(false);
 					staffSearchBtn.setBounds(156, 535, 73, 25);
 					add(staffSearchBtn);
 					
 					staffSearchField = new JTextField();
+					staffSearchField.setVisible(false);
 					staffSearchField.setColumns(10);
 					staffSearchField.setBounds(30, 536, 120, 22);
 					add(staffSearchField);
@@ -114,7 +135,7 @@ public class MgmtPanel extends JPanel {
 					add(staffSave);
 					
 					JButton staffRemove = new JButton("Remove Selected");
-				
+					staffRemove.setVisible(false);
 					staffRemove.setBounds(476, 534, 132, 25);
 					add(staffRemove);
 					
@@ -257,11 +278,11 @@ public class MgmtPanel extends JPanel {
 					elderlyAddressValue.setBounds(179, 220, 116, 22);
 					elderlyManagementPanel.add(elderlyAddressValue);
 					
-					JLabel elderlyIdValue = new JLabel("");
+					elderlyIdValue = new JLabel("");
 					elderlyIdValue.setBounds(179, 10, 116, 22);
 					elderlyManagementPanel.add(elderlyIdValue);
 					
-					JLabel elderlyAgeValue = new JLabel("");
+					elderlyAgeValue = new JLabel("");
 					elderlyAgeValue.setBounds(180, 160, 116, 22);
 					elderlyManagementPanel.add(elderlyAgeValue);
 					
@@ -295,19 +316,18 @@ public class MgmtPanel extends JPanel {
 					elderlyContactValue.setBounds(179, 280, 116, 22);
 					elderlyManagementPanel.add(elderlyContactValue);
 					
-					JComboBox<String> elderlyDay = new JComboBox<String>();
+					elderlyDay = new JComboBox<String>();
 					elderlyDay.setModel(new DefaultComboBoxModel<String>(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 					elderlyDay.setFont(new Font("Tahoma", Font.PLAIN, 13));
 					elderlyDay.setBounds(179, 70, 40, 22);
 					elderlyManagementPanel.add(elderlyDay);
 					
-					JComboBox<String> elderlyMonth = new JComboBox<String>();
+					elderlyMonth = new JComboBox<String>();
 					elderlyMonth.setModel(new DefaultComboBoxModel<String>(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 					elderlyMonth.setBounds(224, 70, 40, 22);
 					elderlyManagementPanel.add(elderlyMonth);
-					
-					@SuppressWarnings({ "unchecked", "rawtypes" })
-					JComboBox<String> elderlyYear = new JComboBox(years_tmp.toArray());
+				
+					elderlyYear = new JComboBox(years_tmp.toArray());
 					elderlyYear.setBounds(269, 70, 60, 22);
 					elderlyManagementPanel.add(elderlyYear);
 					
@@ -392,7 +412,7 @@ public class MgmtPanel extends JPanel {
 					label.setBounds(152, 150, 23, 25);
 					staffManagementPanel.add(label);
 					
-					JLabel staffAgeValue = new JLabel("");
+					staffAgeValue = new JLabel("");
 					staffAgeValue.setBounds(180, 150, 116, 22);
 					staffManagementPanel.add(staffAgeValue);
 					
@@ -411,7 +431,7 @@ public class MgmtPanel extends JPanel {
 					staffNricValue.setBounds(180, 180, 116, 22);
 					staffManagementPanel.add(staffNricValue);
 					
-					JLabel staffIdValue = new JLabel("");
+					staffIdValue = new JLabel("");
 					staffIdValue.setBounds(180, 30, 116, 22);
 					staffManagementPanel.add(staffIdValue);
 					
@@ -455,45 +475,49 @@ public class MgmtPanel extends JPanel {
 					editableUsernameValue.setVisible(false);
 					staffManagementPanel.add(editableUsernameValue);
 					
-					JLabel uneditableUsernameValue = new JLabel("");
+					uneditableUsernameValue = new JLabel("");
 					uneditableUsernameValue.setBounds(180, 270, 116, 22);
 					uneditableUsernameValue.setVisible(true);
 					staffManagementPanel.add(uneditableUsernameValue);
 					
-					JComboBox<String> editableAccessLevel = new JComboBox<String>();
+					editableAccessLevel = new JComboBox<String>();
 					editableAccessLevel.setModel(new DefaultComboBoxModel<String>(new String[] {"No Access", "Staff", "Sr Staff", "Admin", "Manager"}));
 					editableAccessLevel.setBounds(180, 210, 116, 22);
 					staffManagementPanel.add(editableAccessLevel);
 					
-					JComboBox<String> staffDay = new JComboBox<String>();
+					staffDay = new JComboBox<String>();
 					staffDay.setFont(new Font("Tahoma", Font.PLAIN, 13));
 					staffDay.setModel(new DefaultComboBoxModel<String>(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 					staffDay.setBounds(180, 120, 40, 22);
 					staffManagementPanel.add(staffDay);
 					
-					@SuppressWarnings({ "unchecked", "rawtypes" })
-					JComboBox<String> staffYear = new JComboBox(years_tmp.toArray());
+					staffYear = new JComboBox(years_tmp.toArray());
 					staffYear.setBounds(270, 120, 60, 22);
 					staffManagementPanel.add(staffYear);
 					
-					JComboBox<String> staffMonth = new JComboBox<String>();
+					staffMonth = new JComboBox<String>();
 					staffMonth.setModel(new DefaultComboBoxModel<String>(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 					staffMonth.setBounds(225, 120, 40, 22);
 					staffManagementPanel.add(staffMonth);
+					
+					JLabel lblDietManagement = new JLabel("Management\r\n - Community");
+					lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+					lblDietManagement.setBounds(300, 20, 388, 30);
+					add(lblDietManagement);
 			
-					lblEManagementLbl = new JLabel("ElderTrack Management");
+					lblEManagementLbl = new JLabel("ElderTrack Suite");
 					lblEManagementLbl.setForeground(SystemColor.textHighlight);
 					lblEManagementLbl.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-					lblEManagementLbl.setBounds(26, 5, 430, 61);
+					lblEManagementLbl.setBounds(10, 0, 280, 54);
 					add(lblEManagementLbl);
 		
 					JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+					tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 					tabbedPane.setBounds(29, 79, 584, 445);
 					add(tabbedPane);
 					
 					JScrollPane scrollPane = new JScrollPane();
 					tabbedPane.addTab("Elderly", null, scrollPane, null);
-					
 					
 					DefaultTableModel allEldersData;
 					allEldersData = TableHelper.getElderlyDetailed("");
@@ -501,7 +525,9 @@ public class MgmtPanel extends JPanel {
 					setColumnWidths();
 					
 					JScrollPane scrollPane2 = new JScrollPane();
-					tabbedPane.addTab("Staff", null, scrollPane2, null);
+					if(CurrentAL == AccessLevel.MANAGER){
+						tabbedPane.addTab("Staff", null, scrollPane2, null);	
+					}
 					
 					DefaultTableModel allStaffData;
 					allStaffData = TableHelper.getStaff("");
@@ -510,7 +536,20 @@ public class MgmtPanel extends JPanel {
 					
 					scrollPane2.setViewportView(staffTable);
 					scrollPane.setViewportView(elderlyTable);
+					
+					JButton announcementSettings = new JButton("Edit Announcement Settings\r\n");
+					announcementSettings.setBounds(625, 499, 307, 25);
+					add(announcementSettings);
+					
 		
+					announcementSettings.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent arg0) {
+							parentcards = (CardLayout)MgmtSection.CardDeck.getLayout();
+							parentcards.show(MgmtSection.CardDeck, MgmtSection.ANNOUNCEMENTPANEL);
+						}
+					});			
+					
 		elderlyTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -527,28 +566,7 @@ public class MgmtPanel extends JPanel {
 						String add2 = rs.getString("name");
 						elderlyNameValue.setText(add2);
 						
-						String add3 = rs.getString("dob");
-						char[] dobChar = add3.toCharArray();
-						String day = (String.valueOf(dobChar[8]) + String.valueOf(dobChar[9]));
-						String month = (String.valueOf(dobChar[5]) + String.valueOf(dobChar[6]));
-						String year = (String.valueOf(dobChar[0]) + String.valueOf(dobChar[1]) + String.valueOf(dobChar[2]) + String.valueOf(dobChar[3]));
-						for(int i = 0 ; i < elderlyDay.getItemCount(); i++){
-							if(elderlyDay.getItemAt(i).equals(day)){
-								elderlyDay.setSelectedIndex(i);
-							}
-						}
-						
-						for(int i = 0 ; i < elderlyMonth.getItemCount(); i++){
-							if(elderlyMonth.getItemAt(i).equals(month)){
-								elderlyMonth.setSelectedIndex(i);
-							}
-						}
-						
-						for(int i = 0 ; i < elderlyYear.getItemCount(); i++){
-							if(elderlyYear.getItemAt(i).equals(year)){
-								elderlyYear.setSelectedIndex(i);
-							}
-						}
+						setElderlyBirthday(rs.getString("dob").toCharArray());
 						
 						String add4 = rs.getString("nric");
 						elderlyNricValue.setText(add4);
@@ -581,9 +599,6 @@ public class MgmtPanel extends JPanel {
 			}
 		});
 			
-			
-			
-			
 			addStaff.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
@@ -595,18 +610,7 @@ public class MgmtPanel extends JPanel {
 						editableUsernameValue.setVisible(true);
 						cancelAddStaff.setVisible(true);
 						
-						staffAgeValue.setText("");
-						staffFirstNameValue.setText("");
-						staffLastNameValue.setText("");
-						staffDay.setSelectedIndex(0);
-						staffMonth.setSelectedIndex(0);
-						staffYear.setSelectedIndex(0);
-						staffIdValue.setText("");
-						staffAgeValue.setText("");
-						staffNricValue.setText("");
-						uneditableUsernameValue.setText("");
-						editableUsernameValue.setText("");
-						staffSetPasswordValue.setText("");
+						clearAllFields();
 					}
 				}
 			});
@@ -620,19 +624,7 @@ public class MgmtPanel extends JPanel {
 						elderlySave.setVisible(false);
 						cancelAddElderly.setVisible(true);
 						
-						elderlyAgeValue.setText("");
-						elderlyNameValue.setText("");
-						elderlyIdValue.setText("");
-						elderlyNricValue.setText("");
-						elderlyAddressValue.setText("");
-						elderlyRoomValue.setText("");
-						elderlyGenderValue.setText("");
-						elderlyDay.setSelectedIndex(0);
-						elderlyYear.setSelectedIndex(0);
-						elderlyMonth.setSelectedIndex(0);
-						elderlyBedValue.setText("");
-						elderlyContactValue.setText("");
-						elderlyEmailValue.setText("");
+						clearAllFields();
 					}
 				}
 			});
@@ -681,18 +673,7 @@ public class MgmtPanel extends JPanel {
 						refreshElderly();
 					
 						//Clear used fields
-						elderlyAgeValue.setText("");
-						elderlyNameValue.setText("");
-						elderlyIdValue.setText("");
-						elderlyNricValue.setText("");
-						elderlyAddressValue.setText("");
-						elderlyRoomValue.setText("");
-						elderlyGenderValue.setText("");
-						elderlyDay.setSelectedIndex(0);
-						elderlyYear.setSelectedIndex(0);
-						elderlyMonth.setSelectedIndex(0);
-						elderlyBedValue.setText("");
-						elderlyContactValue.setText("");
+						clearAllFields();
 						
 						JOptionPane.showMessageDialog(null, "Person has successfully been added to database!");
 						}
@@ -722,18 +703,7 @@ public class MgmtPanel extends JPanel {
 						editableUsernameValue.setVisible(false);
 						cancelAddStaff.setVisible(false);
 						
-						staffAgeValue.setText("");
-						staffFirstNameValue.setText("");
-						staffLastNameValue.setText("");
-						staffDay.setSelectedIndex(0);
-						staffMonth.setSelectedIndex(0);
-						staffYear.setSelectedIndex(0);
-						staffIdValue.setText("");
-						staffAgeValue.setText("");
-						staffNricValue.setText("");
-						uneditableUsernameValue.setText("");
-						editableUsernameValue.setText("");
-						staffSetPasswordValue.setText("");
+						clearAllFields();
 					}
 				}
 			});
@@ -747,19 +717,7 @@ public class MgmtPanel extends JPanel {
 						elderlySave.setVisible(true);
 						cancelAddElderly.setVisible(false);
 						
-						elderlyAgeValue.setText("");
-						elderlyNameValue.setText("");
-						elderlyIdValue.setText("");
-						elderlyNricValue.setText("");
-						elderlyAddressValue.setText("");
-						elderlyRoomValue.setText("");
-						elderlyGenderValue.setText("");
-						elderlyDay.setSelectedIndex(0);
-						elderlyYear.setSelectedIndex(0);
-						elderlyMonth.setSelectedIndex(0);
-						elderlyBedValue.setText("");
-						elderlyContactValue.setText("");
-						elderlyEmailValue.setText("");
+						clearAllFields();
 					}
 				}
 			});
@@ -817,18 +775,7 @@ public class MgmtPanel extends JPanel {
 									cancelAddStaff.setVisible(false);
 									editableAccessLevel.setSelectedIndex(0);
 									
-									staffAgeValue.setText("");
-									staffFirstNameValue.setText("");
-									staffLastNameValue.setText("");
-									staffDay.setSelectedIndex(0);
-									staffMonth.setSelectedIndex(0);
-									staffYear.setSelectedIndex(0);
-									staffIdValue.setText("");
-									staffAgeValue.setText("");
-									staffNricValue.setText("");
-									uneditableUsernameValue.setText("");
-									editableUsernameValue.setText("");
-									staffSetPasswordValue.setText("");
+									clearAllFields();
 							}
 							
 							refreshStaff();
@@ -870,7 +817,7 @@ public class MgmtPanel extends JPanel {
 										JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
 									}else if (validNric == false){
 										JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
-									}else if(staffSetPasswordValue.getPassword() != null || staffSetPasswordValue.getPassword().length != 0){			
+									}else if(staffSetPasswordValue.getPassword().length != 0){			
 										
 										// Password encryption
 										char[] passChar = staffSetPasswordValue.getPassword();
@@ -886,16 +833,14 @@ public class MgmtPanel extends JPanel {
 										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
 									}else{
 										// Executes update without the password
-										ManagementObject.executeStaffUpdateNoPassword(birthString, firstName, lastName, nric, staffId);
+										ManagementObject.executeStaffUpdateNoPassword(birthString, firstName, lastName, nric, staffId, accessLevel);
 										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
 									}
-											refreshElderly();
+											refreshStaff();
 										}
 									}catch(SQLException e){
 									e.printStackTrace();
-								}
-							
-								
+								}		
 							}
 				}
 			});
@@ -947,10 +892,7 @@ public class MgmtPanel extends JPanel {
 								JOptionPane.showMessageDialog(null,e1);	
 							}
 								}
-								
-					
 						}
-							
 				}
 			);
 			
@@ -1011,7 +953,7 @@ public class MgmtPanel extends JPanel {
 			    	//Cancel Buttons
 			    	cancelAddStaff.setVisible(true);
 			    	cancelAddElderly.setVisible(false);
-			    } else {
+			    }else{
 			    	//Panels
 			    	staffManagementPanel.setVisible(false);
 			    	elderlyManagementPanel.setVisible(true);
@@ -1033,7 +975,7 @@ public class MgmtPanel extends JPanel {
 			    	//Cancel Buttons
 			    	cancelAddStaff.setVisible(false);
 			    	cancelAddElderly.setVisible(true);
-			    }
+			    	}
 			    }
 			});
 			
@@ -1056,28 +998,7 @@ public class MgmtPanel extends JPanel {
 							String add3 = rs1.getString("lastname");
 							staffLastNameValue.setText(add3);
 							
-							String add4 = rs1.getString("dob");
-							char[] dobChar = add4.toCharArray();
-							String day = (String.valueOf(dobChar[8]) + String.valueOf(dobChar[9]));
-							String month = (String.valueOf(dobChar[5]) + String.valueOf(dobChar[6]));
-							String year = (String.valueOf(dobChar[0]) + String.valueOf(dobChar[1]) + String.valueOf(dobChar[2]) + String.valueOf(dobChar[3]));
-							for(int i = 0 ; i < staffDay.getItemCount(); i++){
-								if(staffDay.getItemAt(i).equals(day)){
-									staffDay.setSelectedIndex(i);
-								}
-							}
-							
-							for(int i = 0 ; i < staffMonth.getItemCount(); i++){
-								if(staffMonth.getItemAt(i).equals(month)){
-									staffMonth.setSelectedIndex(i);
-								}
-							}
-							
-							for(int i = 0 ; i < staffYear.getItemCount(); i++){
-								if(staffYear.getItemAt(i).equals(year)){
-									staffYear.setSelectedIndex(i);
-								}
-							}
+							setStaffBirthday(rs1.getString("dob").toCharArray());
 							
 							String add5 = rs1.getString("nric");
 							staffNricValue.setText(add5);
@@ -1100,34 +1021,7 @@ public class MgmtPanel extends JPanel {
 			discardChanges.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					//Clear Elderly Fields
-					elderlyAgeValue.setText("");
-					elderlyNameValue.setText("");
-					elderlyIdValue.setText("");
-					elderlyNricValue.setText("");
-					elderlyAddressValue.setText("");
-					elderlyRoomValue.setText("");
-					elderlyGenderValue.setText("");
-					elderlyDay.setSelectedIndex(0);
-					elderlyYear.setSelectedIndex(0);
-					elderlyMonth.setSelectedIndex(0);
-					elderlyBedValue.setText("");
-					elderlyContactValue.setText("");
-					
-					//Clear Staff Fields
-					staffAgeValue.setText("");
-					staffFirstNameValue.setText("");
-					staffLastNameValue.setText("");
-					staffDay.setSelectedIndex(0);
-					staffMonth.setSelectedIndex(0);
-					staffYear.setSelectedIndex(0);
-					staffIdValue.setText("");
-					staffAgeValue.setText("");
-					staffNricValue.setText("");
-					uneditableUsernameValue.setText("");
-					editableUsernameValue.setText("");
-					staffSetPasswordValue.setText("");
-					editableAccessLevel.setSelectedIndex(0);
+					clearAllFields();
 				}
 			});
 			
@@ -1145,10 +1039,32 @@ public class MgmtPanel extends JPanel {
 			}
 			});
 			
+			if(CurrentAL == AccessLevel.SRSTAFF){
+				elderlyNameValue.setEditable(false);
+				elderlyNricValue.setEditable(false);
+				elderlyAddressValue.setEditable(false);
+				elderlyRoomValue.setEditable(false);
+				elderlyGenderValue.setEditable(false);
+				elderlyDay.setEnabled(false);
+				elderlyYear.setEnabled(false);
+				elderlyMonth.setEnabled(false);
+				elderlyBedValue.setEditable(false);
+				elderlyContactValue.setEditable(false);
+				elderlyEmailValue.setEditable(false);
+				
+				addElderly.setVisible(false);
+				elderlySave.setVisible(false);
+				elderlyRemove.setVisible(false);
+				discardChanges.setVisible(false);
+				announcementSettings.setVisible(false);
+			}		
 	}
+	
+	
 	
 	//Methods	
 	private void setColumnWidths(){
+		elderlyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		elderlyTable.getTableHeader().setResizingAllowed(false);
 		elderlyTable.getTableHeader().setReorderingAllowed(false);
 		elderlyTable.getColumnModel().getColumn(0).setPreferredWidth(25);
@@ -1175,5 +1091,87 @@ public class MgmtPanel extends JPanel {
 	private void refreshStaff(){
 		staffTable.setModel(TableHelper.getStaff(""));
 		setColumnWidths();
+	}
+	
+	private void clearAllFields(){
+		//Clear Elderly Fields
+		elderlyAgeValue.setText("");
+		elderlyNameValue.setText("");
+		elderlyIdValue.setText("");
+		elderlyNricValue.setText("");
+		elderlyAddressValue.setText("");
+		elderlyRoomValue.setText("");
+		elderlyGenderValue.setText("");
+		elderlyDay.setSelectedIndex(0);
+		elderlyYear.setSelectedIndex(0);
+		elderlyMonth.setSelectedIndex(0);
+		elderlyBedValue.setText("");
+		elderlyContactValue.setText("");
+		elderlyEmailValue.setText("");
+		
+		//Clear Staff Fields
+		staffAgeValue.setText("");
+		staffFirstNameValue.setText("");
+		staffLastNameValue.setText("");
+		staffDay.setSelectedIndex(0);
+		staffMonth.setSelectedIndex(0);
+		staffYear.setSelectedIndex(0);
+		staffIdValue.setText("");
+		staffAgeValue.setText("");
+		staffNricValue.setText("");
+		uneditableUsernameValue.setText("");
+		editableUsernameValue.setText("");
+		staffSetPasswordValue.setText("");
+		editableAccessLevel.setSelectedIndex(0);
+	}
+	
+	private void setStaffBirthday(char[] dobChar){
+		String day = (String.valueOf(dobChar[8]) + String.valueOf(dobChar[9]));
+		String month = (String.valueOf(dobChar[5]) + String.valueOf(dobChar[6]));
+		String year = (String.valueOf(dobChar[0]) + String.valueOf(dobChar[1]) + String.valueOf(dobChar[2]) + String.valueOf(dobChar[3]));
+		for(int i = 0 ; i < staffDay.getItemCount(); i++){
+			if(staffDay.getItemAt(i).equals(day)){
+				staffDay.setSelectedIndex(i);
+			}
+		}
+		
+		for(int i = 0 ; i < staffMonth.getItemCount(); i++){
+			if(staffMonth.getItemAt(i).equals(month)){
+				staffMonth.setSelectedIndex(i);
+			}
+		}
+		
+		for(int i = 0 ; i < staffYear.getItemCount(); i++){
+			if(staffYear.getItemAt(i).equals(year)){
+				staffYear.setSelectedIndex(i);
+			}
+		}
+	}
+	
+	private void setElderlyBirthday(char[] dobChar){
+		String day = (String.valueOf(dobChar[8]) + String.valueOf(dobChar[9]));
+		String month = (String.valueOf(dobChar[5]) + String.valueOf(dobChar[6]));
+		String year = (String.valueOf(dobChar[0]) + String.valueOf(dobChar[1]) + String.valueOf(dobChar[2]) + String.valueOf(dobChar[3]));
+		for(int i = 0 ; i < elderlyDay.getItemCount(); i++){
+			if(elderlyDay.getItemAt(i).equals(day)){
+				elderlyDay.setSelectedIndex(i);
+			}
+		}
+		
+		for(int i = 0 ; i < elderlyMonth.getItemCount(); i++){
+			if(elderlyMonth.getItemAt(i).equals(month)){
+				elderlyMonth.setSelectedIndex(i);
+			}
+		}
+		
+		for(int i = 0 ; i < elderlyYear.getItemCount(); i++){
+			if(elderlyYear.getItemAt(i).equals(year)){
+				elderlyYear.setSelectedIndex(i);
+			}
+		}
+	}
+	
+	public JTable getElderlyTable(){
+		return elderlyTable;
 	}
 }
