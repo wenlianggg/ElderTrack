@@ -34,7 +34,7 @@ public class MedicalData implements Serializable{
 				
 		ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp" );
 		PreparedStatement statementInsertTmp = so.getPreparedStatementWithKey
-				("INSERT INTO et_reportTemp (name,date,checktime,temperature,blood,heart,sugar,eye,ear,id) values(?,?,?,?,?,?,?,?,?,?)");
+				("INSERT INTO et_reportTemp (name,date,checktime,temp,blood,heart,sugar,eye,ear,id) values(?,?,?,?,?,?,?,?,?,?)");
 		
 		while(rs.next()){
 			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id FROM et_elderly_checkup WHERE id = ?");
