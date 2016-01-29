@@ -32,4 +32,8 @@ public class MgmtSection extends JPanel{
 	 public MgmtPanel getManagementPanel(){
 		return (MgmtPanel)this.mgmtPanel;
 	}
+	 
+	 public AnnouncementPanel getAnnouncementPanel(){
+		 return (AnnouncementPanel)this.announcementPanel;
+	 }
 }
