@@ -190,7 +190,7 @@ public class MainFrame extends JFrame {
 		jpbar.update(jpbar.getGraphics());
 		
 		jpbar.setString("Initializing Scroll Text");
-		initScrollText();
+		setScrollText();
 		jpbar.setValue(80);
 		jpbar.update(jpbar.getGraphics());
 		
@@ -291,37 +291,16 @@ public class MainFrame extends JFrame {
 		return this.DietSection;
 	}
 	
-	private void initScrollText() {
-	// Initialize scroll text
-		try {
-    		SQLObject so = new SQLObject();
-    		ResultSet rs = so.getResultSet("SELECT * FROM et_scrollcfg");
-    		rs.next();
-			String text = rs.getString("value");
-			rs.next();
-			String font = rs.getString("value");
-			rs.next();
-			String fonttype = rs.getString("value");
-			setScrollText(text);
-			if (fonttype.equalsIgnoreCase("bold")) {
-				marqueePanel.setFont(font, Font.BOLD, 17);
-				MarqueePanel.type = Font.BOLD;
-			} else if (fonttype.equalsIgnoreCase("italic")) {
-				marqueePanel.setFont(font, Font.ITALIC, 17);
-				MarqueePanel.type = Font.ITALIC;
-			} else {
-				marqueePanel.setFont(font, Font.PLAIN, 17);
-				MarqueePanel.type = Font.PLAIN;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	MgmtSection getManagementSection() {
+		return this.MgmtSection;
 	}
 	
-	public void setScrollText(String s) {
+	public void setScrollText() {
+		AnnouncementPanel ap = MainFrame.getInstance().getManagementSection().getAnnouncementPanel();
 		MasterPane.remove(marqueePanel);
+		this.repaint();
 		marqueePanel = null;
-		marqueePanel = new MarqueePanel(s, 160);
+		marqueePanel = new MarqueePanel(ap.getSex(), 160, ap.getFont());
 		marqueePanel.setBackground(new Color(0, 153, 255));
 		marqueePanel.setBounds(0, 752, 790, 29);
 		marqueePanel.start();
