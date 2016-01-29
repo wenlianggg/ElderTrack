@@ -137,7 +137,6 @@ public class AnnouncementPanel extends JPanel{
 				fontTypeSelector.setSelectedIndex(fontTypeValue);
 				JOptionPane.showMessageDialog(null, "Announcement has been successfully updated!");
 				
-				MainFrame.getInstance().setScrollText(defaultText);
 			}
 		});
 		
@@ -257,8 +256,11 @@ public class AnnouncementPanel extends JPanel{
 		}
 	}
 	
-	
 	public Font getFont(){
 		return new Font(this.fontStyle, this.fontTypeValue, 17);
+	}
+	
+	public String getSex(){
+		return this.defaultText;
 	}
 }
