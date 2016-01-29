@@ -96,7 +96,7 @@ public class AnnouncementPanel extends JPanel{
 		
 		previewMarquee = new MarqueePanel(defaultText, 185);
 		previewMarquee.setBounds(0, 100, 933, 29);
-		previewMarquee.setFont(fontStyle, fontTypeValue, 18);
+		previewMarquee.setFont(fontStyle, fontTypeValue, 17);
 		panel_1.add(previewMarquee);
 		previewMarquee.setBackground(new Color(0, 153, 255));
 		
@@ -136,6 +136,8 @@ public class AnnouncementPanel extends JPanel{
 				setFontStyleIndex();
 				fontTypeSelector.setSelectedIndex(fontTypeValue);
 				JOptionPane.showMessageDialog(null, "Announcement has been successfully updated!");
+				
+				MainFrame.getInstance().setScrollText(defaultText);
 			}
 		});
 		
@@ -241,7 +243,7 @@ public class AnnouncementPanel extends JPanel{
 		previewMarquee = null;
 		previewMarquee = new MarqueePanel(newText, 160);
 		previewMarquee.setBounds(0, 100, 933, 29);
-		previewMarquee.setFont(fontStyleValue, fontTypeValue, 18);
+		previewMarquee.setFont(fontStyleValue, fontTypeValue, 17);
 		panel_1.add(previewMarquee);
 		previewMarquee.setBackground(new Color(0, 153, 255));
 		previewMarquee.start();
@@ -253,5 +255,10 @@ public class AnnouncementPanel extends JPanel{
 				fontStyleSelector.setSelectedIndex(i);
 			}
 		}
+	}
+	
+	
+	public Font getFont(){
+		return new Font(this.fontStyle, this.fontTypeValue, 17);
 	}
 }
