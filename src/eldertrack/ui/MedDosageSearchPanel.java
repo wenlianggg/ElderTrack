@@ -44,6 +44,7 @@ public class MedDosageSearchPanel extends JPanel {
 	public static String timeselected;
 	private ElderData summaryDetails;
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public MedDosageSearchPanel() {
 
 		setBounds(5, 5, 975, 510);
