@@ -104,7 +104,6 @@ public class CreatePdf{
 /////////////////////////////////
     public static void CreateReport (int id) throws SQLException, IOException, ClassNotFoundException {
     	
-    	
 		try{
 			Document document = new Document();
 			PdfWriter.getInstance(document,	
