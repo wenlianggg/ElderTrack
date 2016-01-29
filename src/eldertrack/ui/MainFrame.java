@@ -298,9 +298,9 @@ public class MainFrame extends JFrame {
 	public void setScrollText() {
 		AnnouncementPanel ap = MainFrame.getInstance().getManagementSection().getAnnouncementPanel();
 		MasterPane.remove(marqueePanel);
+		this.repaint();
 		marqueePanel = null;
-		marqueePanel = new MarqueePanel(ap.getSex(), 160);
-		marqueePanel.setFont(ap.getFont());
+		marqueePanel = new MarqueePanel(ap.getSex(), 160, ap.getFont());
 		marqueePanel.setBackground(new Color(0, 153, 255));
 		marqueePanel.setBounds(0, 752, 790, 29);
 		marqueePanel.start();
