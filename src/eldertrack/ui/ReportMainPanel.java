@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -52,9 +53,13 @@ public class ReportMainPanel extends JPanel {
 	Date dNow = new Date( );
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
     
-    ResultSet rsAvr = so.getResultSet("SELECT name, addComment FROM et_reportAvr" );
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	Date date = new Date();
+	String reportDate=dateFormat.format(date);
+    
+    ResultSet rsAvr = so.getResultSet("SELECT * FROM et_reportAvr" );
 	PreparedStatement statementInsertComment = so.getPreparedStatementWithKey
-			("UPDATE et_reportAvr SET addComments=? WHERE name =?, id=?");
+			("UPDATE et_reportAvr SET addComments=? WHERE name =?, id=?, date=?");
 	ResultSet chkFile = so.getResultSet("SELECT report FROM et_report");
 	
 	// Constructor
@@ -269,15 +274,15 @@ public class ReportMainPanel extends JPanel {
 		lblAdditionalComments.setBounds(345, 314, 285, 29);
 		panel.add(lblAdditionalComments);
 		
-		JTextArea txtrAddComment = new JTextArea();
-		txtrAddComment.setToolTipText("");
-		txtrAddComment.setText("");
-		txtrAddComment.setBackground(SystemColor.text);
-		txtrAddComment.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtrAddComment.setLineWrap(true);
-		txtrAddComment.setWrapStyleWord(true);
-		txtrAddComment.setBounds(345, 343, 297, 99);
-		panel.add(txtrAddComment);
+		JTextArea txtrAddComments = new JTextArea();
+		txtrAddComments.setToolTipText("");
+		txtrAddComments.setText("");
+		txtrAddComments.setBackground(SystemColor.text);
+		txtrAddComments.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		txtrAddComments.setLineWrap(true);
+		txtrAddComments.setWrapStyleWord(true);
+		txtrAddComments.setBounds(345, 343, 297, 99);
+		panel.add(txtrAddComments);
 		
 		JButton btnSaveChanges = new JButton("Save Changes");
 		btnSaveChanges.setBounds(309, 576, 215, 83);
@@ -288,15 +293,16 @@ public class ReportMainPanel extends JPanel {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Save changes?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	try {
-						statementInsertComment.setString(1, txtrAddComment.getText());
+						statementInsertComment.setString(1, txtrAddComments.getText());
 						statementInsertComment.setString(2, lblInfoName.getText());
 						statementInsertComment.setString(3, lblElderid.getText());
+						statementInsertComment.setString(4, reportDate);
 						statementInsertComment.executeUpdate();
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
                 	JOptionPane.showMessageDialog(null, "Changes saved.");
-                	txtrAddComment.setText("");
+                	txtrAddComments.setText("");
                 }
 			}
 		});
@@ -309,7 +315,7 @@ public class ReportMainPanel extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Discard changes?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                	txtrAddComment.setText("");
+                	txtrAddComments.setText("");
                 	JOptionPane.showMessageDialog(null, "Changes discarded.");
                 }
 			}
