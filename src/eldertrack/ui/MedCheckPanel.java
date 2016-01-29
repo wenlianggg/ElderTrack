@@ -144,6 +144,7 @@ public class MedCheckPanel extends JPanel {
 		add(lblTemperature);
 
 		JFormattedTextField TempField = new JFormattedTextField(doubleformat);
+		TempField.setText("0");
 		TempField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		TempField.setBounds(260, 292, 70, 25);
 		TempField.setColumns(10);
@@ -160,6 +161,7 @@ public class MedCheckPanel extends JPanel {
 		lblBlood.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 
 		JFormattedTextField  BloodField= new JFormattedTextField (doubleformat);
+		BloodField.setText("0");
 		BloodField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		BloodField.setColumns(10);
 		BloodField.setBounds(260, 331, 70, 25);
@@ -176,6 +178,7 @@ public class MedCheckPanel extends JPanel {
 		add(lblHeartRate);
 
 		JFormattedTextField HeartField = new JFormattedTextField(formatter);
+		HeartField.setText("0");
 		HeartField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		HeartField.setBounds(260, 373, 70, 25);
 		HeartField.setColumns(10);
@@ -192,6 +195,7 @@ public class MedCheckPanel extends JPanel {
 		add(lblSugarLv);
 
 		JFormattedTextField SugarField=new JFormattedTextField(doubleformat);
+		SugarField.setText("0");
 		SugarField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		SugarField.setBounds(260, 412, 70, 25);
 		SugarField.setColumns(10);
@@ -318,9 +322,9 @@ public class MedCheckPanel extends JPanel {
 				else{
 					CheckUpObject checkElder=new CheckUpObject();	
 					checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-					checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+					checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
 					checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-					checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+					checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
 					if(comboEye.getSelectedItem().toString().equals("Yes")){
 						checkElder.setElderEye(true);
 					}
@@ -404,9 +408,9 @@ public class MedCheckPanel extends JPanel {
 					else{
 						CheckUpObject checkElder=new CheckUpObject();
 						checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-						checkElder.setElderBlood(Integer.parseInt(BloodField.getText()));
+						checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
 						checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-						checkElder.setElderSugar(Integer.parseInt(SugarField.getText()));
+						checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
 						if(comboEye.getSelectedItem().toString().equals("Yes")){
 							checkElder.setElderEye(true);
 						}
