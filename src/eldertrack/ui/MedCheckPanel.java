@@ -315,28 +315,30 @@ public class MedCheckPanel extends JPanel {
 
 		btnSaveQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				boolean valid = CheckUpObject.validValues(TempField.getText(), BloodField.getText(), HeartField.getText(), SugarField.getText());
+				CheckUpObject checkElder=new CheckUpObject();	
+				checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
+				checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
+				checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+				checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
+				if(comboEye.getSelectedItem().toString().equals("Yes")){
+					checkElder.setElderEye(true);
+				}
+				else{
+					checkElder.setElderEye(false);
+				}
+				if(comboEar.getSelectedItem().toString().equals("Yes")){
+					checkElder.setElderEar(true);
+				}
+				else{
+					checkElder.setElderEar(false);
+				}
+				
+				
+				boolean valid = CheckUpObject.validValues(checkElder);
 				if(valid == false){
 					JOptionPane.showMessageDialog(null, "Either fields are empty or values are invalid. Please check your entries again!");
 				}
 				else{
-					CheckUpObject checkElder=new CheckUpObject();	
-					checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-					checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
-					checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-					checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
-					if(comboEye.getSelectedItem().toString().equals("Yes")){
-						checkElder.setElderEye(true);
-					}
-					else{
-						checkElder.setElderEye(false);
-					}
-					if(comboEar.getSelectedItem().toString().equals("Yes")){
-						checkElder.setElderEar(true);
-					}
-					else{
-						checkElder.setElderEar(false);
-					}
 
 					CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 					CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
@@ -367,30 +369,31 @@ public class MedCheckPanel extends JPanel {
 		btnNextElder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				numofElder--;
+				CheckUpObject checkElder=new CheckUpObject();
+				checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
+				checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
+				checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
+				checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
+				if(comboEye.getSelectedItem().toString().equals("Yes")){
+					checkElder.setElderEye(true);
+				}
+				else{
+					checkElder.setElderEye(false);
+				}
+				if(comboEar.getSelectedItem().toString().equals("Yes")){
+					checkElder.setElderEar(true);
+				}
+				else{
+					checkElder.setElderEar(false);
+				}
 				// Validation of values
-				boolean valid = CheckUpObject.validValues(TempField.getText(), BloodField.getText(), HeartField.getText(), SugarField.getText());
+				boolean valid = CheckUpObject.validValues(checkElder);
 				if(valid == false){
 					JOptionPane.showMessageDialog(null, "Either fields are empty or values are invalid. Please check your entries again!");
 				}
 				else{
 					if(counter+1!=CheckList.size()){
-						CheckUpObject checkElder=new CheckUpObject();
-						checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-						checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
-						checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-						checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
-						if(comboEye.getSelectedItem().toString().equals("Yes")){
-							checkElder.setElderEye(true);
-						}
-						else{
-							checkElder.setElderEye(false);
-						}
-						if(comboEar.getSelectedItem().toString().equals("Yes")){
-							checkElder.setElderEar(true);
-						}
-						else{
-							checkElder.setElderEar(false);
-						}
+						
 						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 						CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
@@ -406,23 +409,6 @@ public class MedCheckPanel extends JPanel {
 						comboEar.setSelectedItem(null);
 					}
 					else{
-						CheckUpObject checkElder=new CheckUpObject();
-						checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
-						checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
-						checkElder.setElderHeart(Integer.parseInt(HeartField.getText()));
-						checkElder.setElderSugar(Double.parseDouble(SugarField.getText()));
-						if(comboEye.getSelectedItem().toString().equals("Yes")){
-							checkElder.setElderEye(true);
-						}
-						else{
-							checkElder.setElderEye(false);
-						}
-						if(comboEar.getSelectedItem().toString().equals("Yes")){
-							checkElder.setElderEar(true);
-						}
-						else{
-							checkElder.setElderEar(false);
-						}
 						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 						CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());

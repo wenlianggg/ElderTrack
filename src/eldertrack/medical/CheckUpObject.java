@@ -263,14 +263,16 @@ public class CheckUpObject  implements Serializable {
 	 * Purpose: Check if values input are valid
 	 * Return: boolean
 	 */	
-	public static boolean validValues(String temp, String bloodPressure, String heartRate, String sugarLvl){
-		if(Double.parseDouble(temp) < 26 || Double.parseDouble(temp) > 50 ||  Double.parseDouble(temp) == 0){
+	public static boolean validValues(CheckUpObject validationChecking){
+		
+		
+		if(validationChecking.getElderTemp() < 26 || validationChecking.getElderTemp() > 50 || validationChecking.getElderTemp() == 0){
 			return false;
-		}else if(Double.parseDouble(bloodPressure) < 70 || Double.parseDouble(bloodPressure) > 190 || Double.parseDouble(bloodPressure) == 0){
+		}else if(validationChecking.getElderBlood() < 70 || validationChecking.getElderBlood() > 190 || validationChecking.getElderBlood() == 0){
 			return false;
-		}else if(Integer.parseInt(heartRate) < 80 || Integer.parseInt(heartRate) > 200 ||  Integer.parseInt(heartRate) == 0){
+		}else if(validationChecking.getElderHeart()< 80 || validationChecking.getElderHeart() > 200 ||  validationChecking.getElderHeart() == 0){
 			return false;
-		}else if(Double.parseDouble(sugarLvl) < 2.6 || Double.parseDouble(sugarLvl) > 21.1 || Double.parseDouble(sugarLvl) == 0){
+		}else if(validationChecking.getElderSugar() < 2.6 || validationChecking.getElderSugar() > 21.1 || validationChecking.getElderSugar() == 0){
 			return false;
 		}else{
 			return true;
