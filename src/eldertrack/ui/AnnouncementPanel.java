@@ -213,6 +213,8 @@ public class AnnouncementPanel extends JPanel{
 	
 	
 	private void updateMarqueeText(String text, String font, String fontType){
+		// int fontValue = 0;
+		
 		try{
 		PreparedStatement ps = so.getPreparedStatement("UPDATE et_scrollcfg SET value = CASE cfg WHEN 'text' THEN ? WHEN 'font' THEN ? WHEN 'fonttype' THEN ? END WHERE cfg IN('text', 'font', 'fonttype')");
 		ps.setString(1, text);
@@ -223,8 +225,15 @@ public class AnnouncementPanel extends JPanel{
 			e.printStackTrace();
 		}
 		
-		
-		MainFrame.getInstance().setScrollText(text);
+		/*
+		if(fontType.equalsIgnoreCase("plain")){
+			fontValue= Font.PLAIN;
+		}else if(fontType.equalsIgnoreCase("bold")){
+			fontValue = Font.BOLD;
+		}else if(fontTypeString.equalsIgnoreCase("italic")){
+			fontValue = Font.ITALIC;
+		}
+		*/
 	}
 	
 	private void repaintMarquee(String newText, String fontStyleValue, int fontTypeValue){

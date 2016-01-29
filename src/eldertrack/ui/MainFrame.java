@@ -298,21 +298,7 @@ public class MainFrame extends JFrame {
     		ResultSet rs = so.getResultSet("SELECT * FROM et_scrollcfg");
     		rs.next();
 			String text = rs.getString("value");
-			rs.next();
-			String font = rs.getString("value");
-			rs.next();
-			String fonttype = rs.getString("value");
 			setScrollText(text);
-			if (fonttype.equalsIgnoreCase("bold")) {
-				marqueePanel.setFont(font, Font.BOLD, 17);
-				MarqueePanel.type = Font.BOLD;
-			} else if (fonttype.equalsIgnoreCase("italic")) {
-				marqueePanel.setFont(font, Font.ITALIC, 17);
-				MarqueePanel.type = Font.ITALIC;
-			} else {
-				marqueePanel.setFont(font, Font.PLAIN, 17);
-				MarqueePanel.type = Font.PLAIN;
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -322,6 +308,7 @@ public class MainFrame extends JFrame {
 		MasterPane.remove(marqueePanel);
 		marqueePanel = null;
 		marqueePanel = new MarqueePanel(s, 160);
+		marqueePanel.setFont(MarqueePanel.font, MarqueePanel.typeValue, 18);
 		marqueePanel.setBackground(new Color(0, 153, 255));
 		marqueePanel.setBounds(0, 752, 790, 29);
 		marqueePanel.start();
