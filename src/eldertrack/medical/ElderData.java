@@ -19,7 +19,7 @@ public class ElderData{
 	private int elderAge;
 	private String elderGender;
 	private String elderDosageSummary;
-	
+	private String elderCheckUpSummary;
 	// check up stuff
 	private int elderNum;
 	private int elderRoomNumber;
@@ -144,6 +144,14 @@ public class ElderData{
 		this.elderNumDosageNotNeeded += elderNumDosageNotNeeded;
 	}
 	
+	public String getElderCheckUpSummary() {
+		return elderCheckUpSummary;
+	}
+
+	public void setElderCheckUpSummary(String elderCheckUpSummary) {
+		this.elderCheckUpSummary = elderCheckUpSummary;
+	}
+
 	public void print(){
 		System.out.println("ElderBed: "+getElderBed());
 		System.out.println("Name: "+getElderName());
@@ -263,7 +271,6 @@ public class ElderData{
 				}
 			}		
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 		return summaryData;
@@ -276,7 +283,7 @@ public class ElderData{
 	
 	/*
 	 * Method: getElderInformation(ResultSet rs)
-	 * Purpose: Retrieve data from database and return it as an object
+	 * Purpose: Retrieve data from database for both dosage and check up and return it as an object
 	 * Return: ElderData
 	 */
 	public static ElderData getElderInformation(ResultSet rs){
@@ -295,6 +302,7 @@ public class ElderData{
 			dataInfo.setElderAge(ElderData.getAge(year,month,day));
 			dataInfo.setElderGender(rs.getString("gender"));
 			dataInfo.setElderDosageSummary(rs.getString("dosagesummary"));
+			dataInfo.setElderCheckUpSummary(rs.getString("checkupsummary"));
 		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -325,7 +333,6 @@ public class ElderData{
 		SQLObject so = new SQLObject();
 		ResultSet rs=so.getResultSet("SELECT * FROM et_elderly");
 		ArrayList<ElderData> DosageList=new ArrayList<ElderData>();
-
 		try {
 			while(rs.next()){
 				ElderData data=new ElderData();
