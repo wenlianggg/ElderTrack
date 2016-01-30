@@ -89,11 +89,13 @@ public class MedCheckSearchPanel extends JPanel {
 			public void itemStateChanged(ItemEvent arg0) {
 				summaryCheckDetails=ElderData.UpdateOverview(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so);
 				if(summaryCheckDetails!=null){
-				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
-				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale());
+				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() 
+				+"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
+				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale()+"\r\nCheck up done:" +summaryCheckDetails.getElderCheckUpDone()
+				+"\r\nCheck up not done:" +summaryCheckDetails.getElderCheckUpNotDone());
 				}
 				else{
-					txtpnCheckOverview.setText("Check Up Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly:");
+					txtpnCheckOverview.setText("Check Up Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly: \r\nCheck up done: \r\nCheck up not done:");
 				}
 			}
 		});
@@ -115,8 +117,10 @@ public class MedCheckSearchPanel extends JPanel {
 		timeComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				summaryCheckDetails=ElderData.UpdateOverview(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so);
-				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
-				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale());
+				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() 
+				+"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
+				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale()+"\r\nCheck up done:" +summaryCheckDetails.getElderCheckUpDone()
+				+"\r\nCheck up not done:" +summaryCheckDetails.getElderCheckUpNotDone());
 			}
 		});
 
@@ -128,7 +132,7 @@ public class MedCheckSearchPanel extends JPanel {
 
 		txtpnCheckOverview = new JTextPane();
 		txtpnCheckOverview.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtpnCheckOverview.setText("Check Up Time:\r\nRoom Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
+		txtpnCheckOverview.setText("Check Up Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly: \r\nCheck up done: \r\nCheck up not done:");
 		txtpnCheckOverview.setBounds(551, 155, 339, 226);
 		add(txtpnCheckOverview);
 

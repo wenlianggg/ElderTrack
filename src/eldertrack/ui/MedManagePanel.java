@@ -58,8 +58,8 @@ public class MedManagePanel extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Dosage Management");
 		lblNewLabel.setForeground(UIManager.getColor("TextField.selectionBackground"));
-		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblNewLabel.setBounds(25, 25, 300, 41);
+		lblNewLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
+		lblNewLabel.setBounds(10, 0, 389, 41);
 		add(lblNewLabel);
 
 

@@ -29,6 +29,7 @@ import javax.swing.SwingConstants;
 public class MedDosagePanel extends JPanel {
 
 	private static final long serialVersionUID = 1726776874636177464L;
+	private SQLObject so = new SQLObject();
 	private JTextField NameField;
 	private JTextField AgeField;
 	private JTextField GenderField;
@@ -62,8 +63,8 @@ public class MedDosagePanel extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Dosage Tracker");
 		lblNewLabel.setForeground(UIManager.getColor("TextField.selectionBackground"));
-		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblNewLabel.setBounds(25, 25, 213, 41);
+		lblNewLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
+		lblNewLabel.setBounds(10, 0, 295, 41);
 		add(lblNewLabel);
 
 		// Name 
@@ -121,7 +122,7 @@ public class MedDosagePanel extends JPanel {
 		add(SummaryDosagePane);
 
 		// Display of information
-		SQLObject so = new SQLObject();
+
 		ArrayList<ElderData> DosageList=new ArrayList<ElderData>();
 		ElderData data=new ElderData();
 		ResultSet rs;
@@ -220,10 +221,8 @@ public class MedDosagePanel extends JPanel {
 		btnNextEldery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int feed=0;
-				counter++;
-				numofElder--;
-
-				if(counter<DosageList.size()){
+				
+				if(counter+1<DosageList.size()){
 					int dialogButton = JOptionPane.YES_NO_OPTION;
 					int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to procced?","Warning",dialogButton);
 					if(dialogResult == JOptionPane.YES_OPTION){
@@ -234,8 +233,9 @@ public class MedDosagePanel extends JPanel {
 							}
 						}
 						if(feed==toDoTable.getRowCount()){
-
-							DosageObject.UpdateDosageTaken(DosageList.get(counter-1).getElderID(),dosageTime);
+							counter++;
+							numofElder--;
+							DosageObject.UpdateDosageTaken(NameField.getText(),dosageTime);
 							DisplayInformation(DosageList, counter);
 							try {
 								// make new table
@@ -260,7 +260,7 @@ public class MedDosagePanel extends JPanel {
 					}
 				}
 				else{
-					DosageObject.UpdateDosageTaken(DosageList.get(counter-1).getElderID(),dosageTime);
+					DosageObject.UpdateDosageTaken(NameField.getText(),dosageTime);
 					JOptionPane.showMessageDialog(null, "Dosage has been completed");
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);

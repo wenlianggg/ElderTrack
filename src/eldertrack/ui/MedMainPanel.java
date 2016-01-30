@@ -16,18 +16,21 @@ public class MedMainPanel extends JPanel {
 
 	private static final long serialVersionUID = -2955963900083964862L;
 	JTabbedPane TabbedPanel=new JTabbedPane();
-	JLabel lblMedPanelLbl;
 	
 	
 	public MedMainPanel() {
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
-		lblMedPanelLbl = new JLabel("ElderTrack Medication");
+		JLabel lblMedPanelLbl = new JLabel("ElderTrack Suite");
 		lblMedPanelLbl.setForeground(new Color(51, 153, 255));
-		lblMedPanelLbl.setBounds(15, 15, 392, 54);
+		lblMedPanelLbl.setBounds(10, 0, 280, 54);
 		lblMedPanelLbl.setFont(new Font("Segoe UI", Font.ITALIC, 40));
-		add(lblMedPanelLbl);    
+		add(lblMedPanelLbl);   
 		
+		JLabel label = new JLabel("Utilities for Nursing Homes");
+		label.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		label.setBounds(300, 20, 262, 30);
+		add(label);
 		
 		
 		TabbedPanel.setBounds(10, 85, 975, 510);
@@ -48,8 +51,9 @@ public class MedMainPanel extends JPanel {
 		});
 		btnMainMenu.setBounds(820, 15, 139, 40);
 		add(btnMainMenu);
+		
+		
 
 		
 	}
-
 }

@@ -12,7 +12,8 @@ import java.util.Calendar;
 import eldertrack.db.SQLObject;
 
 public class ElderData{
-	// common stuff
+	
+	// General Usage
 	private int elderBed;
 	private String elderName;
 	private int elderID;
@@ -20,14 +21,17 @@ public class ElderData{
 	private String elderGender;
 	private String elderDosageSummary;
 	private String elderCheckUpSummary;
-	// check up stuff
+	
+	// Summary 
 	private int elderNum;
 	private int elderRoomNumber;
 	private int elderNumMale;
 	private int elderNumFemale;
 	private int elderNumDosageNeeded;
 	private int elderNumDosageNotNeeded;
-
+	private int elderCheckUpDone;
+	private int elderCheckUpNotDone;
+	
 	public ElderData(){
 
 	}
@@ -123,33 +127,38 @@ public class ElderData{
 	public int getElderNumFemale() {
 		return elderNumFemale;
 	}
-
 	public void setElderNumFemale(int elderNumFemale) {
 		this.elderNumFemale += elderNumFemale;
 	}
-
 	public int getElderNumDosageNeeded() {
 		return elderNumDosageNeeded;
 	}
-
 	public void setElderNumDosageNeeded(int elderNumDosageNeeded) {
 		this.elderNumDosageNeeded += elderNumDosageNeeded;
 	}
-
 	public int getElderNumDosageNotNeeded() {
 		return elderNumDosageNotNeeded;
 	}
-
 	public void setElderNumDosageNotNeeded(int elderNumDosageNotNeeded) {
 		this.elderNumDosageNotNeeded += elderNumDosageNotNeeded;
 	}
-	
 	public String getElderCheckUpSummary() {
 		return elderCheckUpSummary;
 	}
-
 	public void setElderCheckUpSummary(String elderCheckUpSummary) {
 		this.elderCheckUpSummary = elderCheckUpSummary;
+	}
+	public int getElderCheckUpDone() {
+		return elderCheckUpDone;
+	}
+	public void setElderCheckUpDone(int elderCheckUpDone) {
+		this.elderCheckUpDone += elderCheckUpDone;
+	}
+	public int getElderCheckUpNotDone() {
+		return elderCheckUpNotDone;
+	}
+	public void setElderCheckUpNotDone(int elderCheckUpNotDone) {
+		this.elderCheckUpNotDone += elderCheckUpNotDone;
 	}
 
 	public void print(){
@@ -252,6 +261,12 @@ public class ElderData{
 					else{
 						summaryData.setElderNumDosageNotNeeded(1);
 					}
+					if(rs.getInt("morningcheck")!=0){
+						summaryData.setElderCheckUpDone(1);
+					}
+					else{
+						summaryData.setElderCheckUpNotDone(1);
+					}
 				}
 				else if(time.equalsIgnoreCase("afternoon")){
 					if(rs.getBlob("afternoondosage")!= null){
@@ -260,6 +275,12 @@ public class ElderData{
 					else{
 						summaryData.setElderNumDosageNotNeeded(1);
 					}
+					if(rs.getInt("afternooncheck")!=0){
+						summaryData.setElderCheckUpDone(1);
+					}
+					else{
+						summaryData.setElderCheckUpNotDone(1);
+					}
 				}
 				else{
 					if(rs.getBlob("noondosage")!= null){
@@ -267,6 +288,12 @@ public class ElderData{
 					}
 					else{
 						summaryData.setElderNumDosageNotNeeded(1);
+					}
+					if(rs.getInt("nooncheck")!=0){
+						summaryData.setElderCheckUpDone(1);
+					}
+					else{
+						summaryData.setElderCheckUpNotDone(1);
 					}
 				}
 			}		
