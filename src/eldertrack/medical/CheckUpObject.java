@@ -29,7 +29,8 @@ public class CheckUpObject  implements Serializable {
 	private double elderSugar;
 	private boolean elderEye =false;
 	private boolean elderEar =false;
-
+	private String elderNotes;
+	
 	private String elderDate;
 
 
@@ -88,7 +89,13 @@ public class CheckUpObject  implements Serializable {
 	public void setElderDate(String elderDate) {
 		this.elderDate = elderDate;
 	}
+	public String getElderNotes() {
+		return elderNotes;
+	}
 
+	public void setElderNotes(String elderNotes) {
+		this.elderNotes = elderNotes;
+	}
 
 	public void view(){
 		System.out.println(getElderTemp());
@@ -96,6 +103,7 @@ public class CheckUpObject  implements Serializable {
 		System.out.println(getElderHeart());
 		System.out.println(isElderEye());
 		System.out.println(isElderEar());
+		System.out.println(getElderNotes());
 	}
 
 
@@ -263,18 +271,26 @@ public class CheckUpObject  implements Serializable {
 	 * Purpose: Check if values input are valid
 	 * Return: boolean
 	 */	
-	public static boolean validValues(CheckUpObject validationChecking){
-		
-		
+	public static boolean CheckUpValidationInput(CheckUpObject validationChecking,String eyeValid,String earValid){
 		if(validationChecking.getElderTemp() < 26 || validationChecking.getElderTemp() > 50 || validationChecking.getElderTemp() == 0){
 			return false;
-		}else if(validationChecking.getElderBlood() < 70 || validationChecking.getElderBlood() > 190 || validationChecking.getElderBlood() == 0){
+		}
+		else if(validationChecking.getElderBlood() < 70 || validationChecking.getElderBlood() > 190 || validationChecking.getElderBlood() == 0){
 			return false;
-		}else if(validationChecking.getElderHeart()< 80 || validationChecking.getElderHeart() > 200 ||  validationChecking.getElderHeart() == 0){
+		}
+		else if(validationChecking.getElderHeart()< 80 || validationChecking.getElderHeart() > 200 ||  validationChecking.getElderHeart() == 0){
 			return false;
-		}else if(validationChecking.getElderSugar() < 2.6 || validationChecking.getElderSugar() > 21.1 || validationChecking.getElderSugar() == 0){
+		}
+		else if(validationChecking.getElderSugar() < 2.6 || validationChecking.getElderSugar() > 21.1 || validationChecking.getElderSugar() == 0){
 			return false;
-		}else{
+		}
+		else if(eyeValid.equalsIgnoreCase(" ")){
+			return false;
+		}
+		else if(earValid.equalsIgnoreCase(" ")){
+			return false;
+		}
+		else{
 			return true;
 		}
 	}
@@ -316,7 +332,7 @@ public class CheckUpObject  implements Serializable {
 		//CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
 		//StoreCheckUp("Ang Siew Fong",reportDate,id, checking);
 		
-		//RetrieveCheckUp(id);
+		//RetrieveCheckUp(5);
 	}
 
 }

@@ -246,9 +246,7 @@ public class MedCheckPanel extends JPanel {
 		//Date
 
 		//DataBase
-		SQLObject so = new SQLObject();
 		ArrayList<ElderData> CheckList=new ArrayList<ElderData>();
-		ArrayList<String> commentsList=new ArrayList<String>();
 		ElderData data=new ElderData();
 		String output=MedCheckSearchPanel.getCheckSelect();
 		String checkupTime=MedCheckSearchPanel.getCheckTimeSelect();
@@ -256,22 +254,17 @@ public class MedCheckPanel extends JPanel {
 		counter=0;
 		numofElder=0;
 		try {
-
-
 			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT * FROM et_elderly WHERE room = ?");
 			stmt.setString(1, output);
 			stmt.executeQuery();
 			rs = stmt.getResultSet();
-
 			while(rs.next()){
-
 				if(checkupTime.equalsIgnoreCase("morning")){
 					if(rs.getInt("morningcheck")==0){
 						data=ElderData.getElderInformation(rs);
 						CheckList.add(data);
 						numofElder++;
 					}
-
 				}
 				else if(checkupTime.equalsIgnoreCase("afternoon")){
 					if(rs.getInt("afternooncheck")==0){
@@ -287,26 +280,13 @@ public class MedCheckPanel extends JPanel {
 						numofElder++;
 					}
 				}
-
 			}
 		} catch (SQLException e1) {
 
 			e1.printStackTrace();
 		}
 
-
-		try {
-			rs = so.getResultSet("SELECT checkupsummary FROM et_elderly");
-			while(rs.next()){
-				commentsList.add(rs.getString("checkupsummary"));
-			}
-		} catch (SQLException e1) {
-
-			e1.printStackTrace();
-		}
-
-
-		DisplayInformation(CheckList,commentsList, counter);
+		DisplayInformation(CheckList, counter);
 
 		JButton btnSaveQuit = new JButton("Save And Quit");
 		btnSaveQuit.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -332,9 +312,9 @@ public class MedCheckPanel extends JPanel {
 				else{
 					checkElder.setElderEar(false);
 				}
+				checkElder.setElderNotes(textAddition.getText());
 				
-				
-				boolean valid = CheckUpObject.validValues(checkElder);
+				boolean valid =  CheckUpObject.CheckUpValidationInput(checkElder,comboEye.getSelectedItem().toString(),comboEar.getSelectedItem().toString());
 				if(valid == false){
 					JOptionPane.showMessageDialog(null, "Either fields are empty or values are invalid. Please check your entries again!");
 				}
@@ -344,9 +324,6 @@ public class MedCheckPanel extends JPanel {
 					CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 					CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
 					JOptionPane.showMessageDialog(null, "Check up is successful");
-
-
-
 					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 					mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 
@@ -368,7 +345,6 @@ public class MedCheckPanel extends JPanel {
 
 		btnNextElder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				numofElder--;
 				CheckUpObject checkElder=new CheckUpObject();
 				checkElder.setElderTemp(Double.parseDouble(TempField.getText()));
 				checkElder.setElderBlood(Double.parseDouble(BloodField.getText()));
@@ -386,19 +362,22 @@ public class MedCheckPanel extends JPanel {
 				else{
 					checkElder.setElderEar(false);
 				}
+				checkElder.setElderNotes(textAddition.getText());
+				
 				// Validation of values
-				boolean valid = CheckUpObject.validValues(checkElder);
+				boolean valid = CheckUpObject.CheckUpValidationInput(checkElder,comboEye.getSelectedItem().toString(),comboEar.getSelectedItem().toString());
 				if(valid == false){
 					JOptionPane.showMessageDialog(null, "Either fields are empty or values are invalid. Please check your entries again!");
 				}
 				else{
+					numofElder--;
 					if(counter+1!=CheckList.size()){
 						
 						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 						CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
 						counter++;
-						DisplayInformation(CheckList,commentsList,counter);
+						DisplayInformation(CheckList,counter);
 						lblElderLeft.setText("Number of Elderly left:"+numofElder);
 						JOptionPane.showMessageDialog(null, "Check up is successful");
 						TempField.setText(null);
@@ -433,11 +412,11 @@ public class MedCheckPanel extends JPanel {
 
 	}
 
-	public void DisplayInformation(ArrayList<ElderData> DosageList,ArrayList<String> commentsList, int counter){
+	public void DisplayInformation(ArrayList<ElderData> DosageList, int counter){
 		BedField.setText(Integer.toString(DosageList.get(counter).getElderBed()));
 		NameField.setText(DosageList.get(counter).getElderName());
 		AgeField.setText(Integer.toString(DosageList.get(counter).getElderAge()));
 		GenderField.setText(DosageList.get(counter).getElderGender());
-		txtSummary.setText(commentsList.get(counter));
+		txtSummary.setText(DosageList.get(counter).getElderCheckUpSummary());
 	}
 }
