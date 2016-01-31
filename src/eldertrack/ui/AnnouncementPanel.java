@@ -118,7 +118,7 @@ public class AnnouncementPanel extends JPanel{
 		
 		fontStyleSelector = new JComboBox<String>();
 		fontStyleSelector.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		fontStyleSelector.setModel(new DefaultComboBoxModel<String>(new String[] {"Tahoma", "Segoe UI", "Times New Roman", "Roboto", "SansSerif"}));
+		fontStyleSelector.setModel(new DefaultComboBoxModel<String>(new String[] {"Tahoma", "Segoe UI", "Times New Roman", "Roboto", "SansSerif", "Arial Rounded MT Bold", "Agency FB", "Bauhaus 93 Regular", "Bernard MT Condensed", "Fixedsys Regular"}));
 		fontStyleSelector.setBounds(188, 450, 145, 22);
 		setFontStyleIndex();
 		add(fontStyleSelector);
@@ -137,6 +137,7 @@ public class AnnouncementPanel extends JPanel{
 				fontTypeSelector.setSelectedIndex(fontTypeValue);
 				JOptionPane.showMessageDialog(null, "Announcement has been successfully updated!");
 				
+				MainFrame.getInstance().setScrollText();
 			}
 		});
 		
