@@ -68,7 +68,7 @@ private static SQLObject so = new SQLObject();
     	    					+ "\n- Sent via ElderTrack Suite -");
     	    			multipart.addBodyPart(messageBodyPart);
     	    			
-    	    			
+    	    			//add id
     	   				PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT report FROM et_report WHERE name = ?");
     	   				statement2.setString(1, rs.getString("name"));
     	   				ResultSet rsBlob = statement2.executeQuery();
