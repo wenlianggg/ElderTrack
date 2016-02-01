@@ -1,9 +1,7 @@
 package eldertrack.report;
 
-//import java.io.ByteArrayInputStream;
-//import java.io.File;
-//import java.io.FileInputStream;
-//import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -25,8 +23,6 @@ import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-//import com.mysql.jdbc.Blob;
-
 import eldertrack.db.SQLObject;
 
 public class CreatePdf{
@@ -99,6 +95,10 @@ public class CreatePdf{
     ResultSet rsReport = so.getResultSet("SELECT * FROM et_report");
     static PreparedStatement statementUpdateReport = so.getPreparedStatementWithKey
     		("INSERT INTO et_report (name,id,timestamp,report) values(?,?,?,?)");
+	private static String notesA;
+	private static String notesM;
+	private static String notesN;
+	private static int counter;
     
 	
 /////////////////////////////////
@@ -106,8 +106,7 @@ public class CreatePdf{
     	
 		try{
 			Document document = new Document();
-			PdfWriter.getInstance(document,	
-					new FileOutputStream(ft.format(dNow)+" Report.pdf"));
+			PdfWriter.getInstance(document,	new FileOutputStream(ft.format(dNow)+" Report.pdf"));
 			document.open();
  
 			Paragraph title1 = new Paragraph("Report for "+name +" for " +ft.format(dNow), 
@@ -137,6 +136,7 @@ public class CreatePdf{
 		    	sugarA=rsTmp.getDouble("sugar");
 		    	eyeA=rsTmp.getBoolean("eye");
 		    	earA=rsTmp.getBoolean("ear");
+		    	notesA=rsTmp.getString("notes");
 		    	
 		    	tempDTot+=tempA;
 		    	bloodDTot+=bloodA;
@@ -160,6 +160,8 @@ public class CreatePdf{
 				sugarM=rsTmp.getDouble("sugar");
 				eyeM=rsTmp.getBoolean("eye");
 				earM=rsTmp.getBoolean("ear");
+		    	notesM=rsTmp.getString("notes");
+
 				if (eyeM==true)
 					eyeMString = "Yes";
 				else
@@ -182,6 +184,8 @@ public class CreatePdf{
 				sugarN=rsTmp.getDouble("sugar");
 				eyeN=rsTmp.getBoolean("eye");
 				earN=rsTmp.getBoolean("ear");
+		    	notesN=rsTmp.getString("notes");
+
 				if (eyeN==true)
 					eyeNString = "Yes";
 				else
@@ -240,6 +244,8 @@ public class CreatePdf{
 		    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
 		    	PdfPCell c17 = new PdfPCell(new Phrase("Ear Infection",
 		    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
+		    	PdfPCell c18 = new PdfPCell(new Phrase("Comments",
+		    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
  			
 		    	//Time of day
 		    	t1.addCell(c11);
@@ -289,6 +295,13 @@ public class CreatePdf{
 		    	t1.addCell(""+earAString);
 		    	t1.addCell(""+earNString);
 		    	t1.addCell(""+earDString);
+		    	
+		    	//notes
+		    	t1.addCell(c18);
+		    	t1.addCell(""+notesM);
+		    	t1.addCell(""+notesA);
+		    	t1.addCell(""+notesN);
+		    	t1.addCell("-");
 			
 		    	section1.add(t1);
 			
@@ -313,14 +326,15 @@ public class CreatePdf{
 		    		earMAvr=false;
 		    		earMAvrString="Yes";
 		    	}
+		    	counter++;
 			}
 
 /////////////////////
 			
-			tempMAvr=tempMTot/4;
-			bloodMAvr=bloodMTot/4;
-			heartMAvr=heartMTot/4;
-			sugarMAvr=sugarMTot/4;
+			tempMAvr=tempMTot/counter;
+			bloodMAvr=bloodMTot/counter;
+			heartMAvr=heartMTot/counter;
+			sugarMAvr=sugarMTot/counter;
 	
 			someSectionText = new Paragraph("Average per Month: ", 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
@@ -378,31 +392,16 @@ public class CreatePdf{
 		} catch (DocumentException e) {
 			e.printStackTrace();
     	}
+	
 		
+		File blob = new File(ft.format(dNow)+" Report.pdf");
+		FileInputStream in = new FileInputStream(blob);
 		
-/*
-		PreparedStatement statementAddReport = so.getPreparedStatementWithKey("UPDATE et_reportAvr SET report = ? WHERE name=? id = ?");
-		statementAddReport.setBlob(1, reportBlob);;
-		statementAddReport.setString(2, name);
-		statementAddReport.setInt(3, id);
-		
-		String filename = ft.format(dNow)+" Report.pdf";
-		FileInputStream fIS = new FileInputStream((FileOutputStream)ft.format(dNow)+" Report.pdf");
-
-		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		// do any output onto outStream you need
-		ByteArrayInputStream inStream = new ByteArrayInputStream(outStream.toByteArray());
-		// you can read back the output with inStream now
-		
-
-		pstUpdate.setBinaryStream(1, fIS, (int) ft.format(dNow)+" Report.pdf".length());
-		                              
-		pstUpdate.setString(2, rs.getString("id")); 
-
-		pstUpdate.execute(); 
-		
-*/		
-		
+		statementUpdateReport.setString(1, name);
+		statementUpdateReport.setInt(2, id);
+		statementUpdateReport.setTimestamp(3,timestamp);
+		statementUpdateReport.setBinaryStream(4, in, (int)blob.length()); 
+		statementUpdateReport.executeUpdate();
     }
     
    public static void main(String[] args){
@@ -412,12 +411,6 @@ public class CreatePdf{
 			while(rsLoadID.next()) {
 				int id = rsLoadID.getInt("id");
 				CreateReport(id);
-				
-				statementUpdateReport.setString(1, name);
-				statementUpdateReport.setInt(2, id);
-			    statementUpdateReport.setTimestamp(3,timestamp);
-		//	    statementUpdateReport.setBlob(4, reportBlob);
-			    statementUpdateReport.executeUpdate();
 			}
 				
 		} catch (SQLException | ClassNotFoundException | IOException e) {

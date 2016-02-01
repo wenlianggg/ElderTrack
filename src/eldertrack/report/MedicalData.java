@@ -24,6 +24,7 @@ public class MedicalData implements Serializable{
 	private static String date;
 	private static String checktime;
 	private static CheckUpObject checking;
+	private static String notes;
 	static SQLObject so = new SQLObject();
 
 	@SuppressWarnings("unused")
@@ -34,7 +35,7 @@ public class MedicalData implements Serializable{
 				
 		ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp" );
 		PreparedStatement statementInsertTmp = so.getPreparedStatementWithKey
-				("INSERT INTO et_reportTemp (name,date,checktime,temp,blood,heart,sugar,eye,ear,id) values(?,?,?,?,?,?,?,?,?,?)");
+				("INSERT INTO et_reportTemp (name,date,checktime,temp,blood,heart,sugar,eye,ear,notes,id) values(?,?,?,?,?,?,?,?,?,?,?)");
 		
 		while(rs.next()){
 			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id FROM et_elderly_checkup WHERE id = ?");
@@ -52,7 +53,8 @@ public class MedicalData implements Serializable{
 			heart=checking.getElderHeart();
 			sugar=checking.getElderSugar();
 			eye=checking.isElderEye();
-			ear=checking.isElderEar();			
+			ear=checking.isElderEar();		
+			notes=checking.getElderNotes();
 			name=rs.getString("name");
 			date=rs.getString("date");
 			checktime=rs.getString("checktime");
@@ -66,7 +68,8 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.setDouble(7, sugar);
 			statementInsertTmp.setBoolean(8, eye);
 			statementInsertTmp.setBoolean(9, ear);
-			statementInsertTmp.setInt(10, id);
+			statementInsertTmp.setString(10, notes);
+			statementInsertTmp.setInt(11, id);
 			statementInsertTmp.executeUpdate();
 		} 
 	}
