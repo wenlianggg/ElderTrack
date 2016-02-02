@@ -230,7 +230,9 @@ public class MedManagePanel extends JPanel {
 		btnMorningAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Morningmodel.addRow(new Object [][] {{"", null,null}});
-				Morningmodel.setValueAt("-Selection-", MorningTable.getRowCount()-1,0);		
+				Morningmodel.setValueAt("-Selection-", MorningTable.getRowCount()-1,0);	
+				DosageTableHelper.AddManagementModel(MorningTable, so);
+				Morningmodel.setValueAt("Tablet", MorningTable.getRowCount()-1,2);	
 			}
 		});
 		btnMorningAdd.setBounds(781, 272, 89, 20);
@@ -352,40 +354,49 @@ public class MedManagePanel extends JPanel {
 		btnSaveChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!ElderIDField.getText().equalsIgnoreCase("")){
-					if(DosageObject.CheckDuplicateManagementTable(MorningTable)==true ){
+					if(DosageObject.CheckDuplicateManagementTable(MorningTable)==true && 
+							DosageObject.CheckDuplicateManagementTable(AfterNoonTable)==true&&
+							DosageObject.CheckDuplicateManagementTable(NoonTable)==true){
+						if(DosageObject.CheckNullValuesManagementTable(MorningTable)==true &&
+								DosageObject.CheckNullValuesManagementTable(AfterNoonTable)==true &&
+								DosageObject.CheckNullValuesManagementTable(NoonTable)==true){
 
-						ElderData.UpdateDosageSummary(so, summaryPane.getText(), Integer.parseInt(ElderIDField.getText()));
-						if(Morningmodel.getRowCount()!=0){
-							DosageObject.updateProcessTable(MorningTable);
-							DosageObject.setTableManage("morning", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(MorningTable), 0);
-						}
-						else{
-							DosageObject.setTableManage("morning", Integer.parseInt(ElderIDField.getText()),null, 1);
-						}
-						if(Afternoonmodel.getRowCount()!=0){
-							DosageObject.updateProcessTable(AfterNoonTable);
-							DosageObject.setTableManage("afternoon", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(AfterNoonTable), 0);
-						}
-						else{
-							DosageObject.setTableManage("afternoon", Integer.parseInt(ElderIDField.getText()),null, 1);
-						}
-						if(Noonmodel.getRowCount()!=0){
-							DosageObject.updateProcessTable(NoonTable);
-							DosageObject.setTableManage("noon", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(NoonTable), 0);
-						}
-						else{
-							DosageObject.setTableManage("noon", Integer.parseInt(ElderIDField.getText()),null, 1);
-						}
-						// REFRESH MODEL
-						try {
-							allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
-							eldertable.setModel(allEldersData);
-							DosageObject.managementTableModel(eldertable);
-						} catch (SQLException e1) {
-							e1.printStackTrace();
-						}
+							ElderData.UpdateDosageSummary(so, summaryPane.getText(), Integer.parseInt(ElderIDField.getText()));
+							if(Morningmodel.getRowCount()!=0){
+								DosageObject.updateProcessTable(MorningTable);
+								DosageObject.setTableManage("morning", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(MorningTable), 0);
+							}
+							else{
+								DosageObject.setTableManage("morning", Integer.parseInt(ElderIDField.getText()),null, 1);
+							}
+							if(Afternoonmodel.getRowCount()!=0){
+								DosageObject.updateProcessTable(AfterNoonTable);
+								DosageObject.setTableManage("afternoon", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(AfterNoonTable), 0);
+							}
+							else{
+								DosageObject.setTableManage("afternoon", Integer.parseInt(ElderIDField.getText()),null, 1);
+							}
+							if(Noonmodel.getRowCount()!=0){
+								DosageObject.updateProcessTable(NoonTable);
+								DosageObject.setTableManage("noon", Integer.parseInt(ElderIDField.getText()), DosageObject.updateProcessTable(NoonTable), 0);
+							}
+							else{
+								DosageObject.setTableManage("noon", Integer.parseInt(ElderIDField.getText()),null, 1);
+							}
+							// REFRESH MODEL
+							try {
+								allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
+								eldertable.setModel(allEldersData);
+								DosageObject.managementTableModel(eldertable);
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
 
-						JOptionPane.showMessageDialog(null, "Changes has been saved!");
+							JOptionPane.showMessageDialog(null, "Changes has been saved!");
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "There are some missing fields");
+						}
 					}
 					else{
 						JOptionPane.showMessageDialog(null, "There is a duplication in dosage");

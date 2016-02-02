@@ -235,12 +235,17 @@ public class DosageTableHelper  {
 					if(Model.getSelectedColumn()==0){
 						if(!Model.getModel().getValueAt( Model.getSelectedRow(), 0).toString().equals("-Selection-")){
 							String treatmentChoice=Model.getModel().getValueAt(Model.getSelectedRow(), Model.getSelectedColumn()).toString();
-							JComboBox<String> comboBox = null;
-							TableColumn feedingCol=Model.getColumnModel().getColumn(1);
-							comboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
-							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));
+							JComboBox<String> MedicationComboBox = null;
+							JComboBox<Double> DosageLimitComboBox = null;
 							
+								
+							TableColumn medicationCol=Model.getColumnModel().getColumn(1);
+							MedicationComboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
+							medicationCol.setCellEditor(new DefaultCellEditor(MedicationComboBox));
 							
+							TableColumn dosageLimitCol=Model.getColumnModel().getColumn(3);
+							DosageLimitComboBox=DosageObject.GetListOfDosageLimit(so,treatmentChoice);
+							dosageLimitCol.setCellEditor(new DefaultCellEditor(DosageLimitComboBox));
 						}
 					}
 				}
@@ -252,13 +257,7 @@ public class DosageTableHelper  {
 		JComboBox<String> treatmentBox = null;
 		TableColumn treatmentCol=Model.getColumnModel().getColumn(0);
 		treatmentBox=DosageObject.GetListOfTreatMent(so);
-		treatmentCol.setCellEditor(new DefaultCellEditor(treatmentBox));
-		
-		
-		JComboBox<Double> dosLimitBox = null;
-		TableColumn dosLimitCol=Model.getColumnModel().getColumn(3);
-		dosLimitBox=DosageObject.GetListOfDosageLimit(so,"Glucofin");
-		dosLimitCol.setCellEditor(new DefaultCellEditor(dosLimitBox));
+		treatmentCol.setCellEditor(new DefaultCellEditor(treatmentBox));		
 	}
 
 }
