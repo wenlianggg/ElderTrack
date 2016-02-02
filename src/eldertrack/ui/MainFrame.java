@@ -16,8 +16,6 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -25,7 +23,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
-import eldertrack.db.SQLObject;
 import eldertrack.diet.Elderly;
 import eldertrack.diet.MenuItem;
 import eldertrack.login.AccessLevel;

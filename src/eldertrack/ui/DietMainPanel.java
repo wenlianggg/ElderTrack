@@ -2,6 +2,7 @@ package eldertrack.ui;
 
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.TrayIcon.MessageType;
 import java.util.HashMap;
 
 import javax.swing.JLabel;
@@ -15,6 +16,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 
 import eldertrack.diet.*;
+import eldertrack.login.AccessLevel;
 import eldertrack.misc.TableHelper;
 
 import java.awt.event.ActionListener;
@@ -63,6 +65,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 	private JScrollPane tableScrollPane;
 	CardLayout parentCards;
 	private JLabel lblDietManagement;
+	private AccessLevel al;
 	
 	// Constructor
 	DietMainPanel() {
@@ -70,6 +73,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 		setLayout(null);
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
+		al = MainFrame.getInstance().getSessionInstance().getAccessLevel();
 		tableScrollPane = new JScrollPane(eldersTable);
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 130, 283, 529);
@@ -257,8 +261,11 @@ public class DietMainPanel extends JPanel implements Presentable {
 		add(btnMenuManagement);
 		btnMenuManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
-				parentCards.show(DietSection.CardsPanel, DietSection.DMENUPANEL);
+				if (al == AccessLevel.ADMIN || al == AccessLevel.MANAGER) {
+					parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
+					parentCards.show(DietSection.CardsPanel, DietSection.DMENUPANEL);
+				} else
+					JOptionPane.showMessageDialog(null, "Insufficient Permissions");
 			}
 		});
 		
@@ -266,11 +273,14 @@ public class DietMainPanel extends JPanel implements Presentable {
 		btnViewInMgmt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (eldersTable.getSelectedRow() != -1) {
-					Integer selectedelderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
-					CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
-					mainCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
-					JTable jtb = MainFrame.getInstance().getManagementPanel().getElderlyTable();
-					jtb.getSelectionModel().setSelectionInterval(selectedelderly, selectedelderly);
+					if (al == AccessLevel.ADMIN || al == AccessLevel.MANAGER || al == AccessLevel.SRSTAFF) {
+						Integer selectedelderly = Integer.parseInt(eldersTable.getValueAt(eldersTable.getSelectedRow(), 0).toString());
+						CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
+						mainCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
+						JTable jtb = MainFrame.getInstance().getManagementPanel().getElderlyTable();
+						jtb.getSelectionModel().setSelectionInterval(selectedelderly, selectedelderly);
+					} else
+						JOptionPane.showMessageDialog(null, "Insufficient Permissions");
 				} else
 					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
 			}
@@ -293,6 +303,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 		lblDietManagement.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
 		lblDietManagement.setBounds(300, 20, 331, 30);
 		add(lblDietManagement);
+
 	}
 	
 	private void setColumnWidths() {
