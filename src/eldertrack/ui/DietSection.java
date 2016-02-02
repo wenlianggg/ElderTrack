@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
+import eldertrack.login.AccessLevel;
+
 public class DietSection extends JPanel {
 	private static final long serialVersionUID = 1L;
     final static String DMAINPANEL = "Diet Main Panel";
@@ -21,13 +23,15 @@ public class DietSection extends JPanel {
 		dietMainPanel = new DietMainPanel();
 		dietAddPanel = new DietAddPanel();
 		dietModifyPanel = new DietModifyPanel();
-		dietMenuPanel = new DietMenuPanel();
+		if(isAdmin())
+			dietMenuPanel = new DietMenuPanel();
 		
 		CardsPanel = new JPanel(new CardLayout());
 		CardsPanel.add(dietMainPanel, DMAINPANEL);
 		CardsPanel.add(dietAddPanel, DADDPANEL);
 		CardsPanel.add(dietModifyPanel, DMODPANEL);
-		CardsPanel.add(dietMenuPanel, DMENUPANEL);
+		if(isAdmin())
+			CardsPanel.add(dietMenuPanel, DMENUPANEL);
 		((CardLayout)CardsPanel.getLayout()).show(CardsPanel, DMAINPANEL);
 		
 		setLayout(null);
@@ -41,6 +45,15 @@ public class DietSection extends JPanel {
 	
 	DietModifyPanel getDietModifyPanel() {
 		return (DietModifyPanel) this.dietModifyPanel;
+	}
+	
+	private boolean isAdmin() {
+		AccessLevel al = MainFrame.getInstance().getSessionInstance().getAccessLevel();
+		if (al.equals(AccessLevel.MANAGER) || al.equals(AccessLevel.ADMIN)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
