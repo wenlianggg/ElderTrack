@@ -127,18 +127,38 @@ public class DosageTableHelper  {
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		while (rs.next()) {
 			Vector<Object> vector = new Vector<Object>();
-			for (int columnIndex = 1; columnIndex <= 4; columnIndex++) {
+			for (int columnIndex = 1; columnIndex <=7; columnIndex++) {
+				if(columnIndex==1 ||columnIndex<5){
 				vector.add(rs.getObject(columnIndex));
+				}
+				else if(columnIndex==5){
+					if(rs.getObject(columnIndex)!=null){
+						vector.add("Added");
+					}
+					else{
+						vector.add("");
+					}
+				}
+				else if(columnIndex==6){
+					if(rs.getObject(columnIndex)!=null){
+						vector.add("Added");
+					}
+					else{
+						vector.add("");
+					}
+				}
+				else if(columnIndex==7){
+					if(rs.getObject(columnIndex)!=null){
+						vector.add("Added");
+					}
+					else{
+						vector.add("");
+					}
+				}
+				
 			}
-			if(rs.getObject(5)!=null){
-				vector.add("Added");
-			}
-			if(rs.getObject(6)!=null){
-				vector.add("Added");
-			}
-			if(rs.getObject(7)!=null){
-				vector.add("Added");
-			}
+			
+			
 			data.add(vector);
 		}
 		DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
@@ -146,7 +166,7 @@ public class DosageTableHelper  {
 
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				if (columnIndex < 7) {
+				if (columnIndex < 8) {
 					return false;
 				} else {
 					return true;

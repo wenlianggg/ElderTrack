@@ -62,7 +62,6 @@ public class MedManagePanel extends JPanel {
 		lblNewLabel.setBounds(10, 0, 389, 41);
 		add(lblNewLabel);
 
-
 		try {
 			allEldersData = DosageTableHelper.getElderlyFromQueryManagement("");
 			eldertable = new JTable(allEldersData);
@@ -269,6 +268,7 @@ public class MedManagePanel extends JPanel {
 				Afternoonmodel.addRow(new Object [][] {{"", null,null}});
 				Afternoonmodel.setValueAt("-Selection-", AfterNoonTable.getRowCount()-1,0);
 				DosageTableHelper.AddManagementModel(AfterNoonTable, so);
+				Afternoonmodel.setValueAt("Tablet", AfterNoonTable.getRowCount()-1,2);	
 			}
 		});
 		btnAfternoonAdd.setBounds(781, 382, 89, 20);
@@ -303,6 +303,7 @@ public class MedManagePanel extends JPanel {
 				Noonmodel.addRow(new Object [][] {{"", null,null}});
 				Noonmodel.setValueAt("-Selection-", NoonTable.getRowCount()-1,0);
 				DosageTableHelper.AddManagementModel(NoonTable, so);
+				Noonmodel.setValueAt("Tablet", NoonTable.getRowCount()-1,2);	
 			}
 		});
 		btnNoonAdd.setBounds(781, 489, 89, 20);
