@@ -437,7 +437,7 @@ public class ReportMainPanel extends JPanel {
 					
 					}
 				}catch(Exception e1){
-					JOptionPane.showMessageDialog(null, e1);
+					JOptionPane.showMessageDialog(null, "Check up details not found, complete check ups first");
 				}
 			}
 		});
