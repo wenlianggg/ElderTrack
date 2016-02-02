@@ -139,25 +139,26 @@ public class MedDosageSearchPanel extends JPanel {
 		btnGetDosage.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		add(btnGetDosage);
 
-
-		// testing for choosing room options
-
 		btnGetDosage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(DosageObject.checkDosageNeeded(summaryDetails)==true){
-					setDosageRoom(roomcombobox.getSelectedItem().toString());
-					setDosageTimeSelect(timeCombobox.getSelectedItem().toString());
-					if(DosageObject.checkDosageValid(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so)==false){
-						JOptionPane.showMessageDialog(null, "Dosage has already been done!");
-					}
-					else{
-						JPanel gottenDosage=new MedDosagePanel();
-						MedPanel.MedCardPanel.add(gottenDosage,MedPanel.MDOSPANEL);
-						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
-						mainCards.show(MedPanel.MedCardPanel, MedPanel.MDOSPANEL);
+				if(!roomcombobox.getSelectedItem().toString().equalsIgnoreCase(" ")){
+					if(DosageObject.checkDosageNeeded(summaryDetails)==true){
+						setDosageRoom(roomcombobox.getSelectedItem().toString());
+						setDosageTimeSelect(timeCombobox.getSelectedItem().toString());
+						if(DosageObject.checkDosageValid(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so)==false){
+							JOptionPane.showMessageDialog(null, "Dosage has already been done");
+						}
+						else{
+							JPanel gottenDosage=new MedDosagePanel();
+							MedPanel.MedCardPanel.add(gottenDosage,MedPanel.MDOSPANEL);
+							CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+							mainCards.show(MedPanel.MedCardPanel, MedPanel.MDOSPANEL);
+						}
 					}
 				}
-
+				else{
+					JOptionPane.showMessageDialog(null, "Please select a room number");
+				}
 			}
 		});
 	}

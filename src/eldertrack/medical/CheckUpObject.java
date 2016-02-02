@@ -7,13 +7,9 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-//import java.text.DateFormat;
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import eldertrack.db.SQLObject;
 import eldertrack.login.StaffSession;
 import eldertrack.ui.MainFrame;
@@ -323,16 +319,16 @@ public class CheckUpObject  implements Serializable {
 	}
 
 
-	// debug mode
+	/* debug mode
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-		//	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-		//	Date date = new Date();
-		//	String reportDate=dateFormat.format(date);
-		//	int id=1;
-		//CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
-		//StoreCheckUp("Ang Siew Fong",reportDate,id, checking);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		Date date = new Date();
+		String reportDate=dateFormat.format(date);
+		int id=1;
+		CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
+		StoreCheckUp("Ang Siew Fong",reportDate,id, checking);
 		
-		//RetrieveCheckUp(5);
-	}
+		RetrieveCheckUp(5);
+	}*/
 
 }

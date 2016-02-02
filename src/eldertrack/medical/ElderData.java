@@ -355,7 +355,7 @@ public class ElderData{
 		return ageYr;
 	}
 
-	//debuger
+	/*debuger
 	public static void main(String[] args) throws SQLException {
 		SQLObject so = new SQLObject();
 		ResultSet rs=so.getResultSet("SELECT * FROM et_elderly");
@@ -386,7 +386,7 @@ public class ElderData{
 			DosageList.get(i).print();
 			System.out.println();
 		}
-	}
+	}*/
 
 
 
