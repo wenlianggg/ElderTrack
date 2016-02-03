@@ -40,14 +40,14 @@ public class MedCheckSearchPanel extends JPanel {
 	public static String selected;
 	public static String timeselected;
 	private ElderData summaryCheckDetails;
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public MedCheckSearchPanel() {
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
-		
+
 		CheckUpObject.ResetCheckUp(so);
-		
+
 		JLabel lblCheckUpSystem = new JLabel("Check Up System");
 		lblCheckUpSystem.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		lblCheckUpSystem.setBounds(25, 25, 232, 41);
@@ -77,23 +77,25 @@ public class MedCheckSearchPanel extends JPanel {
 
 			e2.printStackTrace();
 		}
-		
+
 		roomComboBox = new JComboBox<String>();
 		roomComboBox.setBackground(UIManager.getColor("TextField.highlight"));
 		roomComboBox.setBounds(277, 124, 125, 31);
 		roomComboBox.setFont( new Font( "Segoe UI", Font.BOLD, 18 ) );
 		roomComboBox.setModel(new DefaultComboBoxModel(roomNumberList.toArray()));
 		add(roomComboBox);
-		
+
 		roomComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				summaryCheckDetails=ElderData.UpdateOverview(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so);
 				if(summaryCheckDetails!=null){
-				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
-				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale());
+					txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() 
+					+"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
+					+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale()+"\r\nCheck up done:" +summaryCheckDetails.getElderCheckUpDone()
+					+"\r\nCheck up not done:" +summaryCheckDetails.getElderCheckUpNotDone());
 				}
 				else{
-					txtpnCheckOverview.setText("Check Up Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly:");
+					txtpnCheckOverview.setText("Check Up Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly: \r\nCheck up done: \r\nCheck up not done:");
 				}
 			}
 		});
@@ -115,8 +117,10 @@ public class MedCheckSearchPanel extends JPanel {
 		timeComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				summaryCheckDetails=ElderData.UpdateOverview(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so);
-				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
-				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale());
+				txtpnCheckOverview.setText("Check Up Time: "+timeComboBox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryCheckDetails.getElderRoomNumber() 
+				+"\r\nTotal number of elderly: "+summaryCheckDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryCheckDetails.getElderNumMale() 
+				+"\r\nTotal Female elderly:" +summaryCheckDetails.getElderNumFemale()+"\r\nCheck up done:" +summaryCheckDetails.getElderCheckUpDone()
+				+"\r\nCheck up not done:" +summaryCheckDetails.getElderCheckUpNotDone());
 			}
 		});
 
@@ -128,7 +132,7 @@ public class MedCheckSearchPanel extends JPanel {
 
 		txtpnCheckOverview = new JTextPane();
 		txtpnCheckOverview.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtpnCheckOverview.setText("Check Up Time:\r\nRoom Number:\r\nTotal number of elderly:\r\nTotal Male elderly:\r\nTotal Female elderly:");
+		txtpnCheckOverview.setText("Check Up Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly: \r\nCheck up done: \r\nCheck up not done:");
 		txtpnCheckOverview.setBounds(551, 155, 339, 226);
 		add(txtpnCheckOverview);
 
@@ -140,21 +144,27 @@ public class MedCheckSearchPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				setCheckSelect(roomComboBox.getSelectedItem().toString());
 				setCheckTimeSelect(timeComboBox.getSelectedItem().toString());
-				if(CheckUpObject.checkupValid(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so)==false){
-					JOptionPane.showMessageDialog(null, "Check up has already been done!");
-				}
-				else{
-					JPanel gottenCheckup=new MedCheckPanel();
-					MedPanel.MedCardPanel.add(gottenCheckup,MedPanel.MCHECKPANEL);
+				if(!roomComboBox.getSelectedItem().toString().equalsIgnoreCase(" ")){
+					if(CheckUpObject.checkupValid(roomComboBox.getSelectedItem().toString(),timeComboBox.getSelectedItem().toString(),so)==false){
+						JOptionPane.showMessageDialog(null, "Check up has already been done!");
+					}
+					else{
+						JPanel gottenCheckup=new MedCheckPanel();
+						MedPanel.MedCardPanel.add(gottenCheckup,MedPanel.MCHECKPANEL);
 
-					CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
-					mainCards.show(MedPanel.MedCardPanel, MedPanel.MCHECKPANEL);
+						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+						mainCards.show(MedPanel.MedCardPanel, MedPanel.MCHECKPANEL);
+					}
+				}
+
+				else{
+					JOptionPane.showMessageDialog(null, "Please select a room number");
 				}
 			}
 		});
 
 	}
-	
+
 	public void setCheckSelect(String select){
 		selected=select;
 	}

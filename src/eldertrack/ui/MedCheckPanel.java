@@ -50,10 +50,10 @@ public class MedCheckPanel extends JPanel {
 		setLayout(null);
 
 
-		JLabel lblNewLabel = new JLabel("Check Up");
+		JLabel lblNewLabel = new JLabel("Check Up Tracker");
 		lblNewLabel.setForeground(UIManager.getColor("TextField.selectionBackground"));
-		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		lblNewLabel.setBounds(25, 25, 210, 41);
+		lblNewLabel.setFont(new Font("Segoe UI", Font.ITALIC, 40));
+		lblNewLabel.setBounds(10, 0, 371, 41);
 		add(lblNewLabel);
 
 		JLabel lblBed = new JLabel("BED:");
@@ -372,7 +372,6 @@ public class MedCheckPanel extends JPanel {
 				else{
 					numofElder--;
 					if(counter+1!=CheckList.size()){
-						
 						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 						CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
@@ -391,7 +390,6 @@ public class MedCheckPanel extends JPanel {
 						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 						CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
-
 						JOptionPane.showMessageDialog(null, "Check up is successful");
 						TempField.setText(null);
 						BloodField.setText(null);
@@ -404,8 +402,6 @@ public class MedCheckPanel extends JPanel {
 						mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
 					}
 				}
-
-
 			}
 		});
 
