@@ -140,7 +140,7 @@ public class MainFrame extends JFrame {
 	
 	void constructPanels() {
 		JProgressBar jpbar = LoginPanel.progressBar;
-		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
+		System.out.println("--------------------- PANELS ARE BEING CONSTRUCTED! ---------------------");
 		jpbar.setValue(10);
 				
 		// Initialize Diet Panel
@@ -168,33 +168,30 @@ public class MainFrame extends JFrame {
 		}else{
 			announcementPanel = new AnnouncementPanel();
 		}
-		jpbar.setValue(40);
+		jpbar.setValue(50);
 
 		// Initialize Report Panel
 		jpbar.setString("Initializing Report Generation...");
 		jpbar.update(jpbar.getGraphics());
 		ReportPanel = new ReportMainPanel();
 		CardsPanel.add(ReportPanel, REPORTPANEL);
-		jpbar.setValue(50);
+		jpbar.setValue(70);
 
 		// Initialize Main Menu Panel
 		jpbar.setString("Initializing Main Menu...");
 		jpbar.update(jpbar.getGraphics());
 		MainMenu = new MainMenuPanel();
 		MainMenu.setBorder(lBorder);
+		MainMenu.fillDetails();
 		CardsPanel.add(MainMenu, MENUPANEL);
-		jpbar.setValue(60);
+		jpbar.setValue(85);
 		jpbar.update(jpbar.getGraphics());
 		
 		jpbar.setString("Initializing Scroll Text");
 		setScrollText();
-		jpbar.setValue(90);
-		jpbar.update(jpbar.getGraphics());
-		
-		MainMenu.fillDetails();
 		jpbar.setValue(100);
 		jpbar.update(jpbar.getGraphics());
-		
+		System.out.println("--------------------- DONE! PANELS ADDED TO CARDLAYOUT ---------------------");
 	}
 	
 	void deconstructPanels() {
@@ -219,7 +216,7 @@ public class MainFrame extends JFrame {
 		Elderly.nullMap();
 		MenuItem.nullMap();
 		StaffSession.nullMap();
-		System.out.println("Panels deconstructed!");
+		System.out.println("--------------------- DONE! PANELS REMOVED FROM CARDLAYOUT ---------------------");
 	}
 	
 	
