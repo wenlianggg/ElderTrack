@@ -31,14 +31,9 @@ public class MedicalData implements Serializable{
 		try {
 			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_elderly_checkup ORDER BY id,name,date");
 						
-			int newId=0;
-
 			while(rsLoadID.next()) {
 				int loadId = rsLoadID.getInt("id");
-				if (loadId!=newId){
-					RetrieveCheckUp(loadId);
-					newId=loadId;
-				}
+				RetrieveCheckUp(loadId);
 			}		
 				
 		} catch (SQLException e) {
@@ -58,7 +53,8 @@ public class MedicalData implements Serializable{
 				("INSERT INTO et_reportTemp (name,date,checktime,temp,blood,heart,sugar,eye,ear,notes,id) values(?,?,?,?,?,?,?,?,?,?,?)");
 		
 		while(rs.next()){
-			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id,name,date,checktime FROM et_elderly_checkup");
+			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id FROM et_elderly_checkup WHERE id = ?");
+			statement2.setInt(1, rs.getInt("id"));
 			ResultSet rsBlob = statement2.executeQuery();
 			rsBlob.next();
 			
@@ -74,7 +70,6 @@ public class MedicalData implements Serializable{
 			eye=checking.isElderEye();
 			ear=checking.isElderEar();		
 			notes=checking.getElderNotes();
-			id=rs.getInt("id");
 			name=rs.getString("name");
 			date=rs.getString("date");
 			checktime=rs.getString("checktime");
@@ -91,6 +86,19 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.setString(10, notes);
 			statementInsertTmp.setInt(11, id);
 			statementInsertTmp.executeUpdate();
+			
+			name=null;
+			date=null;
+			checktime=null;
+			temp=0;
+			blood=0;
+			heart=0;
+			sugar=0;
+			eye=false;
+			ear=false;
+			notes=null;
 		} 
 	}
-	}
+		
+	
+}
