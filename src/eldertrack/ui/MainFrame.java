@@ -13,14 +13,11 @@ import javax.swing.UIManager;
 import java.awt.CardLayout;
 import javax.swing.JComboBox;
 
-import javax.swing.DefaultComboBoxModel;
-import java.awt.event.ItemListener;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
 import eldertrack.diet.Elderly;
@@ -191,26 +188,9 @@ public class MainFrame extends JFrame {
 		
 		jpbar.setString("Initializing Scroll Text");
 		setScrollText();
-		jpbar.setValue(80);
-		jpbar.update(jpbar.getGraphics());
-		
-		// Add menus to combo box
-		comboBox = new JComboBox<>();
-		comboBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent evt) {
-		        JComboBox<?> jcb = (JComboBox<?>) evt.getSource();
-		        CardLayout cl = (CardLayout) CardsPanel.getLayout();
-		        cl.show(CardsPanel, jcb.getSelectedItem().toString());
-			}
-		});
-		comboBox.setSize(174, 26);
-		comboBox.setLocation(10, 682);
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MENUPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, REPORTPANEL}));
-		comboBox.setSelectedIndex(0);
 		jpbar.setValue(90);
 		jpbar.update(jpbar.getGraphics());
-	
-		MasterPane.add(comboBox);
+		
 		MainMenu.fillDetails();
 		jpbar.setValue(100);
 		jpbar.update(jpbar.getGraphics());
