@@ -396,7 +396,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 				availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 				setColumnWidths();
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "One of the fields are empty or invalid!");
 		}
 	}
 	
@@ -413,7 +413,7 @@ public class DietMenuPanel extends JPanel implements Presentable {
 			availMealsTable.setModel(TableHelper.getMeals("%" + searchQuery.getText() + "%"));
 			setColumnWidths();
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "One of the fields were empty or invalid!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "One of the fields were empty or invalid!");
 		}
 	}
 	
