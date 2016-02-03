@@ -46,7 +46,7 @@ public class MedCheckSearchPanel extends JPanel {
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
 
-		CheckUpObject.ResetCheckUp(so);
+		
 
 		JLabel lblCheckUpSystem = new JLabel("Check Up System");
 		lblCheckUpSystem.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -154,6 +154,7 @@ public class MedCheckSearchPanel extends JPanel {
 
 						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 						mainCards.show(MedPanel.MedCardPanel, MedPanel.MCHECKPANEL);
+						roomComboBox.setSelectedItem(" ");
 					}
 				}
 

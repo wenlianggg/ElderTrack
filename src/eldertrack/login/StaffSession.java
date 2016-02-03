@@ -3,6 +3,9 @@ package eldertrack.login;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+
+import javax.swing.JOptionPane;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -13,6 +16,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 import eldertrack.db.SQLObject;
+import eldertrack.ui.MainFrame;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -198,15 +202,23 @@ public class StaffSession{
 		namemap = null;
 	}
 	
+	/**
+	 * @param text - Sticky note
+	 * 
+	 * Saves sticky note into user in database
+	 */
 	public void setNotes(String text) {
-		PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET staffnotes=? WHERE staffid=?");
-		try {
-			ps.setString(1, text);
-			ps.setInt(2, this.staffid);
-			ps.executeUpdate();
-			System.out.println("Saving staff sticky notes!");
-		} catch (SQLException e) {
-			e.printStackTrace();
+		Integer selected = JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Are you sure you want to save?");
+		if (selected == JOptionPane.YES_OPTION) {
+			PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET staffnotes=? WHERE staffid=?");
+			try {
+				ps.setString(1, text);
+				ps.setInt(2, this.staffid);
+				ps.executeUpdate();
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "Successfully Saved");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
