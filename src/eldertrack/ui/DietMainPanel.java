@@ -2,7 +2,6 @@ package eldertrack.ui;
 
 import java.awt.Font;
 import java.awt.SystemColor;
-import java.awt.TrayIcon.MessageType;
 import java.util.HashMap;
 
 import javax.swing.JLabel;
