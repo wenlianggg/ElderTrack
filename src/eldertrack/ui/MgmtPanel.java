@@ -886,7 +886,7 @@ public class MgmtPanel extends JPanel {
 								}													
 							}
 								}catch(Exception e1){
-								JOptionPane.showMessageDialog(null,e1);	
+								JOptionPane.showMessageDialog(MainFrame.getInstance(),e1);	
 							}
 								}
 						}

@@ -135,7 +135,7 @@ public class AnnouncementPanel extends JPanel{
 				repaintMarquee(defaultText,fontStyle, fontTypeValue);
 				setFontStyleIndex();
 				fontTypeSelector.setSelectedIndex(fontTypeValue);
-				JOptionPane.showMessageDialog(null, "Announcement has been successfully updated!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "Announcement has been successfully updated!");
 				
 				MainFrame.getInstance().setScrollText();
 			}

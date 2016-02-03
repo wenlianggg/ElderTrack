@@ -228,7 +228,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 					parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 					parentCards.show(DietSection.CardsPanel, DietSection.DADDPANEL);
 				} else
-					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
+					JOptionPane.showMessageDialog(MainFrame.getInstance(), "Please select an elderly before proceeding!");
 
 			}
 		});
@@ -248,7 +248,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 						parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 						parentCards.show(DietSection.CardsPanel, DietSection.DMODPANEL);
 					} else
-						JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), "Please select an elderly before proceeding!");
 
 				}
 			});
@@ -264,7 +264,7 @@ public class DietMainPanel extends JPanel implements Presentable {
 					parentCards = (CardLayout) DietSection.CardsPanel.getLayout();
 					parentCards.show(DietSection.CardsPanel, DietSection.DMENUPANEL);
 				} else
-					JOptionPane.showMessageDialog(null, "Insufficient Permissions");
+					JOptionPane.showMessageDialog(MainFrame.getInstance(), "Insufficient Permissions");
 			}
 		});
 		
@@ -279,9 +279,9 @@ public class DietMainPanel extends JPanel implements Presentable {
 						JTable jtb = MainFrame.getInstance().getManagementPanel().getElderlyTable();
 						jtb.getSelectionModel().setSelectionInterval(selectedelderly, selectedelderly);
 					} else
-						JOptionPane.showMessageDialog(null, "Insufficient Permissions");
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), "Insufficient Permissions");
 				} else
-					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
+					JOptionPane.showMessageDialog(MainFrame.getInstance(), "Please select an elderly before proceeding!");
 			}
 		});
 		btnViewInMgmt.setFont(new Font("Tahoma", Font.PLAIN, 13));

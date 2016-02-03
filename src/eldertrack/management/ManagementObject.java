@@ -20,6 +20,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import eldertrack.db.SQLObject;
+import eldertrack.ui.MainFrame;
 
 public class ManagementObject {
 	private static SQLObject so = new SQLObject();
@@ -158,22 +159,22 @@ public class ManagementObject {
 	// Check for invalid entries
 		public static boolean invalidEntries(boolean dupeBed, boolean dupeNric, boolean validNric, boolean validPhoneNo, String bed, boolean validEmail){
 			if(dupeBed == true){
-				JOptionPane.showMessageDialog(null, "There are duplicate bed numbers! Please check your entries!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "There are duplicate bed numbers! Please check your entries!");
 				return true;
 			}else if(Integer.parseInt(bed) > 10){
-				JOptionPane.showMessageDialog(null, "The bed number cannot exceed 10!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "The bed number cannot exceed 10!");
 				return true;
 			}else if(dupeNric == true){
-				JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "There are duplicate NRICS! Please check your entries");
 				return true;
 			}else if(validNric == false){
-				JOptionPane.showMessageDialog(null, "The NRIC entered is not valid! Please check your entry!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "The NRIC entered is not valid! Please check your entry!");
 				return true;
 			}else if(validPhoneNo == false){
-				JOptionPane.showMessageDialog(null, "The phone number given is invalid! Please check your entry!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "The phone number given is invalid! Please check your entry!");
 				return true;
 			}else if(validEmail == false){
-				JOptionPane.showMessageDialog(null, "That is an invalid email format!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "That is an invalid email format!");
 				return true;
 			}else{
 				return false;
@@ -321,10 +322,10 @@ public class ManagementObject {
 	// Check for valid phone numbers
 	public static boolean checkValidPhoneNo(String no){
 		if(Character.getNumericValue(no.charAt(0)) != 6 && Character.getNumericValue(no.charAt(0)) != 8 && Character.getNumericValue(no.charAt(0)) != 9){
-			JOptionPane.showMessageDialog(null, "The phone number is invalid!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "The phone number is invalid!");
 			return false;
 		}else if(no.length() != 8){
-			JOptionPane.showMessageDialog(null, "The phone number contains more than 8 numbers!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "The phone number contains more than 8 numbers!");
 			return false;
 		}else
 			return true;

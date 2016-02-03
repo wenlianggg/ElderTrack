@@ -137,7 +137,7 @@ public class LoginPanel extends JPanel {
 			session = MainFrame.getInstance().setSessionInstance(StaffSession.createSession(loginField.getText(), passwordField.getPassword()));
 			passwordField.setText("");
 			if (session == null)
-				JOptionPane.showMessageDialog(null, "Login failed, try again!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "Login failed, try again!");
 			else if (session.isAuthenticated()) {
 				progressBar.setValue(10);
 				progressBar.update(progressBar.getGraphics());
@@ -146,7 +146,7 @@ public class LoginPanel extends JPanel {
 				mainCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Fields cannot be empty!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "Fields cannot be empty!");
 		}
 	}
 }
