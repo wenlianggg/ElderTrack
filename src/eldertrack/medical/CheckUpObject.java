@@ -320,16 +320,18 @@ public class CheckUpObject  implements Serializable {
 	}
 
 
-	/* debug mode
+	 //debug mode
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	/*	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();
 		String reportDate=dateFormat.format(date);
 		int id=1;
 		CheckUpObject checking =new CheckUpObject(41,43,41,false,false);
-		StoreCheckUp("Ang Siew Fong",reportDate,id, checking);
-		
-		RetrieveCheckUp(5);
-	}*/
+		StoreCheckUp("Ang Siew Fong",reportDate,id, checking);*/
+		for(int i=1;i<=10;i++){
+			System.out.println("=================================");
+			RetrieveCheckUp(i);
+		}
+	}
 
 }

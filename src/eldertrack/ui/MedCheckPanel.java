@@ -382,8 +382,9 @@ public class MedCheckPanel extends JPanel {
 						BloodField.setText("0");
 						HeartField.setText("0");
 						SugarField.setText("0");
-						comboEye.setSelectedItem(null);
-						comboEar.setSelectedItem(null);
+						comboEye.setSelectedItem(" ");
+						comboEar.setSelectedItem(" ");
+						textAddition.setText("");
 					}
 					else{
 						CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
@@ -394,8 +395,9 @@ public class MedCheckPanel extends JPanel {
 						BloodField.setText("0");
 						HeartField.setText("0");
 						SugarField.setText("0");
-						comboEye.setSelectedItem(null);
-						comboEar.setSelectedItem(null);
+						comboEye.setSelectedItem(" ");
+						comboEar.setSelectedItem(" ");
+						textAddition.setText("");
 						JOptionPane.showMessageDialog(null, "Check Up has been completed");	
 						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
 						mainCards.show(MedPanel.MedCardPanel, MedPanel.MMAINPANEL);
