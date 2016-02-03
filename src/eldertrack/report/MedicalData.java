@@ -27,19 +27,38 @@ public class MedicalData implements Serializable{
 	private static String notes;
 	static SQLObject so = new SQLObject();
 
-	@SuppressWarnings("unused")
+	public static void main(String[] args) throws ClassNotFoundException, IOException{
+		try {
+			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_elderly_checkup ORDER BY id,name,date");
+						
+			int newId=0;
+
+			while(rsLoadID.next()) {
+				int loadId = rsLoadID.getInt("id");
+				if (loadId!=newId){
+					RetrieveCheckUp(loadId);
+					newId=loadId;
+				}
+			}		
+				
+		} catch (SQLException e) {
+			e.printStackTrace();	
+			}
+		}
+
+	
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
 		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup,name,date,checktime,id FROM et_elderly_checkup WHERE id = ?");
 		statement.setInt(1, id);
 		ResultSet rs = statement.executeQuery();
 				
+		@SuppressWarnings("unused")
 		ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp" );
 		PreparedStatement statementInsertTmp = so.getPreparedStatementWithKey
 				("INSERT INTO et_reportTemp (name,date,checktime,temp,blood,heart,sugar,eye,ear,notes,id) values(?,?,?,?,?,?,?,?,?,?,?)");
 		
 		while(rs.next()){
-			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id FROM et_elderly_checkup WHERE id = ?");
-			statement2.setInt(1, rs.getInt("id"));
+			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id,name,date,checktime FROM et_elderly_checkup");
 			ResultSet rsBlob = statement2.executeQuery();
 			rsBlob.next();
 			
@@ -55,6 +74,7 @@ public class MedicalData implements Serializable{
 			eye=checking.isElderEye();
 			ear=checking.isElderEar();		
 			notes=checking.getElderNotes();
+			id=rs.getInt("id");
 			name=rs.getString("name");
 			date=rs.getString("date");
 			checktime=rs.getString("checktime");
@@ -73,20 +93,4 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.executeUpdate();
 		} 
 	}
-		
-	public static void main(String[] args) throws ClassNotFoundException, IOException{
-		try {
-			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_elderly_checkup ORDER BY name,date");
-						
-			while(rsLoadID.next()) {
-				int id = rsLoadID.getInt("id");
-				RetrieveCheckUp(id);
-			}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();	
-			}
-		System.out.println("Data processed");
-		}
-
-}
+	}
