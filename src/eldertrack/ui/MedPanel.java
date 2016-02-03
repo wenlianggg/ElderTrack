@@ -2,12 +2,19 @@ package eldertrack.ui;
 
 
 import javax.swing.JPanel;
+
+import eldertrack.db.SQLObject;
+import eldertrack.medical.CheckUpObject;
+import eldertrack.medical.DosageObject;
+
 import java.awt.CardLayout;
 
 
 
 public class MedPanel extends JPanel {
 	private static final long serialVersionUID = 5062666526948201245L;
+	
+	private SQLObject so=new SQLObject();
 	
 	static final String MMAINPANEL="Main Medical Panel";
 	static final String MDOSSEARCHPANEL="Medical Dosage Search Panel";
@@ -26,6 +33,8 @@ public class MedPanel extends JPanel {
 		JPanel MedCheckSearchPanel = new MedCheckSearchPanel();
 		JPanel MedManageSearchPanel=new MedManageSearchPanel();
 		
+		DosageObject.ResetDosage(so);
+		CheckUpObject.ResetCheckUp(so);
 		
 		MedCardPanel = new JPanel(new CardLayout());
 		MedCardPanel.add(MedMainPanel, MMAINPANEL);
