@@ -276,15 +276,15 @@ public class ReportMainPanel extends JPanel {
 		lblAdditionalComments.setBounds(345, 314, 285, 29);
 		panel.add(lblAdditionalComments);
 		
-		JTextArea txtrAddComments = new JTextArea();
-		txtrAddComments.setToolTipText("");
-		txtrAddComments.setText("");
-		txtrAddComments.setBackground(SystemColor.text);
-		txtrAddComments.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtrAddComments.setLineWrap(true);
-		txtrAddComments.setWrapStyleWord(true);
-		txtrAddComments.setBounds(345, 343, 297, 99);
-		panel.add(txtrAddComments);
+		JTextArea txtrAddComment = new JTextArea();
+		txtrAddComment.setToolTipText("");
+		txtrAddComment.setText("");
+		txtrAddComment.setBackground(SystemColor.text);
+		txtrAddComment.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		txtrAddComment.setLineWrap(true);
+		txtrAddComment.setWrapStyleWord(true);
+		txtrAddComment.setBounds(345, 343, 297, 99);
+		panel.add(txtrAddComment);
 		
 ////////////////////////////
 		
@@ -373,18 +373,18 @@ public class ReportMainPanel extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Save changes?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                	String addComments = txtrAddComments.getText();
+                	String addComment = txtrAddComment.getText();
                 	try {                							
                 		PreparedStatement statementUpdate = so.getPreparedStatementWithKey
-                				("UPDATE et_reportAvr SET addComments=? WHERE id=?");
-                		statementUpdate.setString(1, addComments);
+                				("UPDATE et_reportAvr SET addComment=? WHERE id=?");
+                		statementUpdate.setString(1, addComment);
                 		statementUpdate.setString(2, add1);
 						
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
                 	JOptionPane.showMessageDialog(null, "Changes saved.");
-                	txtrAddComments.setText("");
+                	txtrAddComment.setText("");
                 }
 			}
 		});
@@ -397,7 +397,7 @@ public class ReportMainPanel extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Discard changes?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                	txtrAddComments.setText("");
+                	txtrAddComment.setText("");
                 	JOptionPane.showMessageDialog(null, "Changes discarded.");
                 }
 			}

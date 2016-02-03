@@ -35,74 +35,71 @@ public class CalculateAvr{
 	static SQLObject so = new SQLObject();    
     
     static PreparedStatement statementInsertAvr = so.getPreparedStatementWithKey
-    		("INSERT INTO et_reportAvr (name,id,date,tempMAvr,bloodMAvr,heartMAvr,sugarMAvr,eyeMAvr,earMAvr,addComments) values(?,?,?,?,?,?,?,?,?,?)");
+    		("INSERT INTO et_reportAvr (name,id,date,tempMAvr,bloodMAvr,heartMAvr,sugarMAvr,eyeMAvr,earMAvr,addComment) values(?,?,?,?,?,?,?,?,?,?)");
 	
 	///////////////////////////////////////
+
     
 	public static void main(String[] args){
-		   try {
-				ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_reportTemp ORDER BY name,date");
-							
-				while(rsLoadID.next()) {
-					int id = rsLoadID.getInt("id");
-					getValues(id);
+		try {
+			ResultSet rsLoadID = so.getResultSet("SELECT id FROM et_reportTemp ORDER BY id");
+				
+			int doneId=0;
+				
+			while(rsLoadID.next()) {
+				int loadId = rsLoadID.getInt("id");
+				if (doneId!=loadId){
+					getValues(loadId);
+					doneId=loadId;
 				}
-					
-			} catch (SQLException | ClassNotFoundException | IOException e) {
-				e.printStackTrace();	
-				}
+			}
 			
-	   }
+		} catch (SQLException | ClassNotFoundException | IOException e) {
+			e.printStackTrace();	
+		}
+	}
 	
 /////////////////////////////////
-    public static void getValues (int id) throws SQLException, IOException, ClassNotFoundException {
-    	PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_reportTemp WHERE id = ?");
+	
+	public static void getValues (int id) throws SQLException, IOException, ClassNotFoundException {
+		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_reportTemp WHERE id = ?");
     	statement.setInt(1, id);
     	ResultSet rsTmp = statement.executeQuery();
     	
     	while (rsTmp.next()){
-		    	name=rsTmp.getString("name");
-		    	date=rsTmp.getString("date");
-		    	checktime=rsTmp.getString("checktime");
-		    	
-		    	temp=rsTmp.getDouble("temp");
-		    	blood=rsTmp.getDouble("blood");
-		    	heart=rsTmp.getDouble("heart");
-		    	sugar=rsTmp.getDouble("sugar");
-		    	eye=rsTmp.getBoolean("eye");
-		    	ear=rsTmp.getBoolean("ear");
+    		counterM++;
+    		}
+    	for (int i=1; i<counterM+1; i++){
+    		rsTmp.absolute(i);
+    		name=rsTmp.getString("name");
+    		date=rsTmp.getString("date");
+    		checktime=rsTmp.getString("checktime");
+    		temp=rsTmp.getDouble("temp");
+    		blood=rsTmp.getDouble("blood");
+    		heart=rsTmp.getDouble("heart");
+    		sugar=rsTmp.getDouble("sugar");
+    		eye=rsTmp.getBoolean("eye");
+    		ear=rsTmp.getBoolean("ear");
+    		
+    		tempMTot+=temp;
+    		bloodMTot+=blood;
+    		heartMTot+=heart;
+    		sugarMTot+=sugar;
+    		
+    		if (eye==true){
+    			eyeMAvr=true;
+    		}
+    		else{
+    			eyeMAvr=false;
+    		}
+    		if (ear==true){
+    			earMAvr=true;
+    		}
+    		else{
+    			earMAvr=false;
+    		}		
     	}
-/////////////////////
-    	System.out.println("exit while loop");
     	
-    	System.out.println("name: " +name);
-
-    	System.out.println("temp: " +temp);
-    	System.out.println("blood: " +blood);
-    	System.out.println("heart: " +heart);
-    	System.out.println("sugar: " +sugar);
-    	System.out.println("eye: " +eye);
-    	System.out.println("ear: " +ear);
-
-    	
-    	tempMTot+=temp;
-    	bloodMTot+=blood;
-    	heartMTot+=heart;
-    	sugarMTot+=sugar;
-    	
-    	if (eye==true){
-    		eyeMAvr=true;
-    	}
-    	else{
-    		eyeMAvr=false;
-    	}
-    	if (ear==true){
-    		earMAvr=true;
-    	}
-    	else{
-    		earMAvr=false;
-    	}		
-    	    	
     	tempMAvr=tempMTot/counterM;
     	bloodMAvr=bloodMTot/counterM;
     	heartMAvr=heartMTot/counterM;
@@ -111,23 +108,23 @@ public class CalculateAvr{
     	try {
     		statementInsertAvr.setString(1, name);
     		statementInsertAvr.setInt(2, id);
-			statementInsertAvr.setString(3, date);
-			statementInsertAvr.setDouble(4,tempMAvr);
-			statementInsertAvr.setDouble(5, bloodMAvr);
-			statementInsertAvr.setDouble(6, heartMAvr);
-			statementInsertAvr.setDouble(7, sugarMAvr);
-			statementInsertAvr.setBoolean(8, eyeMAvr);
-			statementInsertAvr.setBoolean(9, earMAvr);
-			statementInsertAvr.setString(10, "");
-			statementInsertAvr.executeUpdate();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-    	
+    		statementInsertAvr.setString(3, date);
+    		statementInsertAvr.setDouble(4,tempMAvr);
+    		statementInsertAvr.setDouble(5, bloodMAvr);
+    		statementInsertAvr.setDouble(6, heartMAvr);
+    		statementInsertAvr.setDouble(7, sugarMAvr);
+    		statementInsertAvr.setBoolean(8, eyeMAvr);
+    		statementInsertAvr.setBoolean(9, earMAvr);
+    		statementInsertAvr.setString(10, ""); //addComment
+    		statementInsertAvr.executeUpdate();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+		    	
     	counterM=0;			
     	tempMTot=0;
     	bloodMTot=0;
     	heartMTot=0;
     	sugarMTot=0;
-    }
+	}
 }
