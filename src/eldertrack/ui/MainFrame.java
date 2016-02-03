@@ -50,6 +50,7 @@ public class MainFrame extends JFrame {
     private MgmtSection MgmtSection;
     private MainMenuPanel MainMenu;
 	private WeatherPanel weatherPanel;
+	private AnnouncementPanel announcementPanel;
     static JPanel CardsPanel;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
@@ -167,6 +168,8 @@ public class MainFrame extends JFrame {
 		if(isManagementShown()) {
 			MgmtSection = new MgmtSection();
 			CardsPanel.add(MgmtSection, MGMTPANEL);
+		}else{
+			announcementPanel = new AnnouncementPanel();
 		}
 		jpbar.setValue(40);
 
@@ -292,8 +295,17 @@ public class MainFrame extends JFrame {
 		return this.MgmtSection;
 	}
 	
+	AnnouncementPanel getAnnouncementPanel() {
+		return this.announcementPanel;
+	}
+	
 	public void setScrollText() {
-		AnnouncementPanel ap = MainFrame.getInstance().getManagementSection().getAnnouncementPanel();
+		AnnouncementPanel ap;
+		if (MgmtSection != null) {
+			ap = MainFrame.getInstance().getManagementSection().getAnnouncementPanel();
+		} else {
+			ap = getAnnouncementPanel();
+		}
 		MasterPane.remove(marqueePanel);
 		this.repaint();
 		marqueePanel = null;
