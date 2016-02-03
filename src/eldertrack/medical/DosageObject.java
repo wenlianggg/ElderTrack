@@ -92,7 +92,7 @@ public class DosageObject implements Serializable{
 		}
 		String lastDate=dateFormat.format(lastlogin);
 		String checkNowDate=dateFormat.format(currectdate);
-		if(!lastDate.equals(checkNowDate)){
+		if(!lastDate.equalsIgnoreCase(checkNowDate)){
 			try {
 				PreparedStatement stmt  = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningtaken = ?, afternoontaken = ?, noontaken = ?");
 				stmt.setInt(1, 0);
@@ -105,7 +105,7 @@ public class DosageObject implements Serializable{
 		}
 	}
 
-	
+
 
 	/*
 	 * Method: managementTableModel(JTable MainTable )
@@ -136,7 +136,6 @@ public class DosageObject implements Serializable{
 			return true;
 		}
 	}
-
 	/*
 	 * Method: checkDosageValid(String roomNum,String TimeOfDay,SQLObject so)
 	 * Purpose: To if dosage is needed, has it been completed
@@ -152,24 +151,23 @@ public class DosageObject implements Serializable{
 			stmt.executeQuery();
 			rs = stmt.getResultSet();
 			while(rs.next()){
-				if(TimeOfDay.equalsIgnoreCase("morning")){
+				if(TimeOfDay.equalsIgnoreCase("Morning")){
 					if(rs.getInt("morningtaken")!=0){
 						checkedDosage++;
+						totalElder++;
 					}
-					totalElder++;
 				}
-				else if(TimeOfDay.equalsIgnoreCase("afternoon")){
+				else if(TimeOfDay.equalsIgnoreCase("Afternoon")){
 					if(rs.getInt("afternoontaken")!=0){
 						checkedDosage++;
+						totalElder++;
 					}
-					totalElder++;
 				}
-
-				else{
+				else if(TimeOfDay.equalsIgnoreCase("Noon")){
 					if(rs.getInt("noontaken")!=0){
 						checkedDosage++;
+						totalElder++;
 					}
-					totalElder++;
 				}
 			}
 		} catch (SQLException e) {
@@ -189,25 +187,25 @@ public class DosageObject implements Serializable{
 	 * Purpose: Update the database that dosage has been done
 	 * Return: void
 	 */	
-	public static void UpdateDosageTaken(int id,String timing){
+	public static void UpdateDosageTaken(String name,String timing){
 		SQLObject so = new SQLObject();
 		try {
 			if(timing.equalsIgnoreCase("morning")){
-				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningtaken=?  WHERE id = ?");
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningtaken=?  WHERE name = ?");
 				ps.setInt(1, 1);
-				ps.setInt(2, id);
+				ps.setString(2, name);
 				ps.executeUpdate();
 			}
 			else if(timing.equalsIgnoreCase("afternoon")){
-				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternoontaken=?  WHERE id = ?");
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET afternoontaken=?  WHERE name = ?");
 				ps.setInt(1, 1);
-				ps.setInt(2, id);
+				ps.setString(2, name);
 				ps.executeUpdate();
 			}
 			else if(timing.equalsIgnoreCase("noon")){
-				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET noontaken=?  WHERE id = ?");
+				PreparedStatement ps = so.getPreparedStatementWithKey("UPDATE et_elderly SET noontaken=?  WHERE name = ?");
 				ps.setInt(1, 1);
-				ps.setInt(2, id);
+				ps.setString(2, name);
 				ps.executeUpdate();
 			}
 		} catch (SQLException e) {
@@ -315,27 +313,24 @@ public class DosageObject implements Serializable{
 	 * Return: List<String>
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static JComboBox<Double> GetListOfDosageLimit(SQLObject so,String medication){
+	public static JComboBox<Double> GetListOfDosageLimit(SQLObject so,String treatment){
 		ResultSet rs;
 		List<Double> dosageLimitList=new ArrayList<Double>();
 		double dosLimit = 0;
 		double dosAmt=0.5;
 		try {
-			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT dosagelimit FROM et_medication WHERE medication=? ");
-			stmt.setString(1, medication);
+			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT DISTINCT treatment,dosagelimit FROM et_medication WHERE treatment=? ");
+			stmt.setString(1, treatment);
 			stmt.executeQuery();
 			rs=stmt.getResultSet();
-			while(rs.next()){
-				dosLimit=rs.getDouble("dosagelimit");
-			}
-
+			rs.next();
+			dosLimit=rs.getDouble("dosagelimit");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		for(double k=50;k<dosLimit;k+=50){
 			if(dosLimit/50>0){
 				dosageLimitList.add(dosAmt);
-
 			}
 			dosAmt+=0.5;
 		}
@@ -366,7 +361,27 @@ public class DosageObject implements Serializable{
 		}		
 		return result;
 	}
-	
+
+	/*
+	 * Method: CheckNullValuesManagementTable(JTable tablemodel)
+	 * Purpose: Check if there is any null values in the table
+	 * Return: Boolean
+	 */	
+	public static Boolean CheckNullValuesManagementTable(JTable tablemodel){
+		Boolean result=true;
+		for(int i=0;i<tablemodel.getRowCount();i++){
+			for(int k=0;k<tablemodel.getColumnCount();k++){
+				if(tablemodel.getValueAt(i, k)==null||tablemodel.getValueAt(i, k).toString().equalsIgnoreCase("-Selection-")){
+					result=false;
+				}
+				else{
+					result=true;
+				}
+			}
+		}	
+		return result;
+	}
+
 	/*
 	 * Method: updateProcessTable(JTable tablemodel)
 	 * Purpose: Creates new dosage objects corresponding to table values
@@ -405,7 +420,8 @@ public class DosageObject implements Serializable{
 	}
 
 
-	/*public static void main(String[] args) {
+	/*	Debugging
+	 * public static void main(String[] args) {
 		SQLObject so=new SQLObject();
 		JComboBox<Double> comboBox =GetListOfDosageLimit(so,"Glucofin");
 		ComboBoxModel model = comboBox.getModel();

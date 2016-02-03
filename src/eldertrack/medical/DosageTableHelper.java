@@ -127,18 +127,38 @@ public class DosageTableHelper  {
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		while (rs.next()) {
 			Vector<Object> vector = new Vector<Object>();
-			for (int columnIndex = 1; columnIndex <= 4; columnIndex++) {
+			for (int columnIndex = 1; columnIndex <=7; columnIndex++) {
+				if(columnIndex==1 ||columnIndex<5){
 				vector.add(rs.getObject(columnIndex));
+				}
+				else if(columnIndex==5){
+					if(rs.getObject(columnIndex)!=null){
+						vector.add("Added");
+					}
+					else{
+						vector.add("");
+					}
+				}
+				else if(columnIndex==6){
+					if(rs.getObject(columnIndex)!=null){
+						vector.add("Added");
+					}
+					else{
+						vector.add("");
+					}
+				}
+				else if(columnIndex==7){
+					if(rs.getObject(columnIndex)!=null){
+						vector.add("Added");
+					}
+					else{
+						vector.add("");
+					}
+				}
+				
 			}
-			if(rs.getObject(5)!=null){
-				vector.add("Added");
-			}
-			if(rs.getObject(6)!=null){
-				vector.add("Added");
-			}
-			if(rs.getObject(7)!=null){
-				vector.add("Added");
-			}
+			
+			
 			data.add(vector);
 		}
 		DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
@@ -146,7 +166,7 @@ public class DosageTableHelper  {
 
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				if (columnIndex < 7) {
+				if (columnIndex < 8) {
 					return false;
 				} else {
 					return true;
@@ -235,10 +255,17 @@ public class DosageTableHelper  {
 					if(Model.getSelectedColumn()==0){
 						if(!Model.getModel().getValueAt( Model.getSelectedRow(), 0).toString().equals("-Selection-")){
 							String treatmentChoice=Model.getModel().getValueAt(Model.getSelectedRow(), Model.getSelectedColumn()).toString();
-							JComboBox<String> comboBox = null;
-							TableColumn feedingCol=Model.getColumnModel().getColumn(1);
-							comboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
-							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));
+							JComboBox<String> MedicationComboBox = null;
+							JComboBox<Double> DosageLimitComboBox = null;
+							
+								
+							TableColumn medicationCol=Model.getColumnModel().getColumn(1);
+							MedicationComboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
+							medicationCol.setCellEditor(new DefaultCellEditor(MedicationComboBox));
+							
+							TableColumn dosageLimitCol=Model.getColumnModel().getColumn(3);
+							DosageLimitComboBox=DosageObject.GetListOfDosageLimit(so,treatmentChoice);
+							dosageLimitCol.setCellEditor(new DefaultCellEditor(DosageLimitComboBox));
 						}
 					}
 				}
@@ -246,39 +273,11 @@ public class DosageTableHelper  {
 		});
 	}
 	
-/*	// when i have time to add
-	public static void MasterTabelListener(JTable MorningModel,JTable AfternoonModel,JTable NoonModel,SQLObject so){
-		MorningModel.getModel().addTableModelListener(new TableModelListener() {
-			public void tableChanged(TableModelEvent evt) {
-				if(MorningModel.getModel().getRowCount()!=0){
-					if(MorningModel.getSelectedColumn()==0){
-						if(!MorningModel.getModel().getValueAt( MorningModel.getSelectedRow(), 0).toString().equals("-Selection-")){
-							String treatmentChoice=MorningModel.getModel().getValueAt(MorningModel.getSelectedRow(), MorningModel.getSelectedColumn()).toString();
-							
-							AfternoonModel.setValueAt(treatmentChoice, 1, 0);
-							
-							JComboBox<String> comboBox = null;
-							TableColumn feedingCol=MorningModel.getColumnModel().getColumn(1);
-							comboBox=DosageObject.GetListOfMedication(so,treatmentChoice);
-							feedingCol.setCellEditor(new DefaultCellEditor(comboBox));		
-						}
-					}
-				}
-			}
-		});
-	}
-	*/
 	public static void AddManagementModel(JTable Model,SQLObject so){
 		JComboBox<String> treatmentBox = null;
 		TableColumn treatmentCol=Model.getColumnModel().getColumn(0);
 		treatmentBox=DosageObject.GetListOfTreatMent(so);
-		treatmentCol.setCellEditor(new DefaultCellEditor(treatmentBox));
-		
-		
-		JComboBox<Double> dosLimitBox = null;
-		TableColumn dosLimitCol=Model.getColumnModel().getColumn(3);
-		dosLimitBox=DosageObject.GetListOfDosageLimit(so,"Glucofin");
-		dosLimitCol.setCellEditor(new DefaultCellEditor(dosLimitBox));
+		treatmentCol.setCellEditor(new DefaultCellEditor(treatmentBox));		
 	}
 
 }

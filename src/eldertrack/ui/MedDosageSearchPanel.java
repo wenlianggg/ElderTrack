@@ -43,15 +43,15 @@ public class MedDosageSearchPanel extends JPanel {
 	public static String roomselected;
 	public static String timeselected;
 	private ElderData summaryDetails;
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public MedDosageSearchPanel() {
 
 		setBounds(5, 5, 975, 510);
 		setLayout(null);
-		
+
 		DosageObject.ResetDosage(so);
-		
+
 		JLabel lblDosageTrackingSystem = new JLabel("Dosage Tracking System");
 		lblDosageTrackingSystem.setForeground(UIManager.getColor("EditorPane.selectionBackground"));
 		lblDosageTrackingSystem.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -66,7 +66,7 @@ public class MedDosageSearchPanel extends JPanel {
 		add(lblRoomNumber);
 
 		//processing for room numbers
-		
+
 		List<String> roomNumberList=new ArrayList<String>();
 		try {
 			ResultSet rs;
@@ -76,9 +76,9 @@ public class MedDosageSearchPanel extends JPanel {
 			while(rs.next()){
 				roomNumberList.add(Integer.toString(rs.getInt("room")));
 			}
-			
+
 		} catch (SQLException e2) {
-			
+
 			e2.printStackTrace();
 		}
 		roomcombobox = new JComboBox<String>();
@@ -87,13 +87,13 @@ public class MedDosageSearchPanel extends JPanel {
 		roomcombobox.setBounds(277, 124, 125, 31);
 		roomcombobox.setModel(new DefaultComboBoxModel(roomNumberList.toArray()));
 		add(roomcombobox);
-		
+
 		roomcombobox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				summaryDetails=ElderData.UpdateOverview(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so);
 				if(summaryDetails!=null){
-				txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryDetails.getElderNumMale() 
-				+"\r\nTotal Female elderly:" +summaryDetails.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+summaryDetails.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+summaryDetails.getElderNumDosageNotNeeded());
+					txtpnOverview.setText("Dosage Time: "+timeCombobox.getSelectedItem().toString() + "\r\nRoom Number: "+summaryDetails.getElderRoomNumber() +"\r\nTotal number of elderly: "+summaryDetails.getElderNum() +"\r\nTotal Male elderly: " +summaryDetails.getElderNumMale() 
+					+"\r\nTotal Female elderly:" +summaryDetails.getElderNumFemale() +"\r\nTotal number of elderly that needs dosage: "+summaryDetails.getElderNumDosageNeeded() +"\r\nTotal number of elderly that don't need dosage: "+summaryDetails.getElderNumDosageNotNeeded());
 				}
 				else{
 					txtpnOverview.setText("Dosage Time: \r\nRoom Number: \r\nTotal number of elderly: \r\nTotal Male elderly: \r\nTotal Female elderly: \r\nTotal number of elderly that needs dosage: \r\nTotal number of elderly that don't need dosage: ");
@@ -139,28 +139,26 @@ public class MedDosageSearchPanel extends JPanel {
 		btnGetDosage.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		add(btnGetDosage);
 
-
-		// testing for choosing room options
-
 		btnGetDosage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(DosageObject.checkDosageNeeded(summaryDetails)==true){
-					
-					setDosageRoom(roomcombobox.getSelectedItem().toString());
-					setDosageTimeSelect(timeCombobox.getSelectedItem().toString());
-
-					if(DosageObject.checkDosageValid(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so)==false){
-						JOptionPane.showMessageDialog(null, "Dosage has already been done!");
-					}
-					else{
-						JPanel gottenDosage=new MedDosagePanel();
-						MedPanel.MedCardPanel.add(gottenDosage,MedPanel.MDOSPANEL);
-
-						CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
-						mainCards.show(MedPanel.MedCardPanel, MedPanel.MDOSPANEL);
+				if(!roomcombobox.getSelectedItem().toString().equalsIgnoreCase(" ")){
+					if(DosageObject.checkDosageNeeded(summaryDetails)==true){
+						setDosageRoom(roomcombobox.getSelectedItem().toString());
+						setDosageTimeSelect(timeCombobox.getSelectedItem().toString());
+						if(DosageObject.checkDosageValid(roomcombobox.getSelectedItem().toString(),timeCombobox.getSelectedItem().toString(),so)==false){
+							JOptionPane.showMessageDialog(null, "Dosage has already been done");
+						}
+						else{
+							JPanel gottenDosage=new MedDosagePanel();
+							MedPanel.MedCardPanel.add(gottenDosage,MedPanel.MDOSPANEL);
+							CardLayout mainCards = (CardLayout) MedPanel.MedCardPanel.getLayout();
+							mainCards.show(MedPanel.MedCardPanel, MedPanel.MDOSPANEL);
+						}
 					}
 				}
-
+				else{
+					JOptionPane.showMessageDialog(null, "Please select a room number");
+				}
 			}
 		});
 	}

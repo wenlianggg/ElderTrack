@@ -16,8 +16,6 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -25,7 +23,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
-import eldertrack.db.SQLObject;
 import eldertrack.diet.Elderly;
 import eldertrack.diet.MenuItem;
 import eldertrack.login.AccessLevel;
@@ -53,6 +50,7 @@ public class MainFrame extends JFrame {
     private MgmtSection MgmtSection;
     private MainMenuPanel MainMenu;
 	private WeatherPanel weatherPanel;
+	private AnnouncementPanel announcementPanel;
     static JPanel CardsPanel;
 	JComboBox<String> comboBox;
 	// Singleton Class Design
@@ -170,6 +168,8 @@ public class MainFrame extends JFrame {
 		if(isManagementShown()) {
 			MgmtSection = new MgmtSection();
 			CardsPanel.add(MgmtSection, MGMTPANEL);
+		}else{
+			announcementPanel = new AnnouncementPanel();
 		}
 		jpbar.setValue(40);
 
@@ -295,8 +295,17 @@ public class MainFrame extends JFrame {
 		return this.MgmtSection;
 	}
 	
+	AnnouncementPanel getAnnouncementPanel() {
+		return this.announcementPanel;
+	}
+	
 	public void setScrollText() {
-		AnnouncementPanel ap = MainFrame.getInstance().getManagementSection().getAnnouncementPanel();
+		AnnouncementPanel ap;
+		if (MgmtSection != null) {
+			ap = MainFrame.getInstance().getManagementSection().getAnnouncementPanel();
+		} else {
+			ap = getAnnouncementPanel();
+		}
 		MasterPane.remove(marqueePanel);
 		this.repaint();
 		marqueePanel = null;
