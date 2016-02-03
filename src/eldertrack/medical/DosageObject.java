@@ -92,6 +92,7 @@ public class DosageObject implements Serializable{
 		}
 		String lastDate=dateFormat.format(lastlogin);
 		String checkNowDate=dateFormat.format(currectdate);
+		
 		if(!lastDate.equalsIgnoreCase(checkNowDate)){
 			try {
 				PreparedStatement stmt  = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningtaken = ?, afternoontaken = ?, noontaken = ?");
@@ -152,21 +153,36 @@ public class DosageObject implements Serializable{
 			rs = stmt.getResultSet();
 			while(rs.next()){
 				if(TimeOfDay.equalsIgnoreCase("Morning")){
-					if(rs.getInt("morningtaken")!=0){
-						checkedDosage++;
-						totalElder++;
+					if(rs.getObject("morningdosage")!=null){
+						if(rs.getInt("morningtaken")!=0){
+							checkedDosage++;
+							totalElder++;
+						}
+						else{
+							totalElder++;
+						}
 					}
 				}
 				else if(TimeOfDay.equalsIgnoreCase("Afternoon")){
-					if(rs.getInt("afternoontaken")!=0){
-						checkedDosage++;
-						totalElder++;
+					if(rs.getObject("afternoondosage")!=null){
+						if(rs.getInt("afternoontaken")!=0){
+							checkedDosage++;
+							totalElder++;
+						}
+						else{
+							totalElder++;
+						}
 					}
 				}
 				else if(TimeOfDay.equalsIgnoreCase("Noon")){
-					if(rs.getInt("noontaken")!=0){
-						checkedDosage++;
-						totalElder++;
+					if(rs.getObject("noondosage")!=null){
+						if(rs.getInt("noontaken")!=0){
+							checkedDosage++;
+							totalElder++;
+						}
+						else{
+							totalElder++;
+						}
 					}
 				}
 			}

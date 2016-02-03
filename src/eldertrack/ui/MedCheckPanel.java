@@ -319,7 +319,6 @@ public class MedCheckPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Either fields are empty or values are invalid. Please check your entries again!");
 				}
 				else{
-
 					CheckUpObject.StoreCheckUp(NameField.getText(),CheckList.get(counter).getElderID(),reportDate,checkElder,MedCheckSearchPanel.getCheckTimeSelect());
 					CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 					CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
@@ -379,10 +378,10 @@ public class MedCheckPanel extends JPanel {
 						DisplayInformation(CheckList,counter);
 						lblElderLeft.setText("Number of Elderly left:"+numofElder);
 						JOptionPane.showMessageDialog(null, "Check up is successful");
-						TempField.setText(null);
-						BloodField.setText(null);
-						HeartField.setText(null);
-						SugarField.setText(null);
+						TempField.setText("0");
+						BloodField.setText("0");
+						HeartField.setText("0");
+						SugarField.setText("0");
 						comboEye.setSelectedItem(null);
 						comboEar.setSelectedItem(null);
 					}
@@ -391,10 +390,10 @@ public class MedCheckPanel extends JPanel {
 						CheckUpObject.UpdateCheckUpTaken(CheckList.get(counter).getElderID(),MedCheckSearchPanel.getCheckTimeSelect(),so);
 						CheckUpObject.StoreComments(CheckList.get(counter).getElderID(),textAddition.getText());
 						JOptionPane.showMessageDialog(null, "Check up is successful");
-						TempField.setText(null);
-						BloodField.setText(null);
-						HeartField.setText(null);
-						SugarField.setText(null);
+						TempField.setText("0");
+						BloodField.setText("0");
+						HeartField.setText("0");
+						SugarField.setText("0");
 						comboEye.setSelectedItem(null);
 						comboEar.setSelectedItem(null);
 						JOptionPane.showMessageDialog(null, "Check Up has been completed");	

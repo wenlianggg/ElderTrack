@@ -126,7 +126,8 @@ public class CheckUpObject  implements Serializable {
 		}
 		String lastDate=dateFormat.format(lastlogin);
 		String checkNowDate=dateFormat.format(currectdate);
-		if(!lastDate.equals(checkNowDate)){
+		
+		if(!lastDate.equalsIgnoreCase(checkNowDate)){
 			try {
 				PreparedStatement stmt  = so.getPreparedStatementWithKey("UPDATE et_elderly SET morningcheck = ?, afternooncheck = ?, nooncheck = ?");
 				stmt.setInt(1, 0);
