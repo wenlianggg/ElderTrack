@@ -333,7 +333,7 @@ public class CreatePdf{
 		    	t1.addCell(""+notesM);
 		    	t1.addCell(""+notesA);
 		    	t1.addCell(""+notesN);
-		    	t1.addCell("-");
+		    	t1.addCell("");
 			
 		    	section1.add(t1);
 		    	counterM=0;

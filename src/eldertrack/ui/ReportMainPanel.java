@@ -411,12 +411,9 @@ public class ReportMainPanel extends JPanel {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Send all reports?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
-             
-							CreatePdf.main(args);
-							SendEmails.main(args);
-							JOptionPane.showMessageDialog(null, "Reports sent.");
-						
-             
+                	CreatePdf.main(args);
+                	SendEmails.main(args);
+                	JOptionPane.showMessageDialog(null, "Reports sent.");	
                 }
 			}
 		});
