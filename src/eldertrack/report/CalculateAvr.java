@@ -118,7 +118,7 @@ public class CalculateAvr{
     		statementInsertAvr.setString(10, ""); //addComment
     		statementInsertAvr.executeUpdate();
     	} catch (SQLException e) {
-    		e.printStackTrace();
+    		// e.printStackTrace();
     	}
 		    	
     	counterM=0;			

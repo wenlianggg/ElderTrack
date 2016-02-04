@@ -196,15 +196,12 @@ public class MainFrame extends JFrame {
 	
 	void deconstructPanels() {
 		System.out.println("--------------------- DECONSTRUCTING ALL PANELS NOW! ---------------------");
-		comboBox.setVisible(false);
 		CardsPanel.remove(DietSection);
 		CardsPanel.remove(MedPanel);
 		CardsPanel.remove(ReportPanel);
 		if(isManagementShown())
 			CardsPanel.remove(MgmtSection);
 		CardsPanel.remove(MainMenu);
-		MasterPane.remove(comboBox);
-		comboBox = null;
 		DietSection = null;
 		MedPanel = null;
 		ReportPanel = null;
