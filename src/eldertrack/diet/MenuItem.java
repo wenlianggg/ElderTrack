@@ -51,7 +51,7 @@ public class MenuItem {
 			ps1.setString(1, this.name);
 			ResultSet rs1 = ps1.executeQuery();
 			if(rs1.next()) {
-				JOptionPane.showMessageDialog(null, "Meal Exists!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "Meal Exists!");
 				return;
 			}
 			PreparedStatement ps2 = TableHelper.getSQLInstance().getPreparedStatementWithKey
@@ -64,11 +64,11 @@ public class MenuItem {
 			ps2.setDate(6, new java.sql.Date(dateadded.getTime()));
 			ps2.executeUpdate();
 			refreshMap();
-			JOptionPane.showMessageDialog(null, "Meal Added!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "Meal Added!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "One of the fields are empty or invalid!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "One of the fields are empty or invalid!");
 		}
 	}
 	
@@ -92,7 +92,7 @@ public class MenuItem {
 			e.printStackTrace();
 		}
 		refreshMap();
-		JOptionPane.showMessageDialog(null, "Meal Edited!");
+		JOptionPane.showMessageDialog(MainFrame.getInstance(), "Meal Edited!");
 	}
 	
 	public void removeMenuItem() {

@@ -72,15 +72,14 @@ public class Elderly {
 		Nutrition n = SerializerSQL.retrieveNutrition(mid, so); 
 		
 		try {
-		PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_menu WHERE itemid = ?");
-		ps.setInt(1, mid);
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		m.getMealProperties().add(mp);
-		m.getMealName().add(rs.getString("name"));
-		m.getNutrition().add(n);
-		System.out.println(n.getCalories());
-		SerializerSQL.storeMeals(this.id, m, so);
+			PreparedStatement ps = so.getPreparedStatement("SELECT * FROM et_menu WHERE itemid = ?");
+			ps.setInt(1, mid);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			m.getMealProperties().add(mp);
+			m.getMealName().add(rs.getString("name"));
+			m.getNutrition().add(n);
+			SerializerSQL.storeMeals(this.id, m, so);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
