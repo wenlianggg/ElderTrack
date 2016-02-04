@@ -79,7 +79,7 @@ public class Crypto {
         String initVectorD = "ElderTRACK451462"; // 16 bytes IV
     	byte[] salt = {0x1F, 0x4E, 0x4D, 0x7A, 0x22, 0x31, 0x64, 0x5C, 0x1A};
         
-        String encrypted = encrypt(keyE.toCharArray(), salt, initVectorE, "eldertrack4321");
+        String encrypted = encrypt(keyE.toCharArray(), salt, initVectorE, "HELLO WORLD THIS IS A TEST!!!!");
         String decrypted;
 		try {
 			decrypted = new String(decrypt(keyD.toCharArray(), salt, initVectorD, encrypted));
