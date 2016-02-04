@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,7 +68,7 @@ public class ReportMainPanel extends JPanel {
 		String[] args = null;
 		try {
 			MedicalData.main(args);
-	//		CalculateAvr.main(args);
+			CalculateAvr.main(args);
 
 		} catch (ClassNotFoundException | IOException e2) {
 			e2.printStackTrace();
@@ -412,24 +411,9 @@ public class ReportMainPanel extends JPanel {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Send all reports?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
-                	try {
-						rsChkFile.absolute(1);
-					
-						Blob report = rsChkFile.getBlob("report");
-						
-						if(report!=null) { 
-							JOptionPane.showMessageDialog(null, "Reports have already been sent.");
-						}
-						else {
-							@SuppressWarnings("unused")
-							CreatePdf pdfs = new CreatePdf();
-							@SuppressWarnings("unused")
-							SendEmails emails = new SendEmails();   
-							JOptionPane.showMessageDialog(null, "Reports sent.");
-						}
-                	} catch (SQLException e) {
-                		e.printStackTrace();
-                	}                	
+                	CreatePdf.main(args);
+                	SendEmails.main(args);
+                	JOptionPane.showMessageDialog(null, "Reports sent.");	
                 }
 			}
 		});
