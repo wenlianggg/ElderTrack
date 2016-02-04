@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -412,22 +411,11 @@ public class ReportMainPanel extends JPanel {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Send all reports?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
-                	try {
-						rsChkFile.absolute(1);
-					
-						Blob report = rsChkFile.getBlob("report");
-						
-						if(report!=null) { 
-							JOptionPane.showMessageDialog(null, "Reports have already been sent.");
-						}
-						else {
+             
 							CreatePdf.main(args);
 							SendEmails.main(args);
 							JOptionPane.showMessageDialog(null, "Reports sent.");
-						}
-                	} catch (SQLException e) {
-                		e.printStackTrace();
-                	} 
+						
              
                 }
 			}
