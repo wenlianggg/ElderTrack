@@ -412,7 +412,7 @@ public class ReportMainPanel extends JPanel {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Send all reports?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
-                /*	try {
+                	try {
 						rsChkFile.absolute(1);
 					
 						Blob report = rsChkFile.getBlob("report");
@@ -421,21 +421,14 @@ public class ReportMainPanel extends JPanel {
 							JOptionPane.showMessageDialog(null, "Reports have already been sent.");
 						}
 						else {
-							@SuppressWarnings("unused")
-							CreatePdf pdfs = new CreatePdf();
-							@SuppressWarnings("unused")
-							SendEmails emails = new SendEmails();   
+							CreatePdf.main(args);
+							SendEmails.main(args);
 							JOptionPane.showMessageDialog(null, "Reports sent.");
 						}
                 	} catch (SQLException e) {
                 		e.printStackTrace();
-                	} */        
-                	
-                	@SuppressWarnings("unused")
-					CreatePdf pdfs = new CreatePdf();
-					@SuppressWarnings("unused")
-					SendEmails emails = new SendEmails();   
-					JOptionPane.showMessageDialog(null, "Reports sent.");
+                	} 
+             
                 }
 			}
 		});
