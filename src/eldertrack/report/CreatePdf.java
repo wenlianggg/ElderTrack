@@ -30,6 +30,8 @@ public class CreatePdf{
 	private static String date;
 	@SuppressWarnings("unused")
 	private static String checktime;
+	private static String addComment;
+
 	private static double tempM;
 	private static double bloodM;
 	private static double heartM;
@@ -58,26 +60,16 @@ public class CreatePdf{
 	private static double bloodDTot;
 	private static double heartDTot;
 	private static double sugarDTot;
-	private static double tempMTot;
-	private static double bloodMTot;
-	private static double heartMTot;
-	private static double sugarMTot;
-	private static PdfPCell c12;
-	private static PdfPCell c13;
-	private static PdfPCell c14;
-	private static PdfPCell c15;
 	private static double tempMAvr;
 	private static double bloodMAvr;
 	private static double heartMAvr;
 	private static double sugarMAvr;
+	@SuppressWarnings("unused")
 	private static boolean eyeD;
 	private static String eyeDString;
+	@SuppressWarnings("unused")
 	private static boolean earD;
 	private static String earDString;
-	private static boolean eyeMAvr;
-	private static PdfPCell c16;
-	private static PdfPCell c17;
-	private static boolean earMAvr;
 	private static String eyeMAvrString;
 	private static String earMAvrString;
 	private static String notesA;
@@ -87,6 +79,10 @@ public class CreatePdf{
 	private static int counterD;
 	private static double sugarDAvr;
 	private static double heartDAvr;
+	private static double bloodDAvr;
+	private static double tempDAvr;
+	private static boolean eyeMAvr;
+	private static boolean earMAvr;
 	
 	static Date dNow = new Date();
     static SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
@@ -95,22 +91,39 @@ public class CreatePdf{
     static java.sql.Timestamp timestamp = new java.sql.Timestamp(calendar.getTime().getTime());
     
 	static SQLObject so = new SQLObject();
-    static ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, date, checktime");
-    static ResultSet rsAvr=so.getResultSet("SELECT * FROM et_reportAvr");
-    
-    static PreparedStatement statementInsertAvr = so.getPreparedStatementWithKey
-    		("INSERT INTO et_reportAvr (name,id,date,tempMAvr,bloodMAvr,heartMAvr,sugarMAvr,eyeMAvr,earMAvr) values(?,?,?,?,?,?,?,?,?)");
-    
+   
     ResultSet rsReport = so.getResultSet("SELECT * FROM et_report");
     static PreparedStatement statementUpdateReport = so.getPreparedStatementWithKey
     		("INSERT INTO et_report (name,id,timestamp,report) values(?,?,?,?)");
 	
-	private static double bloodDAvr;
-	private static double tempDAvr;
+	
+/////////////////////////////////
     
+    public static void main(String[] args){
+ 	   try {
+ 			ResultSet rsLoadID = so.getResultSet("SELECT id FROM et_reportTemp ORDER BY id");
+ 						
+ 			int doneId=0;
+			
+			while(rsLoadID.next()) {
+				int loadId = rsLoadID.getInt("id");
+				if (doneId!=loadId){
+					CreateReport(loadId);
+					doneId=loadId;
+				}
+			}
+ 				
+ 		} catch (SQLException | ClassNotFoundException | IOException e) {
+ 			e.printStackTrace();	
+ 			}
+ 		
+    }
 	
 /////////////////////////////////
     public static void CreateReport (int id) throws SQLException, IOException, ClassNotFoundException {
+    	PreparedStatement statement = so.getPreparedStatementWithKey("SELECT * FROM et_reportTemp WHERE id = ?");
+    	statement.setInt(1, id);
+    	ResultSet rsTmp = statement.executeQuery();
     	
 		try{
 			Document document = new Document();
@@ -123,9 +136,7 @@ public class CreatePdf{
  		   
 			Chapter chapter1 = new Chapter(title1, 1);
 			chapter1.setNumberDepth(0);
- 
-			System.out.println("open pdf");
-			
+ 			
 			document.add(chapter1);
 			Paragraph title11 = new Paragraph("Medical History", 
 					FontFactory.getFont(FontFactory.HELVETICA, 20, Font.BOLD));
@@ -134,42 +145,13 @@ public class CreatePdf{
 			Paragraph someSectionText = new Paragraph("Weekly Checkup: ", 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 			section1.add(someSectionText);
-			
-			System.out.println("start while loop");
-			
+						
 			while (rsTmp.next()){
-				rsTmp.absolute(1);
-		    	name=rsTmp.getString("name");
-		    	date=rsTmp.getString("date");
-		    	checktime=rsTmp.getString("checktime");
-		    	tempA=rsTmp.getDouble("temp");
-		    	bloodA=rsTmp.getDouble("blood");
-		    	heartA=rsTmp.getDouble("heart");
-		    	sugarA=rsTmp.getDouble("sugar");
-		    	eyeA=rsTmp.getBoolean("eye");
-		    	earA=rsTmp.getBoolean("ear");
-		    	notesA=rsTmp.getString("notes");
-		    	
-		    	if (eyeA==true)
-		    		eyeAString = "Yes";
-		    	else
-		    		eyeAString="No";
-							
-		    	if (earA==true)
-		    		earAString = "Yes";
-		    	else
-		    		earAString="No";
-		    
-		    	tempDTot+=tempA;
-		    	bloodDTot+=bloodA;
-		    	heartDTot+=heartA;
-		    	sugarDTot+=sugarA;
-		    	counterD++;
-		    	
-		    	System.out.println("absolute 1" +id);
-		    	
-		///////////////////////////			
-				rsTmp.absolute(2);
+	    		counterM++;
+	    		}			
+	    	
+	    	for (int i=1; i<counterM+1; i++){
+	    		rsTmp.absolute(i);
 				tempM=rsTmp.getDouble("temp");
 				bloodM=rsTmp.getDouble("blood");
 				heartM=rsTmp.getDouble("heart");
@@ -194,12 +176,36 @@ public class CreatePdf{
 		    	sugarDTot+=sugarM;
 		    	counterD++;
 		    	
-		    	System.out.println("absolute 2" +id);
-
-
-		///////////////////////////////		
-				rsTmp.absolute(3);
-				tempN=rsTmp.getDouble("temp");
+		    	++i;		    	
+		    	name=rsTmp.getString("name");
+		    	date=rsTmp.getString("date");
+		    	tempA=rsTmp.getDouble("temp");
+		    	bloodA=rsTmp.getDouble("blood");
+		    	heartA=rsTmp.getDouble("heart");
+		    	sugarA=rsTmp.getDouble("sugar");
+		    	eyeA=rsTmp.getBoolean("eye");
+		    	earA=rsTmp.getBoolean("ear");
+		    	notesA=rsTmp.getString("notes");
+		    	
+		    	if (eyeA==true)
+		    		eyeAString = "Yes";
+		    	else
+		    		eyeAString="No";
+							
+		    	if (earA==true)
+		    		earAString = "Yes";
+		    	else
+		    		earAString="No";
+		    
+		    	tempDTot+=tempA;
+		    	bloodDTot+=bloodA;
+		    	heartDTot+=heartA;
+		    	sugarDTot+=sugarA;
+		    	
+		    	
+		    	++i;
+		    	rsTmp.absolute(i);
+		    	tempN=rsTmp.getDouble("temp");
 				bloodN=rsTmp.getDouble("blood");
 				heartN=rsTmp.getDouble("heart");
 				sugarN=rsTmp.getDouble("sugar");
@@ -222,12 +228,7 @@ public class CreatePdf{
 		    	heartDTot+=heartN;
 		    	sugarDTot+=sugarN;
 		    	counterD++;
-		    	
-		    	System.out.println("absolute 3" +id);
-
-		    	
-		//////////////////////////////////
-		    	
+	///////////////////////////////////	    	
 		    	tempDAvr=tempDTot/counterD;
 		    	bloodDAvr=bloodDTot/counterD;
 		    	heartDAvr=heartDTot/counterD;
@@ -251,11 +252,7 @@ public class CreatePdf{
 		    		earDString="No";
 		    	}
 		    	
-		    	System.out.println("cal avr day");
-		    	
-		    	
-		///////////////////////////
-					
+//////////////////////////////////////////////			
 		    	someSectionText = new Paragraph(date, 
 		    			FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 		    	section1.add(someSectionText);
@@ -264,9 +261,7 @@ public class CreatePdf{
 		    	t1.setWidthPercentage(100);
 		    	t1.setSpacingBefore(25); //above table
 		    	t1.setSpacingAfter(25); //below table
-		    	
-		    	System.out.println("open day table");
-			
+		    				
 		    	PdfPCell c11 = new PdfPCell(new Phrase("Time of Day",
 		    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
 		    	PdfPCell c12 = new PdfPCell(new Phrase("Temperature (deg Celcius)",
@@ -341,62 +336,59 @@ public class CreatePdf{
 		    	t1.addCell("-");
 			
 		    	section1.add(t1);
-			
-		    	tempMTot+=tempDTot;
-		    	bloodMTot+=bloodDTot;
-		    	heartMTot+=heartDTot;
-		    	sugarMTot+=sugarDTot;
-		    	
-		    	if (eyeD==true){
-		    		eyeMAvr=true;
-		    		eyeMAvrString="Yes";
-		    	}
-		    	else{
-		    		eyeMAvr=false;
-		    		eyeMAvrString="No";
-		    	}
-		    	if (earD==true){
-		    		earMAvr=true;
-		    		earMAvrString="Yes";
-		    	}
-		    	else{
-		    		earMAvr=false;
-		    		earMAvrString="Yes";
-		    	}
-		    	counterM++;
+		    	counterM=0;
 			}
 
-/////////////////////
+/////////////////////end day tables
 			
-			tempMAvr=tempMTot/counterM;
-			bloodMAvr=bloodMTot/counterM;
-			heartMAvr=heartMTot/counterM;
-			sugarMAvr=sugarMTot/counterM;
+			PreparedStatement statement3 = so.getPreparedStatementWithKey
+					("SELECT tempMAvr, bloodMAvr, heartMAvr, sugarMAvr, eyeMAvr, earMAvr, addComment FROM et_reportAvr WHERE id = ?");
+	    	statement3.setInt(1, id);
+	    	ResultSet rsGetMAvr = statement3.executeQuery();
+	    	rsGetMAvr.next();
+    		tempMAvr=rsGetMAvr.getDouble("tempMAvr");
+    		bloodMAvr=rsGetMAvr.getDouble("bloodMAvr");
+    		heartMAvr=rsGetMAvr.getDouble("heartMAvr");
+    		sugarMAvr=rsGetMAvr.getDouble("sugarMAvr");
+    		eyeMAvr=rsGetMAvr.getBoolean("eyeMAvr");
+    		earMAvr=rsGetMAvr.getBoolean("earMAvr");
+    		addComment=rsGetMAvr.getString("addComment");
+    		
+    		if (eyeMAvr==true){
+	    		eyeMAvrString="Yes";
+	    	}
+	    	else{
+	    		eyeMAvrString="No";
+	    	}
+	    	if (earMAvr==true){
+	    		earMAvrString="Yes";
+	    	}
+	    	else{
+	    		earMAvrString="Yes";
+	    	}
 			
-			statementInsertAvr.setString(1, name);
-			statementInsertAvr.setInt(2, id);
-			statementInsertAvr.setString(3, date);
-			statementInsertAvr.setDouble(4,tempMAvr);
-			statementInsertAvr.setDouble(5, bloodMAvr);
-			statementInsertAvr.setDouble(6, heartMAvr);
-			statementInsertAvr.setDouble(7, sugarMAvr);
-			statementInsertAvr.setBoolean(8, eyeMAvr);
-			statementInsertAvr.setBoolean(9, earMAvr);
-			statementInsertAvr.executeUpdate();
 			
-			System.out.println("store data");
-			
-	
 			someSectionText = new Paragraph("Average per Month: ", 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 			section1.add(someSectionText);
 			
-			System.out.println("open month table");
-	
 			PdfPTable t2 = new PdfPTable(2);
 			t2.setWidthPercentage(100);
 			t2.setSpacingBefore(25); //above table
 			t2.setSpacingAfter(25); //below table
+			
+			PdfPCell c12 = new PdfPCell(new Phrase("Temperature (deg Celcius)",
+	    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));  
+	    	PdfPCell c13 = new PdfPCell(new Phrase("Blood Pressure",
+	    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
+	    	PdfPCell c14 = new PdfPCell(new Phrase("Heart Rate",
+	    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
+	    	PdfPCell c15 = new PdfPCell(new Phrase("Sugar Level",
+	    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
+	    	PdfPCell c16 = new PdfPCell(new Phrase("Eye Infection",
+	    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
+	    	PdfPCell c17 = new PdfPCell(new Phrase("Ear Infection",
+	    			FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD)));
 	
 			t2.addCell(c12);
 			t2.addCell(""+tempMAvr);
@@ -418,14 +410,16 @@ public class CreatePdf{
 	
 			section1.add(t2);
 			
-////////////////////
-  
+////////////////////	    	
+			
+			
+			
 			someSectionText = new Paragraph("Additional Comments: ", 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 
 			section1.add(someSectionText);
 			
-			someSectionText = new Paragraph("" +rsAvr.getString("addComments"), 
+			someSectionText = new Paragraph("" +addComment, 
 					FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD));
 	
 			document.add(section1);
@@ -445,20 +439,4 @@ public class CreatePdf{
 		statementUpdateReport.setBinaryStream(4, in, (int)blob.length()); 
 		statementUpdateReport.executeUpdate();
     }
-    
-   public static void main(String[] args){
-	   try {
-			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_reportTemp ORDER BY name,date");
-						
-			while(rsLoadID.next()) {
-				int id = rsLoadID.getInt("id");
-				CreateReport(id);
-				System.out.println("load " +id);
-			}
-				
-		} catch (SQLException | ClassNotFoundException | IOException e) {
-			e.printStackTrace();	
-			}
-		
-   }
 }

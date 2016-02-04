@@ -31,10 +31,15 @@ public class MedicalData implements Serializable{
 		try {
 			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_elderly_checkup ORDER BY id,name,date");
 						
+			int doneId=0;
+			
 			while(rsLoadID.next()) {
 				int loadId = rsLoadID.getInt("id");
-				RetrieveCheckUp(loadId);
-			}		
+				if (doneId!=loadId){
+					RetrieveCheckUp(loadId);
+					doneId=loadId;
+				}
+			}	
 				
 		} catch (SQLException e) {
 			e.printStackTrace();	

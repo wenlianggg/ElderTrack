@@ -69,7 +69,7 @@ public class ReportMainPanel extends JPanel {
 		String[] args = null;
 		try {
 			MedicalData.main(args);
-	//		CalculateAvr.main(args);
+			CalculateAvr.main(args);
 
 		} catch (ClassNotFoundException | IOException e2) {
 			e2.printStackTrace();
@@ -412,7 +412,7 @@ public class ReportMainPanel extends JPanel {
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Send all reports?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
                 	
-                	try {
+                /*	try {
 						rsChkFile.absolute(1);
 					
 						Blob report = rsChkFile.getBlob("report");
@@ -429,7 +429,13 @@ public class ReportMainPanel extends JPanel {
 						}
                 	} catch (SQLException e) {
                 		e.printStackTrace();
-                	}                	
+                	} */        
+                	
+                	@SuppressWarnings("unused")
+					CreatePdf pdfs = new CreatePdf();
+					@SuppressWarnings("unused")
+					SendEmails emails = new SendEmails();   
+					JOptionPane.showMessageDialog(null, "Reports sent.");
                 }
 			}
 		});
