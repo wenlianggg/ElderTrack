@@ -8,7 +8,7 @@ public class LDBConfig {
 	static String port = "3306";
 	static String schema = "eldertrack";
 	static String dbuser = "eldertrackadmin";
-	public static final String dbencrypted = "cBZbw9N4H7p6YAPXv4z5/w==";
+	public static final String dbencrypted = "MBka09M3Dum8RKwFGy2xFw==";
 	static String dbpw = "";
 	static String url = "jdbc:mysql://" + hostname + ":" + port + "/" + schema + "?useSSL=false";
 	

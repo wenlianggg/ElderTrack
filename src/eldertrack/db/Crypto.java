@@ -24,14 +24,14 @@ public class Crypto {
         	
         	// Get key from password provided
         	SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-        	KeySpec spec = new PBEKeySpec(password, salt, 65536, 256);
+        	KeySpec spec = new PBEKeySpec(password, salt, 65536, 128);
         	SecretKey tmp = factory.generateSecret(spec);
         	SecretKeySpec secret = new SecretKeySpec(tmp.getEncoded(), "AES");
         	
         	// Get byte array from IV
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
             
-            // Magical encryption happens here (AES256)
+            // Magical encryption happens here (AES-128)
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, secret, iv);
             byte[] encrypted = cipher.doFinal(text.getBytes());
@@ -50,14 +50,14 @@ public class Crypto {
         	
         	// Get key from password provided
            	SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-        	KeySpec spec = new PBEKeySpec(password, salt, 65536, 256);
+        	KeySpec spec = new PBEKeySpec(password, salt, 65536, 128);
         	SecretKey tmp = factory.generateSecret(spec);
         	SecretKeySpec secret = new SecretKeySpec(tmp.getEncoded(), "AES");
         	
         	// Get byte array from IV
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
             
-            /// Magical cryptography happens here (AES256)
+            /// Magical cryptography happens here (AES-128)
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, secret, iv);
 
@@ -79,7 +79,7 @@ public class Crypto {
         String initVectorD = "ElderTRACK451462"; // 16 bytes IV
     	byte[] salt = {0x1F, 0x4E, 0x4D, 0x7A, 0x22, 0x31, 0x64, 0x5C, 0x1A};
         
-        String encrypted = encrypt(keyE.toCharArray(), salt, initVectorE, "HELLO WORLDY");
+        String encrypted = encrypt(keyE.toCharArray(), salt, initVectorE, "eldertrack4321");
         String decrypted;
 		try {
 			decrypted = new String(decrypt(keyD.toCharArray(), salt, initVectorD, encrypted));

@@ -20,7 +20,7 @@ public class SQLObject {
 	private Connection con;
 	private static String url = "jdbc:mysql://eldertrackdb.ctfjtggc5l0j.ap-southeast-1.rds.amazonaws.com:3306/eldertrack";
 	private static String dbuser = "eldertrackadmin";
-	public static final String dbencrypted = "cBZbw9N4H7p6YAPXv4z5/w==";
+	public static final String dbencrypted = "MBka09M3Dum8RKwFGy2xFw==";
 	private static String dbpw = "";
 
 	public SQLObject() {
