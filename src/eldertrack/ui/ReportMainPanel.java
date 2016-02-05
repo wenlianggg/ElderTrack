@@ -8,9 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -33,6 +35,7 @@ import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
 import eldertrack.misc.TableHelper;
+import eldertrack.report.CalculateAvr;
 import eldertrack.report.CreatePdf;
 import eldertrack.report.MedicalData;
 import eldertrack.report.SendEmails;
@@ -52,13 +55,25 @@ public class ReportMainPanel extends JPanel {
 	Date dNow = new Date( );
     SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
     
-    ResultSet rsAvr = so.getResultSet("SELECT name, addComment FROM et_reportAvr" );
-	PreparedStatement statementInsertComment = so.getPreparedStatementWithKey
-			("UPDATE et_reportAvr SET addComments=? WHERE name =?, id=?");
-	ResultSet chkFile = so.getResultSet("SELECT report FROM et_report");
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	Date date = new Date();
+	String reportDate=dateFormat.format(date);
+       
+	ResultSet rsChkFile = so.getResultSet("SELECT report FROM et_report");
+	protected String table_clicked;
+	protected String add1;
 	
 	// Constructor
 	ReportMainPanel() {
+		String[] args = null;
+		try {
+			MedicalData.main(args);
+			CalculateAvr.main(args);
+
+		} catch (ClassNotFoundException | IOException e2) {
+			e2.printStackTrace();
+		}
+		
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 
@@ -66,15 +81,6 @@ public class ReportMainPanel extends JPanel {
 		tableScrollPane.setViewportBorder(null);
 		tableScrollPane.setBounds(10, 130, 283, 529);
 		add(tableScrollPane);
-
-		DefaultTableModel allEldersData;
-		allEldersData = TableHelper.getElderlyBasic("");
-		elderDataTable = new JTable(allEldersData);
-		elderDataTable.getColumnModel().getColumn(0).setPreferredWidth(36);
-		tableScrollPane.setViewportView(elderDataTable);
-		
-		@SuppressWarnings("unused")
-		MedicalData elderList = new MedicalData();
 		
 		lblReportLabel = new JLabel("ElderTrack Report Generation");
 		lblReportLabel.setForeground(SystemColor.textHighlight);
@@ -279,19 +285,100 @@ public class ReportMainPanel extends JPanel {
 		txtrAddComment.setBounds(345, 343, 297, 99);
 		panel.add(txtrAddComment);
 		
+////////////////////////////
+		
+		DefaultTableModel allEldersData;
+		allEldersData = TableHelper.getElderlyBasic("");
+		elderDataTable = new JTable(allEldersData);
+		elderDataTable.getColumnModel().getColumn(0).setPreferredWidth(36);
+		elderDataTable.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				try{
+					int row = elderDataTable.getSelectedRow();
+					String table_clicked = (elderDataTable.getModel().getValueAt(row, 0).toString());
+					String sql = "SELECT * FROM et_elderly WHERE id=?";
+					ResultSet rs = so.getResultSet(sql, table_clicked);	
+					
+					ResultSet rsAvr = so.getResultSet("SELECT * FROM et_reportAvr WHERE id=?", table_clicked);
+					
+				    
+					while(rs.next()){
+						String add1 = rs.getString("id");
+						lblElderid.setText(add1);
+						
+						String add2 = rs.getString("name");
+						lblInfoName.setText(add2);
+								
+						Date dob = rs.getDate("dob");
+						LocalDate doblocaldate = LocalDateTime.ofInstant
+							(Instant.ofEpochMilli(dob.getTime()), ZoneId.systemDefault()).toLocalDate();
+						Integer age = (int) doblocaldate.until(LocalDate.now(), ChronoUnit.YEARS);
+						String add3 = Integer.toString(age);
+						lblElderAge.setText(add3);
+						
+						String add4 = rs.getString("room");
+						lblRoomNumber.setText(add4);
+						
+						String add5 = rs.getString("nric");
+						lblNRIC.setText(add5);
+					}
+					while(rsAvr.next()){
+						double add6 =rsAvr.getDouble("tempMAvr");
+						txtrTemp.setText(add6 +"\u00b0C");
+						
+						double add7 =rsAvr.getDouble("bloodMAvr");
+						txtrBP.setText(add7 +" mmHg");
+						
+						double add8 =rsAvr.getDouble("heartMAvr");
+						txtrHeartRate.setText(add8 +" bpm");
+						
+						int add9 =rsAvr.getInt("sugarMAvr");
+						txtrSugarLevel.setText(add9 +" mmol/L");
+						
+						@SuppressWarnings("unused")
+						boolean add10 =rsAvr.getBoolean("eyeMAvr");
+						String add10S = "";
+						if (add10=true)
+							add10S="Yes";
+						else
+							add10S="No";
+						txtrEye.setText(add10S);
+						
+						@SuppressWarnings("unused")
+						boolean add11 =rsAvr.getBoolean("earMAvr");
+						String add11S = "";
+						if (add11=true)
+							add11S="Yes";
+						else
+							add11S="No";
+						txtrEar.setText(add11S);
+						
+						}
+					}catch(Exception e1){
+						JOptionPane.showMessageDialog(null, "Check up details not found, complete check ups first");
+					}
+				}
+			});
+		tableScrollPane.setViewportView(elderDataTable);
+		
+	///////////////////////////////////////////////////
+		
 		JButton btnSaveChanges = new JButton("Save Changes");
 		btnSaveChanges.setBounds(309, 576, 215, 83);
 		add(btnSaveChanges);
 		btnSaveChanges.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent arg0) {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Save changes?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                	try {
-						statementInsertComment.setString(1, txtrAddComment.getText());
-						statementInsertComment.setString(2, lblInfoName.getText());
-						statementInsertComment.setString(3, lblElderid.getText());
-						statementInsertComment.executeUpdate();
+                	String addComment = txtrAddComment.getText();
+                	try {                							
+                		PreparedStatement statementUpdate = so.getPreparedStatementWithKey
+                				("UPDATE et_reportAvr SET addComment=? WHERE id=?");
+                		statementUpdate.setString(1, addComment);
+                		statementUpdate.setString(2, add1);
+						
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -323,16 +410,10 @@ public class ReportMainPanel extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Send all reports?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
-                	if(chkFile!=null) { 
-                		JOptionPane.showMessageDialog(null, "Reports have already been sent.");
-                	}
-                	else {
-                		@SuppressWarnings("unused")
-                		CreatePdf pdfs = new CreatePdf();
-                		@SuppressWarnings("unused")
-                		SendEmails emails = new SendEmails();   
-                    	JOptionPane.showMessageDialog(null, "Reports sent.");
-                	}
+                	
+                	CreatePdf.main(args);
+                	SendEmails.main(args);
+                	JOptionPane.showMessageDialog(null, "Reports sent.");	
                 }
 			}
 		});
@@ -346,8 +427,7 @@ public class ReportMainPanel extends JPanel {
 					Integer selectedelderly = Integer.parseInt(elderDataTable.getValueAt(elderDataTable.getSelectedRow(), 0).toString());
 					CardLayout mainCards = (CardLayout) MainFrame.CardsPanel.getLayout();
 					mainCards.show(MainFrame.CardsPanel, MainFrame.MGMTPANEL);
-					MgmtPanel mgp = MainFrame.getInstance().getManagementPanel();
-					JTable jtb = (JTable) mgp.getComponentAt(200, 200).getComponentAt(50, 50).getComponentAt(50, 50).getComponentAt(50, 50);
+					JTable jtb = MainFrame.getInstance().getManagementPanel().getElderlyTable();
 					jtb.getSelectionModel().setSelectionInterval(selectedelderly, selectedelderly);
 				} else
 					JOptionPane.showMessageDialog(null, "Please select an elderly before proceeding!");
@@ -365,75 +445,7 @@ public class ReportMainPanel extends JPanel {
 		});
 
 //////////////////////////////////////
+		
 	
-	elderDataTable.addMouseListener(new MouseAdapter() {
-		public void mouseClicked(MouseEvent e) {
-			try{
-				int row = elderDataTable.getSelectedRow();
-				String table_clicked = (elderDataTable.getModel().getValueAt(row, 0).toString());
-				String sql = "SELECT * FROM et_elderly WHERE id=?";
-				ResultSet rs = so.getResultSet(sql, table_clicked);
-				ResultSet rsAvr = so.getResultSet("SELECT tempMAvr, bloodMAvr, heartMAvr,"
-						+ "sugarMAvr, eyeMAvr, earMAvr FROM et_reportAvr WHERE name=?");
-				
-				while(rs.next()){
-					String add1 = rs.getString("id");
-					lblElderid.setText(add1);
-					
-					String add2 = rs.getString("name");
-					lblInfoName.setText(add2);
-							
-					Date dob = rs.getDate("dob");
-					LocalDate doblocaldate = LocalDateTime.ofInstant
-						(Instant.ofEpochMilli(dob.getTime()), ZoneId.systemDefault()).toLocalDate();
-					Integer age = (int) doblocaldate.until(LocalDate.now(), ChronoUnit.YEARS);
-					String add3 = Integer.toString(age);
-					lblElderAge.setText(add3);
-					
-					String add4 = rs.getString("room");
-					lblRoomNumber.setText(add4);
-					
-					String add5 = rs.getString("nric");
-					lblNRIC.setText(add5);
-					
-					((PreparedStatement) rsAvr).setString(1, rs.getString(add2));
-					((PreparedStatement) rsAvr).executeQuery();
-					
-					double add6 =rsAvr.getDouble("tempMAvr");
-					txtrTemp.setText(add6 +"\u00b0C");
-					
-					double add7 =rsAvr.getDouble("bloodMAvr");
-					txtrBP.setText(add7 +" mmHg");
-					
-					double add8 =rsAvr.getDouble("heartMonthAvr");
-					txtrHeartRate.setText(add8 +" bpm");
-					
-					int add9 =rsAvr.getInt("sugarMonthAvr");
-					txtrSugarLevel.setText(add9 +" mmol/L");
-					
-					@SuppressWarnings("unused")
-					boolean add10 =rsAvr.getBoolean("eyeMAvr");
-					String add10S = "";
-					if (add10=true)
-						add10S="Yes";
-					else
-						add10S="No";
-					txtrEye.setText(add10S);
-					
-					@SuppressWarnings("unused")
-					boolean add11 =rsAvr.getBoolean("earMAvr");
-					String add11S = "";
-					if (add11=true)
-						add11S="Yes";
-					else
-						add11S="No";
-					txtrEye.setText(add11S);
-					
-					}
-				}catch(Exception e1){
-					JOptionPane.showMessageDialog(null, e1);
-				}
-			}
-		});
 	}
 }	

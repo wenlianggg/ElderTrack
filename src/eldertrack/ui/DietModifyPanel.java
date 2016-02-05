@@ -335,10 +335,10 @@ public class DietModifyPanel extends JPanel implements Presentable {
 			eldermap.get(this.currentElderly).getMeals().setNutrition(mealid, n);
 			Meals m = eldermap.get(this.currentElderly).getMeals();
 			SerializerSQL.storeMeals(this.currentElderly, m, TableHelper.getSQLInstance());
-			JOptionPane.showMessageDialog(null, "Changes were saved successfully!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "Changes were saved successfully!");
 		System.out.println("Saved meal into database!");
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "ERROR: Please check that all your inputs are correct!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "ERROR: Please check that all your inputs are correct!");
 		}
 	}
 	
@@ -347,7 +347,7 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		eldermap = Elderly.getElderlyMap();
 		eldermap.get(this.currentElderly).getMeals().removeMeal(mealid);
 		SerializerSQL.storeMeals(this.currentElderly, eldermap.get(this.currentElderly).getMeals(), Meals.getSQLInstance());
-		JOptionPane.showMessageDialog(null, "Meal Removed!");
+		JOptionPane.showMessageDialog(MainFrame.getInstance(), "Meal Removed!");
 
 		// Refresh table model
 		presentData(this.currentElderly);

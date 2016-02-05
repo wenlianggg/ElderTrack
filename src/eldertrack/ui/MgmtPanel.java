@@ -596,7 +596,7 @@ public class MgmtPanel extends JPanel {
 						elderlyAgeValue.setText(age);	
 						}
 					}catch(Exception e1){
-						JOptionPane.showMessageDialog(null, e1);
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), e1);
 					}
 			}
 		});
@@ -635,7 +635,7 @@ public class MgmtPanel extends JPanel {
 			confirmAddElderly.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to add?");
+					int dialogResult = JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Are you sure you want to add?");
 					if (dialogResult == JOptionPane.YES_OPTION){
 						try{
 						String birthString = (elderlyYear.getSelectedItem() + "-" + elderlyMonth.getSelectedItem() + "-" + elderlyDay.getSelectedItem());
@@ -647,7 +647,7 @@ public class MgmtPanel extends JPanel {
 						boolean empty = ManagementObject.elderlyEmptyFields(ep, elderlyYear.getSelectedItem().toString(), elderlyMonth.getSelectedItem().toString(), elderlyDay.getSelectedItem().toString());
 						
 						if(empty == true){
-							JOptionPane.showMessageDialog(null, "One or more of the fields are empty! Please check your entries!");
+							JOptionPane.showMessageDialog(MainFrame.getInstance(), "One or more of the fields are empty! Please check your entries!");
 						}else{
 						PreparedStatement ps1 = so.getPreparedStatement("SELECT bed, nric FROM et_elderly WHERE room=?");
 						ps1.setString(1, ep.getRoom());
@@ -674,7 +674,7 @@ public class MgmtPanel extends JPanel {
 						//Clear used fields
 						clearAllFields();
 						
-						JOptionPane.showMessageDialog(null, "Person has successfully been added to database!");
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), "Person has successfully been added to database!");
 						}
 						if(addElderly.isVisible() == false){
 							confirmAddElderly.setVisible(false);
@@ -724,7 +724,7 @@ public class MgmtPanel extends JPanel {
 			confirmAddStaff.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to add this staff?");
+					int dialogResult = JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Are you sure you want to add this staff?");
 					if(dialogResult == JOptionPane.YES_OPTION){
 						try{
 							String birthString = (staffYear.getSelectedItem() + "-" + staffMonth.getSelectedItem() + "-" + staffDay.getSelectedItem());
@@ -738,7 +738,7 @@ public class MgmtPanel extends JPanel {
 										staffYear.getSelectedItem().toString(), staffMonth.getSelectedItem().toString(), 
 										staffDay.getSelectedItem().toString());
 								if(empty == true){
-									JOptionPane.showMessageDialog(null, "One or more fields are empty! Please check your entries!");
+									JOptionPane.showMessageDialog(MainFrame.getInstance(), "One or more fields are empty! Please check your entries!");
 									System.out.println("Empty fields detected! Discontinuing update.");
 								}else{
 								// Obtain char array
@@ -759,13 +759,13 @@ public class MgmtPanel extends JPanel {
 							boolean validNric = NRICUtils.validate(sp.getNric());
 							
 							if(dupeNric == true){
-								JOptionPane.showMessageDialog(null,"There are duplicate NRICS! Please check your entries!");
+								JOptionPane.showMessageDialog(MainFrame.getInstance(),"There are duplicate NRICS! Please check your entries!");
 							}else if(validNric == false){
-								JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
+								JOptionPane.showMessageDialog(MainFrame.getInstance(), "That is not a valid NRIC! Please check your entry!");
 							}else{
 								// Executes the update and adds staff member to the database
 								ManagementObject.executeAddStaff(sp, salt);
-								JOptionPane.showMessageDialog(null,"New staff has been successfully added!");
+								JOptionPane.showMessageDialog(MainFrame.getInstance(),"New staff has been successfully added!");
 								
 								if(confirmAddStaff.isVisible() == true){
 									confirmAddStaff.setVisible(false);
@@ -796,7 +796,7 @@ public class MgmtPanel extends JPanel {
 			staffSave.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
+					int dialogResult = JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Are you sure you want to save the data?");
 							if(dialogResult == JOptionPane.YES_OPTION){
 								try{
 									String birthString = (staffYear.getSelectedItem() + "-" + staffMonth.getSelectedItem() + "-" + staffDay.getSelectedItem());
@@ -807,16 +807,16 @@ public class MgmtPanel extends JPanel {
 									StaffPerson sp = createNewStaffObj(birthString, "");
 									
 									if(empty == true){
-										JOptionPane.showMessageDialog(null, "One or more fields are empty! Please check your entires!");
+										JOptionPane.showMessageDialog(MainFrame.getInstance(), "One or more fields are empty! Please check your entires!");
 									}else{
 									ResultSet check = ManagementObject.retrieveStaffNrics(sp.getId());
 									boolean dupeNric = ManagementObject.checkDuplicateNrics(sp.getNric(), check);
 									boolean validNric = NRICUtils.validate(sp.getNric());
 									
 									if(dupeNric == true){
-										JOptionPane.showMessageDialog(null, "There are duplicate NRICS! Please check your entries");
+										JOptionPane.showMessageDialog(MainFrame.getInstance(), "There are duplicate NRICS! Please check your entries");
 									}else if (validNric == false){
-										JOptionPane.showMessageDialog(null, "That is not a valid NRIC! Please check your entry!");
+										JOptionPane.showMessageDialog(MainFrame.getInstance(), "That is not a valid NRIC! Please check your entry!");
 									}else if(staffSetPasswordValue.getPassword().length != 0){			
 										
 										// Password encryption
@@ -832,11 +832,11 @@ public class MgmtPanel extends JPanel {
 										
 										// Executes update with a new password
 										ManagementObject.executeStaffUpdateWithPassword(sp);
-										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
+										JOptionPane.showMessageDialog(MainFrame.getInstance(), "Data has been succesfully saved!");
 									}else{
 										// Executes update without the password
 										ManagementObject.executeStaffUpdateNoPassword(sp);
-										JOptionPane.showMessageDialog(null, "Data has been succesfully saved!");
+										JOptionPane.showMessageDialog(MainFrame.getInstance(), "Data has been succesfully saved!");
 									}
 											refreshStaff();
 										}
@@ -850,7 +850,7 @@ public class MgmtPanel extends JPanel {
 			elderlySave.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to save the data?");
+					int dialogResult = JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Are you sure you want to save the data?");
 						if (dialogResult == JOptionPane.YES_OPTION){
 							try{
 								String birthString = (elderlyYear.getSelectedItem() + "-" + elderlyMonth.getSelectedItem() + "-" + elderlyDay.getSelectedItem());
@@ -859,7 +859,7 @@ public class MgmtPanel extends JPanel {
 								
 								boolean empty = ManagementObject.elderlyEmptyFields(ep, elderlyYear.getSelectedItem().toString(), elderlyMonth.getSelectedItem().toString(), elderlyDay.getSelectedItem().toString());
 								if(empty == true){
-									JOptionPane.showMessageDialog(null, "One or more of the fields are empty! Please check your entries!");
+									JOptionPane.showMessageDialog(MainFrame.getInstance(), "One or more of the fields are empty! Please check your entries!");
 								}else{
 									ResultSet checkBed = ManagementObject.retrieveElderlySameRoom(ep.getRoom(), ep.getId());
 									ResultSet checkNric = ManagementObject.retrieveElderlyNrics();
@@ -878,7 +878,7 @@ public class MgmtPanel extends JPanel {
 									System.out.println("There were invalid entries encountered. Discontinuing update.");
 								}else{
 									ManagementObject.executeElderlyUpdate(ep);
-									JOptionPane.showMessageDialog(null, "Update successfully completed!");	
+									JOptionPane.showMessageDialog(MainFrame.getInstance(), "Update successfully completed!");	
 									
 									// Refresh table
 									refreshElderly();
@@ -886,7 +886,7 @@ public class MgmtPanel extends JPanel {
 								}													
 							}
 								}catch(Exception e1){
-								JOptionPane.showMessageDialog(null,e1);	
+								JOptionPane.showMessageDialog(MainFrame.getInstance(),e1);	
 							}
 								}
 						}
@@ -896,12 +896,12 @@ public class MgmtPanel extends JPanel {
 				elderlyRemove.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the selected person?");
+						int dialogResult = JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Are you sure you want to remove the selected person?");
 						if (dialogResult == JOptionPane.YES_OPTION){
 							try{
 								String id = elderlyIdValue.getText();
 								ManagementObject.removePerson(Integer.parseInt(id), ManagementObject.REMOVE_ELDERLY);
-								JOptionPane.showMessageDialog(null, "Removal sucessfully completed!");
+								JOptionPane.showMessageDialog(MainFrame.getInstance(), "Removal sucessfully completed!");
 								// Refresh table	
 								elderlyTable.setModel(TableHelper.getElderlyDetailed(""));
 								setColumnWidths();
@@ -1010,7 +1010,7 @@ public class MgmtPanel extends JPanel {
 							staffAgeValue.setText(age);
 							}
 					}catch(Exception e1){
-						JOptionPane.showMessageDialog(null, e1);
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), e1);
 					}
 				}
 			});
@@ -1025,11 +1025,11 @@ public class MgmtPanel extends JPanel {
 			staffRemove.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the selected staff member?");
+					int dialogResult = JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Are you sure you want to remove the selected staff member?");
 					if(dialogResult == JOptionPane.YES_OPTION){
 						int staffid = Integer.parseInt(staffIdValue.getText());
 						ManagementObject.removePerson(staffid, ManagementObject.REMOVE_STAFF);
-						JOptionPane.showMessageDialog(null, "Staff member has been sucessfully removed!");
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), "Staff member has been sucessfully removed!");
 						staffTable.setModel(TableHelper.getStaff(""));
 						setColumnWidths();
 					}

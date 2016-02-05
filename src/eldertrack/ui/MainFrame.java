@@ -13,14 +13,11 @@ import javax.swing.UIManager;
 import java.awt.CardLayout;
 import javax.swing.JComboBox;
 
-import javax.swing.DefaultComboBoxModel;
-import java.awt.event.ItemListener;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import javax.swing.border.EtchedBorder;
 
 import eldertrack.diet.Elderly;
@@ -143,7 +140,7 @@ public class MainFrame extends JFrame {
 	
 	void constructPanels() {
 		JProgressBar jpbar = LoginPanel.progressBar;
-		System.out.println("--------------------- CONSTRUCTING ALL PANELS NOW! ---------------------");
+		System.out.println("--------------------- PANELS ARE BEING CONSTRUCTED! ---------------------");
 		jpbar.setValue(10);
 				
 		// Initialize Diet Panel
@@ -171,63 +168,40 @@ public class MainFrame extends JFrame {
 		}else{
 			announcementPanel = new AnnouncementPanel();
 		}
-		jpbar.setValue(40);
+		jpbar.setValue(50);
 
 		// Initialize Report Panel
 		jpbar.setString("Initializing Report Generation...");
 		jpbar.update(jpbar.getGraphics());
 		ReportPanel = new ReportMainPanel();
 		CardsPanel.add(ReportPanel, REPORTPANEL);
-		jpbar.setValue(50);
+		jpbar.setValue(70);
 
 		// Initialize Main Menu Panel
 		jpbar.setString("Initializing Main Menu...");
 		jpbar.update(jpbar.getGraphics());
 		MainMenu = new MainMenuPanel();
 		MainMenu.setBorder(lBorder);
+		MainMenu.fillDetails();
 		CardsPanel.add(MainMenu, MENUPANEL);
-		jpbar.setValue(60);
+		jpbar.setValue(85);
 		jpbar.update(jpbar.getGraphics());
 		
 		jpbar.setString("Initializing Scroll Text");
 		setScrollText();
-		jpbar.setValue(80);
-		jpbar.update(jpbar.getGraphics());
-		
-		// Add menus to combo box
-		comboBox = new JComboBox<>();
-		comboBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent evt) {
-		        JComboBox<?> jcb = (JComboBox<?>) evt.getSource();
-		        CardLayout cl = (CardLayout) CardsPanel.getLayout();
-		        cl.show(CardsPanel, jcb.getSelectedItem().toString());
-			}
-		});
-		comboBox.setSize(174, 26);
-		comboBox.setLocation(10, 682);
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MENUPANEL, MGMTPANEL, MEDICATIONPANEL, DIETPANEL, REPORTPANEL}));
-		comboBox.setSelectedIndex(0);
-		jpbar.setValue(90);
-		jpbar.update(jpbar.getGraphics());
-	
-		MasterPane.add(comboBox);
-		MainMenu.fillDetails();
 		jpbar.setValue(100);
 		jpbar.update(jpbar.getGraphics());
-		
+		System.out.println("--------------------- DONE! PANELS ADDED TO CARDLAYOUT ---------------------");
 	}
 	
 	void deconstructPanels() {
 		System.out.println("--------------------- DECONSTRUCTING ALL PANELS NOW! ---------------------");
-		comboBox.setVisible(false);
 		CardsPanel.remove(DietSection);
 		CardsPanel.remove(MedPanel);
 		CardsPanel.remove(ReportPanel);
 		if(isManagementShown())
 			CardsPanel.remove(MgmtSection);
 		CardsPanel.remove(MainMenu);
-		MasterPane.remove(comboBox);
-		comboBox = null;
 		DietSection = null;
 		MedPanel = null;
 		ReportPanel = null;
@@ -239,7 +213,7 @@ public class MainFrame extends JFrame {
 		Elderly.nullMap();
 		MenuItem.nullMap();
 		StaffSession.nullMap();
-		System.out.println("Panels deconstructed!");
+		System.out.println("--------------------- DONE! PANELS REMOVED FROM CARDLAYOUT ---------------------");
 	}
 	
 	

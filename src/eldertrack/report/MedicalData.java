@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import eldertrack.db.SQLObject;
 import eldertrack.medical.CheckUpObject;
 
@@ -24,18 +26,38 @@ public class MedicalData implements Serializable{
 	private static String date;
 	private static String checktime;
 	private static CheckUpObject checking;
+	private static String notes;
 	static SQLObject so = new SQLObject();
-	private static String rsid;
 
-	@SuppressWarnings("unused")
+	public static void main(String[] args) throws ClassNotFoundException, IOException{
+		try {
+			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_elderly_checkup ORDER BY id,name,date");
+						
+			int doneId=0;
+			
+			while(rsLoadID.next()) {
+				int loadId = rsLoadID.getInt("id");
+				if (doneId!=loadId){
+					RetrieveCheckUp(loadId);
+					doneId=loadId;
+				}
+			}	
+				
+		} catch (SQLException e) {
+			e.printStackTrace();	
+			}
+		}
+
+	
 	public static void RetrieveCheckUp(int id) throws SQLException, IOException, ClassNotFoundException{
 		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT checkup,name,date,checktime,id FROM et_elderly_checkup WHERE id = ?");
 		statement.setInt(1, id);
 		ResultSet rs = statement.executeQuery();
 				
+		@SuppressWarnings("unused")
 		ResultSet rsTmp = so.getResultSet("SELECT * FROM et_reportTemp" );
 		PreparedStatement statementInsertTmp = so.getPreparedStatementWithKey
-				("INSERT INTO et_reportTemp (name,date,checktime,temperature,blood,heart,sugar,eye,ear,id) values(?,?,?,?,?,?,?,?,?,?)");
+				("INSERT INTO et_reportTemp (name,date,checktime,temp,blood,heart,sugar,eye,ear,notes,id) values(?,?,?,?,?,?,?,?,?,?,?)");
 		
 		while(rs.next()){
 			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT checkup,id FROM et_elderly_checkup WHERE id = ?");
@@ -53,7 +75,8 @@ public class MedicalData implements Serializable{
 			heart=checking.getElderHeart();
 			sugar=checking.getElderSugar();
 			eye=checking.isElderEye();
-			ear=checking.isElderEar();			
+			ear=checking.isElderEar();		
+			notes=checking.getElderNotes();
 			name=rs.getString("name");
 			date=rs.getString("date");
 			checktime=rs.getString("checktime");
@@ -67,42 +90,27 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.setDouble(7, sugar);
 			statementInsertTmp.setBoolean(8, eye);
 			statementInsertTmp.setBoolean(9, ear);
-			statementInsertTmp.setInt(10, id);
+			statementInsertTmp.setString(10, notes);
+			statementInsertTmp.setInt(11, id);
+			
+			try {
 			statementInsertTmp.executeUpdate();
+			} catch (MySQLIntegrityConstraintViolationException e) {
+				// e.printStackTrace();
+			}
+			
+			name=null;
+			date=null;
+			checktime=null;
+			temp=0;
+			blood=0;
+			heart=0;
+			sugar=0;
+			eye=false;
+			ear=false;
+			notes=null;
 		} 
 	}
+		
 	
-	private static void CalAverage(int id) {
-		ResultSet rsCalAvr = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, id, date, checktime");
-		PreparedStatement calAvr = so.getPreparedStatementWithKey("SELECT");
-	}
-		
-	public static void main(String[] args) throws ClassNotFoundException, IOException{
-		try {
-			ResultSet rsLoadID = so.getResultSet("SELECT id, name, date FROM et_elderly_checkup ORDER BY name,date");
-						
-			while(rsLoadID.next()) {
-				int id = rsLoadID.getInt("id");
-				RetrieveCheckUp(id);
-			}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();	
-			}
-		
-		try {
-			ResultSet rsCalAvr = so.getResultSet("SELECT * FROM et_reportTemp ORDER BY name, id, date, checktime");
-						
-			while(rsCalAvr.next()) {
-				int id = rsCalAvr.getInt("id");
-				CalAverage(id);
-			}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();	
-			}
-		
-		System.out.println("Data processed");
-		}
-
 }

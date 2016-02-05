@@ -109,22 +109,14 @@ public class CheckUpObject  implements Serializable {
 	 * Return: void
 	 */	
 	public static void ResetCheckUp(SQLObject so){
-		ResultSet rs;
+
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-		Date lastlogin = null;
+
 		Date currectdate = new Date();
 		StaffSession session = MainFrame.getInstance().getSessionInstance();
-		try {
-			PreparedStatement stmt  = so.getPreparedStatementWithKey("SELECT lastlogin FROM et_staff where staffid=?");
-			stmt.setInt(1, session.getStaffid());
-			stmt.executeQuery();
-			rs = stmt.getResultSet();
-			rs.next();
-			lastlogin=rs.getTimestamp("lastlogin");	
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		String lastDate=dateFormat.format(lastlogin);
+
+
+		String lastDate=session.getLastLoginTimeString();
 		String checkNowDate=dateFormat.format(currectdate);
 		
 		if(!lastDate.equalsIgnoreCase(checkNowDate)){

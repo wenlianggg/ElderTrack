@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -158,7 +159,10 @@ public class DietAddPanel extends JPanel implements Presentable {
 		btnAddMeal.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnAddMeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addMealEntry(mealSearchTable.getValueAt(mealSearchTable.getSelectedRow(), 0).toString());
+				if (mealSearchTable.getSelectedRow() != -1)
+					addMealEntry(mealSearchTable.getValueAt(mealSearchTable.getSelectedRow(), 0).toString());
+				else
+					JOptionPane.showMessageDialog(MainFrame.getInstance(), "Please select an item!");
 			}
 		});
 

@@ -42,7 +42,7 @@ public class LoginPanel extends JPanel {
 		JPanel loginFieldsPanel = new JPanel();
 		loginFieldsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		loginFieldsPanel.setBackground(new Color(255, 248, 220));
-		loginFieldsPanel.setBounds(250, 186, 500, 274);
+		loginFieldsPanel.setBounds(250, 221, 500, 239);
 		add(loginFieldsPanel);
 		loginFieldsPanel.setLayout(null);
 		
@@ -80,14 +80,10 @@ public class LoginPanel extends JPanel {
 		passwordField.setBackground(Color.LIGHT_GRAY);
 		
 		JButton loginButton = new JButton("Login");
-		loginButton.setBounds(10, 179, 480, 45);
+		loginButton.setForeground(new Color(0, 128, 0));
+		loginButton.setBounds(10, 182, 480, 51);
 		loginFieldsPanel.add(loginButton);
-		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		
-		JButton forgetPassButton = new JButton("Forgot Password");
-		forgetPassButton.setBounds(10, 235, 480, 27);
-		loginFieldsPanel.add(forgetPassButton);
-		forgetPassButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		loginButton.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 		
 		// On login button pressed, 
 		// Check login details by calling method from eldertrack.login.LoginProcessor class file
@@ -141,7 +137,7 @@ public class LoginPanel extends JPanel {
 			session = MainFrame.getInstance().setSessionInstance(StaffSession.createSession(loginField.getText(), passwordField.getPassword()));
 			passwordField.setText("");
 			if (session == null)
-				JOptionPane.showMessageDialog(null, "Login failed, try again!");
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), "Login failed, try again!");
 			else if (session.isAuthenticated()) {
 				progressBar.setValue(10);
 				progressBar.update(progressBar.getGraphics());
@@ -150,7 +146,7 @@ public class LoginPanel extends JPanel {
 				mainCards.show(MainFrame.CardsPanel, MainFrame.MENUPANEL);
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Fields cannot be empty!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "Fields cannot be empty!");
 		}
 	}
 }

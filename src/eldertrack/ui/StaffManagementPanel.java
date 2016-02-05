@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 
 public class StaffManagementPanel extends JPanel {
+	private static final long serialVersionUID = 5411502024220109030L;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;

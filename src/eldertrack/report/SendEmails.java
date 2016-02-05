@@ -1,8 +1,10 @@
 package eldertrack.report;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -20,23 +22,48 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-import javax.swing.JOptionPane;
 
 import eldertrack.db.SQLObject;
 
 public class SendEmails {
 private static SQLObject so = new SQLObject();
 	
-	Date dNow = new Date( );
-    SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
-    {
-    	try{
-    		String sql = "SELECT email, name FROM et_elderly";
-    		ResultSet rs = so.getResultSet(sql);
-		
-    		while(rs.next()){
-    			String email = rs.getString("email");
-    			String name = rs.getString("name");
+	static Date dNow = new Date( );
+    static SimpleDateFormat ft = new SimpleDateFormat ("MMMM yyyy");
+    
+    	
+    	public static void main(String[] args){
+    	 	   try {
+    	 			ResultSet rsLoadID = so.getResultSet("SELECT id FROM et_report");
+    	 						    				
+    				while(rsLoadID.next()) {
+    					int loadId = rsLoadID.getInt("id");
+    					SendFiles(loadId);
+    					}
+    				
+    	 		} catch (SQLException | ClassNotFoundException | IOException e) {
+    	 			e.printStackTrace();	
+    	 			}
+    	 		
+    	    }
+    	
+    	
+    	public static void SendFiles (int id) throws SQLException, IOException, ClassNotFoundException {
+    		
+    		PreparedStatement statement = so.getPreparedStatementWithKey("SELECT report FROM et_report WHERE id = ?");
+			statement.setInt(1, id);
+			ResultSet rsBlob = statement.executeQuery();
+			rsBlob.next();
+			
+			PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT id,name,email FROM et_elderly WHERE id = ?");
+			statement2.setInt(1, id);
+			ResultSet rsElder = statement2.executeQuery();
+			rsElder.next();
+    		
+					
+   			
+    			String email = rsElder.getString("email");
+        		String name = rsElder.getString("name");
     			
     	    		try{
     	    			String to = email;
@@ -65,35 +92,27 @@ private static SQLObject so = new SQLObject();
     	    					+ "\n"
     	    					+ "\nThank you."
     	    					+ "\n"
-    	    					+ "\nRegards,"
-    	    					+ "\nElder Home Name");
+    	    					+ "\n- Sent via ElderTrack Suite -");
     	    			multipart.addBodyPart(messageBodyPart);
     	    			
-    	    			
-    	   				PreparedStatement statement2 = so.getPreparedStatementWithKey("SELECT report FROM et_report WHERE name = ?");
-    	   				statement2.setString(1, rs.getString("name"));
-    	   				ResultSet rsBlob = statement2.executeQuery();
-    	   				rsBlob.next();
-    	    			
     	    			messageBodyPart = new MimeBodyPart();
-    	    			String filename = ft.format(dNow)+" Report.pdf";
+    	    			String filename = ft.format(dNow)+" Report.pdf";	    			
+    	   				    	    			
     	    			ByteArrayInputStream isGetBlob = new ByteArrayInputStream(rsBlob.getBytes(1));  
     	    			DataSource sourceBlob = new ByteArrayDataSource(isGetBlob, "application/pdf");
     	    			messageBodyPart.setDataHandler(new DataHandler(sourceBlob));
     	    			messageBodyPart.setFileName(filename);
-				
+    	    			
     	    			multipart.addBodyPart(messageBodyPart);
-
+    	    			
     	    			message.setContent(multipart);
-
+    	    			
     	    			Transport.send(message);
+    	   				
     	    			}catch (MessagingException mex) {
     	    				mex.printStackTrace();
-    	    		}    			
-			}
-		}catch(Exception e1){
-			JOptionPane.showMessageDialog(null, e1);
-			}
-		System.out.println("Emails sent successfully.");
-    }
-}
+    	    			}    			
+    			}
+    		}
+    	
+    
