@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,6 +34,7 @@ public class MainMenuPanel extends JPanel {
 	private JLabel lblYourNotes;
 	private JTextArea txtarea_stickynotes;
 	private JLabel lblAccessLevel;
+	private JLabel lbllastSavedOn;
 	
 	MainMenuPanel() {
 		setBackground(SystemColor.control);
@@ -145,7 +148,8 @@ public class MainMenuPanel extends JPanel {
 		btnSaveNotes.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnSaveNotes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MainFrame.getInstance().getSessionInstance().setNotes(txtarea_stickynotes.getText());
+				if (MainFrame.getInstance().getSessionInstance().setNotes(txtarea_stickynotes.getText()))
+					updateStickyLastSaved();
 			}
 		});
 		btnSaveNotes.setBounds(838, 565, 147, 47);
@@ -155,6 +159,10 @@ public class MainMenuPanel extends JPanel {
 		lblUtilitiesForNursing.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
 		lblUtilitiesForNursing.setBounds(300, 20, 262, 30);
 		add(lblUtilitiesForNursing);
+		
+		lbllastSavedOn = new JLabel("(Last saved on --/--/---- --:--)");
+		lbllastSavedOn.setBounds(801, 237, 184, 14);
+		add(lbllastSavedOn);
 	}
 	
 	void fillDetails() {
@@ -182,6 +190,7 @@ public class MainMenuPanel extends JPanel {
 		lblLastLogin.setText("Last Login: " + session.getLastLoginTimeString());
 		lblAccessLevel.setText("Access Level: " + access);
 		txtarea_stickynotes.setText(MainFrame.getInstance().getSessionInstance().getNotes());
+		lbllastSavedOn.setText("(Last saved on " + MainFrame.getInstance().getSessionInstance().getLastNoteTimeString() + ")");
 	}
 	
 	void clearDetails() {
@@ -189,5 +198,11 @@ public class MainMenuPanel extends JPanel {
 		lblLoginNric.setText("Login NRIC: ");
 		lblLastLogin.setText("Last Login: ");
 		txtarea_stickynotes.setText("");
+	}
+	
+	void updateStickyLastSaved() {
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		lbllastSavedOn.setText("(Last saved on " + sdf.format(now) + ")");
 	}
 }
