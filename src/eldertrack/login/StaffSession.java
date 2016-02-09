@@ -31,6 +31,7 @@ public class StaffSession{
 	private String nric  = "";
 	private String stickynotes = "";
 	private Date lastlogin;
+	private Date lastnote;
 	private boolean exists = false;
 	private boolean passwordcorrect = false;
 	private AccessLevel accesslevel = AccessLevel.NOACCESS;
@@ -81,16 +82,24 @@ public class StaffSession{
 					this.nric = rs.getString("nric");
 					this.stickynotes = rs.getString("staffnotes");
 					passwordcorrect = true;
+					
+					// For last login
 					Timestamp ts = rs.getTimestamp("lastlogin");
 					if (ts != null)
 						this.lastlogin = new Date(ts.getTime());
 					else
 						this.lastlogin = new Date();
-					Date date = new Date();
-					Timestamp timenow = new Timestamp(date.getTime());
-					PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET lastlogin=? WHERE staffid=?");
-					ps.setTimestamp(1, timenow);
-					ps.setInt(2, this.staffid);
+					
+					// For last note
+					Timestamp ts2 = rs.getTimestamp("lastnote");
+					if (ts2 != null)
+						this.lastnote = new Date(ts2.getTime());
+					else
+						this.lastnote = new Date();
+					
+					// Update last login time
+					PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET lastlogin=CURRENT_TIMESTAMP WHERE staffid=?");
+					ps.setInt(1, this.staffid);
 					ps.executeUpdate();
 			} else {
 				/**
@@ -172,6 +181,11 @@ public class StaffSession{
 		return sdf.format(this.lastlogin);
 	}
 	
+	public String getLastNoteTimeString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return sdf.format(this.lastnote);
+	}
+	
 	public String getFullName() {
 		return this.firstname + " " + this.lastname;
 	}
@@ -207,18 +221,21 @@ public class StaffSession{
 	 * 
 	 * Saves sticky note into user in database
 	 */
-	public void setNotes(String text) {
+	public boolean setNotes(String text) {
 		Integer selected = JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Are you sure you want to save?");
 		if (selected == JOptionPane.YES_OPTION) {
-			PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET staffnotes=? WHERE staffid=?");
+			PreparedStatement ps = so.getPreparedStatement("UPDATE et_staff SET staffnotes=?, lastnote=CURRENT_TIMESTAMP WHERE staffid=?");
 			try {
 				ps.setString(1, text);
 				ps.setInt(2, this.staffid);
 				ps.executeUpdate();
 				JOptionPane.showMessageDialog(MainFrame.getInstance(), "Successfully Saved");
+				return true;
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return false;
 			}
 		}
+		return false;
 	}
 }

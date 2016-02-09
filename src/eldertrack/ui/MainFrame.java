@@ -66,8 +66,9 @@ public class MainFrame extends JFrame {
 			public void run() {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
+					DecryptDBFrame dbauth = new DecryptDBFrame();
+					dbauth.setVisible(true);
 					frame = new MainFrame();
-					frame.setVisible(true); // Set the main frame as visible
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -196,15 +197,12 @@ public class MainFrame extends JFrame {
 	
 	void deconstructPanels() {
 		System.out.println("--------------------- DECONSTRUCTING ALL PANELS NOW! ---------------------");
-		comboBox.setVisible(false);
 		CardsPanel.remove(DietSection);
 		CardsPanel.remove(MedPanel);
 		CardsPanel.remove(ReportPanel);
 		if(isManagementShown())
 			CardsPanel.remove(MgmtSection);
 		CardsPanel.remove(MainMenu);
-		MasterPane.remove(comboBox);
-		comboBox = null;
 		DietSection = null;
 		MedPanel = null;
 		ReportPanel = null;

@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import eldertrack.db.SQLObject;
 import eldertrack.medical.CheckUpObject;
 
@@ -90,7 +92,12 @@ public class MedicalData implements Serializable{
 			statementInsertTmp.setBoolean(9, ear);
 			statementInsertTmp.setString(10, notes);
 			statementInsertTmp.setInt(11, id);
+			
+			try {
 			statementInsertTmp.executeUpdate();
+			} catch (MySQLIntegrityConstraintViolationException e) {
+				// e.printStackTrace();
+			}
 			
 			name=null;
 			date=null;

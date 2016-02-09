@@ -288,7 +288,7 @@ public class ManagementObject {
 		
 		try{
 			while(check.next()){
-				if(check.getString("nric") == nric){
+				if(check.getString("nric").equals(nric)){
 					result = true;
 					break;
 				}else
