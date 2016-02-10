@@ -66,8 +66,9 @@ public class MainFrame extends JFrame {
 			public void run() {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Change look to native Windows / OS X / Linux
+					DecryptDBFrame dbauth = new DecryptDBFrame();
+					dbauth.setVisible(true);
 					frame = new MainFrame();
-					frame.setVisible(true); // Set the main frame as visible
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

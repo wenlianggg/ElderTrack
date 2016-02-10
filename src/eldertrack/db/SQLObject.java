@@ -18,9 +18,10 @@ public class SQLObject {
 	 * 2 - Show query executed in Console
 	 ************************************/
 	private Connection con;
-	private String url = "jdbc:mysql://eldertrackdb.ctfjtggc5l0j.ap-southeast-1.rds.amazonaws.com:3306/eldertrack";
-	private String dbuser = "eldertrackadmin";
-	private String dbpw = "eldertrack4321";
+	private static String url = "jdbc:mysql://eldertrackdb.ctfjtggc5l0j.ap-southeast-1.rds.amazonaws.com:3306/eldertrack";
+	private static String dbuser = "eldertrackadmin";
+	public static final String dbencrypted = "MBka09M3Dum8RKwFGy2xFw==";
+	private static String dbpw = "";
 
 	public SQLObject() {
 		try { 
@@ -52,6 +53,10 @@ public class SQLObject {
 			System.out.println("Exiting!");
 			System.exit(1);
 		}
+	}
+	
+	public static void setPassword(byte[] newpw) {
+		dbpw = new String(newpw);
 	}
 	
 	/********************************************************
