@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -416,9 +415,6 @@ public class ReportMainPanel extends JPanel {
             		} catch (SQLException e) {
             			e.printStackTrace();
             		}
-            		
-					boolean deleteFile= new File(ft.format(dNow)+ "Report.pdf").delete();
-            		System.out.println(deleteFile);
                 	JOptionPane.showMessageDialog(null, "Reports sent.");	
                 }
 			}
