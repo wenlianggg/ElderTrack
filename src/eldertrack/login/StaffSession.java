@@ -147,6 +147,7 @@ public class StaffSession{
 			return false;
 		} else if (accesslevel == AccessLevel.NOACCESS) {
 			System.out.println("Password accepted, access level not authorized!");
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "No access, please contact an administrator");
 			return false;
 		} else
 			return false;
