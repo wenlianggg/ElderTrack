@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +15,9 @@ import javax.swing.JPanel;
 
 import eldertrack.login.AccessLevel;
 import eldertrack.login.StaffSession;
+import eldertrack.report.CalculateAvr;
+import eldertrack.report.MedicalData;
+
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextArea;
@@ -73,6 +77,14 @@ public class MainMenuPanel extends JPanel {
 		btnReportGeneration.setFont(new Font("Segoe UI", Font.PLAIN, 21));
 		btnReportGeneration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String[] args = null;
+				try {
+					MedicalData.main(args);
+					CalculateAvr.main(args);
+
+				} catch (ClassNotFoundException | IOException e2) {
+					e2.printStackTrace();
+				}
 		        CardLayout parentCards = (CardLayout) MainFrame.CardsPanel.getLayout();
 		        parentCards.show(MainFrame.CardsPanel, MainFrame.REPORTPANEL);
 			}
