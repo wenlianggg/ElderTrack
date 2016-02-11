@@ -46,7 +46,6 @@ public class DietMenuPanel extends JPanel implements Presentable {
 	private JTextField fieldCalories;
 	private JTextField searchQuery;
 	private JTextField fieldMealName;
-	private JLabel lblRda;
 	private JLabel lblAddedDate;
 	private JLabel lblAddedBy;
 	private JLabel lblLastModified;
@@ -217,11 +216,6 @@ public class DietMenuPanel extends JPanel implements Presentable {
 		fieldFat.setColumns(10);
 		fieldFat.setBounds(109, 167, 208, 20);
 		nutriInfoPanel.add(fieldFat);
-		
-		lblRda = new JLabel("Recommended Daily Allowance (%):");
-		lblRda.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblRda.setBounds(12, 419, 306, 29);
-		nutriInfoPanel.add(lblRda);
 		
 		lblAddedDate = new JLabel("Added On: dd/mm/yy");
 		lblAddedDate.setFont(new Font("Tahoma", Font.PLAIN, 13));

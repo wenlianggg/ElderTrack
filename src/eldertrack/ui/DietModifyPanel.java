@@ -29,6 +29,7 @@ import eldertrack.diet.MealProperties;
 import eldertrack.diet.Meals;
 import eldertrack.diet.Nutrition;
 import eldertrack.diet.SerializerSQL;
+import eldertrack.login.StaffSession;
 import eldertrack.misc.TableHelper;
 
 public class DietModifyPanel extends JPanel implements Presentable {
@@ -229,11 +230,6 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		fieldFat.setBounds(110, 282, 207, 20);
 		nutriInfoPanel.add(fieldFat);
 		
-		JLabel lblRda = new JLabel("Recommended Daily Allowance (%):");
-		lblRda.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblRda.setBounds(11, 339, 306, 29);
-		nutriInfoPanel.add(lblRda);
-		
 		sdf = new SimpleDateFormat("HH:mm dd MMM yyyy ");
 		
 		lblAddedOn = new JLabel("Added On: dd/mm/yy hh:mmAM");
@@ -257,7 +253,7 @@ public class DietModifyPanel extends JPanel implements Presentable {
 		nutriInfoPanel.add(lblModifiedBy);
 		
 		chckbxHalal = new JCheckBox("Halal Meal");
-		chckbxHalal.setBounds(6, 309, 97, 23);
+		chckbxHalal.setBounds(11, 370, 97, 23);
 		nutriInfoPanel.add(chckbxHalal);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -371,9 +367,9 @@ public class DietModifyPanel extends JPanel implements Presentable {
 			fieldCalories.setText(Integer.toString(n.getCalories()));
 			fieldProtein.setText(Integer.toString(n.getProtein()));
 			lblAddedOn.setText("Added on: " + sdf.format(mp.getCreated()));
-			lblAddedBy.setText("Added by: Staff ID - " + mp.getCreator().toString());
+			lblAddedBy.setText("Added by: " + StaffSession.nameFromID(mp.getCreator()));
 			lblLastModified.setText("Last Modified: " + sdf.format(mp.getEdited()));
-			lblModifiedBy.setText("Modified By: Staff ID - " + mp.getEditor().toString());
+			lblModifiedBy.setText("Modified By: "+ StaffSession.nameFromID(mp.getEditor()));
 		} else {
 			System.out.println("Nutrition is null.");
 			clearData();
