@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,9 +35,7 @@ import javax.swing.table.DefaultTableModel;
 
 import eldertrack.db.SQLObject;
 import eldertrack.misc.TableHelper;
-import eldertrack.report.CalculateAvr;
 import eldertrack.report.CreatePdf;
-import eldertrack.report.MedicalData;
 import eldertrack.report.SendEmails;
 
 public class ReportMainPanel extends JPanel {
@@ -66,14 +64,7 @@ public class ReportMainPanel extends JPanel {
 	// Constructor
 	ReportMainPanel() {
 		String[] args = null;
-		try {
-			MedicalData.main(args);
-			CalculateAvr.main(args);
 
-		} catch (ClassNotFoundException | IOException e2) {
-			e2.printStackTrace();
-		}
-		
 		setBounds(0, 0, 995, 670);
 		setLayout(null);
 
@@ -378,6 +369,7 @@ public class ReportMainPanel extends JPanel {
                 				("UPDATE et_reportAvr SET addComment=? WHERE id=?");
                 		statementUpdate.setString(1, addComment);
                 		statementUpdate.setString(2, add1);
+            			statementUpdate.executeUpdate();
 						
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -413,6 +405,20 @@ public class ReportMainPanel extends JPanel {
                 	
                 	CreatePdf.main(args);
                 	SendEmails.main(args);
+                	
+                	PreparedStatement reset1 = so.getPreparedStatement("DELETE FROM et_reportTemp");
+            		PreparedStatement reset2 = so.getPreparedStatement("DELETE FROM et_report");
+            		PreparedStatement reset3 = so.getPreparedStatement("DELETE FROM et_reportAvr");
+            		try {
+            			reset1.execute();
+            			reset2.execute();
+            			reset3.execute();
+            		} catch (SQLException e) {
+            			e.printStackTrace();
+            		}
+            		
+					boolean deleteFile= new File(ft.format(dNow)+ "Report.pdf").delete();
+            		System.out.println(deleteFile);
                 	JOptionPane.showMessageDialog(null, "Reports sent.");	
                 }
 			}

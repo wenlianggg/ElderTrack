@@ -430,13 +430,13 @@ public class CreatePdf{
     	}
 	
 		
-		File blob = new File(ft.format(dNow)+" Report.pdf");
-		FileInputStream in = new FileInputStream(blob);
+		File PDFtoBlob = new File(ft.format(dNow)+" Report.pdf");
+		FileInputStream in = new FileInputStream(PDFtoBlob);
 		
 		statementUpdateReport.setString(1, name);
 		statementUpdateReport.setInt(2, id);
 		statementUpdateReport.setTimestamp(3,timestamp);
-		statementUpdateReport.setBinaryStream(4, in, (int)blob.length()); 
+		statementUpdateReport.setBinaryStream(4, in, (int)PDFtoBlob.length()); 
 		statementUpdateReport.executeUpdate();
     }
 }
